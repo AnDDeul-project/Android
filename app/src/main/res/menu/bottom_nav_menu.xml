@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        app:showAsAction="always"
+        android:title="홈" />
+    <item
+        android:id="@+id/checklistFragment"
+        android:icon="@drawable/ic_checklist"
+        app:showAsAction="always"
+        android:title="체크리스트" />
+    <item
+        android:id="@+id/postboxFragment"
+        android:icon="@drawable/ic_postbox"
+        app:showAsAction="always"
+        android:title="우체통" />
+    <item
+        android:id="@+id/myPageFragment"
+        android:icon="@drawable/ic_mypage"
+        app:showAsAction="always"
+        android:title="마이페이지" />
+
+
+</menu>

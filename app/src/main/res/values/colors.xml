@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    // 브랜드 컬러
+    <color name="primary">#93D0BE</color>
+    <color name="onPrimary">#F7F7FB</color>
+    <color name="primary_hover">#9CD4C3</color>
+    <color name="primary_pressed">#9CD4C3</color>
+    <color name="primary_disabled">#D6EEE6</color>
+    <color name="secondary">#261710</color>
+    <color name="on_secondary">#93D0BE</color>
+    <color name="secondary_hover">#372A23</color>
+    <color name="secondary_pressed">#493C36</color>
+    <color name="secondary_disabled">#593B1F11</color>
+    <color name="tertiary">#F7F7FB</color>
+
+    // 환경 컬러
+    <color name="background">#F7F6F6</color>
+
+    // 상태 컬러
+    <color name="system_informative">#6873D3</color>
+    <color name="system_error">#EB6B59</color>
+    <color name="system_success">#85C270</color>
+
+    // 텍스트
+    <color name="text_high">#1D1D1D</color>
+    <color name="text_medium">#666666</color>
+    <color name="text_disabled">#BFBFBF</color>
+    <color name="text_white">#FFFFFF</color>
+
+    // 아이콘
+    <color name="icon_active">#1D1D1D</color>
+    <color name="icon_inactive">#666666</color>
+    <color name="icon_disabled">#BFBFBF</color>
+    <color name="icon_white">#FFFFFF</color>
+
+    // Grey
+    <color name="grey_500">#9C9A96</color>
+    <color name="grey_200">#E7E6E5</color>
+
+</resources>
