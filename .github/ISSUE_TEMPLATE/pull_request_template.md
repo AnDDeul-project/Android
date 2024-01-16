@@ -1,5 +1,5 @@
 ---
-name: pull_reques_template
+name: pull_request_template
 about: Pull Request 작업 사항을 입력해주세요
 title: ''
 labels: ''
