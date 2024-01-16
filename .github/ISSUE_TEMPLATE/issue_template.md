@@ -1,12 +1,12 @@
 ---
 name: issue_template
 about: Issue 작업 사항을 입력해주세요
-title: '[♻️ Refactor /✨ Feature/🚨Bug / 🔧 Fix/ 🌈 Style] 이슈 제목'
+title: "[♻️ Refactor /✨ Feature/\U0001F6A8Bug / \U0001F527 Fix/ \U0001F308 Style]
+  이슈 제목"
 labels: ''
 assignees: ''
 
 ---
-
 
 📌 이슈 내용
 ------------
