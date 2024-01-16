@@ -1,11 +1,3 @@
----
-name: pull_request_template
-about: Pull Request 작업 사항을 입력해주세요
-title: ''
-labels: ''
-assignees: ''
-
----
 
 # PR 템플릿
 ### 체크리스트!
