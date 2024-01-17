@@ -41,12 +41,9 @@ class HomeFragment : Fragment() {
         }
 
         // Floating Action Button 클릭 시
-        /*
         binding.homeFloatingBt.setOnClickListener {
 
         }
-
-         */
 
         return binding.root
     }
