@@ -21,6 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".start.StartActivity" />
+        <activity android:name=".start.login.LoginActivity" />
+        <activity android:name=".start.signup.SignupActivity" />
+        <activity android:name=".start.terms.TermsActivity" />
+        <activity android:name=".start.setprofile.SetProfileActivity" />
     </application>
 
 </manifest>

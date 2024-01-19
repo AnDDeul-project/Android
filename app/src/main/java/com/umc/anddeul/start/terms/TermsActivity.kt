@@ -1,9 +1,12 @@
 package com.umc.anddeul.start.terms
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.databinding.ActivityTermsBinding
+import com.umc.anddeul.start.setprofile.SetProfileActivity
+import com.umc.anddeul.start.signup.SignupActivity
 
 class TermsActivity: AppCompatActivity()  {
     private lateinit var binding: ActivityTermsBinding
@@ -15,6 +18,12 @@ class TermsActivity: AppCompatActivity()  {
         binding = ActivityTermsBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        //// 뒤로 가기
+        binding.termsBackBtn.setOnClickListener {
+            val signupIntent = Intent(this, SignupActivity::class.java)
+            startActivity(signupIntent)
+        }
 
         //// 약관 체크 버튼
 
@@ -103,7 +112,10 @@ class TermsActivity: AppCompatActivity()  {
 
         //// 동의 완료 버튼
         binding.termsAgreeBtn.setOnClickListener {
-
+            if(termsCheckedCnt == 3) {
+                val setProfileIntent = Intent(this, SetProfileActivity::class.java)
+                startActivity(setProfileIntent)
+            }
         }
 
     }
