@@ -42,7 +42,8 @@
         android:src="@drawable/ic_home_plus_bt"
         android:tint="@color/onPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearance="@drawable/floating_round_button"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/home_swipe_refresh"
