@@ -57,7 +57,7 @@
         android:orientation="horizontal"
         android:padding="10dp"
         android:background="@drawable/emoji_back_selector"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/home_upload_emoji_ib"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="10dp">
