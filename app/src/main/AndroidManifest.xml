@@ -25,7 +25,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".start.StartActivity" />
-        <activity android:name=".start.login.LoginActivity" />
+        <activity
+            android:name=".start.login.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="@string/scheme_kakao_app_key" />
+            </intent-filter>
+        </activity>
         <activity android:name=".start.signup.SignupActivity" />
         <activity android:name=".start.terms.TermsActivity" />
         <activity android:name=".start.setprofile.SetProfileActivity" />
