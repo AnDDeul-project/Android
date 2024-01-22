@@ -1,11 +1,15 @@
 package com.umc.anddeul.home
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
+import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
 
-class PostRVAdapter(private val postList: ArrayList<Post>) : RecyclerView.Adapter<PostRVAdapter.ViewHolder>() {
+class PostRVAdapter(private val context: Context, private val postList: ArrayList<Post>) : RecyclerView.Adapter<PostRVAdapter.ViewHolder>() {
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PostRVAdapter.ViewHolder {
         val binding: FragmentHomeUploadBinding = FragmentHomeUploadBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
 
@@ -27,6 +31,38 @@ class PostRVAdapter(private val postList: ArrayList<Post>) : RecyclerView.Adapte
             binding.homeUploadUsernameTv.text = post.user_idx
             // binding.homeUploadImageIv
             binding.homeUploadExplainTv.text = post.content
+            binding.homeUploadEmojiIb.setOnClickListener {
+                showEmojiPopup(binding)
+            }
+        }
+    }
+
+    fun showEmojiPopup(binding: FragmentHomeUploadBinding) {
+
+        val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+        binding.homeEmojiLinear.startAnimation(slideUpAnimation)
+        binding.homeEmojiLinear.visibility = View.VISIBLE
+
+        // 사라지는 애니메이션
+        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
+        binding.homeEmojiHappy.setOnClickListener{
+            // 이모티콘 선택과 관련된 작업 수행
+            binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
+            binding.homeEmojiLinear.visibility = View.GONE
+
+        }
+        binding.homeEmojiLaugh.setOnClickListener {
+            // 이모티콘 선택과 관련된 작업 수행
+            binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
+            binding.homeEmojiLinear.visibility = View.GONE
+
+        }
+        binding.homeEmojiSad.setOnClickListener {
+            // 이모티콘 선택과 관련된 작업 수행
+            binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
+            binding.homeEmojiLinear.visibility = View.GONE
+
         }
     }
 }
