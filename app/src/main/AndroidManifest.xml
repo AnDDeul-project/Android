@@ -26,6 +26,12 @@
         <activity android:name=".start.signup.SignupActivity" />
         <activity android:name=".start.terms.TermsActivity" />
         <activity android:name=".start.setprofile.SetProfileActivity" />
+        <activity android:name=".invite.InviteStartActivity" />
+        <activity android:name=".invite.CreateGroupActivity" />
+        <activity android:name=".invite.CreateGroupCodeActivity" />
+        <activity android:name=".invite.JoinGroupActivity" />
+        <activity android:name=".invite.JoinGroupCodeActivity" />
+        <activity android:name=".invite.JoinGroupSendActivity" />
     </application>
 
 </manifest>
