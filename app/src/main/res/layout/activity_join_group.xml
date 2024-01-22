@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="67dp"
         android:fontFamily="@font/font_pretendard_bold"
-        android:text="가족 그룹에 참여하기"
+        android:text="기존 그룹에 참여하기"
         android:textColor="@color/text_high"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
