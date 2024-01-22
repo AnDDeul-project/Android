@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
             add(Post(2, "user2", "안녕하세요 두번째 피드글입니다", "사진", 2, 2))
         }
 
-        val postRVAdapter = PostRVAdapter(postDatas) // 어댑터와 postDatas 연결
+        val postRVAdapter = PostRVAdapter(requireContext(), postDatas) // 어댑터와 postDatas 연결
         binding.homeFeedRv.adapter = postRVAdapter // recyclerView에 Adapter 연결
         binding.homeFeedRv.layoutManager = LinearLayoutManager(context)
 
