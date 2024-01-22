@@ -38,9 +38,9 @@
         android:layout_height="55dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/floating_round_button"
+        app:backgroundTint="@color/primary"
         android:src="@drawable/ic_home_plus_bt"
-        android:tint="@color/onPrimary"
+        app:tint="@color/onPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:shapeAppearance="@drawable/floating_round_button"/>
