@@ -1,13 +1,18 @@
 package com.umc.anddeul.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.databinding.FragmentHomeBinding
+import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
+import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
 
 class HomeFragment : Fragment() {
     lateinit var binding : FragmentHomeBinding
@@ -34,13 +39,38 @@ class HomeFragment : Fragment() {
         // 툴바 기본 타이틀 없애기
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
-        binding.homeSwipeRefresh.setOnRefreshListener {
+        val drawerLayout : DrawerLayout = binding.homeDrawerLayout
 
+        binding.homeToolbarMenuIb.setOnClickListener {
+            Log.e("toolbar", "click!!!!!!!!")
+            if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                drawerLayout.openDrawer(GravityCompat.END)
+            } else {
+                drawerLayout.closeDrawer(GravityCompat.END)
+            }
         }
 
-        // 햄버거 버튼 클릭 이벤트 처리
-        binding.homeToolbarMenuIb.setOnClickListener {
+        val memberLayout = binding.homeMenuMembersLinear
+
+        // 더미 데이터 리스트
+        val memberDataList = listOf("이솜솜", "김솜솜", "박솜솜", "최솜솜")
+
+        for (memberData in memberDataList) {
+            val memberBinding = FragmentHomeMenuMemberBinding.inflate(LayoutInflater.from(context), memberLayout, true)
+            memberBinding.homeMenuMemberNameTv.text = memberData
+        }
+
+        val requestMemberLayout = binding.homeMenuRequestMembersLinear
+        // 수락 요청 더미 데이터 리스트
+        val requestMemberDataList = listOf("이솜솜", "김솜솜")
+        for (requestMember in requestMemberDataList) {
+            val memberBinding = FragmentHomeMenuRequestMemberBinding.inflate(LayoutInflater.from(context), requestMemberLayout, true)
+            memberBinding.homeMenuRequestMemberNameTv.text = requestMember
+        }
+
+
+        // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
+        binding.homeSwipeRefresh.setOnRefreshListener {
 
         }
 
