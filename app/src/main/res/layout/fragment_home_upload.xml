@@ -104,6 +104,7 @@
         android:layout_height="wrap_content"
         android:text="게시물에 대한 사용자의 설명들"
         android:textSize="16sp"
+        android:textColor="@color/secondary"
         android:fontFamily="@font/font_pretendard_regular"
         app:layout_constraintTop_toBottomOf="@id/home_upload_emoji_ib"
         app:layout_constraintStart_toStartOf="parent"
