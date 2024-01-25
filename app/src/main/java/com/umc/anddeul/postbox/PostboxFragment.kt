@@ -1,12 +1,15 @@
 package com.umc.anddeul.postbox
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.umc.anddeul.MainActivity
+import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
 
 class PostboxFragment : Fragment() {
@@ -18,6 +21,15 @@ class PostboxFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPostboxBinding.inflate(inflater, container, false)
+
+        //// 화분 키우기 페이지로 이동
+        binding.gotoPotBtn.setOnClickListener {
+//            (context as MainActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.main_frm, PotFragment())
+//                .addToBackStack(null)
+//                .commitAllowingStateLoss()
+        }
+
 
         //// 달력
 
