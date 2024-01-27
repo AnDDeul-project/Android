@@ -68,12 +68,11 @@ class HomeFragment : Fragment() {
             memberBinding.homeMenuRequestMemberNameTv.text = requestMember
 
             memberBinding.homeMenuRequestAcceptBt.setOnClickListener {
-                val dialog = ConfirmDialog()
+                val dialog = ConfirmDialog("이솜솜", "행복한 우리 가족")
                 dialog.isCancelable = false
-                dialog.show(parentFragmentManager, "confirm dialog")
+                dialog.show(parentFragmentManager, "home accept confirm dialog")
             }
         }
-
 
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)

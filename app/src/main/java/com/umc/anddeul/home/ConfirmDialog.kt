@@ -1,5 +1,6 @@
 package com.umc.anddeul.home
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,9 +10,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.umc.anddeul.databinding.DialogConfirmBinding
 
-class ConfirmDialog : DialogFragment() {
+class ConfirmDialog(name: String, groupName: String) : DialogFragment() {
     lateinit var binding : DialogConfirmBinding
+    private var name : String = ""
+    private var groupName : String = ""
 
+    init {
+        this.name = name
+        this.groupName = groupName
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,8 +29,8 @@ class ConfirmDialog : DialogFragment() {
         binding = DialogConfirmBinding.inflate(layoutInflater, container, false)
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명
-        binding.dialogNameTv.text = "'이솜솜'님을"
-        binding.dialogQuestionTv.text = "행복한 우리 가족에 추가하시겠습니까?"
+        binding.dialogNameTv.text = "'${name}'님을"
+        binding.dialogQuestionTv.text = "${groupName}에 추가하시겠습니까?"
 
         // 취소 버튼
         binding.dialogCancelBtn.setOnClickListener {
