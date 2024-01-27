@@ -66,7 +66,14 @@ class HomeFragment : Fragment() {
         for (requestMember in requestMemberDataList) {
             val memberBinding = FragmentHomeMenuRequestMemberBinding.inflate(LayoutInflater.from(context), requestMemberLayout, true)
             memberBinding.homeMenuRequestMemberNameTv.text = requestMember
+
+            memberBinding.homeMenuRequestAcceptBt.setOnClickListener {
+                val dialog = ConfirmDialog()
+                dialog.isCancelable = false
+                dialog.show(parentFragmentManager, "confirm dialog")
+            }
         }
+
 
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
