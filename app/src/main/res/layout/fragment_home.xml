@@ -24,7 +24,7 @@
             android:src="@drawable/anddeul_logo"
             android:layout_gravity="start"
             android:layout_marginStart="10dp"/>
-        
+
         <ImageButton
             android:id="@+id/home_toolbar_menu_ib"
             android:layout_width="36dp"

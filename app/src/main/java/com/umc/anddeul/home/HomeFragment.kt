@@ -66,6 +66,12 @@ class HomeFragment : Fragment() {
         for (requestMember in requestMemberDataList) {
             val memberBinding = FragmentHomeMenuRequestMemberBinding.inflate(LayoutInflater.from(context), requestMemberLayout, true)
             memberBinding.homeMenuRequestMemberNameTv.text = requestMember
+
+            memberBinding.homeMenuRequestAcceptBt.setOnClickListener {
+                val dialog = ConfirmDialog("이솜솜", "행복한 우리 가족")
+                dialog.isCancelable = false
+                dialog.show(parentFragmentManager, "home accept confirm dialog")
+            }
         }
 
 
