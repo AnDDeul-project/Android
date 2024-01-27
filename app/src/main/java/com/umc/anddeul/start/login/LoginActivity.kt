@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
@@ -66,7 +67,7 @@ class LoginActivity: AppCompatActivity()  {
         //// 다른 카카오 계정으로 로그인
         binding.newLoginBtn.setOnClickListener {
             // 카카오계정으로 로그인
-            UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
+            UserApiClient.instance.loginWithKakaoAccount(this, prompts = listOf(Prompt.LOGIN)) { token, error ->
                 if (error != null) {
                     Log.e(TAG, "로그인 실패", error)
                 }
