@@ -47,6 +47,8 @@ dependencies {
     // 카카오 로그인
     implementation ("com.kakao.sdk:v2-user:2.19.0")
 
+    // retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
