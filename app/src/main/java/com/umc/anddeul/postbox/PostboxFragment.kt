@@ -40,14 +40,14 @@ class PostboxFragment : Fragment() {
 
         // 테스트용 더미 데이터
         val dummyPosts = listOf(
-            Letter(1, "아티"),
-            Letter(2, "도라"),
-            Letter(3, "지나"),
-            Letter(4, "율"),
-            Letter(5, "도도"),
-            Letter(6, "훈"),
-            Letter(7, "빈온"),
-            Letter(8, "세흐"),
+            Letter(1, "아티", 0, "어쩌구저쩌구"),
+            Letter(2, "도라", 0, "어쩌구저쩌구"),
+            Letter(3, "지나", 0, "어쩌구저쩌구"),
+            Letter(4, "율", 1, "음성 메세지가 도착했습니다."),
+            Letter(5, "도도", 1, "음성 메세지가 도착했습니다."),
+            Letter(6, "훈", 1, "음성 메세지가 도착했습니다."),
+            Letter(7, "빈온", 0, "어쩌구저쩌구"),
+            Letter(8, "세흐", 0, "어쩌구저쩌구"),
         )
 
         postAdapter.letters = dummyPosts
