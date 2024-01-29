@@ -9,6 +9,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
     defaultConfig {
@@ -46,6 +47,11 @@ dependencies {
 
     // swipe refresh layout 라이브러리
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    implementation ("io.coil-kt:coil:1.4.0")
+
+    // image picker 라이브러리
+    implementation ("io.github.ParkSangGwon:tedimagepicker:1.4.2")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
