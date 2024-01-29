@@ -9,6 +9,7 @@ import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.umc.anddeul.data.signin.SigninService
 import com.umc.anddeul.databinding.ActivityLoginBinding
 import com.umc.anddeul.start.StartActivity
 
@@ -29,6 +30,8 @@ class LoginActivity: AppCompatActivity()  {
             startActivity(startIntent)
         }
 
+        val signinService = SigninService()
+
         //// 기존 카카오톡으로 로그인
         binding.oldLoginBtn.setOnClickListener {
             // 카카오계정으로 로그인 공통 callback 구성
@@ -38,6 +41,11 @@ class LoginActivity: AppCompatActivity()  {
                     Log.e(TAG, "카카오계정으로 로그인 실패", error)
                 } else if (token != null) {
                     Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
+                    signinService.executeSignIn(token.accessToken) { signinResponse ->
+                        if (signinResponse != null) {
+                        } else {
+                        }
+                    }
                 }
             }
 
@@ -57,6 +65,11 @@ class LoginActivity: AppCompatActivity()  {
                         UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                     } else if (token != null) {
                         Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        signinService.executeSignIn(token.accessToken) { signinResponse ->
+                            if (signinResponse != null) {
+                            } else {
+                            }
+                        }
                     }
                 }
             } else {
@@ -73,6 +86,11 @@ class LoginActivity: AppCompatActivity()  {
                 }
                 else if (token != null) {
                     Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                    signinService.executeSignIn(token.accessToken) { signinResponse ->
+                        if (signinResponse != null) {
+                        } else {
+                        }
+                    }
                 }
             }
         }
