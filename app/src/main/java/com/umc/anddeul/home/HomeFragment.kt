@@ -1,11 +1,14 @@
 package com.umc.anddeul.home
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
+import com.umc.anddeul.invite.InviteStartActivity
 
 class HomeFragment : Fragment() {
     lateinit var binding : FragmentHomeBinding
@@ -82,6 +86,30 @@ class HomeFragment : Fragment() {
 
         // Floating Action Button 클릭 시
         binding.homeFloatingBt.setOnClickListener {
+            Log.e("floating button", "click!!!!!!!!")
+
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED -> {
+//                    스토리지 읽기 권한이 허용이면 커스텀 앨범 띄워주기
+//                    권한 있을 경우 : PERMISSION_GRANTED
+//                    권한 없을 경우 : PERMISSION_DENIED
+                    Log.e("floatingButton", "activity go")
+                    val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                    startActivity(postUploadActivity)
+                }
+
+                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                    //권한을 명시적으로 거부한 경우 : ture
+                    //다시 묻지 않음을 선택한 경우 : false
+                    //다이얼로그를 띄워 권한 팝업을 허용해야 갤러리 접근이 가능하다는 사실을 알려줌
+                    val permissionDialog = PermissionDialog()
+                    permissionDialog.isCancelable = false
+                    permissionDialog.show(parentFragmentManager, "permission dialog")
+                }
+            }
 
         }
 
