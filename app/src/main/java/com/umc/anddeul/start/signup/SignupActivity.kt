@@ -41,6 +41,14 @@ class SignupActivity: AppCompatActivity()  {
                     Log.e(TAG, "카카오계정으로 회원가입 실패", error)
                 } else if (token != null) {
                     Log.i(TAG, "카카오계정으로 회원가입 성공 ${token.accessToken}")
+                    signinService.executeSignIn(token.accessToken) { signinResponse ->
+                        if (signinResponse != null) {
+                            if (signinResponse.isSuccess.toString() == "true") {
+                                saveJwt(signinResponse.accessToken.toString())
+                            }
+                        } else {
+                        }
+                    }
                 }
             }
 
@@ -62,6 +70,9 @@ class SignupActivity: AppCompatActivity()  {
                         Log.i(TAG, "카카오톡으로 회원가입 성공 ${token.accessToken}")
                         signinService.executeSignIn(token.accessToken) { signinResponse ->
                             if (signinResponse != null) {
+                                if (signinResponse.isSuccess.toString() == "true") {
+                                    saveJwt(signinResponse.accessToken.toString())
+                                }
                             } else {
                             }
                         }
@@ -83,11 +94,23 @@ class SignupActivity: AppCompatActivity()  {
                     Log.i(TAG, "회원가입 성공 ${token.accessToken}")
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
                         if (signinResponse != null) {
+                            if (signinResponse.isSuccess.toString() == "true") {
+                                saveJwt(signinResponse.accessToken.toString())
+                            }
                         } else {
                         }
                     }
                 }
             }
         }
+    }
+
+    //// 토큰 저장
+    private fun saveJwt(jwt: String){
+        val spf = getSharedPreferences("myToken", MODE_PRIVATE)
+        val editor = spf.edit()
+
+        editor.putString("jwtToken", jwt)
+        editor.apply()
     }
 }

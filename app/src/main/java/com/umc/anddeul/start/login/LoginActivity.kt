@@ -43,6 +43,9 @@ class LoginActivity: AppCompatActivity()  {
                     Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
                         if (signinResponse != null) {
+                            if (signinResponse.isSuccess.toString() == "true") {
+                                saveJwt(signinResponse.accessToken.toString())
+                            }
                         } else {
                         }
                     }
@@ -67,6 +70,9 @@ class LoginActivity: AppCompatActivity()  {
                         Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
                         signinService.executeSignIn(token.accessToken) { signinResponse ->
                             if (signinResponse != null) {
+                                if (signinResponse.isSuccess.toString() == "true") {
+                                    saveJwt(signinResponse.accessToken.toString())
+                                }
                             } else {
                             }
                         }
@@ -88,11 +94,23 @@ class LoginActivity: AppCompatActivity()  {
                     Log.i(TAG, "로그인 성공 ${token.accessToken}")
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
                         if (signinResponse != null) {
+                            if (signinResponse.isSuccess.toString() == "true") {
+                                saveJwt(signinResponse.accessToken.toString())
+                            }
                         } else {
                         }
                     }
                 }
             }
         }
+    }
+
+    //// 토큰 저장
+    private fun saveJwt(jwt: String){
+        val spf = getSharedPreferences("myToken", MODE_PRIVATE)
+        val editor = spf.edit()
+
+        editor.putString("jwtToken", jwt)
+        editor.apply()
     }
 }
