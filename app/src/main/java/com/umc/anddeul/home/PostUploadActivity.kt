@@ -61,7 +61,7 @@ class PostUploadActivity : AppCompatActivity() {
         }
 
         binding.uploadGalleryRv.layoutManager = GridLayoutManager(this, 3)
-        val galleryAdapter = GalleryAdapter(galleryImages = getGalleryImages(), selectedImages = selectedImages) { selectedImageUri ->
+        val galleryAdapter = GalleryAdapter(this, galleryImages = getGalleryImages(), selectedImages = selectedImages) { selectedImageUri ->
             binding.uploadSelectedIv.setImageURI(selectedImageUri)
         }
 
