@@ -8,6 +8,7 @@
     <application
         android:name=".utils.GlobalApplication"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -55,6 +56,12 @@
         </activity>
         <activity android:name=".start.terms.TermsActivity" />
         <activity android:name=".start.setprofile.SetProfileActivity" />
+        <activity android:name=".invite.InviteStartActivity" />
+        <activity android:name=".invite.CreateGroupActivity" />
+        <activity android:name=".invite.CreateGroupCodeActivity" />
+        <activity android:name=".invite.JoinGroupActivity" />
+        <activity android:name=".invite.JoinGroupCodeActivity" />
+        <activity android:name=".invite.JoinGroupSendActivity" />
     </application>
 
 </manifest>
