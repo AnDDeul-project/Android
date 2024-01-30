@@ -60,6 +60,17 @@ class PostboxFragment : Fragment() {
                     val selectedDateText = day.date.format(dateFormat)
                     Toast.makeText(view.context, "Selected Date: $selectedDateText", Toast.LENGTH_SHORT).show()
 
+                    val letterListFragment = LetterListFragment()
+
+                    val bundle = Bundle()
+                    bundle.putString("selectedDate", selectedDateText)
+                    letterListFragment.arguments = bundle
+
+                    // 날짜별 편지 확인 페이지로 이동
+                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, letterListFragment)
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss()
                 }
             }
 
