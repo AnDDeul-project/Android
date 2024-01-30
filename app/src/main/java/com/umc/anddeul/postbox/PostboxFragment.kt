@@ -5,12 +5,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendar.core.WeekDay
+import com.kizitonwose.calendar.core.atStartOfMonth
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendar.view.WeekDayBinder
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
+import com.umc.anddeul.databinding.ItemCalendarBinding
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 class PostboxFragment : Fragment() {
     private lateinit var binding: FragmentPostboxBinding
@@ -32,7 +46,60 @@ class PostboxFragment : Fragment() {
 
 
         //// 달력
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val bind = ItemCalendarBinding.bind(view)
+            lateinit var day: WeekDay
 
+            // 날짜 클릭 시
+            init {
+                view.setOnClickListener {
+                    // 달력에서 날짜 클릭 시 동작 추가
+
+                    // 제대로 선택되었는지 확인 코드 (추후 삭제)
+                    val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                    val selectedDateText = day.date.format(dateFormat)
+                    Toast.makeText(view.context, "Selected Date: $selectedDateText", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+
+            // 날짜 넣기
+            fun bind(day: WeekDay) {
+                val dateFormatter = DateTimeFormatter.ofPattern("dd")
+                this.day = day
+                bind.calDateTv.text = dateFormatter.format(day.date)
+                bind.calDayTv.text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN).toString()
+
+                // 요일별 색상 다르게
+                val textColorRes = when (day.date.dayOfWeek) {
+                    DayOfWeek.SATURDAY -> R.color.system_informative
+                    DayOfWeek.SUNDAY -> R.color.system_error
+                    else -> if (day.date == LocalDate.now()) R.color.white else R.color.black
+                }
+
+                if (day.date == LocalDate.now()) {
+                    bind.calDateTv.setBackgroundResource(R.drawable.calendar_circle)
+                } else {
+                    bind.calDateTv.background = null // Remove the background
+                }
+
+                bind.calDateTv.setTextColor(ContextCompat.getColor(view.context, textColorRes))
+            }
+        }
+
+        // 달력에 적용
+        binding.rvCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
+        }
+
+        val currentMonth = YearMonth.now()
+        binding.rvCalendar.setup(
+            currentMonth.minusMonths(5).atStartOfMonth(),
+            currentMonth.plusMonths(5).atEndOfMonth(),
+            firstDayOfWeek = DayOfWeek.MONDAY,
+        )
+        binding.rvCalendar.scrollToDate(LocalDate.now())
 
 
         //// 편지 리스트
