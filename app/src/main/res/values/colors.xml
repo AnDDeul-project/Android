@@ -38,6 +38,7 @@
     <color name="icon_white">#FFFFFF</color>
 
     // Grey
+    <color name="grey_700">#696763</color>
     <color name="grey_500">#9C9A96</color>
     <color name="grey_200">#E7E6E5</color>
 
