@@ -9,6 +9,7 @@ import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.umc.anddeul.MainActivity
 import com.umc.anddeul.start.signin.service.SigninService
 import com.umc.anddeul.databinding.ActivitySignupBinding
 import com.umc.anddeul.start.StartActivity
@@ -46,8 +47,14 @@ class SignupActivity: AppCompatActivity()  {
                         if (signinResponse != null) {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
-                                val termsIntent = Intent(this, TermsActivity::class.java)
-                                startActivity(termsIntent)
+                                if (signinResponse.has == true){
+                                    val mainIntent = Intent(this, MainActivity::class.java)
+                                    startActivity(mainIntent)
+                                }
+                                else {
+                                    val termsIntent = Intent(this, TermsActivity::class.java)
+                                    startActivity(termsIntent)
+                                }
                             }
                         } else {
                         }
@@ -75,8 +82,14 @@ class SignupActivity: AppCompatActivity()  {
                             if (signinResponse != null) {
                                 if (signinResponse.isSuccess.toString() == "true") {
                                     saveJwt(signinResponse.accessToken.toString())
-                                    val termsIntent = Intent(this, TermsActivity::class.java)
-                                    startActivity(termsIntent)
+                                    if (signinResponse.has == true){
+                                        val mainIntent = Intent(this, MainActivity::class.java)
+                                        startActivity(mainIntent)
+                                    }
+                                    else {
+                                        val termsIntent = Intent(this, TermsActivity::class.java)
+                                        startActivity(termsIntent)
+                                    }
                                 }
                             } else {
                             }
@@ -101,8 +114,14 @@ class SignupActivity: AppCompatActivity()  {
                         if (signinResponse != null) {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
-                                val termsIntent = Intent(this, TermsActivity::class.java)
-                                startActivity(termsIntent)
+                                if (signinResponse.has == true){
+                                    val mainIntent = Intent(this, MainActivity::class.java)
+                                    startActivity(mainIntent)
+                                }
+                                else {
+                                    val termsIntent = Intent(this, TermsActivity::class.java)
+                                    startActivity(termsIntent)
+                                }
                             }
                         } else {
                         }
