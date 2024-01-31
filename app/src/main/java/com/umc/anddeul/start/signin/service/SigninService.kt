@@ -1,6 +1,7 @@
-package com.umc.anddeul.data.signin
+package com.umc.anddeul.start.signin.service
 
-import android.util.Log
+import com.umc.anddeul.start.signin.model.SigninResponse
+import com.umc.anddeul.start.signin.network.SigninInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
