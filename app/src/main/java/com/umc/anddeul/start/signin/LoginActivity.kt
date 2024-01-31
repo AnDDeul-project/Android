@@ -1,4 +1,4 @@
-package com.umc.anddeul.start.login
+package com.umc.anddeul.start.signin
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.umc.anddeul.data.signin.SigninService
+import com.umc.anddeul.start.signin.service.SigninService
 import com.umc.anddeul.databinding.ActivityLoginBinding
 import com.umc.anddeul.start.StartActivity
 

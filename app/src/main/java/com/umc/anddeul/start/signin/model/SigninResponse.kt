@@ -1,4 +1,4 @@
-package com.umc.anddeul.data.signin
+package com.umc.anddeul.start.signin.model
 
 data class SigninResponse (
     val status: Int,
