@@ -149,15 +149,4 @@ class PostboxFragment : Fragment() {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
     }
-
-    private fun setClickListener(date: LocalDate, textView: TextView) {
-        textView.setOnClickListener {
-            textView.setBackgroundResource(R.drawable.calendar_circle)
-            showToast(date)
-        }
-    }
-
-    private fun showToast(date: LocalDate) {
-        Toast.makeText(requireContext(), "Selected date: $date", Toast.LENGTH_SHORT).show()
-    }
 }
