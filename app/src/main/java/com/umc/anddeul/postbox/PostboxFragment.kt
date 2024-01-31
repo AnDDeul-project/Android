@@ -5,16 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.core.atStartOfMonth
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.view.ViewContainer
-import com.kizitonwose.calendar.view.WeekDayBinder
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
@@ -24,11 +20,13 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
+import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
 class PostboxFragment : Fragment() {
     private lateinit var binding: FragmentPostboxBinding
     private lateinit var postAdapter: LetterAdapter
+    private var currentStartOfWeek: LocalDate = LocalDate.now()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,72 +44,24 @@ class PostboxFragment : Fragment() {
 
 
         //// 달력
-        class DayViewContainer(view: View) : ViewContainer(view) {
-            val bind = ItemCalendarBinding.bind(view)
-            lateinit var day: WeekDay
 
-            // 날짜 클릭 시
-            init {
-                view.setOnClickListener {
-                    // 달력에서 날짜 클릭 시 동작 추가
+        setWeek(currentStartOfWeek)
 
-                    // 제대로 선택되었는지 확인 코드 (추후 삭제)
-                    val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                    val selectedDateText = day.date.format(dateFormat)
-                    Toast.makeText(view.context, "Selected Date: $selectedDateText", Toast.LENGTH_SHORT).show()
-
-                    val letterListFragment = LetterListFragment()
-
-                    val bundle = Bundle()
-                    bundle.putString("selectedDate", selectedDateText)
-                    letterListFragment.arguments = bundle
-
-                    // 날짜별 편지 확인 페이지로 이동
-                    (context as MainActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_frm, letterListFragment)
-                        .addToBackStack(null)
-                        .commitAllowingStateLoss()
-                }
-            }
-
-            // 날짜 넣기
-            fun bind(day: WeekDay) {
-                val dateFormatter = DateTimeFormatter.ofPattern("dd")
-                this.day = day
-                bind.calDateTv.text = dateFormatter.format(day.date)
-                bind.calDayTv.text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN).toString()
-
-                // 요일별 색상 다르게
-                val textColorRes = when (day.date.dayOfWeek) {
-                    DayOfWeek.SATURDAY -> R.color.system_informative
-                    DayOfWeek.SUNDAY -> R.color.system_error
-                    else -> if (day.date == LocalDate.now()) R.color.white else R.color.black
-                }
-
-                if (day.date == LocalDate.now()) {
-                    bind.calDateTv.setBackgroundResource(R.drawable.calendar_circle)
-                } else {
-                    bind.calDateTv.background = null // Remove the background
-                }
-
-                bind.calDateTv.setTextColor(ContextCompat.getColor(view.context, textColorRes))
-            }
+        // 저번주
+        binding.beforeBtn.setOnClickListener {
+            currentStartOfWeek = currentStartOfWeek.minusWeeks(1)
+            val yearMonth = YearMonth.from(currentStartOfWeek)
+            binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+            setWeek(currentStartOfWeek)
         }
-
-        // 달력에 적용
-        binding.rvCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
-            override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
+        
+        // 다음주
+        binding.afterBtn.setOnClickListener {
+            currentStartOfWeek = currentStartOfWeek.plusWeeks(1)
+            val yearMonth = YearMonth.from(currentStartOfWeek)
+            binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+            setWeek(currentStartOfWeek)
         }
-
-        val currentMonth = YearMonth.now()
-        binding.rvCalendar.setup(
-            currentMonth.minusMonths(5).atStartOfMonth(),
-            currentMonth.plusMonths(5).atEndOfMonth(),
-            firstDayOfWeek = DayOfWeek.MONDAY,
-        )
-        binding.rvCalendar.scrollToDate(LocalDate.now())
-
 
         //// 편지 리스트
         postAdapter = LetterAdapter()
@@ -165,5 +115,49 @@ class PostboxFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setWeek(startOfWeek: LocalDate) {
+        val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        val yearMonth = YearMonth.from(nearestMonday)
+        binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+
+        for (i in 1..7) {
+            val currentDateForDay = nearestMonday.plusDays(i.toLong() - 1)
+            val dateTextView = when (i) {
+                1 -> binding.date1
+                2 -> binding.date2
+                3 -> binding.date3
+                4 -> binding.date4
+                5 -> binding.date5
+                6 -> binding.date6
+                7 -> binding.date7
+                else -> null
+            }
+
+            dateTextView?.text = formatDate(currentDateForDay)
+
+            // 날짜 선택 시
+            dateTextView?.setOnClickListener {
+                Toast.makeText(requireContext(), "Selected date: $currentDateForDay", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    private fun formatDate(date: LocalDate): String {
+        val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
+        return date.format(formatter)
+    }
+
+    private fun setClickListener(date: LocalDate, textView: TextView) {
+        textView.setOnClickListener {
+            textView.setBackgroundResource(R.drawable.calendar_circle)
+            showToast(date)
+        }
+    }
+
+    private fun showToast(date: LocalDate) {
+        Toast.makeText(requireContext(), "Selected date: $date", Toast.LENGTH_SHORT).show()
     }
 }

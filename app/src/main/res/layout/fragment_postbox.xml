@@ -31,18 +31,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.kizitonwose.calendar.view.WeekCalendarView
-                android:id="@+id/rvCalendar"
-                android:layout_width="339dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="173dp"
-                app:cv_dayViewResource="@layout/item_calendar"
-                app:cv_daySize="seventhWidth"
-                app:cv_orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
@@ -138,6 +126,225 @@
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
                 app:layout_constraintTop_toBottomOf="@+id/voiceIv" />
+
+            <TextView
+                android:id="@+id/date1"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="180dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/date2"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="72dp"
+                android:layout_marginTop="180dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="2"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/date3"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="180dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="3"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/date4"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="177dp"
+                android:layout_marginTop="180dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="4"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/date5"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="231dp"
+                android:layout_marginTop="180dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="5"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/date6"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="284dp"
+                android:layout_marginTop="180dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="6"
+                android:textSize="16sp"
+                android:textColor="@color/system_informative"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/date7"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="337dp"
+                android:layout_marginTop="180dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="7"
+                android:textSize="16sp"
+                android:textColor="@color/system_error"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day1"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="213dp"
+                android:text="월"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:fontFamily="@font/pretendard_regular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day2"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="77dp"
+                android:layout_marginTop="213dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="화"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day3"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="130dp"
+                android:layout_marginTop="213dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="수"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day4"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="182dp"
+                android:layout_marginTop="213dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="목"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day5"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="236dp"
+                android:layout_marginTop="213dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="금"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day6"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="289dp"
+                android:layout_marginTop="213dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="토"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day7"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="342dp"
+                android:layout_marginTop="213dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="일"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/beforeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="168dp"
+                android:layout_marginTop="124dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/calendar_circle" />
+
+            <ImageView
+                android:id="@+id/afterBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="244dp"
+                android:layout_marginTop="124dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/calendar_circle" />
+
+            <TextView
+                android:id="@+id/selectDateTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="284dp"
+                android:layout_marginTop="140dp"
+                android:text="TextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
