@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="clear">#00FFFFFF</color>
 
     // 브랜드 컬러
     <color name="primary">#93D0BE</color>
