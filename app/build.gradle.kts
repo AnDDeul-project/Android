@@ -50,12 +50,19 @@ dependencies {
 
     // retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3") // 베어러 토큰 사용
+
+    implementation ("com.squareup.retrofit2:converter-scalars:2.1.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.1.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.6.0")
 
     // swipe refresh layout 라이브러리
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // viewPager2
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    // ViewPager2
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
