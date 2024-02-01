@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.databinding.ActivityStartBinding
-import com.umc.anddeul.start.login.LoginActivity
-import com.umc.anddeul.start.signup.SignupActivity
+import com.umc.anddeul.start.signin.LoginActivity
+import com.umc.anddeul.start.signin.SignupActivity
 
 class StartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartBinding

@@ -37,7 +37,7 @@
         </activity>
         <activity android:name=".start.StartActivity" />
         <activity
-            android:name=".start.login.LoginActivity"
+            android:name=".start.signin.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".start.signup.SignupActivity"
+            android:name=".start.signin.SignupActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
