@@ -4,11 +4,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
+import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
 
+@Suppress("DEPRECATION")
 class PostWriteActivity : AppCompatActivity() {
     lateinit var binding: ActivityPostWriteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,18 +29,16 @@ class PostWriteActivity : AppCompatActivity() {
         }
 
         // 이미지 URI 목록 받아오기
-        val selectedImagesUri = intent.getStringArrayListExtra("selectedImages")
+        val selectedImagesUri : ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
+
+        val selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
+        binding.uploadWriteSelectedVp.adapter = selectedVPAdapter
+        binding.uploadWriteSelectedVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
-        if (selectedImagesUri != null) {
-            for (imageUriString in selectedImagesUri) {
-                val imageUri = Uri.parse(imageUriString)
-
-                // 예시로 ImageView를 사용하여 이미지를 나열
-                // val imageView = ImageView(this)
-
-                binding.uploadWriteSelectedIv.setImageURI(imageUri)
-            }
+        val copiedImagesUri: List<Uri> = ArrayList(selectedImagesUri)
+        for (imageUri in copiedImagesUri) {
+            selectedVPAdapter.addImage(imageUri)
         }
 
         binding.uploadWriteBtn.setOnClickListener {

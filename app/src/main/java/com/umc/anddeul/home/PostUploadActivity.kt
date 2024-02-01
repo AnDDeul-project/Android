@@ -34,12 +34,11 @@ class PostUploadActivity : AppCompatActivity() {
                         val intent = Intent(this@PostUploadActivity, PostWriteActivity::class.java)
 
                         // 선택된 이미지들을 번들에 추가
-                        val selectedImagesUri: ArrayList<String> = ArrayList()
+                        val selectedImagesUri: MutableList<Uri> = ArrayList()
                         for (selectedImageUri in selectedImages) {
-                            selectedImagesUri.add(selectedImageUri.toString())
+                            selectedImagesUri.add(selectedImageUri)
                         }
-
-                        intent.putStringArrayListExtra("selectedImages", selectedImagesUri)
+                        intent.putParcelableArrayListExtra("selectedImages", ArrayList(selectedImagesUri))
 
                         // 다음 액티비티 시작
                         startActivity(intent)
