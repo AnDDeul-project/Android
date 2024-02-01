@@ -1,6 +1,7 @@
 package com.umc.anddeul.home
 
 import PostsInterface
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -179,6 +180,7 @@ class HomeFragment : Fragment() {
         val postService = retrofitBearer.create(PostsInterface::class.java)
 
         postService.homePosts().enqueue(object : Callback<Post> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 Log.e("postService", "onResponse")
                 Log.e("postService response code : ", "${response.code()}")
@@ -188,7 +190,7 @@ class HomeFragment : Fragment() {
                     val postData = response.body()?.result?.map {
                         PostData(it.user_idx, it.content, it.picture)
                     }
-
+                    Log.e("postService", "$postData")
                     if (postData != null) {
                         postRVAdapter.postList = postData
                         postRVAdapter.notifyDataSetChanged()
