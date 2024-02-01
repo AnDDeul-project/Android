@@ -23,16 +23,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
-        android:id="@+id/upload_write_selected_iv"
+    <!--    <ImageView-->
+    <!--        android:id="@+id/upload_write_selected_iv"-->
+    <!--        android:layout_width="342dp"-->
+    <!--        android:layout_height="342dp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar"-->
+    <!--        android:src="@drawable/img_upload_feed"-->
+    <!--        android:layout_marginTop="10dp"/>-->
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/upload_write_selected_vp"
         android:layout_width="342dp"
         android:layout_height="342dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar"
-        android:src="@drawable/img_upload_feed"
         android:layout_marginTop="10dp"/>
-    
+
     <EditText
         android:id="@+id/upload_write_edit"
         android:layout_width="342dp"
@@ -42,11 +51,11 @@
         android:gravity="start"
         android:padding="14dp"
         android:fontFamily="@font/font_pretendard_regular"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:maxLength="100"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_write_selected_iv"
+        app:layout_constraintTop_toBottomOf="@+id/upload_write_selected_vp"
         android:layout_marginTop="20dp"/>
     
     <Button
