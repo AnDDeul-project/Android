@@ -28,7 +28,7 @@
         android:layout_marginTop="15dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/hoome_upload_image_vp"
+        android:id="@+id/home_upload_image_vp"
         android:layout_width="342dp"
         android:layout_height="342dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +45,7 @@
         android:src="@drawable/ic_home_emoji"
         android:background="@color/background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hoome_upload_image_vp"
+        app:layout_constraintTop_toBottomOf="@+id/home_upload_image_vp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="18dp"/>
 

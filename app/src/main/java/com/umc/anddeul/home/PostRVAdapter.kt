@@ -1,11 +1,13 @@
 package com.umc.anddeul.home
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
 import com.umc.anddeul.home.model.PostData
@@ -30,16 +32,24 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>) 
         fun bind(postData: PostData) {
             // binding.homeUploadProfileIv = post.
             binding.homeUploadUsernameTv.text = postData.user_idx
-            // binding.homeUploadImageIv
             binding.homeUploadExplainTv.text = postData.content
             binding.homeUploadEmojiIb.setOnClickListener {
                 showEmojiPopup(binding)
             }
 
-            val imageUrl = postData.picture
-            val imageView = binding.homeUploadImageIv
-            val loadImage = LoadImage(imageView)
-            loadImage.execute(imageUrl)
+            // val imageUrls = postData.picture.map { it.toString() }.toMutableList()
+            val imageUrlsString = postData.picture
+            val imageUrls = imageUrlsString.substring(1, imageUrlsString.length - 1).split(", ")
+
+            Log.e("postRVAdapter", "$imageUrls")
+//            val imageView = binding.homeUploadImageIv
+//            val loadImage = LoadImage(imageView)
+//            loadImage.execute(imageUrl)
+
+            val postVPAdapter = PostVPAdapter(imageUrls)
+            binding.homeUploadImageVp.adapter = postVPAdapter
+            binding.homeUploadImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
         }
     }
 
