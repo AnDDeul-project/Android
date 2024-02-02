@@ -30,7 +30,6 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>) 
     inner class ViewHolder(val binding: FragmentHomeUploadBinding): RecyclerView.ViewHolder(binding.root) {
         // bind 메서드를 통해 해당 뷰의 텍스트를 게시글 데이터로 설정
         fun bind(postData: PostData) {
-            // binding.homeUploadProfileIv = post.
             binding.homeUploadUsernameTv.text = postData.user_idx
             binding.homeUploadExplainTv.text = postData.content
             binding.homeUploadEmojiIb.setOnClickListener {
