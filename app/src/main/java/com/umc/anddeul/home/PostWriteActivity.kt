@@ -46,7 +46,7 @@ class PostWriteActivity : AppCompatActivity() {
         }
 
         // 이미지 URI 목록 받아오기
-        val selectedImagesUri : ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
+        val selectedImagesUri: ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
 
         val selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
         binding.uploadWriteSelectedVp.adapter = selectedVPAdapter
@@ -58,20 +58,10 @@ class PostWriteActivity : AppCompatActivity() {
             selectedVPAdapter.addImage(imageUri)
         }
 
-
         binding.uploadWriteBtn.setOnClickListener {
             // 서버에 데이터 전송
             boardPost()
-
-            // homeFragment로 돌아가기
-            Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-            }.also {
-                startActivity(it)
-            }
-            finishAffinity()
         }
-
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File {
@@ -91,7 +81,8 @@ class PostWriteActivity : AppCompatActivity() {
     fun boardPost() {
         val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+        val token =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -112,7 +103,8 @@ class PostWriteActivity : AppCompatActivity() {
         val boardService = retrofitBearer.create(BoardInterface::class.java)
 
         // 이미지 URI 목록 받아오기
-        val selectedImagesUri : ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
+        val selectedImagesUri: ArrayList<Uri> =
+            intent.getParcelableArrayListExtra("selectedImages")!!
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
         val copiedImagesUri: List<Uri> = ArrayList(selectedImagesUri)
 
@@ -128,26 +120,36 @@ class PostWriteActivity : AppCompatActivity() {
 
         Log.e("boardService", "${contentRequestBody}, ${imageParts}")
 
-        boardService.homeBoard(contentRequestBody, imageParts).enqueue(object : Callback<BoardResponse> {
-            override fun onResponse(call: Call<BoardResponse>, response: Response<BoardResponse>) {
-                Log.e("boardService", "onResponse")
-                Log.e("boardService", "${response.code()}")
-                Log.e("boardService", "${response.body()}")
+        boardService.homeBoard(contentRequestBody, imageParts)
+            .enqueue(object : Callback<BoardResponse> {
+                override fun onResponse(
+                    call: Call<BoardResponse>,
+                    response: Response<BoardResponse>
+                ) {
+                    Log.e("boardService", "onResponse")
+                    Log.e("boardService", "${response.code()}")
+                    Log.e("boardService", "${response.body()}")
 
-                if (response.isSuccessful) {
-                    Log.e("boardService", "isSuccessful")
+                    if (response.isSuccessful) {
+                        Log.e("boardService", "게시글 업로드 성공")
+
+                        // 홈 화면으로 이동하기
+                        Intent(this@PostWriteActivity, MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        }.also {
+                            startActivity(it)
+                        }
+                        finishAffinity()
+
+                    } else {
+                        Log.e("boardService", "게시글 업로드 실패")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
-                Log.e("boardService", "onFailure")
-                Log.e("boardService", "Failure message: ${t.message}")
-
-            }
-
-        })
-
+                override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
+                    Log.e("boardService", "onFailure")
+                    Log.e("boardService", "Failure message: ${t.message}")
+                }
+            })
     }
-
-
 }
