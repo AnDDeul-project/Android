@@ -37,6 +37,11 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>) 
                 showEmojiPopup(binding)
             }
 
+            val profileImageUrl = postData.userImage
+            val imageView = binding.homeUploadProfileIv
+            val loadImage = LoadProfileImage(imageView)
+            loadImage.execute(profileImageUrl)
+
             val imageUrlsString = postData.picture
             Log.e("postRVAdapter", "$imageUrlsString")
 
