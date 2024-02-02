@@ -37,16 +37,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>) 
                 showEmojiPopup(binding)
             }
 
-            // val imageUrls = postData.picture.map { it.toString() }.toMutableList()
             val imageUrlsString = postData.picture
-            val imageUrls = imageUrlsString.substring(1, imageUrlsString.length - 1).split(", ")
+            Log.e("postRVAdapter", "$imageUrlsString")
 
-            Log.e("postRVAdapter", "$imageUrls")
-//            val imageView = binding.homeUploadImageIv
-//            val loadImage = LoadImage(imageView)
-//            loadImage.execute(imageUrl)
-
-            val postVPAdapter = PostVPAdapter(imageUrls)
+            val postVPAdapter = PostVPAdapter(imageUrlsString)
             binding.homeUploadImageVp.adapter = postVPAdapter
             binding.homeUploadImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
