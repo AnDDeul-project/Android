@@ -10,5 +10,6 @@ data class Post(
 data class PostData(
     val user_idx: String,
     val content: String,
-    val picture: String
+    val picture: List<String>,
+    val userImage : String
 )
