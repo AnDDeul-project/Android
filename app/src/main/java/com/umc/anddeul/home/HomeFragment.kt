@@ -20,8 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
+import com.umc.anddeul.home.model.Member
+import com.umc.anddeul.home.model.MemberResponse
 import com.umc.anddeul.home.model.Post
 import com.umc.anddeul.home.model.PostData
+import com.umc.anddeul.home.network.MemberInterface
 import com.umc.anddeul.home.service.PostService
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -34,7 +37,7 @@ import java.util.concurrent.TimeUnit
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private var postService = context?.let { PostService(it) }
-    lateinit var postRVAdapter : PostRVAdapter
+    lateinit var postRVAdapter: PostRVAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,43 +61,11 @@ class HomeFragment : Fragment() {
             Log.e("toolbar", "click!!!!!!!!")
             if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 drawerLayout.openDrawer(GravityCompat.END)
+                loadMemberList()
             } else {
                 drawerLayout.closeDrawer(GravityCompat.END)
             }
         }
-
-        val memberLayout = binding.homeMenuMembersLinear
-
-        // 더미 데이터 리스트
-        val memberDataList = listOf("이솜솜", "김솜솜", "박솜솜", "최솜솜")
-
-        for (memberData in memberDataList) {
-            val memberBinding = FragmentHomeMenuMemberBinding.inflate(
-                LayoutInflater.from(context),
-                memberLayout,
-                true
-            )
-            memberBinding.homeMenuMemberNameTv.text = memberData
-        }
-
-        val requestMemberLayout = binding.homeMenuRequestMembersLinear
-        // 수락 요청 더미 데이터 리스트
-        val requestMemberDataList = listOf("이솜솜", "김솜솜")
-        for (requestMember in requestMemberDataList) {
-            val memberBinding = FragmentHomeMenuRequestMemberBinding.inflate(
-                LayoutInflater.from(context),
-                requestMemberLayout,
-                true
-            )
-            memberBinding.homeMenuRequestMemberNameTv.text = requestMember
-
-            memberBinding.homeMenuRequestAcceptBt.setOnClickListener {
-                val dialog = ConfirmDialog("이솜솜", "행복한 우리 가족")
-                dialog.isCancelable = false
-                dialog.show(parentFragmentManager, "home accept confirm dialog")
-            }
-        }
-
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
         binding.homeSwipeRefresh.setOnRefreshListener {
@@ -129,15 +100,10 @@ class HomeFragment : Fragment() {
                     permissionDialog.show(parentFragmentManager, "permission dialog")
                 }
             }
-
         }
-
         return binding.root
     }
 
-    fun floatingButtonSetting() {
-
-    }
 
 //    fun getPostData() {
 //        Log.e("getPost", "call")
@@ -157,9 +123,11 @@ class HomeFragment : Fragment() {
 
     fun loadPost() {
 
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val spf: SharedPreferences =
+            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+        val token =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -198,8 +166,7 @@ class HomeFragment : Fragment() {
 
                     // 새로고침 상태를 false로 변경해서 새로고침 완료
                     binding.homeSwipeRefresh.isRefreshing = false
-                }
-                else {
+                } else {
                     Log.e("postService onResponse", "But not success")
                 }
             }
@@ -210,5 +177,121 @@ class HomeFragment : Fragment() {
             }
         })
 
+    }
+
+    fun loadMemberList() {
+        val spf: SharedPreferences =
+            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        // val token = spf.getString("jwtToken", "")
+        val token =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://umc-garden.store")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val memberListService = retrofitBearer.create(MemberInterface::class.java)
+
+        memberListService.memberList().enqueue(object : Callback<MemberResponse> {
+            override fun onResponse(
+                call: Call<MemberResponse>,
+                response: Response<MemberResponse>
+            ) {
+                Log.e("memberService", "onResponse")
+                Log.e("memberService response code : ", "${response.code()}")
+                Log.e("memberService response body : ", "${response.body()}")
+
+                if (response.isSuccessful) {
+                    val memberData = response.body()?.result
+
+                    memberData?.let {
+                        val me = it.me
+                        val family = it.family
+                        val wait = it.waitlist
+
+                        // 가족 초대 코드 설정
+                        binding.homeMenuCodeNumTv.text = memberData.family_code
+
+                        // 내 프로필 이름 설정
+                        binding.homeMenuMyProfileNameIv.text = me.nickname
+                        // 내 프로필 사진 설정
+                        val profileImageUrl = me.image
+                        val imageView = binding.homeMenuMyProfileIv
+                        val loadImage = LoadProfileImage(imageView)
+                        loadImage.execute(profileImageUrl)
+
+                        // 가족 구성원 정보 리스트
+                        val familyList = family.map { member ->
+                            Member(member.snsId, member.nickname, member.image)
+                        }
+
+                        val memberLayout = binding.homeMenuMembersLinear
+
+                        for (memberData in familyList) {
+                            val memberBinding = FragmentHomeMenuMemberBinding.inflate(
+                                LayoutInflater.from(context),
+                                memberLayout,
+                                true
+                            )
+                            memberBinding.homeMenuMemberNameTv.text = memberData.nickname
+
+                            // 가족 구성원 프로필 사진 설정
+                            val profileImageUrl = memberData.image
+                            val imageView = memberBinding.homeMenuMemberProfileIv
+                            val loadImage = LoadProfileImage(imageView)
+                            loadImage.execute(profileImageUrl)
+                        }
+
+                        // 수락 요청 멤버 리스트
+                        val waitList = wait.map { waitMember ->
+                            Member(waitMember.snsId, waitMember.nickname, waitMember.image)
+                        }
+
+                        val waitLayout = binding.homeMenuRequestMembersLinear
+
+                        for (waitData in waitList) {
+                            val waitBinding = FragmentHomeMenuRequestMemberBinding.inflate(
+                                LayoutInflater.from(context),
+                                waitLayout, true
+                            )
+                            waitBinding.homeMenuRequestMemberNameTv.text = waitData.nickname
+
+                            // 수락하기 버튼 클릭시 (api 연결하기)
+                            waitBinding.homeMenuRequestAcceptBt.setOnClickListener {
+                                val dialog = ConfirmDialog(waitData.nickname, "행복한 우리 가족")
+                                dialog.isCancelable = false
+                                dialog.show(parentFragmentManager, "home accept confirm dialog")
+                            }
+
+                            // 수락 요청 멤버 프로필 사진 설정
+                            val profileImageUrl = waitData.image
+                            val imageView = waitBinding.homeMenuRequestMemberProfileIv
+                            val loadImage = LoadProfileImage(imageView)
+                            loadImage.execute(profileImageUrl)
+                        }
+                    }
+                } else {
+                    Log.e("memberService", "멤버 데이터 로드 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
+                Log.e("memberService", "onFailure")
+                Log.e("memberService", "Failure message: ${t.message}")
+            }
+
+        })
     }
 }
