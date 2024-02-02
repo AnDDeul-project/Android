@@ -19,12 +19,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/checkli_tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="120dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:lineSpacingExtra="36dp"
+                android:text="X월 X일"
+                android:textColor="#3B1F11"
+                android:textSize="26sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/calendar_recylerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="156dp"
+                android:layout_marginTop="168dp"
                 android:layout_marginEnd="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,6 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/checkli_top_box" />
 
     <TextView
@@ -81,19 +96,5 @@
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/checkli_tv_name"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/checkli_tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/pretendard_bold"
-        android:lineSpacingExtra="36dp"
-        android:text="X월 X일"
-        android:textColor="#3B1F11"
-        android:textSize="26sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkli_tv_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
