@@ -1,11 +1,12 @@
 package com.umc.anddeul.postbox
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -14,12 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
-import com.umc.anddeul.databinding.ItemCalendarBinding
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
@@ -45,6 +44,7 @@ class PostboxFragment : Fragment() {
 
         //// 달력
 
+        // 초기 세팅
         setWeek(currentStartOfWeek)
 
         // 저번주
@@ -117,6 +117,7 @@ class PostboxFragment : Fragment() {
         return binding.root
     }
 
+    // 달력 세팅
     private fun setWeek(startOfWeek: LocalDate) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
@@ -134,12 +135,67 @@ class PostboxFragment : Fragment() {
                 7 -> binding.date7
                 else -> null
             }
+            val dayTextView = when (i) {
+                1 -> binding.day1
+                2 -> binding.day2
+                3 -> binding.day3
+                4 -> binding.day4
+                5 -> binding.day5
+                6 -> binding.day6
+                7 -> binding.day7
+                else -> null
+            }
 
             dateTextView?.text = formatDate(currentDateForDay)
 
+            // 오늘 날짜에 동그라미 표시
+            val today = LocalDate.now()
+            val isTodayInWeek = startOfWeek <= today && today <= startOfWeek.plusDays(6)
+            
+            if (isTodayInWeek) {
+                if (today == currentDateForDay) {
+                    binding.todayCircle.visibility = View.VISIBLE
+                    dateTextView?.viewTreeObserver?.addOnPreDrawListener(object :
+                        ViewTreeObserver.OnPreDrawListener {
+                        override fun onPreDraw(): Boolean {
+                            dateTextView.viewTreeObserver.removeOnPreDrawListener(this)
+                            val dateTextViewX = dateTextView.x
+                            val dateTextViewWidth = dateTextView.width.toFloat()
+                            val circleWidth = binding.todayCircle.width.toFloat()
+                            binding.todayCircle.x =
+                                dateTextViewX + (dateTextViewWidth - circleWidth) / 2
+                            return true
+                        }
+                    })
+                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    dayTextView?.setTextColor(Color.parseColor("#1D1D1D"))
+                    dayTextView?.typeface = Typeface.create("@font/font_pretendard_bold", Typeface.NORMAL)
+                    dateTextView?.typeface = Typeface.create("@font/font_pretendard_bold", Typeface.NORMAL)
+                }
+            } else {
+                dateTextView?.setTextColor(Color.parseColor("#666666"))
+                dayTextView?.setTextColor(Color.parseColor("#666666"))
+                dayTextView?.typeface = Typeface.create("@font/font_pretendard_regular", Typeface.NORMAL)
+                dateTextView?.typeface = Typeface.create("@font/font_pretendard_regular", Typeface.NORMAL)
+                binding.todayCircle.visibility = View.GONE
+            }
+
             // 날짜 선택 시
             dateTextView?.setOnClickListener {
-                Toast.makeText(requireContext(), "Selected date: $currentDateForDay", Toast.LENGTH_SHORT).show()
+                val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val selectedDateText = currentDateForDay.format(dateFormat)
+
+                val letterListFragment = LetterListFragment()
+
+                val bundle = Bundle()
+                bundle.putString("selectedDate", selectedDateText)
+                letterListFragment.arguments = bundle
+
+                // 날짜별 편지 확인 페이지로 이동
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, letterListFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
             }
 
         }
