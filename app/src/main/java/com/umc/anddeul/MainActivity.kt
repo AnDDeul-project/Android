@@ -1,5 +1,6 @@
 package com.umc.anddeul
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.umc.anddeul.checklist.ChecklistFragment
@@ -11,6 +12,7 @@ import com.umc.anddeul.postbox.PostboxFragment
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+    val REQUEST_IMAGE_CAPTURE = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
