@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/checkli__tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:lineSpacingExtra="36dp"
+        android:text="이름"
+        android:textColor="@color/primary"
+        android:textSize="26sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/checkli_add_tv_todaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="34dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:lineSpacingExtra="22dp"
+        android:text="님의 오늘의 할 일"
+        android:textColor="@color/text_high"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/checkli__tv_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/checkli_add_tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:lineSpacingExtra="36dp"
+        android:text="X월 X일"
+        android:textColor="#3B1F11"
+        android:textSize="26sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkli__tv_name" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/checkli_add_calendar_recylerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkli_add_tv_date" />
+
+    <EditText
+        android:id="@+id/checkli_et_contents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:background="@null"
+        android:drawableEnd="@drawable/checkli_img_inkpen"
+        android:fontFamily="@font/pretendard_bold"
+        android:hint="텍스트 입력"
+        android:inputType="text"
+        android:lineSpacingExtra="22dp"
+        android:textColor="@color/grey_500"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/checkli_et_circle"
+        app:layout_constraintTop_toBottomOf="@+id/checkli_add_calendar_recylerView" />
+
+    <TextView
+        android:id="@+id/checkli_et_reader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:letterSpacing="-0.01"
+        android:lineSpacingExtra="16dp"
+        android:text="이름님에게 할 일을 남겨보세요"
+        android:textColor="@color/grey_500"
+        app:layout_constraintStart_toEndOf="@+id/checkli_et_circle"
+        app:layout_constraintTop_toBottomOf="@+id/checkli_et_contents" />
+
+    <ImageView
+        android:id="@+id/checkli_et_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkli_add_calendar_recylerView"
+        app:srcCompat="@drawable/checkli_img_add_circle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/checklist_add_recylerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkli_et_reader" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
