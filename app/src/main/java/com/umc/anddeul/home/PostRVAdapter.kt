@@ -30,23 +30,21 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>) 
     inner class ViewHolder(val binding: FragmentHomeUploadBinding): RecyclerView.ViewHolder(binding.root) {
         // bind 메서드를 통해 해당 뷰의 텍스트를 게시글 데이터로 설정
         fun bind(postData: PostData) {
-            // binding.homeUploadProfileIv = post.
             binding.homeUploadUsernameTv.text = postData.user_idx
             binding.homeUploadExplainTv.text = postData.content
             binding.homeUploadEmojiIb.setOnClickListener {
                 showEmojiPopup(binding)
             }
 
-            // val imageUrls = postData.picture.map { it.toString() }.toMutableList()
+            val profileImageUrl = postData.userImage
+            val imageView = binding.homeUploadProfileIv
+            val loadImage = LoadProfileImage(imageView)
+            loadImage.execute(profileImageUrl)
+
             val imageUrlsString = postData.picture
-            val imageUrls = imageUrlsString.substring(1, imageUrlsString.length - 1).split(", ")
+            Log.e("postRVAdapter", "$imageUrlsString")
 
-            Log.e("postRVAdapter", "$imageUrls")
-//            val imageView = binding.homeUploadImageIv
-//            val loadImage = LoadImage(imageView)
-//            loadImage.execute(imageUrl)
-
-            val postVPAdapter = PostVPAdapter(imageUrls)
+            val postVPAdapter = PostVPAdapter(imageUrlsString)
             binding.homeUploadImageVp.adapter = postVPAdapter
             binding.homeUploadImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
