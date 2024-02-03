@@ -35,5 +35,8 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="GalleryToolBar">
+        <item name="fontFamily">@font/font_pretendard_bold</item>
+    </style>
 
 </resources>
