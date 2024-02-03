@@ -14,57 +14,57 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
-import com.umc.anddeul.databinding.FragmentPostboxBinding
+import com.umc.anddeul.databinding.FragmentLetterlistBinding
+import com.umc.anddeul.databinding.ItemCalendarBinding
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
-class PostboxFragment : Fragment() {
-    private lateinit var binding: FragmentPostboxBinding
-    private lateinit var postAdapter: LetterAdapter
-    private var currentStartOfWeek: LocalDate = LocalDate.now()
+class LetterListFragment : Fragment() {
+    private lateinit var binding: FragmentLetterlistBinding
+    private lateinit var letterlistAdapter: LetterListAdapter
+    private lateinit var selectedDay: LocalDate
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPostboxBinding.inflate(inflater, container, false)
-
-        //// 화분 키우기 페이지로 이동
-        binding.gotoPotBtn.setOnClickListener {
-//            (context as MainActivity).supportFragmentManager.beginTransaction()
-//                .replace(R.id.main_frm, PotFragment())
-//                .addToBackStack(null)
-//                .commitAllowingStateLoss()
-        }
-
+        binding = FragmentLetterlistBinding.inflate(inflater, container, false)
 
         //// 달력
+        val selectedDateStr = arguments?.getString("selectedDate")
+        var selectedDate = selectedDateStr.let {
+            LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        }
+        selectedDay = selectedDateStr?.let {
+            LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        } ?: LocalDate.now()
 
         // 초기 세팅
-        setWeek(currentStartOfWeek)
+        setWeek(selectedDate)
 
         // 저번주
-        binding.beforeBtn.setOnClickListener {
-            currentStartOfWeek = currentStartOfWeek.minusWeeks(1)
-            val yearMonth = YearMonth.from(currentStartOfWeek)
-            binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            setWeek(currentStartOfWeek)
+        binding.beforeBtn2.setOnClickListener {
+            selectedDate = selectedDate.minusWeeks(1)
+            val yearMonth = YearMonth.from(selectedDate)
+            binding.selectDateTv2.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+            setWeek(selectedDate)
         }
-        
+
         // 다음주
-        binding.afterBtn.setOnClickListener {
-            currentStartOfWeek = currentStartOfWeek.plusWeeks(1)
-            val yearMonth = YearMonth.from(currentStartOfWeek)
-            binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            setWeek(currentStartOfWeek)
+        binding.afterBtn2.setOnClickListener {
+            selectedDate = selectedDate.plusWeeks(1)
+            val yearMonth = YearMonth.from(selectedDate)
+            binding.selectDateTv2.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+            setWeek(selectedDate)
         }
 
         //// 편지 리스트
-        postAdapter = LetterAdapter()
+        letterlistAdapter = LetterListAdapter()
 
         // 테스트용 더미 데이터
         val dummyPosts = listOf(
@@ -78,91 +78,69 @@ class PostboxFragment : Fragment() {
             Letter(8, "세흐", 0, "어쩌구저쩌구"),
         )
 
-        postAdapter.letters = dummyPosts
-
+        letterlistAdapter.letters = dummyPosts
 
         //// 편지 보기(팝업)
-        val onClickListener = object: LetterAdapter.OnItemClickListener {
+        val onClickListener = object: LetterListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, pos: Int) {
                 val postPopupFragment = LetterPopupFragment(requireContext())
                 postPopupFragment.show(dummyPosts[pos])
             }
         }
-        postAdapter.setOnItemClickListener(onClickListener)
+        letterlistAdapter.setOnItemClickListener(onClickListener)
 
-        binding.rvLetters.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        binding.rvLetters.adapter = postAdapter
-
-
-        //// 편지 작성 (음성)
-        binding.voiceIv.setOnClickListener{
-            if(binding.letterEt.text.toString().isEmpty()){   // 작성된 텍스트 없을 때
-                val recordPopupFragment = RecordPopupFragment(requireContext())
-                recordPopupFragment.show()
-            } else {    // 작성된 텍스트 있을 때
-                val dialogFragment = DialogLetterFragment(requireContext())
-                dialogFragment.show("voice")
-            }
-        }
-
-
-        //// 편지 작성 (텍스트)
-        binding.mailIv.setOnClickListener{
-            // 편지 보내는 기능 추가
-
-            //텍스트 초기화
-            binding.letterEt.setText("")
-        }
+        binding.rvLetterlist.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.rvLetterlist.adapter = letterlistAdapter
 
         return binding.root
     }
+
 
     // 달력 세팅
     private fun setWeek(startOfWeek: LocalDate) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
-        binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+        binding.selectDateTv2.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
 
         for (i in 1..7) {
             val currentDateForDay = nearestMonday.plusDays(i.toLong() - 1)
             val dateTextView = when (i) {
-                1 -> binding.date1
-                2 -> binding.date2
-                3 -> binding.date3
-                4 -> binding.date4
-                5 -> binding.date5
-                6 -> binding.date6
-                7 -> binding.date7
+                1 -> binding.letterDate1
+                2 -> binding.letterDate2
+                3 -> binding.letterDate3
+                4 -> binding.letterDate4
+                5 -> binding.letterDate5
+                6 -> binding.letterDate6
+                7 -> binding.letterDate7
                 else -> null
             }
             val dayTextView = when (i) {
-                1 -> binding.day1
-                2 -> binding.day2
-                3 -> binding.day3
-                4 -> binding.day4
-                5 -> binding.day5
-                6 -> binding.day6
-                7 -> binding.day7
+                1 -> binding.letterDay1
+                2 -> binding.letterDay2
+                3 -> binding.letterDay3
+                4 -> binding.letterDay4
+                5 -> binding.letterDay5
+                6 -> binding.letterDay6
+                7 -> binding.letterDay7
                 else -> null
             }
 
             dateTextView?.text = formatDate(currentDateForDay)
 
-            // 오늘 날짜에 동그라미 표시
-            val today = LocalDate.now()
-            val isTodayInWeek = startOfWeek <= today && today <= startOfWeek.plusDays(6)
-            
-            if (isTodayInWeek) {
-                if (today == currentDateForDay) {
-                    binding.todayCircle.visibility = View.VISIBLE
+            // 선택한 날짜에 동그라미 표시
+            val isSelectedDay = startOfWeek <= selectedDay && selectedDay <= startOfWeek.plusDays(6)
+
+            if (isSelectedDay) {
+                if (selectedDay == currentDateForDay) {
+                    binding.selectCircle.visibility = View.VISIBLE
                     dateTextView?.viewTreeObserver?.addOnPreDrawListener(object :
                         ViewTreeObserver.OnPreDrawListener {
                         override fun onPreDraw(): Boolean {
                             dateTextView.viewTreeObserver.removeOnPreDrawListener(this)
                             val dateTextViewX = dateTextView.x
                             val dateTextViewWidth = dateTextView.width.toFloat()
-                            val circleWidth = binding.todayCircle.width.toFloat()
-                            binding.todayCircle.x =
+                            val circleWidth = binding.selectCircle.width.toFloat()
+                            binding.selectCircle.x =
                                 dateTextViewX + (dateTextViewWidth - circleWidth) / 2
                             return true
                         }
@@ -177,7 +155,7 @@ class PostboxFragment : Fragment() {
                 dayTextView?.setTextColor(Color.parseColor("#666666"))
                 dayTextView?.typeface = Typeface.create("@font/font_pretendard_regular", Typeface.NORMAL)
                 dateTextView?.typeface = Typeface.create("@font/font_pretendard_regular", Typeface.NORMAL)
-                binding.todayCircle.visibility = View.GONE
+                binding.selectCircle.visibility = View.GONE
             }
 
             // 날짜 선택 시
@@ -185,17 +163,25 @@ class PostboxFragment : Fragment() {
                 val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 val selectedDateText = currentDateForDay.format(dateFormat)
 
-                val letterListFragment = LetterListFragment()
+                if (currentDateForDay == LocalDate.now()) {
+                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, PostboxFragment())
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss()
+                }
+                else {
+                    val letterListFragment = LetterListFragment()
 
-                val bundle = Bundle()
-                bundle.putString("selectedDate", selectedDateText)
-                letterListFragment.arguments = bundle
+                    val bundle = Bundle()
+                    bundle.putString("selectedDate", selectedDateText)
+                    letterListFragment.arguments = bundle
 
-                // 날짜별 편지 확인 페이지로 이동
-                (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, letterListFragment)
-                    .addToBackStack(null)
-                    .commitAllowingStateLoss()
+                    // 날짜별 편지 확인 페이지로 이동
+                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, letterListFragment)
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss()
+                }
             }
 
         }
@@ -205,4 +191,5 @@ class PostboxFragment : Fragment() {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
     }
+
 }
