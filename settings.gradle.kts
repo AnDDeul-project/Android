@@ -10,6 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // 카카오 로그인
+        maven {
+            url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
+        }
     }
 }
 

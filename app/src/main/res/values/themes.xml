@@ -5,6 +5,9 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:statusBarColor">@color/background</item>
         <item name="android:windowLightStatusBar">true</item>
+        
+        <item name="colorPrimary">@color/primary</item>
+
     </style>
 
     <style name="Theme.Anddeul" parent="Base.Theme.Anddeul" />
@@ -15,6 +18,25 @@
         <item name="android:textSize">12sp</item> <!-- 텍스트 크기 조절 -->
     </style>
 
+    // Bottom Navigation 탭 클릭 시 컬러 설정
+    <style name="NavActiveIndicatorStyle">
+        <item name="background">@color/background</item>
+    </style>
 
+    // 프로필 사진 동그라미 모양으로 cut
+    <style name="ProfileCircle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    // 버튼 테두리 둥글게 설정
+    <style name="RoundButton" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="GalleryToolBar">
+        <item name="fontFamily">@font/font_pretendard_bold</item>
+    </style>
 
 </resources>
