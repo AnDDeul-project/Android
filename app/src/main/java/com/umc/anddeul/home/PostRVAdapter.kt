@@ -1,15 +1,18 @@
 package com.umc.anddeul.home
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
+import com.umc.anddeul.home.model.PostData
 
-class PostRVAdapter(private val context: Context, private val postList: ArrayList<Post>) : RecyclerView.Adapter<PostRVAdapter.ViewHolder>() {
+class PostRVAdapter(private val context: Context, var postList: List<PostData>) : RecyclerView.Adapter<PostRVAdapter.ViewHolder>() {
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PostRVAdapter.ViewHolder {
         val binding: FragmentHomeUploadBinding = FragmentHomeUploadBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
 
@@ -26,14 +29,25 @@ class PostRVAdapter(private val context: Context, private val postList: ArrayLis
 
     inner class ViewHolder(val binding: FragmentHomeUploadBinding): RecyclerView.ViewHolder(binding.root) {
         // bind 메서드를 통해 해당 뷰의 텍스트를 게시글 데이터로 설정
-        fun bind(post: Post) {
-            // binding.homeUploadProfileIv = post.
-            binding.homeUploadUsernameTv.text = post.user_idx
-            // binding.homeUploadImageIv
-            binding.homeUploadExplainTv.text = post.content
+        fun bind(postData: PostData) {
+            binding.homeUploadUsernameTv.text = postData.user_idx
+            binding.homeUploadExplainTv.text = postData.content
             binding.homeUploadEmojiIb.setOnClickListener {
                 showEmojiPopup(binding)
             }
+
+            val profileImageUrl = postData.userImage
+            val imageView = binding.homeUploadProfileIv
+            val loadImage = LoadProfileImage(imageView)
+            loadImage.execute(profileImageUrl)
+
+            val imageUrlsString = postData.picture
+            Log.e("postRVAdapter", "$imageUrlsString")
+
+            val postVPAdapter = PostVPAdapter(imageUrlsString)
+            binding.homeUploadImageVp.adapter = postVPAdapter
+            binding.homeUploadImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
         }
     }
 
