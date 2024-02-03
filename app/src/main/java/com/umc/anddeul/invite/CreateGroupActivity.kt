@@ -17,8 +17,10 @@ class CreateGroupActivity : AppCompatActivity() {
 
         //// 새로운 그룹 만들기
         binding.groupNmBtn.setOnClickListener {
-            val codeIntent = Intent(this, CreateGroupCodeActivity::class.java)
-            startActivity(codeIntent)
+            if(binding.groupNm.text.toString().isNotBlank()) {
+                val codeIntent = Intent(this, CreateGroupCodeActivity::class.java)
+                startActivity(codeIntent)
+            }
         }
 
     }

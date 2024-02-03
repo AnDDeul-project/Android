@@ -65,7 +65,7 @@
         app:layout_constraintTop_toTopOf="@+id/sendCodeBtn" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/groupCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="355dp"
