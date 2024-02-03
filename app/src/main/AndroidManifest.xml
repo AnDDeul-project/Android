@@ -2,24 +2,30 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 카메라 권한 -->
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
 
-    <!-- 저장소 권한 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
+        android:name=".utils.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Anddeul"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".home.PostWriteActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -29,16 +35,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 카메라 관련 코드 -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.umc.anddeul.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
-        </provider>
+        <activity android:name=".start.StartActivity" />
+        <activity
+            android:name=".start.signin.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="@string/scheme_kakao_app_key" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".start.signin.SignupActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="@string/scheme_kakao_app_key" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".start.terms.TermsActivity" />
+        <activity android:name=".start.setprofile.SetProfileActivity" />
+        <activity android:name=".invite.InviteStartActivity" />
+        <activity android:name=".invite.CreateGroupActivity" />
+        <activity android:name=".invite.CreateGroupCodeActivity" />
+        <activity android:name=".invite.JoinGroupActivity" />
+        <activity android:name=".invite.JoinGroupCodeActivity" />
+        <activity android:name=".invite.JoinGroupSendActivity" />
+        <activity android:name=".home.PostUploadActivity" />
     </application>
 
 </manifest>
