@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.databinding.ActivityTermsBinding
 import com.umc.anddeul.start.setprofile.SetProfileActivity
-import com.umc.anddeul.start.signup.SignupActivity
+import com.umc.anddeul.start.signin.SignupActivity
 
 class TermsActivity: AppCompatActivity()  {
     private lateinit var binding: ActivityTermsBinding

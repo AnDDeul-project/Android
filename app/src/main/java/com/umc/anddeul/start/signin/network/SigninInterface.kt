@@ -1,5 +1,6 @@
-package com.umc.anddeul.data.signin
+package com.umc.anddeul.start.signin.network
 
+import com.umc.anddeul.start.signin.model.SigninResponse
 import retrofit2.Call
 import retrofit2.http.Header
 import retrofit2.http.POST
