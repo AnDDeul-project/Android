@@ -13,6 +13,10 @@ class GardenFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGardenBinding.inflate(inflater, container, false)
 
+        binding.gardenImgBack.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+            requireActivity().supportFragmentManager.popBackStack()
+        }
         return binding.root
     }
 }
