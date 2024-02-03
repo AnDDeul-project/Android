@@ -57,11 +57,14 @@ class HomeFragment : Fragment() {
 
         val drawerLayout: DrawerLayout = binding.homeDrawerLayout
 
+        // 메뉴 가족 구성원 정보 가져오기
+        loadMemberList()
+
         binding.homeToolbarMenuIb.setOnClickListener {
             Log.e("toolbar", "click!!!!!!!!")
             if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 drawerLayout.openDrawer(GravityCompat.END)
-                loadMemberList()
+
             } else {
                 drawerLayout.closeDrawer(GravityCompat.END)
             }
