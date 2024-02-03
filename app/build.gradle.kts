@@ -53,6 +53,11 @@ dependencies {
     // swipe refresh layout 라이브러리
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+
+    // circleImageView
+    implementation ("de.hdodenhof:circleimageview:2.2.0")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
