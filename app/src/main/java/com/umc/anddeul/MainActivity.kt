@@ -69,4 +69,12 @@ class MainActivity : AppCompatActivity() {
             false
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // 프래그먼트로 결과 전달
+        supportFragmentManager.fragments.forEach { fragment ->
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
+    }
 }

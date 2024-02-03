@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
@@ -42,11 +43,30 @@ class ChecklistRVAdapter(private val checklist : ArrayList<Checklist>) : Recycle
 
         //갤러리 앱 연동 함수
         holder.binding.checkliBtnCamera.setOnClickListener {
-            Log.d("갤러리", "클릭")
+            Log.d("카메라", "클릭")
+            //카메라 앱 실행
             val activity = holder.itemView.context as? MainActivity
             activity?.let {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 it.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+
+                if (takePictureIntent.resolveActivity(holder.itemView.context.packageManager) != null) {
+                    val photoFile: File? = try {
+                        createImageFile()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        null
+                    }
+                    if (photoFile != null) {
+                        val photoURI: Uri = FileProvider.getUriForFile(
+                            it,
+                            "your.fileprovider.authority",
+                            photoFile
+                        )
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        it.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    }
+                }
             }
         }
 
@@ -68,4 +88,46 @@ class ChecklistRVAdapter(private val checklist : ArrayList<Checklist>) : Recycle
             }
         }
     }
+
+    lateinit var currentPhotoPath: String   // 현재 이미지 파일의 경로 저장
+    var currentPhotoFileName: String? = null
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+
+        val file = File("${storageDir?.path}/${timeStamp}.jpg")
+
+        /*Temp File 생성*/
+//        val file = File.createTempFile(
+//            "JPEG_${timeStamp}_", /* prefix */
+//            ".jpg", /* suffix */
+//            storageDir /* directory */
+//        )
+
+        currentPhotoFileName = file.name
+        currentPhotoPath = file.absolutePath
+        return file
+    }
+
+
+//    private fun setPic() {
+//        Glide.with(this)
+//            .load(File(currentPhotoPath))
+//            .into(binding.ivAddClothes)
+//    }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        when (requestCode) {
+//            REQUEST_IMAGE_CAPTURE -> {
+//                if (resultCode == Activity.RESULT_OK) {
+//                    // 카메라 앱에서 사진 촬영 완료된 경우
+//                    // 사진을 리사이클러뷰 내의 다른 이미지뷰에 설정
+//                    yourOtherImageView.setImageURI(Uri.fromFile(File(currentPhotoPath)))
+//                }
+//            }
+//        }
+//    }
 }
