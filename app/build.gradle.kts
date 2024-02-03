@@ -45,7 +45,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.4.0")
     implementation ("com.google.android.material:material:1.11.0")
 
-
     implementation("com.kizitonwose.calendar:view:2.4.1")
 
     // 카카오 로그인
