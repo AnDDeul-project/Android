@@ -16,6 +16,10 @@ class CreateGroupCodeActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        //// 그룹 생성 세팅
+        binding.groupCode.text = intent.getStringExtra("FAMILY_GROUP_CODE")
+        binding.groupExplainTv.text = "\'${intent.getStringExtra("FAMILY_GROUP_NAME")}\'\n그룹 초대코드"
+
         //// 카카오톡으로 전송하기
         binding.sendCodeBtn.setOnClickListener {
         }

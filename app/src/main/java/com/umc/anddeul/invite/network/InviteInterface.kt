@@ -1,19 +1,24 @@
 package com.umc.anddeul.invite.network
 
 import com.umc.anddeul.invite.model.FamilyInfoResponse
+import com.umc.anddeul.invite.model.NewFamilyRequest
+import com.umc.anddeul.invite.model.NewFamilyResponse
 import com.umc.anddeul.start.signin.model.SigninResponse
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface InviteInterface {
     // 가족 생성
-    @POST("/random/new")
+    @PUT("/random/new")
     fun familyCreate(
-        @Header("Authorization") accessToken: String
-    ): Call<SigninResponse>
+        @Header("Authorization") accessToken: String,
+        @Body familyName: NewFamilyRequest
+    ): Call<NewFamilyResponse>
 
     // 가족 요청
 //    @PUT("/family/add")
