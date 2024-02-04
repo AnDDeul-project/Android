@@ -17,6 +17,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.umc.anddeul.MainActivity
+import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
@@ -32,12 +34,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private var postService = context?.let { PostService(it) }
     lateinit var postRVAdapter: PostRVAdapter
+    lateinit var drawerLayout : DrawerLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,7 +57,7 @@ class HomeFragment : Fragment() {
         // 툴바 기본 타이틀 없애기
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val drawerLayout: DrawerLayout = binding.homeDrawerLayout
+        drawerLayout = binding.homeDrawerLayout
 
         // 메뉴 가족 구성원 정보 가져오기
         loadMemberList()
@@ -68,6 +70,17 @@ class HomeFragment : Fragment() {
             } else {
                 drawerLayout.closeDrawer(GravityCompat.END)
             }
+        }
+
+        // 유저 프로필 이미지 클릭 시 유저 프로필 조회로 이동
+        binding.homeMenuMyProfileIv.setOnClickListener {
+            // drawerLayout 자동 닫기
+            drawerLayout.closeDrawers()
+
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .add(R.id.home_drawer_layout, UserProfileFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
         }
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
@@ -255,6 +268,17 @@ class HomeFragment : Fragment() {
                             val imageView = memberBinding.homeMenuMemberProfileIv
                             val loadImage = LoadProfileImage(imageView)
                             loadImage.execute(profileImageUrl)
+
+                            // 멤버 프로필 사진 클릭 시 유저 프로필로 이동
+                            memberBinding.homeMenuMemberProfileIv.setOnClickListener {
+                                // drawerLayout 자동 닫기
+                                drawerLayout.closeDrawers()
+
+                                (context as MainActivity).supportFragmentManager.beginTransaction()
+                                    .add(R.id.home_drawer_layout, UserProfileFragment())
+                                    .addToBackStack(null)
+                                    .commitAllowingStateLoss()
+                            }
                         }
 
                         // 수락 요청 멤버 리스트
