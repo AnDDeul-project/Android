@@ -17,8 +17,11 @@ class JoinGroupActivity : AppCompatActivity() {
 
         //// 기존 그룹에 참여하기
         binding.existGroupNmBtn.setOnClickListener {
-            val codeIntent = Intent(this, JoinGroupCodeActivity::class.java)
-            startActivity(codeIntent)
+            if (binding.existGroupNm.text.isNotBlank()) {
+                val codeIntent = Intent(this, JoinGroupCodeActivity::class.java)
+                codeIntent.putExtra("GROUP_CODE", binding.existGroupNm.text.toString())
+                startActivity(codeIntent)
+            }
         }
 
     }

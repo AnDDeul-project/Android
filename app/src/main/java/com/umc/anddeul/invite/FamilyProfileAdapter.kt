@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.umc.anddeul.databinding.ItemFamilyIconBinding
+import com.umc.anddeul.invite.model.FamilyImage
 
 class FamilyProfileAdapter : RecyclerView.Adapter<FamilyProfileAdapter.FamilyProfileHolder>() {
-    var families: List<Family>? = null
+    var families: List<FamilyImage>? = null
 
     override fun getItemCount(): Int {
         return families?.size ?: 0
@@ -24,7 +25,7 @@ class FamilyProfileAdapter : RecyclerView.Adapter<FamilyProfileAdapter.FamilyPro
     override fun onBindViewHolder(holder: FamilyProfileHolder, position: Int) {
         val currentFamily = families?.get(position)
 
-        val imageUrl = currentFamily?.profile
+        val imageUrl = currentFamily?.image
 
         imageUrl?.let {
             Glide.with(holder.itemView.context)
