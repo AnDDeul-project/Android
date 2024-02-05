@@ -51,6 +51,10 @@ class ChecklistFragment : Fragment() {
         binding.checkliTvDate.text = dateStamp
 
 
+        binding.checkliTvName.setOnClickListener {
+            val intent = Intent(activity, AddChecklistActivity::class.java)
+            startActivity(intent)
+        }
 
 
         return binding.root
