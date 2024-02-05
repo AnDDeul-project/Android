@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,10 +36,10 @@ class PostboxFragment : Fragment() {
 
         //// 화분 키우기 페이지로 이동
         binding.gotoPotBtn.setOnClickListener {
-//            (context as MainActivity).supportFragmentManager.beginTransaction()
-//                .replace(R.id.main_frm, PotFragment())
-//                .addToBackStack(null)
-//                .commitAllowingStateLoss()
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, PotFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
         }
 
 
@@ -169,14 +170,14 @@ class PostboxFragment : Fragment() {
                     })
                     dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     dayTextView?.setTextColor(Color.parseColor("#1D1D1D"))
-                    dayTextView?.typeface = Typeface.create("@font/font_pretendard_bold", Typeface.NORMAL)
-                    dateTextView?.typeface = Typeface.create("@font/font_pretendard_bold", Typeface.NORMAL)
+                    dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
+                    dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
                 }
             } else {
                 dateTextView?.setTextColor(Color.parseColor("#666666"))
                 dayTextView?.setTextColor(Color.parseColor("#666666"))
-                dayTextView?.typeface = Typeface.create("@font/font_pretendard_regular", Typeface.NORMAL)
-                dateTextView?.typeface = Typeface.create("@font/font_pretendard_regular", Typeface.NORMAL)
+                dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
+                dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 binding.todayCircle.visibility = View.GONE
             }
 

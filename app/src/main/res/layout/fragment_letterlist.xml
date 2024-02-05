@@ -34,7 +34,7 @@
                 android:id="@+id/letterDate1"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="19dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -124,7 +124,7 @@
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
-                android:layout_marginEnd="19dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="7"
@@ -135,9 +135,9 @@
 
             <TextView
                 android:id="@+id/letterDay1"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="19dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="21dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -149,8 +149,8 @@
 
             <TextView
                 android:id="@+id/letterDay2"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -164,8 +164,8 @@
 
             <TextView
                 android:id="@+id/letterDay3"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -179,8 +179,8 @@
 
             <TextView
                 android:id="@+id/letterDay4"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -194,8 +194,8 @@
 
             <TextView
                 android:id="@+id/letterDay5"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -209,8 +209,8 @@
 
             <TextView
                 android:id="@+id/letterDay6"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -224,10 +224,10 @@
 
             <TextView
                 android:id="@+id/letterDay7"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
-                android:layout_marginEnd="19dp"
+                android:layout_marginEnd="21dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="일"
@@ -240,7 +240,7 @@
                 android:id="@+id/beforeBtn2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="122dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -251,7 +251,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="122dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_navi_right" />
@@ -262,15 +262,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="125dp"
                 android:text="TextView"
+                android:textSize="14sp"
+                android:fontFamily="@font/font_pretendard_bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvLetterlist"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="252dp"
+                android:layout_marginTop="234dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -282,6 +284,7 @@
         android:id="@+id/imageView11"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -291,10 +294,9 @@
         android:id="@+id/gotoPotBtn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="337dp"
         android:layout_marginTop="64dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_goto_pot" />
 
@@ -302,7 +304,7 @@
         android:id="@+id/textView17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="59dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:text="이솜솜"
@@ -315,11 +317,11 @@
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="94dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="69dp"
         android:fontFamily="@font/font_pretendard_regular"
         android:text="님의 우체통"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView17"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
