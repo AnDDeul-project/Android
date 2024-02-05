@@ -1,5 +1,7 @@
 package com.umc.anddeul.invite.network
 
+import com.umc.anddeul.invite.model.AddFamilyRequest
+import com.umc.anddeul.invite.model.AddFamilyResponse
 import com.umc.anddeul.invite.model.FamilyInfoResponse
 import com.umc.anddeul.invite.model.NewFamilyRequest
 import com.umc.anddeul.invite.model.NewFamilyResponse
@@ -21,11 +23,11 @@ interface InviteInterface {
     ): Call<NewFamilyResponse>
 
     // 가족 요청
-//    @PUT("/family/add")
-//    fun familyAdd(
-//        @Header("Authorization") accessToken: String,
-//        @Body request: FamilyAddRequest
-//    ): Call<SigninResponse>
+    @PUT("/family/add")
+    fun familyAdd(
+        @Header("Authorization") accessToken: String,
+        @Body request: AddFamilyRequest
+    ): Call<AddFamilyResponse>
 
     // 가족 검색
     @GET("/family/info/{family_code}")

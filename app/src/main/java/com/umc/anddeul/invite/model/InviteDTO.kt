@@ -14,14 +14,16 @@ data class NewFamilyResponse (
     @SerializedName("randomToken") val randomToken: List<String>
 )
 
-// 가족 참여 요청 코드
-data class AddFamilyCode (
+// 가족 코드 참여
+data class AddFamilyRequest (
+    @SerializedName("family_code") val familyCode: String
+)
+
+// 가족 코드 참여 요청
+data class AddFamilyResponse (
     val status: Int,
     val isSuccess: Boolean,
-    @SerializedName("family_code") val familyCode: String?,
-    val error: String?,
-    val message: String?,
-
+    @SerializedName("family_code") val familyCode: String
 )
 
 // 가족 검색 정보

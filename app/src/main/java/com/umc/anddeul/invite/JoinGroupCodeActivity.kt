@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.databinding.ActivityJoinGroupCodeBinding
 import com.umc.anddeul.invite.model.FamilyImage
+import com.umc.anddeul.invite.service.FamilyAddService
 import com.umc.anddeul.invite.service.FamilyInfoService
 import com.umc.anddeul.start.terms.TermsActivity
 
@@ -53,8 +54,18 @@ class JoinGroupCodeActivity : AppCompatActivity() {
 
         //// 가족 그룹에 참여하기
         binding.existGroupJoinBtn.setOnClickListener {
-            val sendIntent = Intent(this, JoinGroupSendActivity::class.java)
-            startActivity(sendIntent)
+
+            // api 연결
+            val familyAddService = FamilyAddService()
+            familyAddService.addFamily(loadedToken, groupCode.toString()) { inviteDto ->
+                if (inviteDto != null) {
+                    if (inviteDto.isSuccess.toString() == "true") {
+                        val sendIntent = Intent(this, JoinGroupSendActivity::class.java)
+                        startActivity(sendIntent)
+                    }
+                } else {
+                }
+            }
         }
 
         //// 뒤로가기
