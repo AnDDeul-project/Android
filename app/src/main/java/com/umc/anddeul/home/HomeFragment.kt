@@ -57,8 +57,6 @@ class HomeFragment : Fragment() {
 
         val drawerLayout: DrawerLayout = binding.homeDrawerLayout
 
-        // 메뉴 가족 구성원 정보 가져오기
-        loadMemberList()
 
         binding.homeToolbarMenuIb.setOnClickListener {
             Log.e("toolbar", "click!!!!!!!!")
@@ -105,6 +103,14 @@ class HomeFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 게시글 조회
+        loadPost()
+        // 메뉴 가족 구성원 정보 가져오기
+        loadMemberList()
     }
 
 
