@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/letterIv"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_letterbox" />
+
+    <ImageView
+        android:id="@+id/minibox"
+        android:layout_width="260dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/img_textbox" />
+
+    <TextView
+        android:id="@+id/userNmTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:text="TextView"
+        android:textColor="@color/grey_800"
+        app:layout_constraintStart_toStartOf="@+id/minibox"
+        app:layout_constraintTop_toTopOf="@+id/minibox" />
+
+    <TextView
+        android:id="@+id/detailTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:text="TextView"
+        android:textColor="@color/grey_800"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/minibox"
+        app:layout_constraintTop_toBottomOf="@+id/userNmTv" />
+
+    <ImageView
+        android:id="@+id/recordIv"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_recordbox" />
+</androidx.constraintlayout.widget.ConstraintLayout>
