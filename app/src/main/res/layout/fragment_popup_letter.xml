@@ -49,7 +49,7 @@
         android:layout_marginTop="39dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/font_ongothic_regular"
-        android:text="TextView"
+        android:text="23.12.13"
         android:textColor="#666666"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
@@ -80,4 +80,64 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="@+id/imageView3" />
+
+    <ImageView
+        android:id="@+id/recordPop2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:srcCompat="@drawable/img_recordbars" />
+
+    <TextView
+        android:id="@+id/recordPop1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="53dp"
+        android:text="녹음 메세지"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/recordPop2"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+
+    <ImageView
+        android:id="@+id/recordPop3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="53dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/recordPop2"
+        app:srcCompat="@drawable/img_record_play_circle" />
+
+    <TextView
+        android:id="@+id/recordPop4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="재생하기"
+        android:textSize="14sp"
+        android:fontFamily="@font/font_pretendard_bold"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/recordPop3" />
+
+    <TextView
+        android:id="@+id/letterPop1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="16dp"
+        android:text="TextView"
+        android:maxWidth="295dp"
+        android:textSize="16sp"
+        android:textColor="@color/secondary"
+        android:fontFamily="@font/font_ongothic_regular"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 </androidx.constraintlayout.widget.ConstraintLayout>
