@@ -23,7 +23,7 @@
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="245dp"
+                android:layout_marginTop="238dp"
                 android:elevation="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -32,8 +32,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvLetters"
                 android:layout_width="wrap_content"
-                android:layout_height="65dp"
-                android:layout_marginTop="253dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="238dp"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -44,11 +45,11 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="361dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="333dp"
                 android:fontFamily="@font/font_pretendard_bold"
                 android:text="오늘의 질문!"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,12 +57,12 @@
                 android:id="@+id/textView3"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="390dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="358dp"
                 android:fontFamily="@font/font_pretendard_bold"
-                android:text="상대방이 갑자기\n좀비로 변한다면?"
+                android:text="상대방이 갑자기 좀비로 변한다면?"
                 android:textColor="#3C9D80"
-                android:textSize="26sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,8 +70,8 @@
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,8 +82,8 @@
                 android:id="@+id/voiceIv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toStartOf="@+id/mailIv"
                 app:layout_constraintTop_toTopOf="@+id/imageView2"
                 app:srcCompat="@drawable/ic_keyboard_voice" />
@@ -91,8 +92,8 @@
                 android:id="@+id/mailIv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
                 app:layout_constraintTop_toTopOf="@+id/imageView2"
                 app:srcCompat="@drawable/ic_outgoing_mail" />
@@ -110,7 +111,7 @@
                 android:inputType="text"
                 android:text=""
                 android:textColor="@color/text_medium"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
                 app:layout_constraintTop_toBottomOf="@+id/voiceIv" />
@@ -129,7 +130,7 @@
                 android:id="@+id/date1"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="19dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -219,7 +220,7 @@
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
-                android:layout_marginEnd="19dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="7"
@@ -230,9 +231,9 @@
 
             <TextView
                 android:id="@+id/day1"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="19dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="21dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -244,14 +245,14 @@
 
             <TextView
                 android:id="@+id/day2"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
                 android:text="화"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                android:gravity="center"
                 app:layout_constraintEnd_toStartOf="@+id/day3"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day1"
@@ -259,14 +260,14 @@
 
             <TextView
                 android:id="@+id/day3"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
                 android:text="수"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                android:gravity="center"
                 app:layout_constraintEnd_toStartOf="@+id/day4"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day2"
@@ -274,14 +275,14 @@
 
             <TextView
                 android:id="@+id/day4"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
                 android:text="목"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                android:gravity="center"
                 app:layout_constraintEnd_toStartOf="@+id/day5"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day3"
@@ -289,14 +290,14 @@
 
             <TextView
                 android:id="@+id/day5"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
                 android:text="금"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                android:gravity="center"
                 app:layout_constraintEnd_toStartOf="@+id/day6"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day4"
@@ -304,14 +305,14 @@
 
             <TextView
                 android:id="@+id/day6"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
                 android:text="토"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                android:gravity="center"
                 app:layout_constraintEnd_toStartOf="@+id/day7"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day5"
@@ -319,15 +320,15 @@
 
             <TextView
                 android:id="@+id/day7"
-                android:layout_width="21dp"
-                android:layout_height="20dp"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="158dp"
-                android:layout_marginEnd="19dp"
+                android:layout_marginEnd="21dp"
                 android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
                 android:text="일"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -335,7 +336,7 @@
                 android:id="@+id/beforeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="122dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -346,7 +347,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="122dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_navi_right" />
@@ -357,9 +358,44 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="125dp"
                 android:text="TextView"
+                android:textSize="14sp"
+                android:fontFamily="@font/font_pretendard_bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="@+id/imageView2"
+                app:srcCompat="@drawable/img_letter_namebox" />
+
+            <ImageView
+                android:id="@+id/imageView13"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView12"
+                app:layout_constraintEnd_toEndOf="@+id/imageView12"
+                app:layout_constraintTop_toTopOf="@+id/imageView12"
+                app:srcCompat="@drawable/ic_see_more" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="에게"
+                android:fontFamily="@font/font_pretendard_regular"
+                android:textColor="@color/text_medium"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/imageView12"
+                app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -378,10 +414,9 @@
         android:id="@+id/gotoPotBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="337dp"
         android:layout_marginTop="64dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_goto_pot" />
 
@@ -389,12 +424,12 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="59dp"
-        android:text="이솜솜"
-        android:textSize="26sp"
         android:fontFamily="@font/font_pretendard_bold"
+        android:text="이솜솜"
         android:textColor="@color/primary"
+        android:textSize="26sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -402,12 +437,12 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="94dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="69dp"
+        android:fontFamily="@font/font_pretendard_regular"
         android:text="님의 우체통"
         android:textSize="18sp"
-        android:fontFamily="@font/font_pretendard_regular"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
