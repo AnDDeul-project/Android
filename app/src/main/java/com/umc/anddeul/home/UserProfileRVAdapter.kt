@@ -10,6 +10,9 @@ class UserProfileRVAdapter(private val userPostList : List<String>) : RecyclerVi
     inner class UserProfileViewHolder(val binding: FragmentUserProfilePostImageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(image: String) {
             binding.userProfilePostIv.setImageResource(R.drawable.img_upload_feed)
+            val imageView = binding.userProfilePostIv
+            val loadImage = LoadImage(imageView)
+            loadImage.execute(image)
         }
     }
 

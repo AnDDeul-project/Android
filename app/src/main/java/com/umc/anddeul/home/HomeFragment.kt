@@ -17,6 +17,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeBinding
@@ -97,7 +98,7 @@ class HomeFragment : Fragment() {
             when {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    android.Manifest.permission.READ_MEDIA_IMAGES
                 ) == PackageManager.PERMISSION_GRANTED -> {
 //                    스토리지 읽기 권한이 허용이면 커스텀 앨범 띄워주기
 //                    권한 있을 경우 : PERMISSION_GRANTED
@@ -107,7 +108,7 @@ class HomeFragment : Fragment() {
                     startActivity(postUploadActivity)
                 }
 
-                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_MEDIA_IMAGES) -> {
                     //권한을 명시적으로 거부한 경우 : ture
                     //다시 묻지 않음을 선택한 경우 : false
                     //다이얼로그를 띄워 권한 팝업을 허용해야 갤러리 접근이 가능하다는 사실을 알려줌
@@ -117,6 +118,13 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
+            override fun onItemClick(position: Int) {
+                // 선택한 유저 프로필로 이동
+                changeUserProfile(position)
+            }
+        })
         return binding.root
     }
 
@@ -136,6 +144,15 @@ class HomeFragment : Fragment() {
 //        }
 //    }
 
+    // 사용자의 snsId를 저장하는 함수
+    fun saveSnsId(context: Context, snsId: List<String>) {
+        val spfSnsId = context.getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
+        val editor = spfSnsId.edit()
+        snsId.forEachIndexed { index, id ->
+            editor.putString("snsId_$index", id)
+        }
+        editor.apply()
+    }
 
     fun loadPost() {
 
@@ -195,6 +212,7 @@ class HomeFragment : Fragment() {
 
     }
 
+
     fun loadMemberList() {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
@@ -253,6 +271,7 @@ class HomeFragment : Fragment() {
                             Member(member.snsId, member.nickname, member.image)
                         }
 
+
                         val memberLayout = binding.homeMenuMembersLinear
 
                         for (memberData in familyList) {
@@ -280,6 +299,11 @@ class HomeFragment : Fragment() {
                                     .commitAllowingStateLoss()
                             }
                         }
+
+                        // snsId 저장
+                        val allSnsIds = familyList.map { it.snsId } + listOf(me.snsId)
+                        saveSnsId(requireContext(), allSnsIds)
+
 
                         // 수락 요청 멤버 리스트
                         val waitList = wait.map { waitMember ->
@@ -320,5 +344,33 @@ class HomeFragment : Fragment() {
             }
 
         })
+    }
+
+    // 유저 프로필로 이동
+    fun changeUserProfile(position: Int) {
+        // 저장된 sns id 리스트 가져오기
+        val spfSnsId = requireActivity().getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
+        val size = spfSnsId.all.size
+        Log.e("selectedsnsId", "아이디 리스트 사이즈 : $size")
+        val snsIds = (0 until size).mapNotNull {
+            val snsId = spfSnsId.getString("snsId_$it", "not found")
+            if (snsId != "not found") snsId else null
+        }
+
+        Log.e("userProfileService", "저장된 아이디 : ${snsIds}")
+
+        // snsIds 리스트에서 position에 해당하는 인덱스 값 가져오기
+        val selectedId = snsIds.getOrNull(position)
+
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .add(R.id.home_drawer_layout, UserProfileFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val idJson = gson.toJson(selectedId)
+                    putString("selectedId", idJson)
+                }
+            })
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 }
