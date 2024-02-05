@@ -27,7 +27,7 @@ class AddChecklistActivity : AppCompatActivity() {
 
         checklist.add(Checklist("메모메모", "율", "image", true))
         checklist.add(Checklist("달력 UI 수정할 예정이에요", "율", "image", false))
-        
+
         //리사이클러뷰 연결
         val addChecklistRVAdapter = AddChecklistRVAdapter(checklist)
         binding.checklistAddRecylerView.adapter = addChecklistRVAdapter

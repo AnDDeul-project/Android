@@ -30,8 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".checklist.AddChecklistActivity"
-            android:exported="false" />
+            android:name=".checklist.AddChecklistActivity" />
     </application>
 
 </manifest>
