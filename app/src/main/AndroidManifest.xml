@@ -35,33 +35,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".start.StartActivity" />
         <activity
-            android:name=".start.signin.LoginActivity"
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data android:host="oauth"
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
+                <!-- scheme-ex: "kakao{NATIVE_APP_KEY}" -->
+                <data
+                    android:host="oauth"
                     android:scheme="@string/scheme_kakao_app_key" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".start.signin.SignupActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data android:host="oauth"
-                    android:scheme="@string/scheme_kakao_app_key" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".start.StartActivity"/>
+        <activity android:name=".start.signin.LoginActivity"/>
+        <activity android:name=".start.signin.SignupActivity" />
         <activity android:name=".start.terms.TermsActivity" />
         <activity android:name=".start.setprofile.SetProfileActivity" />
         <activity android:name=".invite.InviteStartActivity" />
