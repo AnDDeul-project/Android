@@ -130,7 +130,7 @@ class HomeFragment : Fragment() {
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -187,7 +187,7 @@ class HomeFragment : Fragment() {
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
