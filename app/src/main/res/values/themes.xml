@@ -37,6 +37,7 @@
 
     <style name="GalleryToolBar">
         <item name="fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>
