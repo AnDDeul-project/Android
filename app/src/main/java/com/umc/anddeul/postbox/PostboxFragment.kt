@@ -35,10 +35,10 @@ class PostboxFragment : Fragment() {
 
         //// 화분 키우기 페이지로 이동
         binding.gotoPotBtn.setOnClickListener {
-//            (context as MainActivity).supportFragmentManager.beginTransaction()
-//                .replace(R.id.main_frm, PotFragment())
-//                .addToBackStack(null)
-//                .commitAllowingStateLoss()
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, PotFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
         }
 
 
