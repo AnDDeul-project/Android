@@ -13,6 +13,17 @@ import com.umc.anddeul.databinding.FragmentHomeUploadBinding
 import com.umc.anddeul.home.model.PostData
 
 class PostRVAdapter(private val context: Context, var postList: List<PostData>) : RecyclerView.Adapter<PostRVAdapter.ViewHolder>() {
+
+    interface MyItemClickListener{
+        fun onItemClick(position: Int)
+    }
+
+    private lateinit var mItemClickListener: MyItemClickListener
+
+    fun setMyItemClickListener(itemClickListener : MyItemClickListener) {
+        mItemClickListener = itemClickListener
+    }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PostRVAdapter.ViewHolder {
         val binding: FragmentHomeUploadBinding = FragmentHomeUploadBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
 
@@ -22,6 +33,9 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>) 
     // 게시글 뷰의 레이아웃을 inflater하고 StudyUploadViewHolder 객체를 생성하여 반환
     override fun onBindViewHolder(holder: PostRVAdapter.ViewHolder, position: Int) {
         holder.bind(postList[position])
+        holder.binding.homeUploadUsernameTv.setOnClickListener {
+            mItemClickListener.onItemClick(position)
+        }
 
     }
 

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/checkli_add_btn_checking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/checkli_img_check_circle" />
+
+    <ImageView
+        android:id="@+id/checkli_add_btn_checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/checkli_img_checked_circle" />
+
+    <TextView
+        android:id="@+id/checkli_add_tv_checklist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="22dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:lineSpacingExtra="22dp"
+        android:text="체크리스트 내용"
+        android:textColor="@color/secondary"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/checkli_add_btn_checking"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/checkli_add_tv_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:letterSpacing="-0.01"
+        android:lineSpacingExtra="16dp"
+        android:text="이름님이 남기셨어요"
+        android:textColor="@color/text_high"
+        app:layout_constraintStart_toEndOf="@+id/checkli_add_btn_checking"
+        app:layout_constraintTop_toBottomOf="@+id/checkli_add_tv_checklist" />
+
+    <ImageView
+        android:id="@+id/checkli_add_iv_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkli_add_tv_writer"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_launcher_background"
+        tools:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
