@@ -9,7 +9,7 @@
         android:id="@+id/pot_img_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,42 +29,43 @@
         android:id="@+id/pot_img_garden"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="275dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_my_point"
         app:srcCompat="@drawable/pot_btn_garden" />
 
     <ImageView
         android:id="@+id/pot_img_plants"
         android:layout_width="271.5dp"
         android:layout_height="340dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="21dp"
         android:scaleType="fitEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_my_point"
         app:srcCompat="@drawable/pot_img_tulip" />
 
     <ImageView
         android:id="@+id/pot_image_gauge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="192dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_tv_plants_name"
         app:srcCompat="@drawable/pot_img_gauge" />
 
     <ImageView
         android:id="@+id/pot_img_point_plus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="128dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="21dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_image_gauge"
         app:srcCompat="@drawable/pot_img_heart" />
 
     <TextView
@@ -98,26 +99,26 @@
         android:id="@+id/pot_tv_plants_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="240dp"
+        android:layout_marginTop="21dp"
         android:fontFamily="@font/pretendard_bold"
         android:lineSpacingExtra="36dp"
         android:text="식물이름"
         android:textColor="#3B1F11"
         android:textSize="26dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_plants" />
 
     <TextView
         android:id="@+id/pot_tv_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginTop="13dp"
+        android:fontFamily="@font/pretendard_regular"
         android:text="사랑을 주어 식물을 키워보세요"
         android:textSize="12dp"
-        android:fontFamily="@font/pretendard_regular"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_point_plus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
