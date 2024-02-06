@@ -102,6 +102,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        // 메뉴 가족 구성원 정보 가져오기
+        loadMemberList()
+
         return binding.root
     }
 
@@ -109,8 +113,6 @@ class HomeFragment : Fragment() {
         super.onResume()
         // 게시글 조회
         loadPost()
-        // 메뉴 가족 구성원 정보 가져오기
-        loadMemberList()
     }
 
 
