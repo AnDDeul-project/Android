@@ -117,12 +117,17 @@ class HomeFragment : Fragment() {
             }
         }
 
+
         postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
             override fun onItemClick(position: Int) {
                 // 선택한 유저 프로필로 이동
                 changeUserProfile(position)
             }
         })
+        
+        // 메뉴 가족 구성원 정보 가져오기
+        loadMemberList()
+        
         return binding.root
     }
 
@@ -130,8 +135,6 @@ class HomeFragment : Fragment() {
         super.onResume()
         // 게시글 조회
         loadPost()
-        // 메뉴 가족 구성원 정보 가져오기
-        loadMemberList()
     }
 
 
