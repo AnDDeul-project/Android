@@ -105,57 +105,8 @@ class HomeFragment : Fragment() {
 
         // Floating Action Button 클릭 시
         binding.homeFloatingBt.setOnClickListener {
-            // 갤러리 접근 권한 확인
-            // 안드로이드 SDK가 33 이상인 경우
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(), android.Manifest.permission.READ_MEDIA_IMAGES
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    // 이미 권한이 허용된 경우 해당 코드 실행
-                    val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                    startActivity(postUploadActivity)
-                } else {
-                    // 권한이 없는 경우 권한 요청
-                    permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-                }
-            } else { // 안드로이드 SDK가 33보다 낮은 경우
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    // 이미 권한이 허용된 경우 해당 코드 실행
-                    val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                    startActivity(postUploadActivity)
-                } else {
-                    // 권한이 없는 경우 권한 요청
-                    permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                }
-            }
+            checkPermission()
         }
-//            when {
-//                ContextCompat.checkSelfPermission(
-//                    requireContext(),
-//                    android.Manifest.permission.READ_MEDIA_IMAGES
-//                ) == PackageManager.PERMISSION_GRANTED -> {
-////                    스토리지 읽기 권한이 허용이면 커스텀 앨범 띄워주기
-////                    권한 있을 경우 : PERMISSION_GRANTED
-////                    권한 없을 경우 : PERMISSION_DENIED
-//                    Log.e("floatingButton", "activity go")
-//                    val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-//                    startActivity(postUploadActivity)
-//                }
-//
-//                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_MEDIA_IMAGES) -> {
-//                    //권한을 명시적으로 거부한 경우 : ture
-//                    //다시 묻지 않음을 선택한 경우 : false
-//                    //다이얼로그를 띄워 권한 팝업을 허용해야 갤러리 접근이 가능하다는 사실을 알려줌
-//                    val permissionDialog = PermissionDialog()
-//                    permissionDialog.isCancelable = false
-//                    permissionDialog.show(parentFragmentManager, "permission dialog")
-//                }
-//            }
-
 
 
         postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
@@ -421,5 +372,66 @@ class HomeFragment : Fragment() {
             })
             .addToBackStack(null)
             .commitAllowingStateLoss()
+    }
+
+    // 갤러리 접근 권한 확인 함수
+    fun checkPermission() {
+        val permissionImages = android.Manifest.permission.READ_MEDIA_IMAGES
+        val permissionVideos = android.Manifest.permission.READ_MEDIA_VIDEO
+        val permissionUserSelected = android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+        val permissionReadExternal = android.Manifest.permission.READ_EXTERNAL_STORAGE
+
+        val permissionImagesGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionImages
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionVideosGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionVideos
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionUserSelectedGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionUserSelected
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionReadExternalGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionReadExternal
+        ) == PackageManager.PERMISSION_GRANTED
+
+        // SDK 34 이상
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (permissionImagesGranted && permissionVideosGranted && permissionUserSelectedGranted) {
+                // 이미 권한이 허용된 경우 해당 코드 실행
+                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                startActivity(postUploadActivity)
+            } else {
+                // 권한이 없는 경우 권한 요청
+                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
+            }
+        }
+
+        // 안드로이드 SDK가 33 이상인 경우
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (permissionImagesGranted && permissionVideosGranted) {
+                // 이미 권한이 허용된 경우 해당 코드 실행
+                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                startActivity(postUploadActivity)
+            } else {
+                // 권한이 없는 경우 권한 요청
+                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else { // 안드로이드 SDK가 33보다 낮은 경우
+            if (permissionReadExternalGranted) {
+                // 이미 권한이 허용된 경우 해당 코드 실행
+                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                startActivity(postUploadActivity)
+            } else {
+                // 권한이 없는 경우 권한 요청
+                permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
     }
 }
