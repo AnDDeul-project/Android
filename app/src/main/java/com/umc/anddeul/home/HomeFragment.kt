@@ -120,9 +120,9 @@ class HomeFragment : Fragment() {
         }
 
         postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
-            override fun onItemClick(position: Int) {
+            override fun onItemClick(userId: String) {
                 // 선택한 유저 프로필로 이동
-                changeUserProfile(position)
+                changeUserProfile(userId)
             }
         })
         return binding.root
@@ -143,16 +143,6 @@ class HomeFragment : Fragment() {
 //
 //        }
 //    }
-
-    // 사용자의 snsId를 저장하는 함수
-    fun saveSnsId(context: Context, snsId: List<String>) {
-        val spfSnsId = context.getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
-        val editor = spfSnsId.edit()
-        snsId.forEachIndexed { index, id ->
-            editor.putString("snsId_$index", id)
-        }
-        editor.apply()
-    }
 
     fun loadPost() {
 
@@ -292,18 +282,16 @@ class HomeFragment : Fragment() {
                             memberBinding.homeMenuMemberProfileIv.setOnClickListener {
                                 // drawerLayout 자동 닫기
                                 drawerLayout.closeDrawers()
+                                changeUserProfile(memberData.snsId)
+                            }
 
-                                (context as MainActivity).supportFragmentManager.beginTransaction()
-                                    .add(R.id.home_drawer_layout, UserProfileFragment())
-                                    .addToBackStack(null)
-                                    .commitAllowingStateLoss()
+                            // 멤버 이름 클릭 시 유저 프로필로 이동
+                            memberBinding.homeMenuMemberNameTv.setOnClickListener {
+                                // drawerLayout 자동 닫기
+                                drawerLayout.closeDrawers()
+                                changeUserProfile(memberData.snsId)
                             }
                         }
-
-                        // snsId 저장
-                        val allSnsIds = familyList.map { it.snsId } + listOf(me.snsId)
-                        saveSnsId(requireContext(), allSnsIds)
-
 
                         // 수락 요청 멤버 리스트
                         val waitList = wait.map { waitMember ->
@@ -347,26 +335,13 @@ class HomeFragment : Fragment() {
     }
 
     // 유저 프로필로 이동
-    fun changeUserProfile(position: Int) {
-        // 저장된 sns id 리스트 가져오기
-        val spfSnsId = requireActivity().getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
-        val size = spfSnsId.all.size
-        Log.e("selectedsnsId", "아이디 리스트 사이즈 : $size")
-        val snsIds = (0 until size).mapNotNull {
-            val snsId = spfSnsId.getString("snsId_$it", "not found")
-            if (snsId != "not found") snsId else null
-        }
-
-        Log.e("userProfileService", "저장된 아이디 : ${snsIds}")
-
-        // snsIds 리스트에서 position에 해당하는 인덱스 값 가져오기
-        val selectedId = snsIds.getOrNull(position)
+    fun changeUserProfile(userId: String) {
 
         (context as MainActivity).supportFragmentManager.beginTransaction()
             .add(R.id.home_drawer_layout, UserProfileFragment().apply {
                 arguments = Bundle().apply {
                     val gson = Gson()
-                    val idJson = gson.toJson(selectedId)
+                    val idJson = gson.toJson(userId)
                     putString("selectedId", idJson)
                 }
             })

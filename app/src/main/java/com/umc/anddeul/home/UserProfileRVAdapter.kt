@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentUserProfilePostImageBinding
 
-class UserProfileRVAdapter(private val userPostList : List<String>) : RecyclerView.Adapter<UserProfileRVAdapter.UserProfileViewHolder>() {
+class UserProfileRVAdapter(private val userPostList : List<String>?) : RecyclerView.Adapter<UserProfileRVAdapter.UserProfileViewHolder>() {
     inner class UserProfileViewHolder(val binding: FragmentUserProfilePostImageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(image: String) {
             binding.userProfilePostIv.setImageResource(R.drawable.img_upload_feed)
@@ -22,10 +22,11 @@ class UserProfileRVAdapter(private val userPostList : List<String>) : RecyclerVi
         return UserProfileViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = userPostList.size
-
+    override fun getItemCount(): Int {
+        return userPostList?.size ?: 0
+    }
     override fun onBindViewHolder(holder: UserProfileViewHolder, position: Int) {
-        holder.bind(userPostList[position])
+        userPostList?.get(position)?.let { holder.bind(it) }
     }
 
 }
