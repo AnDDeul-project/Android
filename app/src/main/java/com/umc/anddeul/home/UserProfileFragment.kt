@@ -95,11 +95,7 @@ class UserProfileFragment : Fragment() {
                         binding.userProfileUsernameTv.text = userProfileData.nickname
                         binding.userProfilePostNumTv.text = "게시물 ${userProfileData.postCount}개"
 
-                        val listImage = listOf(userProfileData.firstPostImage)
-
-                        // 서버에서 리스트로 바꾸면 어댑터에 userProfileData.firstPostImage 그대로 넘겨주기
-                        // UserProfileData의 firstPostImage List<String>
-                        val userProfileRVAdapter = UserProfileRVAdapter(listImage)
+                        val userProfileRVAdapter = UserProfileRVAdapter(userProfileData.firstPostImage)
                         binding.userProfilePostRv.layoutManager = GridLayoutManager(requireContext(),3)
                         binding.userProfilePostRv.adapter = userProfileRVAdapter
 
