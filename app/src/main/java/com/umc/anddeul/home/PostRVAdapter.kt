@@ -15,7 +15,7 @@ import com.umc.anddeul.home.model.PostData
 class PostRVAdapter(private val context: Context, var postList: List<PostData>) : RecyclerView.Adapter<PostRVAdapter.ViewHolder>() {
 
     interface MyItemClickListener{
-        fun onItemClick(position: Int)
+        fun onItemClick(userId: String)
     }
 
     private lateinit var mItemClickListener: MyItemClickListener
@@ -33,8 +33,15 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>) 
     // 게시글 뷰의 레이아웃을 inflater하고 StudyUploadViewHolder 객체를 생성하여 반환
     override fun onBindViewHolder(holder: PostRVAdapter.ViewHolder, position: Int) {
         holder.bind(postList[position])
+        // 유저 이름 클릭 시 해당 유저 아이디 전달
         holder.binding.homeUploadUsernameTv.setOnClickListener {
-            mItemClickListener.onItemClick(position)
+            val userId = postList[position].user_idx
+            mItemClickListener.onItemClick(userId)
+        }
+        // 유저 프로필 클릭 시 해당 유저 아이디 전달
+        holder.binding.homeUploadProfileIv.setOnClickListener {
+            val userId = postList[position].user_idx
+            mItemClickListener.onItemClick(userId)
         }
 
     }
