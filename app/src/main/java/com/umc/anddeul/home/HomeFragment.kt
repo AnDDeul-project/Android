@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private var postService = context?.let { PostService(it) }
     lateinit var postRVAdapter: PostRVAdapter
-    lateinit var drawerLayout : DrawerLayout
+    lateinit var drawerLayout: DrawerLayout
 
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        postRVAdapter = PostRVAdapter(requireContext(), listOf()) // 어댑터와 postDatas 연결
+        postRVAdapter = PostRVAdapter(requireContext(), listOf(), listOf()) // 어댑터와 postDatas 연결
         binding.homeFeedRv.adapter = postRVAdapter // recyclerView에 Adapter 연결
         binding.homeFeedRv.layoutManager = LinearLayoutManager(context)
 
@@ -74,6 +74,8 @@ class HomeFragment : Fragment() {
 
         drawerLayout = binding.homeDrawerLayout
 
+        // 메뉴 가족 구성원 정보 가져오기
+        loadMemberList()
 
         binding.homeToolbarMenuIb.setOnClickListener {
             Log.e("toolbar", "click!!!!!!!!")
@@ -108,24 +110,13 @@ class HomeFragment : Fragment() {
             checkPermission()
         }
 
-
         postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
             override fun onItemClick(userId: String) {
                 // 선택한 유저 프로필로 이동
                 changeUserProfile(userId)
             }
         })
-        
-        // 메뉴 가족 구성원 정보 가져오기
-        loadMemberList()
-        
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // 게시글 조회
-        loadPost()
     }
 
 
@@ -144,7 +135,26 @@ class HomeFragment : Fragment() {
 //        }
 //    }
 
+    fun saveMyId(context: Context, myId: String) {
+        val spfMyId = context.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val editor = spfMyId.edit()
+        editor.putString("myId", myId)
+        editor.apply()
+    }
+
     fun loadPost() {
+
+        // 저장된 sns id 리스트 가져오기
+        val spfSnsId = requireActivity().getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
+        val size = spfSnsId.all.size
+        val snsIds = (0 until size).mapNotNull {
+            val snsId = spfSnsId.getString("snsId_$it", "not found")
+            if (snsId != "not found") snsId else null
+        }
+
+        // 내 sns id 가져오기
+        val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val myId = spfMyId.getString("myId", "not found")
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
@@ -183,6 +193,16 @@ class HomeFragment : Fragment() {
                     }
                     Log.e("postService", "$postData")
                     if (postData != null) {
+
+                        // 각 게시글의 작성자 타입을 확인하여 리스트에 저장
+                        val authorTypesList = postData.map { post ->
+                            if (myId == post.user_idx) {
+                                "me"
+                            } else {
+                                "other"
+                            }
+                        }
+                        postRVAdapter.authorTypeList = authorTypesList
                         postRVAdapter.postList = postData
                         postRVAdapter.notifyDataSetChanged()
                     }
@@ -261,7 +281,6 @@ class HomeFragment : Fragment() {
                             Member(member.snsId, member.nickname, member.image)
                         }
 
-
                         val memberLayout = binding.homeMenuMembersLinear
 
                         for (memberData in familyList) {
@@ -292,6 +311,9 @@ class HomeFragment : Fragment() {
                                 changeUserProfile(memberData.snsId)
                             }
                         }
+
+                        // 내 sns id 저장
+                        saveMyId(requireContext(), me.snsId)
 
                         // 수락 요청 멤버 리스트
                         val waitList = wait.map { waitMember ->
