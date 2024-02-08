@@ -2,6 +2,9 @@ package com.umc.anddeul.postbox
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +30,8 @@ class PostboxFragment : Fragment() {
     private lateinit var binding: FragmentPostboxBinding
     private lateinit var postAdapter: LetterAdapter
     private var currentStartOfWeek: LocalDate = LocalDate.now()
+    private lateinit var letterType: String
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,13 +111,57 @@ class PostboxFragment : Fragment() {
             }
         }
 
+        // 작성한 음성 편지 있을 때
+        val recordFilePath = arguments?.getString("recordFilePath")
+        if (recordFilePath?.isNotBlank() == true){
+            letterType = "record"
+            binding.letterEt.visibility = View.GONE
+            binding.recordInfo1.visibility = View.VISIBLE
+            binding.recordInfo2.visibility = View.VISIBLE
+            binding.recordInfo3.visibility = View.VISIBLE
+            binding.recordInfo4.visibility = View.VISIBLE
+        }
+
+        // 작성한 음성 실행
+        binding.recordInfo4.setOnClickListener {
+            binding.recordInfo4.visibility = View.GONE
+            val myUri: Uri = Uri.parse("file://$recordFilePath")
+            mediaPlayer = MediaPlayer().apply {
+                setAudioStreamType(AudioManager.STREAM_MUSIC)
+                setDataSource(requireContext(), myUri)
+                prepare()
+                start()
+                Toast.makeText(context, "음성이 시작되었습니다.", Toast.LENGTH_SHORT).show()
+
+                // 음성 실행 완료 시 (다시 재생 버튼 등장)
+                setOnCompletionListener {
+                    binding.recordInfo4.visibility = View.VISIBLE
+                    mediaPlayer?.reset()
+                }
+            }
+        }
+
+
+
 
         //// 편지 작성 (텍스트)
+        
+        
+        //// 편지 보내기
         binding.mailIv.setOnClickListener{
             // 편지 보내는 기능 추가
-
-            //텍스트 초기화
-            binding.letterEt.setText("")
+            if (letterType == "text") { // 텍스트일 때
+                //텍스트 초기화
+                binding.letterEt.setText("")
+                letterType = ""
+            }
+            else if (letterType == "record"){   // 녹음일 때
+                binding.recordInfo1.visibility = View.GONE
+                binding.recordInfo2.visibility = View.GONE
+                binding.recordInfo3.visibility = View.GONE
+                binding.recordInfo4.visibility = View.GONE
+                letterType = ""
+            }
         }
 
         return binding.root
@@ -168,12 +217,14 @@ class PostboxFragment : Fragment() {
                             return true
                         }
                     })
+                    // 색상&폰트 적용
                     dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     dayTextView?.setTextColor(Color.parseColor("#1D1D1D"))
                     dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
                     dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
                 }
             } else {
+                // 색상&폰트 적용
                 dateTextView?.setTextColor(Color.parseColor("#666666"))
                 dayTextView?.setTextColor(Color.parseColor("#666666"))
                 dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
@@ -205,5 +256,11 @@ class PostboxFragment : Fragment() {
     private fun formatDate(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 }
