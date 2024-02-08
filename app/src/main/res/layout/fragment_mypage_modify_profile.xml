@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:clickable="true">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mypage_modify_profile_toolbar"

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMypageModifyProfileBinding
 
-class MyPageModify : Fragment() {
+class MyPageModifyFragment : Fragment() {
     lateinit var binding: FragmentMypageModifyProfileBinding
 
     override fun onCreateView(
