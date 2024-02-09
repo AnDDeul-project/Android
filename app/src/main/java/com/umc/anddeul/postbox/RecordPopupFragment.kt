@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPopupRecordBinding
-import java.io.IOException
 import java.util.Date
 
 class RecordPopupFragment(private val context: Context) {
@@ -28,6 +27,7 @@ class RecordPopupFragment(private val context: Context) {
     private var outputPath: String? = null
     private var mediaRecorder : MediaRecorder? = null
     private var state : Boolean = false
+    private var hasRecorded : Boolean = false
 
     fun show(){
         binding = FragmentPopupRecordBinding.inflate(LayoutInflater.from(context))
@@ -61,15 +61,16 @@ class RecordPopupFragment(private val context: Context) {
 
         }
 
-        // 녹음 정지 버튼
+        // 녹음 일시정지 버튼
         binding.recordPauseBtn.setOnClickListener {
-            stopRecording()
+            pauseRecording()
             binding.recordPlayBtn.visibility = View.VISIBLE
             binding.recordPauseBtn.visibility = View.GONE
         }
 
         // 확인 버튼
         binding.okBtn.setOnClickListener {
+            stopRecording()
 
             val postboxFragment = PostboxFragment()
 
@@ -104,22 +105,43 @@ class RecordPopupFragment(private val context: Context) {
 
     private fun startRecording(){
 
-        val fileName = "Anddeul" + Date().getTime().toString() + ".mp3"
+        if (hasRecorded == false) {
+            hasRecorded = true
 
-        outputPath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + fileName
-        mediaRecorder = MediaRecorder()
-        mediaRecorder?.setAudioSource((MediaRecorder.AudioSource.MIC))
-        mediaRecorder?.setOutputFormat((MediaRecorder.OutputFormat.MPEG_4))
-        mediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-        mediaRecorder?.setOutputFile(outputPath)
+            val fileName = "Anddeul" + Date().getTime().toString() + ".mp3"
+
+            outputPath =
+                Environment.getExternalStorageDirectory().absolutePath + "/Download/" + fileName
+            mediaRecorder = MediaRecorder()
+            mediaRecorder?.setAudioSource((MediaRecorder.AudioSource.MIC))
+            mediaRecorder?.setOutputFormat((MediaRecorder.OutputFormat.MPEG_4))
+            mediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            mediaRecorder?.setOutputFile(outputPath)
 
 
-        mediaRecorder?.prepare()
-        mediaRecorder?.start()
-        state = true
-        Toast.makeText(context, "녹음이 시작되었습니다.", Toast.LENGTH_SHORT).show()
+            mediaRecorder?.prepare()
+            mediaRecorder?.start()
+            state = true
+            Toast.makeText(context, "녹음이 시작되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            state = true
+            mediaRecorder?.resume()
+            Toast.makeText(context, "녹음이 다시 시작되었습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 
+    // 일시정지
+    private fun pauseRecording(){
+        if(state){
+            mediaRecorder?.pause()
+            Toast.makeText(context, "녹음이 정지되었습니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // 정지
     private fun stopRecording(){
         if(state){
             mediaRecorder?.stop()
