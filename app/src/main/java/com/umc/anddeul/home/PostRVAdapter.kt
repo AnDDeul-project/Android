@@ -14,7 +14,6 @@ import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeMyUploadBinding
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
 import com.umc.anddeul.home.model.PostData
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class PostRVAdapter(private val context: Context, var postList: List<PostData>, var authorTypeList: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -48,18 +47,41 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
     }
 
     // 게시글 뷰의 레이아웃을 inflater하고 StudyUploadViewHolder 객체를 생성하여 반환
-    override fun onBindViewHolder(holder: PostRVAdapter.ViewHolder, position: Int) {
-        holder.bind(postList[position])
-        // 유저 이름 클릭 시 해당 유저 아이디 전달
-        holder.binding.homeUploadUsernameTv.setOnClickListener {
-            val userId = postList[position].user_idx
-            mItemClickListener.onItemClick(userId)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is MyViewHolder -> {
+                holder.bind(postList[position])
+
+                // 유저 이름 클릭 시 해당 유저 아이디 전달
+                holder.binding.homeMyUploadUsernameTv.setOnClickListener {
+                    val userId = postList[position].user_idx
+                    mItemClickListener.onItemClick(userId)
+                }
+
+                // 유저 프로필 클릭 시 해당 유저 아이디 전달
+                holder.binding.homeMyUploadProfileIv.setOnClickListener {
+                    val userId = postList[position].user_idx
+                    mItemClickListener.onItemClick(userId)
+                }
+            }
+            is ViewHolder -> {
+                holder.bind(postList[position])
+
+                // 유저 이름 클릭 시 해당 유저 아이디 전달
+                holder.binding.homeUploadUsernameTv.setOnClickListener {
+                    val userId = postList[position].user_idx
+                    mItemClickListener.onItemClick(userId)
+                }
+
+                // 유저 프로필 클릭 시 해당 유저 아이디 전달
+                holder.binding.homeUploadProfileIv.setOnClickListener {
+                    val userId = postList[position].user_idx
+                    mItemClickListener.onItemClick(userId)
+                }
+            }
         }
-        // 유저 프로필 클릭 시 해당 유저 아이디 전달
-        holder.binding.homeUploadProfileIv.setOnClickListener {
-            val userId = postList[position].user_idx
-            mItemClickListener.onItemClick(userId)
     }
+
 
     override fun getItemCount(): Int = postList.size // 데이터 세트의 크기를 알려줌 (recyclerView의 마지막이 언제인지를 알게해줌)
 
@@ -97,7 +119,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
 
     inner class MyViewHolder(val binding: FragmentHomeMyUploadBinding) :RecyclerView.ViewHolder(binding.root) {
         fun bind(postData: PostData) {
-            binding.homeMyUploadUsernameTv.text = postData.user_idx
+            binding.homeMyUploadUsernameTv.text = postData.nickname
             binding.homeMyUploadExplainTv.text = postData.content
             binding.homeMyUploadEmojiIb.setOnClickListener {
                 showMyEmojiPopup(binding)
