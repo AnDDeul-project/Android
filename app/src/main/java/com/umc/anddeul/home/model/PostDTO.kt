@@ -8,7 +8,9 @@ data class Post(
 )
 
 data class PostData(
+    val post_idx: Int,
     val user_idx: String,
+    val nickname: String,
     val content: String,
     val picture: List<String>,
     val userImage : String
