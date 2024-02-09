@@ -88,7 +88,7 @@ class RecordPopupFragment(private val context: Context) {
 
         // 재녹음 버튼
         binding.restartBtn.setOnClickListener {
-            val restartFragment = DialogRecordRestartFragment(context)
+            val restartFragment = DialogRecordRestartFragment(context, this)
             restartFragment.show()
         }
 
@@ -103,9 +103,10 @@ class RecordPopupFragment(private val context: Context) {
 
     }
 
+    // 녹음 시작
     private fun startRecording(){
 
-        if (hasRecorded == false) {
+        if (hasRecorded == false) {     // 녹음 시작 (일시정지한 적 없는 경우)
             hasRecorded = true
 
             val fileName = "Anddeul" + Date().getTime().toString() + ".mp3"
@@ -118,13 +119,12 @@ class RecordPopupFragment(private val context: Context) {
             mediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             mediaRecorder?.setOutputFile(outputPath)
 
-
             mediaRecorder?.prepare()
             mediaRecorder?.start()
             state = true
             Toast.makeText(context, "녹음이 시작되었습니다.", Toast.LENGTH_SHORT).show()
         }
-        else{
+        else{     // 녹음 시작 (일시정지한 적 있는 경우)
             state = true
             mediaRecorder?.resume()
             Toast.makeText(context, "녹음이 다시 시작되었습니다.", Toast.LENGTH_SHORT).show()
@@ -135,6 +135,7 @@ class RecordPopupFragment(private val context: Context) {
     private fun pauseRecording(){
         if(state){
             mediaRecorder?.pause()
+            binding.restartBtn.visibility = View.VISIBLE
             Toast.makeText(context, "녹음이 정지되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
@@ -148,7 +149,24 @@ class RecordPopupFragment(private val context: Context) {
             mediaRecorder?.reset()
             mediaRecorder?.release()
             state = false
+            binding.restartBtn.visibility = View.VISIBLE
             Toast.makeText(context, "녹음이 되었습니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // 초기화
+    fun resetRecording() {
+        if (state) {
+            mediaRecorder?.stop()
+            mediaRecorder?.reset()
+            mediaRecorder?.release()
+            state = false
+            hasRecorded = false
+            outputPath = null
+            binding.restartBtn.visibility = View.GONE
+            Toast.makeText(context, "녹음이 초기화되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
