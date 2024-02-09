@@ -189,7 +189,7 @@ class HomeFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val postData = response.body()?.result?.map {
-                        PostData(it.user_idx, it.content, it.picture, it.userImage)
+                        PostData(it.post_idx, it.user_idx, it.nickname, it.content, it.picture, it.userImage)
                     }
                     Log.e("postService", "$postData")
                     if (postData != null) {
