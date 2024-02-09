@@ -23,12 +23,6 @@ class DialogLetterFragment(private val context: Context) {
 
         dlg.setCanceledOnTouchOutside(true)
 
-        // 텍스트 경고
-        if(postType == "letter"){
-            binding.titleTv.text = ""
-            binding.contentTv.text = ""
-        }
-
         // 녹음 경고
         if(postType == "voice"){
             binding.titleTv.text = "이미 편지를 적은 경우\n녹음할 수 없습니다."

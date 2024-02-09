@@ -30,7 +30,7 @@ class PostboxFragment : Fragment() {
     private lateinit var binding: FragmentPostboxBinding
     private lateinit var postAdapter: LetterAdapter
     private var currentStartOfWeek: LocalDate = LocalDate.now()
-    private lateinit var letterType: String
+    private var letterType: String = ""
     private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
@@ -102,12 +102,14 @@ class PostboxFragment : Fragment() {
 
         //// 편지 작성 (음성)
         binding.voiceIv.setOnClickListener{
-            if(binding.letterEt.text.toString().isEmpty()){   // 작성된 텍스트 없을 때
-                val recordPopupFragment = RecordPopupFragment(requireContext())
-                recordPopupFragment.show()
-            } else {    // 작성된 텍스트 있을 때
-                val dialogFragment = DialogLetterFragment(requireContext())
-                dialogFragment.show("voice")
+            if (letterType != "record") {   // 녹음을 하지 않았을 때
+                if (binding.letterEt.text.toString().isEmpty()) {   // 작성된 텍스트 없을 때
+                    val recordPopupFragment = RecordPopupFragment(requireContext())
+                    recordPopupFragment.show()
+                } else {    // 작성된 텍스트 있을 때
+                    val dialogFragment = DialogLetterFragment(requireContext())
+                    dialogFragment.show("voice")
+                }
             }
         }
 
@@ -141,6 +143,12 @@ class PostboxFragment : Fragment() {
             }
         }
 
+        // 작성한 음성 녹음 삭제
+        binding.recordInfo3.setOnClickListener {
+            val recordDeleteFragment = DialogRecordDeleteFragment(requireContext(), this)
+            recordDeleteFragment.show()
+
+        }
 
 
 
@@ -263,4 +271,13 @@ class PostboxFragment : Fragment() {
         mediaPlayer?.release()
         mediaPlayer = null
     }
+
+    fun deleteRecording(){
+        letterType = ""
+        binding.recordInfo1.visibility = View.GONE
+        binding.recordInfo2.visibility = View.GONE
+        binding.recordInfo3.visibility = View.GONE
+        binding.recordInfo4.visibility = View.GONE
+    }
+
 }
