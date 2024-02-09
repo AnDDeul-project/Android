@@ -11,5 +11,5 @@ data class UserProfileData(
     val nickname : String,
     val image : String,
     val postCount : Int,
-    val firstPostImage : List<String>?
+    val firstPostImages : List<String>?
 )

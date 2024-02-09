@@ -65,6 +65,17 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="20dp"/>
 
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/user_profile_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="23dp">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/user_profile_post_rv"
         android:layout_width="match_parent"
@@ -72,7 +83,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_profile_iv"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="23dp"
         android:layout_marginHorizontal="9dp"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
