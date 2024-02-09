@@ -1,5 +1,6 @@
 package com.umc.anddeul.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.view.Gravity
@@ -24,6 +25,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
 
     interface MyItemClickListener{
         fun onItemClick(userId: String)
+        fun onDeleteClick(postId : Int)
     }
 
     private lateinit var mItemClickListener: MyItemClickListener
@@ -147,6 +149,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
 
             popupMenu.inflate(R.menu.home_upload_my_menu)
 
+            val postIdx = postData.post_idx
             // 팝업 메뉴 버튼 클릭 시
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
@@ -156,6 +159,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                     }
                     R.id.home_my_upload_menu_delete -> {
                         // 삭제하기
+                        mItemClickListener.onDeleteClick(postIdx)
                         true
                     }
                     else -> false

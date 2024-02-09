@@ -115,6 +115,13 @@ class HomeFragment : Fragment() {
                 // 선택한 유저 프로필로 이동
                 changeUserProfile(userId)
             }
+
+            override fun onDeleteClick(postId: Int) {
+                val deleteDialog = DeleteDialog(postId)
+                deleteDialog.isCancelable = false
+                deleteDialog.show(requireActivity().supportFragmentManager, "delete dialog")
+
+            }
         })
         return binding.root
     }
