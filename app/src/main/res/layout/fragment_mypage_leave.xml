@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -18,6 +19,88 @@
         android:theme="@style/GalleryToolBar"
         app:titleTextColor="@color/text_high"
         app:titleCentered="true"/>
+    
+    <ImageView
+        android:id="@+id/mypage_leave_emoji_iv"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/mypage_emoji"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_leave_toolbar"
+        android:layout_marginTop="51dp"/>
+
+    <TextView
+        android:id="@+id/mypage_leave_question_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안뜰을 탈퇴하시나요?"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:textSize="20sp"
+        android:textColor="@color/text_high"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_leave_emoji_iv"
+        android:layout_marginTop="26dp"/>
+
+    <TextView
+        android:id="@+id/mypage_leave_reason_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="탈퇴 사유를 알려주세요"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:textSize="16sp"
+        android:textColor="@color/text_high"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_leave_question_tv"
+        android:layout_marginTop="74dp"
+        android:layout_marginStart="32dp"/>
+
+    <TextView
+        android:id="@+id/mypage_leave_reason_warning_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:text="(필수)"
+        android:textColor="@color/system_error"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/mypage_leave_reason_tv"
+        app:layout_constraintStart_toEndOf="@id/mypage_leave_reason_tv"
+        android:layout_marginStart="5dp"/>
+
+    <EditText
+        android:id="@+id/mypage_leave_reason_edit"
+        android:layout_width="match_parent"
+        android:layout_height="147dp"
+        android:background="@drawable/post_write_selector"
+        android:hint="최소 10자 이상 입력해주세요"
+        android:gravity="start"
+        android:padding="16dp"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:textSize="14sp"
+        android:layout_marginHorizontal="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_leave_reason_tv"
+        android:layout_marginTop="17dp"/>
+
+    <Button
+        android:id="@+id/mypage_leave_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="탈퇴하기"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:textSize="18sp"
+        app:shapeAppearance="@style/RoundButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="45dp"
+        android:layout_marginHorizontal="32dp"
+        android:enabled="false"
+        android:backgroundTint="@color/icon_disabled"
+        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

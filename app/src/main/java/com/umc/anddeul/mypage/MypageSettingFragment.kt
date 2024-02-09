@@ -35,6 +35,15 @@ class MypageSettingFragment : Fragment(){
             logoutDialog.show(parentFragmentManager, "logout dialog")
         }
 
+        // 탈퇴하기
+        binding.mypageSettingLeave.setOnClickListener {
+            // 탈퇴하기 화면으로 이동
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .add(R.id.mypage_setting_layout, MyPageLeaveFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
         setToolbar()
 
         return binding.root

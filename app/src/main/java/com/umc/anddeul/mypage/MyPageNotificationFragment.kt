@@ -31,7 +31,7 @@ class MyPageNotificationFragment : Fragment() {
 
     fun setToolbar() {
         binding.mypageNotificationToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationIcon(R.drawable.mypage_setting_back)
             setNavigationOnClickListener {
                 // MyPageSettingFragment로 이동
                 val fragmentManager = requireActivity().supportFragmentManager

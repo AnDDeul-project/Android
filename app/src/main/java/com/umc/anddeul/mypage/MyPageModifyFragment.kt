@@ -25,7 +25,7 @@ class MyPageModifyFragment : Fragment() {
 
     fun setToolbar() {
         binding.mypageModifyProfileToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationIcon(R.drawable.mypage_setting_back)
             setNavigationOnClickListener {
                 // MyPageFragment로 이동
                 val fragmentManager = requireActivity().supportFragmentManager
