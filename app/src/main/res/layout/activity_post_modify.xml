@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".home.PostWriteActivity">
+    tools:context=".home.PostModifyActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/upload_write_toolbar"
+        android:id="@+id/post_modify_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
@@ -17,22 +17,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="새 게시물"
+        app:title="게시글 수정"
         app:titleCentered="true"
         app:titleTextColor="@color/text_high" />
 
+
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/upload_write_selected_vp"
+        android:id="@+id/post_modify_selected_vp"
         android:layout_width="match_parent"
         android:layout_height="342dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/post_modify_toolbar" />
 
     <EditText
-        android:id="@+id/upload_write_edit"
+        android:id="@+id/post_modify_edit"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginHorizontal="16dp"
@@ -40,22 +41,22 @@
         android:background="@drawable/post_write_selector"
         android:fontFamily="@font/font_pretendard_regular"
         android:gravity="start"
-        android:hint="설명을 입력하세요\n(최대 100자 입력 가능)"
+        android:hint="수정할 내용을 입력해주세요\n(최대 100자 입력 가능)"
         android:maxLength="100"
         android:padding="14dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_write_selected_vp" />
+        app:layout_constraintTop_toBottomOf="@+id/post_modify_selected_vp" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/upload_write_btn"
+        android:id="@+id/post_modify_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/font_pretendard_bold"
-        android:text="게시하기"
+        android:text="게시글 수정하기"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
