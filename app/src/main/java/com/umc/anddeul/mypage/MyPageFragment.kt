@@ -14,7 +14,9 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMypageBinding
@@ -23,6 +25,7 @@ import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.PostUploadActivity
 import com.umc.anddeul.home.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
+import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -33,6 +36,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
+    private val myPageViewModel : MyPageViewModel by viewModels()
+
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -75,6 +80,7 @@ class MyPageFragment : Fragment() {
 
         // 프로필 수정하기
         binding.mypageModifyBtn.setOnClickListener {
+            loadMyProfile()
             // MyPageModifyFragment로 이동
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .add(R.id.mypage_layout, MyPageModifyFragment())
@@ -203,6 +209,12 @@ class MyPageFragment : Fragment() {
                             val imageView = binding.mypageProfileIv
                             val loadImage = LoadProfileImage(imageView)
                             loadImage.execute(profileImageUrl)
+
+                            val gson = Gson()
+                            val myProfile = myProfileData
+                            val myProfileDTO = gson.fromJson(gson.toJson(myProfile), UserProfileData::class.java)
+                            myPageViewModel.setMyProfile(myProfileDTO)
+
                         }
                     }
                 }
