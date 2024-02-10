@@ -52,8 +52,18 @@ class MyPageFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
 
+        // 게시글 올리기
         binding.mypageUploadBtn.setOnClickListener {
             checkPermission()
+        }
+
+        // 프로필 수정하기
+        binding.mypageModifyBtn.setOnClickListener {
+            // MyPageModifyFragment로 이동
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .add(R.id.mypage_layout, MyPageModifyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
         }
 
         return binding.root
