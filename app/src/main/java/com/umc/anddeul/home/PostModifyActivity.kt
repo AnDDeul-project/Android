@@ -41,6 +41,7 @@ class PostModifyActivity : AppCompatActivity() {
         // 원래 게시글 내용 담기
         binding.postModifyEdit.setText(postContent)
 
+        // 게시글 수정 버튼 클릭 시 수정 api 호출
         binding.postModifyBtn.setOnClickListener {
             modify(postIdx)
         }
@@ -61,7 +62,7 @@ class PostModifyActivity : AppCompatActivity() {
         val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMjkzNjU1Njg2Il0sImlhdCI6MTcwNzU3NzEwM30.YUGCoUltwrvyj8FQdP0nxJKT5OMjZHUX2aLlS8XjLq8"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
