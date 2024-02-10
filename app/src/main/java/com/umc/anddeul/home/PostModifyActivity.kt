@@ -41,9 +41,11 @@ class PostModifyActivity : AppCompatActivity() {
         // 원래 게시글 내용 담기
         binding.postModifyEdit.setText(postContent)
 
-        setToolbar()
-        modify(postIdx)
+        binding.postModifyBtn.setOnClickListener {
+            modify(postIdx)
+        }
 
+        setToolbar()
     }
 
     fun setToolbar() {
