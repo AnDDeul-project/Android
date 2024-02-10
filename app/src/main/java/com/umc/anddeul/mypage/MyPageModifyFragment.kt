@@ -74,7 +74,7 @@ class MyPageModifyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMypageModifyProfileBinding.inflate(inflater, container, false)
-        val myPageViewModel : MyPageViewModel by viewModels({requireParentFragment()})
+        val myPageViewModel: MyPageViewModel by viewModels({ requireActivity().supportFragmentManager.fragments.first() })
         val myProfileData : UserProfileData? = myPageViewModel.getMyProfile().value
 
         // 프로필 이미지, 닉네임 정보 담아 띄우기
@@ -175,7 +175,6 @@ class MyPageModifyFragment : Fragment() {
             override fun onFailure(call: Call<ModifyProfileResponse>, t: Throwable) {
                 Log.e("modifyProfileService", "onFailure")
                 Log.e("modifyProfileService", "Failure message: ${t.message}")
-
             }
 
         })
