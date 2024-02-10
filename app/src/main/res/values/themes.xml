@@ -49,5 +49,10 @@
         <item name="boxStrokeColor">@color/icon_inactive</item>
     </style>
 
+    <style name="PopupMenuStyle" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@drawable/emoji_back_selector</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+    </style>
 
 </resources>

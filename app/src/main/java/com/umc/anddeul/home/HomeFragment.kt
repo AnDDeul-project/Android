@@ -6,17 +6,22 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.umc.anddeul.MainActivity
+import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
@@ -32,12 +37,24 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private var postService = context?.let { PostService(it) }
     lateinit var postRVAdapter: PostRVAdapter
+    lateinit var drawerLayout: DrawerLayout
+
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            // 권한이 허용되면 갤러리 액티비티로 이동
+            val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+            startActivity(postUploadActivity)
+        } else {
+            val permissionDialog = PermissionDialog()
+            permissionDialog.isCancelable = false
+            permissionDialog.show(parentFragmentManager, "permission dialog")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +63,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        postRVAdapter = PostRVAdapter(requireContext(), listOf()) // 어댑터와 postDatas 연결
+        postRVAdapter = PostRVAdapter(requireContext(), listOf(), listOf()) // 어댑터와 postDatas 연결
         binding.homeFeedRv.adapter = postRVAdapter // recyclerView에 Adapter 연결
         binding.homeFeedRv.layoutManager = LinearLayoutManager(context)
 
@@ -55,7 +72,7 @@ class HomeFragment : Fragment() {
         // 툴바 기본 타이틀 없애기
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val drawerLayout: DrawerLayout = binding.homeDrawerLayout
+        drawerLayout = binding.homeDrawerLayout
 
         // 메뉴 가족 구성원 정보 가져오기
         loadMemberList()
@@ -70,6 +87,17 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // 유저 프로필 이미지 클릭 시 유저 프로필 조회로 이동
+        binding.homeMenuMyProfileIv.setOnClickListener {
+            // drawerLayout 자동 닫기
+            drawerLayout.closeDrawers()
+
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .add(R.id.home_drawer_layout, UserProfileFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
         binding.homeSwipeRefresh.setOnRefreshListener {
             Log.d("getPost", "swipe")
@@ -79,31 +107,15 @@ class HomeFragment : Fragment() {
 
         // Floating Action Button 클릭 시
         binding.homeFloatingBt.setOnClickListener {
-            Log.e("floating button", "click!!!!!!!!")
-
-            when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED -> {
-//                    스토리지 읽기 권한이 허용이면 커스텀 앨범 띄워주기
-//                    권한 있을 경우 : PERMISSION_GRANTED
-//                    권한 없을 경우 : PERMISSION_DENIED
-                    Log.e("floatingButton", "activity go")
-                    val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                    startActivity(postUploadActivity)
-                }
-
-                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-                    //권한을 명시적으로 거부한 경우 : ture
-                    //다시 묻지 않음을 선택한 경우 : false
-                    //다이얼로그를 띄워 권한 팝업을 허용해야 갤러리 접근이 가능하다는 사실을 알려줌
-                    val permissionDialog = PermissionDialog()
-                    permissionDialog.isCancelable = false
-                    permissionDialog.show(parentFragmentManager, "permission dialog")
-                }
-            }
+            checkPermission()
         }
+
+        postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
+            override fun onItemClick(userId: String) {
+                // 선택한 유저 프로필로 이동
+                changeUserProfile(userId)
+            }
+        })
         return binding.root
     }
 
@@ -123,8 +135,26 @@ class HomeFragment : Fragment() {
 //        }
 //    }
 
+    fun saveMyId(context: Context, myId: String) {
+        val spfMyId = context.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val editor = spfMyId.edit()
+        editor.putString("myId", myId)
+        editor.apply()
+    }
 
     fun loadPost() {
+
+        // 저장된 sns id 리스트 가져오기
+        val spfSnsId = requireActivity().getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
+        val size = spfSnsId.all.size
+        val snsIds = (0 until size).mapNotNull {
+            val snsId = spfSnsId.getString("snsId_$it", "not found")
+            if (snsId != "not found") snsId else null
+        }
+
+        // 내 sns id 가져오기
+        val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val myId = spfMyId.getString("myId", "not found")
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
@@ -159,10 +189,20 @@ class HomeFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val postData = response.body()?.result?.map {
-                        PostData(it.user_idx, it.content, it.picture, it.userImage)
+                        PostData(it.post_idx, it.user_idx, it.nickname, it.content, it.picture, it.userImage)
                     }
                     Log.e("postService", "$postData")
                     if (postData != null) {
+
+                        // 각 게시글의 작성자 타입을 확인하여 리스트에 저장
+                        val authorTypesList = postData.map { post ->
+                            if (myId == post.user_idx) {
+                                "me"
+                            } else {
+                                "other"
+                            }
+                        }
+                        postRVAdapter.authorTypeList = authorTypesList
                         postRVAdapter.postList = postData
                         postRVAdapter.notifyDataSetChanged()
                     }
@@ -181,6 +221,7 @@ class HomeFragment : Fragment() {
         })
 
     }
+
 
     fun loadMemberList() {
         val spf: SharedPreferences =
@@ -255,7 +296,24 @@ class HomeFragment : Fragment() {
                             val imageView = memberBinding.homeMenuMemberProfileIv
                             val loadImage = LoadProfileImage(imageView)
                             loadImage.execute(profileImageUrl)
+
+                            // 멤버 프로필 사진 클릭 시 유저 프로필로 이동
+                            memberBinding.homeMenuMemberProfileIv.setOnClickListener {
+                                // drawerLayout 자동 닫기
+                                drawerLayout.closeDrawers()
+                                changeUserProfile(memberData.snsId)
+                            }
+
+                            // 멤버 이름 클릭 시 유저 프로필로 이동
+                            memberBinding.homeMenuMemberNameTv.setOnClickListener {
+                                // drawerLayout 자동 닫기
+                                drawerLayout.closeDrawers()
+                                changeUserProfile(memberData.snsId)
+                            }
                         }
+
+                        // 내 sns id 저장
+                        saveMyId(requireContext(), me.snsId)
 
                         // 수락 요청 멤버 리스트
                         val waitList = wait.map { waitMember ->
@@ -296,5 +354,81 @@ class HomeFragment : Fragment() {
             }
 
         })
+    }
+
+    // 유저 프로필로 이동
+    fun changeUserProfile(userId: String) {
+
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .add(R.id.home_drawer_layout, UserProfileFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val idJson = gson.toJson(userId)
+                    putString("selectedId", idJson)
+                }
+            })
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+    }
+
+    // 갤러리 접근 권한 확인 함수
+    fun checkPermission() {
+        val permissionImages = android.Manifest.permission.READ_MEDIA_IMAGES
+        val permissionVideos = android.Manifest.permission.READ_MEDIA_VIDEO
+        val permissionUserSelected = android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+        val permissionReadExternal = android.Manifest.permission.READ_EXTERNAL_STORAGE
+
+        val permissionImagesGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionImages
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionVideosGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionVideos
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionUserSelectedGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionUserSelected
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionReadExternalGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionReadExternal
+        ) == PackageManager.PERMISSION_GRANTED
+
+        // SDK 34 이상
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (permissionImagesGranted && permissionVideosGranted && permissionUserSelectedGranted) {
+                // 이미 권한이 허용된 경우 해당 코드 실행
+                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                startActivity(postUploadActivity)
+            } else {
+                // 권한이 없는 경우 권한 요청
+                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
+            }
+        }
+
+        // 안드로이드 SDK가 33 이상인 경우
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (permissionImagesGranted && permissionVideosGranted) {
+                // 이미 권한이 허용된 경우 해당 코드 실행
+                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                startActivity(postUploadActivity)
+            } else {
+                // 권한이 없는 경우 권한 요청
+                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else { // 안드로이드 SDK가 33보다 낮은 경우
+            if (permissionReadExternalGranted) {
+                // 이미 권한이 허용된 경우 해당 코드 실행
+                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                startActivity(postUploadActivity)
+            } else {
+                // 권한이 없는 경우 권한 요청
+                permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
     }
 }

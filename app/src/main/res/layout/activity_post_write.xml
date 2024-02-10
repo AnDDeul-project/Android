@@ -11,14 +11,12 @@
         android:id="@+id/upload_write_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/background"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/GalleryToolBar"
         app:title="새 게시물"
         app:titleTextColor="@color/text_high"
         app:titleCentered="true"
-        android:backgroundTint="@color/background"
-        tools:layout_editor_absoluteX="1dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -35,16 +33,17 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/upload_write_selected_vp"
-        android:layout_width="342dp"
+        android:layout_width="match_parent"
         android:layout_height="342dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/upload_write_edit"
-        android:layout_width="342dp"
+        android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@drawable/post_write_selector"
         android:hint="설명을 입력하세요\n(최대 100자 입력가능)"
@@ -56,11 +55,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_write_selected_vp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="20dp"/>
     
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/upload_write_btn"
-        android:layout_width="342dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="게시하기"
         android:fontFamily="@font/font_pretendard_bold"
@@ -69,6 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="33dp"/>
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
