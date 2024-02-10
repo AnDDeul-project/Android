@@ -1,9 +1,13 @@
 package com.umc.anddeul.mypage
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,22 +18,34 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMypageBinding
+import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.PostUploadActivity
+import com.umc.anddeul.home.UserProfileRVAdapter
+import com.umc.anddeul.home.model.UserProfileDTO
+import com.umc.anddeul.home.network.UserProfileInterface
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
-    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            // 권한이 허용되면 갤러리 액티비티로 이동
-            val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-            startActivity(postUploadActivity)
-        } else {
-            val permissionDialog = PermissionDialog()
-            permissionDialog.isCancelable = false
-            permissionDialog.show(parentFragmentManager, "permission dialog")
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                // 권한이 허용되면 갤러리 액티비티로 이동
+                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
+                startActivity(postUploadActivity)
+            } else {
+                val permissionDialog = PermissionDialog()
+                permissionDialog.isCancelable = false
+                permissionDialog.show(parentFragmentManager, "permission dialog")
+            }
         }
-    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,6 +81,8 @@ class MyPageFragment : Fragment() {
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
         }
+
+        loadMyProfile()
 
         return binding.root
     }
@@ -127,5 +145,74 @@ class MyPageFragment : Fragment() {
                 permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
+    }
+
+    // 내 프로필 조회
+    fun loadMyProfile() {
+        // 내 sns id 가져오기
+        val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val myId = spfMyId.getString("myId", "not found")
+
+        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        // val token = spf.getString("jwtToken", "")
+        val token =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://umc-garden.store")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val userProfileService = retrofitBearer.create(UserProfileInterface::class.java)
+
+        if (myId != null) {
+            userProfileService.getUserProfile(myId).enqueue(object : Callback<UserProfileDTO> {
+                @SuppressLint("SetTextI18n")
+                override fun onResponse(
+                    call: Call<UserProfileDTO>,
+                    response: Response<UserProfileDTO>
+                ) {
+                    Log.e("myProfileService", "onResponse")
+                    Log.e("myProfileService response code : ", "${response.code()}")
+                    Log.e("myProfileService response body : ", "${response.body()}")
+
+                    if (response.isSuccessful) {
+                        val myProfileData = response.body()?.result
+
+                        myProfileData?.let {
+                            binding.mypageUsernameTv.text = myProfileData.nickname
+                            binding.mypagePostNumTv.text = "게시물 ${myProfileData.postCount}개"
+
+                            val myProfileRVAdapter = UserProfileRVAdapter(myProfileData.firstPostImages)
+
+                            binding.mypageProfileRv.layoutManager = GridLayoutManager(requireContext(), 3)
+                            binding.mypageProfileRv.adapter = myProfileRVAdapter
+
+                            val profileImageUrl = myProfileData.image
+                            val imageView = binding.mypageProfileIv
+                            val loadImage = LoadProfileImage(imageView)
+                            loadImage.execute(profileImageUrl)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
+                    Log.e("myProfileService", "onFailure")
+                    Log.e("myProfileService", "Failure message: ${t.message}")
+                }
+            })
+        }
+
     }
 }
