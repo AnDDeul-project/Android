@@ -374,6 +374,18 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView2"
                 app:srcCompat="@drawable/img_letter_namebox" />
 
+            <Spinner
+                android:id="@+id/sFamily"
+                android:layout_width="104dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:background="@drawable/img_primary_outline"
+                android:popupBackground="@drawable/img_primary_outline"
+                app:layout_constraintEnd_toEndOf="@+id/imageView12"
+                app:layout_constraintStart_toStartOf="@+id/imageView12"
+                app:layout_constraintTop_toBottomOf="@+id/imageView12"
+                tools:listitem="@layout/item_familylist" />
+
             <ImageView
                 android:id="@+id/imageView13"
                 android:layout_width="11dp"

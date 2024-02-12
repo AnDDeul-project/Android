@@ -1,5 +1,6 @@
 package com.umc.anddeul.postbox
 
+import FamilyAdapter
 import android.graphics.Color
 import android.graphics.Typeface
 import android.media.AudioManager
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
+import com.umc.anddeul.postbox.model.FamilyDTO
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -29,6 +31,7 @@ import java.util.Locale
 class PostboxFragment : Fragment() {
     private lateinit var binding: FragmentPostboxBinding
     private lateinit var postAdapter: LetterAdapter
+    private lateinit var familyAdapter: FamilyAdapter
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     private var letterType: String = ""
     private var mediaPlayer: MediaPlayer? = null
@@ -98,6 +101,25 @@ class PostboxFragment : Fragment() {
 
         binding.rvLetters.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         binding.rvLetters.adapter = postAdapter
+
+
+        //// 가족 리스트
+        familyAdapter = FamilyAdapter()
+
+        // 테스트용 더미 데이터
+        val dummyFams = listOf(
+            FamilyDTO(1, "아티"),
+            FamilyDTO(2, "도라"),
+            FamilyDTO(3, "지나"),
+            FamilyDTO(4, "율"),
+            FamilyDTO(5, "도도"),
+            FamilyDTO(6, "훈"),
+            FamilyDTO(7, "빈온"),
+            FamilyDTO(8, "세흐"),
+        )
+
+        familyAdapter.families = dummyFams
+        binding.sFamily.adapter = familyAdapter
 
 
         //// 편지 작성 (음성)
