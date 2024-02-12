@@ -95,11 +95,18 @@ class UserProfileFragment : Fragment() {
                         binding.userProfileUsernameTv.text = userProfileData.nickname
                         binding.userProfilePostNumTv.text = "게시물 ${userProfileData.postCount}개"
 
-                        val userProfileRVAdapter = UserProfileRVAdapter(userProfileData.firstPostImages)
+                        val userProfileRVAdapter = UserProfileRVAdapter(userProfileData.firstPostImages, userProfileData.postIdx)
                         Log.e("UserProfileBind", "게시물 첫번째 사진들 리스트 : ${userProfileData.firstPostImages}")
 
                         binding.userProfilePostRv.layoutManager = GridLayoutManager(requireContext(),3)
                         binding.userProfilePostRv.adapter = userProfileRVAdapter
+
+                        userProfileRVAdapter.setMyItemClickListener(object : UserProfileRVAdapter.MyItemClickInterface {
+                            override fun onItemClick(postIdx: Int) {
+                                // 선택한 게시글 단일 조회
+                                getPost(postIdx)
+                            }
+                        })
 
                         val profileImageUrl = userProfileData.image
                         val imageView = binding.userProfileIv
@@ -116,5 +123,18 @@ class UserProfileFragment : Fragment() {
             }
 
         })
+    }
+
+    fun getPost(postIdx: Int) {
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .add(R.id.user_profile_layout, UserPostFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val postIdxJson = gson.toJson(postIdx)
+                    putInt("postIdx", postIdxJson.toInt())
+                }
+            })
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 }
