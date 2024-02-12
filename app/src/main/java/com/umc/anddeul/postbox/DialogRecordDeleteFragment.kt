@@ -7,14 +7,14 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.Window
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.databinding.FragmentDialogRecordRestartBinding
+import com.umc.anddeul.databinding.FragmentDialogRecordDeleteBinding
 
-class DialogRecordRestartFragment(private val context: Context, private val recordPopupFragment: RecordPopupFragment) {
-    private lateinit var binding: FragmentDialogRecordRestartBinding
+class DialogRecordDeleteFragment(private val context: Context, private val postBoxFragment: PostboxFragment) {
+    private lateinit var binding: FragmentDialogRecordDeleteBinding
     private val dlg = Dialog(context)
 
     fun show(){
-        binding = FragmentDialogRecordRestartBinding.inflate(LayoutInflater.from(context))
+        binding = FragmentDialogRecordDeleteBinding.inflate(LayoutInflater.from(context))
 
         // 기본 설정
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -24,10 +24,9 @@ class DialogRecordRestartFragment(private val context: Context, private val reco
 
         dlg.setCanceledOnTouchOutside(true)
 
-        // 확인 버튼
-        binding.okBtn2.setOnClickListener {
-            // 녹음 초기화 코드 추가
-            recordPopupFragment.resetRecording()
+        // 확인 버튼 (녹음 삭제)
+        binding.okBtn4.setOnClickListener {
+            postBoxFragment.deleteRecording()
             dlg.dismiss()
         }
 
