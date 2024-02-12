@@ -58,13 +58,6 @@ class MyPageFragment : Fragment() {
     ): View? {
         binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-        // 게시글 더미
-        val myFeed = listOf("1", "2", "3", "4", "5")
-
-        val mypageProfileRVAdapter = MyPageProfileRVAdapter(myFeed)
-        binding.mypageProfileRv.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.mypageProfileRv.adapter = mypageProfileRVAdapter
-
         binding.mypageSettingIb.setOnClickListener {
             // MyPageSettingFragment로 이동
             (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -162,7 +155,7 @@ class MyPageFragment : Fragment() {
         val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")

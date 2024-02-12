@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
 import com.umc.anddeul.home.model.LogoutDTO
 import com.umc.anddeul.home.network.LogoutInterface
@@ -53,7 +54,7 @@ class LogoutDialog : DialogFragment() {
         val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -86,6 +87,9 @@ class LogoutDialog : DialogFragment() {
                     val intent = Intent(activity, StartActivity::class.java)
                     // FLAG_ACTIVITY_NO_HISTORY 플래그를 사용하여 해당 액티비티를 백 스택에서 제거
                     intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+
+                    val fragmentManager = requireActivity().supportFragmentManager
+                    fragmentManager.popBackStack()
 
                     startActivity(intent)
                 } else {
