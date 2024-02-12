@@ -23,6 +23,7 @@ import com.umc.anddeul.databinding.FragmentMypageBinding
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.PostUploadActivity
 import com.umc.anddeul.home.LoadProfileImage
+import com.umc.anddeul.home.UserPostFragment
 import com.umc.anddeul.home.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
@@ -196,6 +197,13 @@ class MyPageFragment : Fragment() {
                             binding.mypageProfileRv.layoutManager = GridLayoutManager(requireContext(), 3)
                             binding.mypageProfileRv.adapter = myProfileRVAdapter
 
+                            myProfileRVAdapter.setMyItemClickListener(object : UserProfileRVAdapter.MyItemClickInterface {
+                                override fun onItemClick(postIdx: Int) {
+                                    // 선택한 게시글 단일 조회
+                                    getPost(postIdx)
+                                }
+                            })
+
                             val profileImageUrl = myProfileData.image
                             val imageView = binding.mypageProfileIv
                             val loadImage = LoadProfileImage(imageView)
@@ -216,6 +224,18 @@ class MyPageFragment : Fragment() {
                 }
             })
         }
+    }
 
+    fun getPost(postIdx: Int) {
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .add(R.id.mypage_layout, MyPostFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val postIdxJson = gson.toJson(postIdx)
+                    putInt("postIdx", postIdxJson.toInt())
+                }
+            })
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 }
