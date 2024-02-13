@@ -29,7 +29,12 @@ class LetterListAdapter : RecyclerView.Adapter<LetterListAdapter.LetterListHolde
             holder.itemBinding.recordIv.visibility = View.VISIBLE
         }
         holder.itemBinding.userNmTv.text = letters?.get(position)?.senderIdx
+        if(letters?.get(position)?.voice == 0.toLong()){
 //        holder.itemBinding.detailTv.text = letters?.get(position)?.content.toString()
+        }
+        else {
+            holder.itemBinding.detailTv.text = "음성 메세지가 도착했습니다."
+        }
         holder.itemBinding.root.setOnClickListener{
             itemClickListener?.onItemClickListener(it, position)
             true

@@ -90,26 +90,14 @@ class LetterListFragment : Fragment() {
             } else {
             }
         }
-
-//        // 테스트용 더미 데이터
-//        val dummyPosts = listOf(
-//            Letter(1, "아티", 0, "어쩌구저쩌구"),
-//            Letter(2, "도라", 0, "어쩌구저쩌구"),
-//            Letter(3, "지나", 0, "어쩌구저쩌구"),
-//            Letter(4, "율", 1, "음성 메세지가 도착했습니다."),
-//            Letter(5, "도도", 1, "음성 메세지가 도착했습니다."),
-//            Letter(6, "훈", 1, "음성 메세지가 도착했습니다."),
-//            Letter(7, "빈온", 0, "어쩌구저쩌구"),
-//            Letter(8, "세흐", 0, "어쩌구저쩌구"),
-//        )
-//
-//        letterlistAdapter.letters = dummyPosts
+        
 
         //// 편지 보기(팝업)
         val onClickListener = object: LetterListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, pos: Int) {
+                val selectedPost = letterlistAdapter.letters?.get(pos)
                 val postPopupFragment = LetterPopupFragment(requireContext())
-//                postPopupFragment.show(dummyPosts[pos])
+                selectedPost?.let { postPopupFragment.show(it) }
             }
         }
         letterlistAdapter.setOnItemClickListener(onClickListener)

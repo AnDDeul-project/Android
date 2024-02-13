@@ -27,7 +27,7 @@
         app:srcCompat="@drawable/img_letterbox_title" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/letterDateTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,7 +50,7 @@
         android:textColor="@color/primary"
         android:textSize="26sp"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        app:layout_constraintTop_toBottomOf="@+id/letterTitleTv" />
 
     <TextView
         android:id="@+id/textView6"
@@ -63,7 +63,7 @@
         android:textColor="@color/secondary"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/userTv"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        app:layout_constraintTop_toBottomOf="@+id/letterTitleTv" />
 
     <TextView
         android:id="@+id/familyTv"
@@ -140,7 +140,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/letterTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -150,6 +150,6 @@
         android:textColor="@color/onPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/imageView14"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/letterDateTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
