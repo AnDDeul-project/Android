@@ -22,22 +22,25 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="5dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/img_unchecked_family" />
 
     <TextView
         android:id="@+id/famNm"
-        android:layout_width="wrap_content"
+        android:layout_width="104dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="29dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         android:fontFamily="@font/font_pretendard_regular"
         android:text="이솜솜"
         android:textColor="@color/text_high"
         android:textSize="14sp"
+        android:textAlignment="center"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -21,7 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
-import com.umc.anddeul.postbox.model.FamilyDTO
+import com.umc.anddeul.postbox.model.Family
+import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
 import com.umc.anddeul.postbox.service.QuestionService
 import java.time.DayOfWeek
@@ -126,21 +128,18 @@ class PostboxFragment : Fragment() {
         //// 가족 리스트
         familyAdapter = FamilyAdapter()
 
-        // 테스트용 더미 데이터
-        val dummyFams = listOf(
-            FamilyDTO(1, "아티"),
-            FamilyDTO(2, "도라"),
-            FamilyDTO(3, "지나"),
-            FamilyDTO(4, "율"),
-            FamilyDTO(5, "도도"),
-            FamilyDTO(6, "훈"),
-            FamilyDTO(7, "빈온"),
-            FamilyDTO(8, "세흐"),
-        )
-
-        familyAdapter.families = dummyFams
-        binding.sFamily.adapter = familyAdapter
-
+        // api 연결
+        val familyService = FamilyService()
+        familyService.getFamilyList(loadedToken) { familyDTO ->
+            Log.d("확1", familyDTO.toString())
+            if (familyDTO != null) {
+                if (familyDTO.isSuccess.toString() == "true") {
+                    Log.d("확3", familyDTO.result.family.toString())
+                    familyAdapter.families = familyDTO.result.family
+                    binding.sFamily.adapter = familyAdapter
+                }
+            }
+        }
 
         //// 편지 작성 (음성)
         binding.voiceIv.setOnClickListener{
@@ -192,26 +191,34 @@ class PostboxFragment : Fragment() {
 
         }
 
-
-
-        //// 편지 작성 (텍스트)
-        
         
         //// 편지 보내기
         binding.mailIv.setOnClickListener{
-            // 편지 보내는 기능 추가
-            if (letterType == "text") { // 텍스트일 때
-                //텍스트 초기화
-                binding.letterEt.setText("")
-                letterType = ""
+
+            // 선택한 가족 확인
+            val selectedPosition = binding.sFamily.selectedItemPosition
+            if (selectedPosition != AdapterView.INVALID_POSITION) {
+                val selectedFamily: Family? = familyAdapter.getItem(selectedPosition) as? Family
+                selectedFamily?.let {
+
+                    // 편지 보내는 기능 추가
+                    if (letterType == "record"){   // 녹음일 때
+                        binding.recordInfo1.visibility = View.GONE
+                        binding.recordInfo2.visibility = View.GONE
+                        binding.recordInfo3.visibility = View.GONE
+                        binding.recordInfo4.visibility = View.GONE
+                        letterType = ""
+                    }
+                    else {  // 텍스트일 때
+                        if (binding.letterEt.text.isNotBlank()) {   // 텍스트가 있을 때
+                            //텍스트 초기화
+                            binding.letterEt.setText("")
+                            letterType = ""
+                        }
+                    }
+                }
             }
-            else if (letterType == "record"){   // 녹음일 때
-                binding.recordInfo1.visibility = View.GONE
-                binding.recordInfo2.visibility = View.GONE
-                binding.recordInfo3.visibility = View.GONE
-                binding.recordInfo4.visibility = View.GONE
-                letterType = ""
-            }
+
         }
 
         return binding.root
