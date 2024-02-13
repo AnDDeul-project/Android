@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <!-- 카메라 권한 -->
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
@@ -68,7 +71,7 @@
         <activity android:name=".invite.JoinGroupCodeActivity" />
         <activity android:name=".invite.JoinGroupSendActivity" />
         <activity android:name=".home.PostUploadActivity" />
-        <activity android:name=".checklist.AddChecklistActivity" />
+        <activity android:name=".home.PostModifyActivity" />
     </application>
 
 </manifest>

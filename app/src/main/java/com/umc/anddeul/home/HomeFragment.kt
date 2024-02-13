@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -114,6 +115,24 @@ class HomeFragment : Fragment() {
             override fun onItemClick(userId: String) {
                 // 선택한 유저 프로필로 이동
                 changeUserProfile(userId)
+            }
+
+            override fun onDeleteClick(postId: Int) {
+                val deleteDialog = DeleteDialog(postId)
+                deleteDialog.isCancelable = false
+                deleteDialog.show(requireActivity().supportFragmentManager, "delete dialog")
+
+            }
+
+            override fun onModifyClick(postId: Int, selectedImages: List<String>, postContent: String) {
+                val intent = Intent(requireContext(), PostModifyActivity::class.java)
+
+                intent.putStringArrayListExtra("selectedImages", ArrayList(selectedImages))
+                intent.putExtra("postId", postId)
+                intent.putExtra("postContent", postContent)
+
+                // 다음 액티비티 시작
+                startActivity(intent)
             }
         })
         return binding.root
