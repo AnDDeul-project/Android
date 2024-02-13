@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.databinding.ItemAddChecklistBinding
 import com.umc.anddeul.databinding.ItemChecklistBinding
 
-class AddChecklistRVAdapter(private val checklist: ArrayList<Checklist>) : RecyclerView.Adapter<AddChecklistRVAdapter.ViewHolder>() {
+class AddChecklistRVAdapter() : RecyclerView.Adapter<AddChecklistRVAdapter.ViewHolder>() {
+    var checklist : List<Checklist>? = null
 
     override fun getItemCount(): Int {
-        return checklist.size
+        return checklist?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: AddChecklistRVAdapter.ViewHolder, position: Int) {
-        holder.bind(checklist[position])
+        holder.bind(checklist!!.get(position))
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AddChecklistRVAdapter.ViewHolder {

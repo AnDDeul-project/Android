@@ -1,8 +1,11 @@
 package com.umc.anddeul.checklist
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
@@ -13,9 +16,19 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.R
+import com.umc.anddeul.checklist.model.AddChecklist
+import com.umc.anddeul.checklist.model.Result
+import com.umc.anddeul.checklist.model.Root
+import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.databinding.ActivityAddChecklistBinding
 import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.postbox.LetterListFragment
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -27,8 +40,8 @@ import java.util.Locale
 
 class AddChecklistActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddChecklistBinding
-    private var checklist = ArrayList<Checklist>()
     private var currentStartOfWeek: LocalDate = LocalDate.now()
+    lateinit var selectedDateText : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +52,11 @@ class AddChecklistActivity : AppCompatActivity() {
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
         binding.addCheckliSelectDateTv.text = dateStamp
 
-        checklist.add(Checklist("메모메모", "율", "image", true))
-        checklist.add(Checklist("달력 UI 수정할 예정이에요", "율", "image", false))
+//        checklist.add(Checklist("메모메모", "율", "image", true))
+//        checklist.add(Checklist("달력 UI 수정할 예정이에요", "율", "image", false))
 
         //리사이클러뷰 연결
-        val addChecklistRVAdapter = AddChecklistRVAdapter(checklist)
+        val addChecklistRVAdapter = AddChecklistRVAdapter()
         binding.checklistAddRecylerView.adapter = addChecklistRVAdapter
         binding.checklistAddRecylerView.layoutManager = LinearLayoutManager(this@AddChecklistActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -66,12 +79,91 @@ class AddChecklistActivity : AppCompatActivity() {
             setWeek(currentStartOfWeek)
         }
 
+        //토큰 가져오기
+        val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzMwNzIzOTQzIl0sImlhdCI6MTcwNzgzMDU3NX0.4jF675wl0rS1i4ehIhtYtZVKmsSTScrxawrUJRtTxkM"
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://umc-garden.store")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("retrofitBearer", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val service = retrofit.create(ChecklistInterface::class.java)
+        readApi(service)
+
         binding.addCheckliEtContents.setOnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
                 //체크리스트 추가 코드
+                val text = binding.addCheckliEtContents.text.toString()
+                val dateList = selectedDateText.split("-")
+                val addChecklist = AddChecklist("sehseh", dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+                Log.d("체크리스트 값 확인", "${addChecklist}")
+                addApi(service, addChecklist)
+                readApi(service)
             }
             true
         }
+    }
+
+    private fun addApi(service : ChecklistInterface, addChecklist: AddChecklist) {
+        val addCall : Call<Root> = service.addCheckliist(
+            addChecklist
+        )
+        Log.d("추가", "readCall ${addCall}")
+        addCall.enqueue(object : Callback<Root> {
+            override fun onResponse(call: Call<Root>, response: Response<Root>) {
+                Log.d("api 추가", "Response ${response}")
+
+                if (response.isSuccessful) {
+                    val root : Root? = response.body()
+                    val result : List<Result>? = root?.result
+                    Log.d("추가", "Result : ${root}")
+                }
+            }
+
+            override fun onFailure(call: Call<Root>, t: Throwable) {
+                Log.d("add 실패", "readCall: ${t.message}")
+            }
+        })
+    }
+
+    private fun readApi(service : ChecklistInterface) {
+        val readCall : Call<Root> = service.getChecklist(
+            "sehseh",
+            false,
+            "2001-12-15"
+        )
+        Log.d("조회", "readCall ${readCall}")
+        readCall.enqueue(object : Callback<Root> {
+            override fun onResponse(call: Call<Root>, response: Response<Root>) {
+                Log.d("api 조회", "Response ${response}")
+
+                if (response.isSuccessful) {
+                    val root : Root? = response.body()
+                    val result : List<Result>? = root?.result
+                    Log.d("조회", "Result : ${root}")
+
+                    result.let {
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Root>, t: Throwable) {
+                Log.d("read 실패", "readCall: ${t.message}")
+            }
+        })
     }
 
     private fun setWeek(startOfWeek: LocalDate) {
@@ -139,15 +231,8 @@ class AddChecklistActivity : AppCompatActivity() {
             // 날짜 선택 시
             dateTextView?.setOnClickListener {
                 val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                val selectedDateText = currentDateForDay.format(dateFormat)
-
-                val letterListFragment = LetterListFragment()
-
-                val bundle = Bundle()
-                bundle.putString("selectedDate", selectedDateText)
-                letterListFragment.arguments = bundle
-
-                // 날짜별 편지 체크리스트 분리
+                selectedDateText = currentDateForDay.format(dateFormat)
+                Log.d("날짜 선택", "${selectedDateText}")
             }
 
         }

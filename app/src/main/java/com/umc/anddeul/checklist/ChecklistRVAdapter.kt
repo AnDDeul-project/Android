@@ -23,12 +23,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
-class ChecklistRVAdapter(private val checklist : ArrayList<Checklist>) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
+class ChecklistRVAdapter() : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
     val GALLERY_REQUEST_CODE = 405
     val REQUEST_IMAGE_CAPTURE = 200
+    var checklist : List<Checklist>? = null
 
     override fun getItemCount(): Int {
-        return checklist.size
+        return checklist?.size ?: 0
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ChecklistRVAdapter.ViewHolder {
@@ -39,7 +40,7 @@ class ChecklistRVAdapter(private val checklist : ArrayList<Checklist>) : Recycle
     override fun onBindViewHolder(holder: ChecklistRVAdapter.ViewHolder, position: Int) {
 
         //체크리스트 리사이클러뷰 연결
-        holder.bind(checklist[position])
+        holder.bind(checklist!!.get(position))
 
         //갤러리 앱 연동 함수
         holder.binding.checkliBtnCamera.setOnClickListener {
@@ -81,8 +82,8 @@ class ChecklistRVAdapter(private val checklist : ArrayList<Checklist>) : Recycle
 
     inner class ViewHolder(val binding: ItemChecklistBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(checklist : Checklist) {
-            binding.checkliTvChecklist.text = checklist.contents
-            binding.checkliTvWriter.text = checklist.writer + "님이 남기셨습니다."
+            binding.checkliTvChecklist.text = checklist?.contents
+            binding.checkliTvWriter.text = checklist?.writer + "님이 남기셨습니다."
             if (binding.checkliIvPhoto != null) {
                 binding.checkliIvPhoto.visibility = View.VISIBLE
             }

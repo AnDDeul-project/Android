@@ -1,8 +1,11 @@
 package com.umc.anddeul.checklist
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +16,17 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.checklist.model.Result
+import com.umc.anddeul.checklist.model.Root
+import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.postbox.LetterListFragment
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -28,22 +40,20 @@ import java.util.Locale
 class ChecklistFragment : Fragment() {
 
     lateinit var binding: FragmentChecklistBinding
-    private var checklist = ArrayList<Checklist>()
     private var currentStartOfWeek: LocalDate = LocalDate.now()
-    private var dateSet = ArrayList<DateSet>()
-    private var GALLERY_REQUEST_CODE = 405
+    lateinit var selectedDateText : String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChecklistBinding.inflate(inflater, container, false)
-        checklist.add(Checklist("체크리스트 내용", "율", "이미지파일", false))
-        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
-        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
-        checklist.add(Checklist("체크리스트 내용", "율", "이미지파일", false))
-        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
-        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
+//        checklist.add(Checklist("체크리스트 내용", "율", "이미지파일", false))
+//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
+//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
+//        checklist.add(Checklist("체크리스트 내용", "율", "이미지파일", false))
+//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
+//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
 
         //리사이클러뷰 연결
-        val checklistRVAdapter = ChecklistRVAdapter(checklist)
+        val checklistRVAdapter = ChecklistRVAdapter()
         binding.checklistRecylerView.adapter = checklistRVAdapter
         binding.checklistRecylerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -71,7 +81,85 @@ class ChecklistFragment : Fragment() {
             startActivity(intent)
         }
 
+        //토큰 가져오기
+        val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA1NzU2OTgwIl0sImlhdCI6MTcwNjY4ODU3NX0.ybGPKOM9GYOxsT_aJqMr_Ozp30urJ2JSRCzk3GIFCnQ"
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://umc-garden.store")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("retrofitBearer", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val service = retrofit.create(ChecklistInterface::class.java)
+
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        val readCall : Call<Root> = service.getChecklist(
+            "sehseh",
+            false,
+            "2001-12-15"
+        )
+        Log.d("조회", "readCall ${readCall}")
+        readCall.enqueue(object : Callback<Root> {
+            override fun onResponse(call: Call<Root>, response: Response<Root>) {
+                Log.d("api 조회", "Response ${response}")
+
+                if (response.isSuccessful) {
+                    val root : Root? = response.body()
+                    val result : List<Result>? = root?.result
+                    Log.d("조회", "Result : ${root}")
+
+                    result.let {
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Root>, t: Throwable) {
+                Log.d("read 실패", "readCall: ${t.message}")
+            }
+        })
+
         return binding.root
+    }
+
+    private fun readApi(service : ChecklistInterface) {
+        val readCall : Call<Root> = service.getChecklist(
+            "sehseh",
+            false,
+            "2001-12-15"
+        )
+        Log.d("조회", "readCall ${readCall}")
+        readCall.enqueue(object : Callback<Root> {
+            override fun onResponse(call: Call<Root>, response: Response<Root>) {
+                Log.d("api 조회", "Response ${response}")
+
+                if (response.isSuccessful) {
+                    val root : Root? = response.body()
+                    val result : List<Result>? = root?.result
+                    Log.d("조회", "Result : ${root}")
+
+                    result.let {
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Root>, t: Throwable) {
+                Log.d("read 실패", "readCall: ${t.message}")
+            }
+        })
     }
 
     private fun setWeek(startOfWeek: LocalDate) {
@@ -139,15 +227,8 @@ class ChecklistFragment : Fragment() {
             // 날짜 선택 시
             dateTextView?.setOnClickListener {
                 val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                val selectedDateText = currentDateForDay.format(dateFormat)
-
-                val letterListFragment = LetterListFragment()
-
-                val bundle = Bundle()
-                bundle.putString("selectedDate", selectedDateText)
-                letterListFragment.arguments = bundle
-
-                // 날짜별 편지 체크리스트 분리
+                selectedDateText = currentDateForDay.format(dateFormat)
+                Log.d("날짜 선택", "${selectedDateText}")
             }
 
         }
