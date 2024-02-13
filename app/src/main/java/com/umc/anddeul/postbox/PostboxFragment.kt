@@ -23,6 +23,7 @@ import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
 import com.umc.anddeul.postbox.model.FamilyDTO
 import com.umc.anddeul.postbox.service.MailService
+import com.umc.anddeul.postbox.service.QuestionService
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -108,6 +109,18 @@ class PostboxFragment : Fragment() {
 
         binding.rvLetters.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         binding.rvLetters.adapter = postAdapter
+
+
+        //// 랜덤 질문
+        // api 연결
+        val questionService = QuestionService()
+        questionService.randomQuestion(loadedToken) { questionDTO ->
+            if (questionDTO != null) {
+                if (questionDTO.isSuccess.toString() == "true") {
+                    binding.randomQTv.text = questionDTO.question[0].content
+                }
+            }
+        }
 
 
         //// 가족 리스트
