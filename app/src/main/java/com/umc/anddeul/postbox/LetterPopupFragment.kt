@@ -26,14 +26,12 @@ class LetterPopupFragment(private val context: Context)  {
         if (content.type == 0){
             binding.letterPop1.text = content.content
             binding.letterPop1.visibility = View.VISIBLE
-            binding.recordPop1.visibility = View.GONE
             binding.recordPop2.visibility = View.GONE
             binding.recordPop3.visibility = View.GONE
             binding.recordPop4.visibility = View.GONE
         }
         else{
             binding.letterPop1.visibility = View.GONE
-            binding.recordPop1.visibility = View.VISIBLE
             binding.recordPop2.visibility = View.VISIBLE
             binding.recordPop3.visibility = View.VISIBLE
             binding.recordPop4.visibility = View.VISIBLE

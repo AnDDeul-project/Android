@@ -226,23 +226,23 @@ class PostboxFragment : Fragment() {
         for (i in 1..7) {
             val currentDateForDay = nearestMonday.plusDays(i.toLong() - 1)
             val dateTextView = when (i) {
-                1 -> binding.date1
-                2 -> binding.date2
-                3 -> binding.date3
-                4 -> binding.date4
-                5 -> binding.date5
-                6 -> binding.date6
-                7 -> binding.date7
+                1 -> binding.postDate1
+                2 -> binding.postDate2
+                3 -> binding.postDate3
+                4 -> binding.postDate4
+                5 -> binding.postDate5
+                6 -> binding.postDate6
+                7 -> binding.postDate7
                 else -> null
             }
             val dayTextView = when (i) {
-                1 -> binding.day1
-                2 -> binding.day2
-                3 -> binding.day3
-                4 -> binding.day4
-                5 -> binding.day5
-                6 -> binding.day6
-                7 -> binding.day7
+                1 -> binding.postDay1
+                2 -> binding.postDay2
+                3 -> binding.postDay3
+                4 -> binding.postDay4
+                5 -> binding.postDay5
+                6 -> binding.postDay6
+                7 -> binding.postDay7
                 else -> null
             }
 
