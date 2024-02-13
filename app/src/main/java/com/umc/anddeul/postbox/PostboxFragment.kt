@@ -23,9 +23,17 @@ import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
 import com.umc.anddeul.postbox.model.Family
+import com.umc.anddeul.postbox.model.TextRequest
+import com.umc.anddeul.postbox.model.VoiceRequest
 import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
 import com.umc.anddeul.postbox.service.QuestionService
+import com.umc.anddeul.postbox.service.TextService
+import com.umc.anddeul.postbox.service.VoiceService
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -131,10 +139,8 @@ class PostboxFragment : Fragment() {
         // api 연결
         val familyService = FamilyService()
         familyService.getFamilyList(loadedToken) { familyDTO ->
-            Log.d("확1", familyDTO.toString())
             if (familyDTO != null) {
                 if (familyDTO.isSuccess.toString() == "true") {
-                    Log.d("확3", familyDTO.result.family.toString())
                     familyAdapter.families = familyDTO.result.family
                     binding.sFamily.adapter = familyAdapter
                 }
@@ -203,17 +209,41 @@ class PostboxFragment : Fragment() {
 
                     // 편지 보내는 기능 추가
                     if (letterType == "record"){   // 녹음일 때
-                        binding.recordInfo1.visibility = View.GONE
-                        binding.recordInfo2.visibility = View.GONE
-                        binding.recordInfo3.visibility = View.GONE
-                        binding.recordInfo4.visibility = View.GONE
-                        letterType = ""
+                        val snsIdList = listOf(it.snsId.toLong())
+                        Log.d("확인", snsIdList.toString())
+                        val myUri: Uri = Uri.parse("file://$recordFilePath")
+                        val file = File(myUri.path)
+                        val requestFile = file.asRequestBody("audio/*".toMediaTypeOrNull())
+                        val recordPart = MultipartBody.Part.createFormData("record", file.name, requestFile)
+                        val request = VoiceRequest(snsIdList, binding.randomQTv.text.toString(), recordPart)
+                        // api 연결
+                        val voiceService = VoiceService()
+                        voiceService.sendVoice(loadedToken, request) { voiceDTO ->
+                            if (voiceDTO != null) {
+                                if (voiceDTO.isSuccess.toString() == "true") {
+                                    binding.recordInfo1.visibility = View.GONE
+                                    binding.recordInfo2.visibility = View.GONE
+                                    binding.recordInfo3.visibility = View.GONE
+                                    binding.recordInfo4.visibility = View.GONE
+                                    letterType = ""
+                                }
+                            }
+                        }
                     }
                     else {  // 텍스트일 때
                         if (binding.letterEt.text.isNotBlank()) {   // 텍스트가 있을 때
-                            //텍스트 초기화
-                            binding.letterEt.setText("")
-                            letterType = ""
+                            val request = TextRequest(it.snsId, binding.randomQTv.text.toString(),binding.letterEt.text.toString())
+                            // api 연결
+                            val textService = TextService()
+                            textService.sendText(loadedToken, request) { textDTO ->
+                                if (textDTO != null) {
+                                    if (textDTO.isSuccess.toString() == "true") {
+                                        //텍스트 초기화
+                                        binding.letterEt.setText("")
+                                        letterType = ""
+                                    }
+                                }
+                            }
                         }
                     }
                 }
