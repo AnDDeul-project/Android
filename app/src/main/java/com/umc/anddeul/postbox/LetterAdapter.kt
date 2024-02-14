@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.umc.anddeul.R
 import com.umc.anddeul.databinding.ItemLetterBinding
+import com.umc.anddeul.postbox.model.Post
 
 class LetterAdapter : RecyclerView.Adapter<LetterAdapter.LetterHolder>() {
-    var letters: List<Letter>? = null
+    var letters: List<Post>? = null
 
     override fun getItemCount(): Int {
         return letters?.size ?: 0
@@ -19,7 +21,12 @@ class LetterAdapter : RecyclerView.Adapter<LetterAdapter.LetterHolder>() {
     }
 
     override fun onBindViewHolder(holder: LetterHolder, position: Int) {
-        holder.itemBinding.letterNm.text = letters?.get(position)?.name.toString()
+        holder.itemBinding.letterNm.text = letters?.get(position)?.senderIdx
+        if (letters?.get(position)?.isRead == 1.toLong()){
+            holder.itemBinding.miniLetterIv.setImageResource(R.drawable.ic_post2)
+        } else {
+            holder.itemBinding.miniLetterIv.setImageResource(R.drawable.ic_post)
+        }
         holder.itemBinding.root.setOnClickListener{
             itemClickListener?.onItemClickListener(it, position)
             true

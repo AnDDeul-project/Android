@@ -3,11 +3,13 @@ package com.umc.anddeul.postbox
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -16,12 +18,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentLetterlistBinding
-import com.umc.anddeul.databinding.ItemCalendarBinding
+import com.umc.anddeul.postbox.service.MailService
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
@@ -75,25 +76,28 @@ class LetterListFragment : Fragment() {
         //// 편지 리스트
         letterlistAdapter = LetterListAdapter()
 
-        // 테스트용 더미 데이터
-        val dummyPosts = listOf(
-            Letter(1, "아티", 0, "어쩌구저쩌구"),
-            Letter(2, "도라", 0, "어쩌구저쩌구"),
-            Letter(3, "지나", 0, "어쩌구저쩌구"),
-            Letter(4, "율", 1, "음성 메세지가 도착했습니다."),
-            Letter(5, "도도", 1, "음성 메세지가 도착했습니다."),
-            Letter(6, "훈", 1, "음성 메세지가 도착했습니다."),
-            Letter(7, "빈온", 0, "어쩌구저쩌구"),
-            Letter(8, "세흐", 0, "어쩌구저쩌구"),
-        )
-
-        letterlistAdapter.letters = dummyPosts
+        val today = selectedDate
+        Log.d("해당날짜", today.toString())
+        val loadedToken = loadJwt() // jwt토큰
+        val mailService = MailService()
+        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
+            Log.d("확2", mailDTO.toString())
+            if (mailDTO != null) {
+                if (mailDTO.isSuccess.toString() == "true") {
+                    letterlistAdapter.letters = mailDTO.post
+                    letterlistAdapter.notifyDataSetChanged()
+                }
+            } else {
+            }
+        }
+        
 
         //// 편지 보기(팝업)
         val onClickListener = object: LetterListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, pos: Int) {
+                val selectedPost = letterlistAdapter.letters?.get(pos)
                 val postPopupFragment = LetterPopupFragment(requireContext())
-                postPopupFragment.show(dummyPosts[pos])
+                selectedPost?.let { postPopupFragment.show(it) }
             }
         }
         letterlistAdapter.setOnItemClickListener(onClickListener)
@@ -199,6 +203,12 @@ class LetterListFragment : Fragment() {
     private fun formatDate(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
+    }
+
+    // 토큰 불러오기
+    private fun loadJwt(): String {
+        val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
+        return spf.getString("jwtToken", null).toString()
     }
 
 }

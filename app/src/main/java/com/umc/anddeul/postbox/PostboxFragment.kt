@@ -2,16 +2,18 @@ package com.umc.anddeul.postbox
 
 import FamilyAdapter
 import android.graphics.Color
-import android.graphics.Typeface
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.AdapterView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -20,7 +22,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPostboxBinding
-import com.umc.anddeul.postbox.model.FamilyDTO
+import com.umc.anddeul.postbox.model.Family
+import com.umc.anddeul.postbox.model.TextRequest
+import com.umc.anddeul.postbox.model.VoiceRequest
+import com.umc.anddeul.postbox.service.FamilyService
+import com.umc.anddeul.postbox.service.MailService
+import com.umc.anddeul.postbox.service.QuestionService
+import com.umc.anddeul.postbox.service.TextService
+import com.umc.anddeul.postbox.service.VoiceService
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -75,26 +88,31 @@ class PostboxFragment : Fragment() {
         //// 편지 리스트
         postAdapter = LetterAdapter()
 
-        // 테스트용 더미 데이터
-        val dummyPosts = listOf(
-            Letter(1, "아티", 0, "편지 내용을 보여준다. 예) 전염병이 발생 초기와 비슷하게 접촉 차단, 추적 관찰로 추가 감염을 막는 데 집중하고 사태가 커지지 않도록 방역, 격리시설 수용, 치료 등이 이루어질 것이다. 물론 좀비는 공격성과 높은 전염성을 가지기에 중무장한 인원이 투입될 것이며 인권 문제를 감안해 최대한 죽이지 않고 생포하려고 시도하겠지만 그러면서도 언제든지 반격을 전제로 깔고 행동할 것이다. (나무위키 좀비 검색 내용)"),
-            Letter(2, "도라", 0, "어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구"),
-            Letter(3, "지나", 0, "어쩌구저쩌구"),
-            Letter(4, "율", 1, "음성 메세지가 도착했습니다."),
-            Letter(5, "도도", 1, "음성 메세지가 도착했습니다."),
-            Letter(6, "훈", 1, "음성 메세지가 도착했습니다."),
-            Letter(7, "빈온", 0, "어쩌구저쩌구"),
-            Letter(8, "세흐", 0, "어쩌구저쩌구"),
-        )
-
-        postAdapter.letters = dummyPosts
+        // api 연결
+//        val currentDate = LocalDate.now()
+//        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//        val today = currentDate.format(dateFormat)
+////        val today = "2024-02-08"
+//        Log.d("오늘날짜", currentDate.format(dateFormat))
+        val loadedToken = loadJwt() // jwt토큰
+//        val mailService = MailService()
+//        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
+//            if (mailDTO != null) {
+//                if (mailDTO.isSuccess.toString() == "true") {
+//                    postAdapter.letters = mailDTO.post
+//                    postAdapter.notifyDataSetChanged()
+//                }
+//            } else {
+//            }
+//        }
 
 
         //// 편지 보기(팝업)
         val onClickListener = object: LetterAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, pos: Int) {
+                val selectedPost = postAdapter.letters?.get(pos)
                 val postPopupFragment = LetterPopupFragment(requireContext())
-                postPopupFragment.show(dummyPosts[pos])
+                selectedPost?.let { postPopupFragment.show(it) }
             }
         }
         postAdapter.setOnItemClickListener(onClickListener)
@@ -103,24 +121,31 @@ class PostboxFragment : Fragment() {
         binding.rvLetters.adapter = postAdapter
 
 
+        //// 랜덤 질문
+//        // api 연결
+//        val questionService = QuestionService()
+//        questionService.randomQuestion(loadedToken) { questionDTO ->
+//            if (questionDTO != null) {
+//                if (questionDTO.isSuccess.toString() == "true") {
+//                    binding.randomQTv.text = questionDTO.question[0].content
+//                }
+//            }
+//        }
+
+
         //// 가족 리스트
         familyAdapter = FamilyAdapter()
 
-        // 테스트용 더미 데이터
-        val dummyFams = listOf(
-            FamilyDTO(1, "아티"),
-            FamilyDTO(2, "도라"),
-            FamilyDTO(3, "지나"),
-            FamilyDTO(4, "율"),
-            FamilyDTO(5, "도도"),
-            FamilyDTO(6, "훈"),
-            FamilyDTO(7, "빈온"),
-            FamilyDTO(8, "세흐"),
-        )
-
-        familyAdapter.families = dummyFams
-        binding.sFamily.adapter = familyAdapter
-
+        // api 연결
+        val familyService = FamilyService()
+        familyService.getFamilyList(loadedToken) { familyDTO ->
+            if (familyDTO != null) {
+                if (familyDTO.isSuccess.toString() == "true") {
+                    familyAdapter.families = familyDTO.result.family
+                    binding.sFamily.adapter = familyAdapter
+                }
+            }
+        }
 
         //// 편지 작성 (음성)
         binding.voiceIv.setOnClickListener{
@@ -172,26 +197,57 @@ class PostboxFragment : Fragment() {
 
         }
 
-
-
-        //// 편지 작성 (텍스트)
-        
         
         //// 편지 보내기
         binding.mailIv.setOnClickListener{
-            // 편지 보내는 기능 추가
-            if (letterType == "text") { // 텍스트일 때
-                //텍스트 초기화
-                binding.letterEt.setText("")
-                letterType = ""
+
+            // 선택한 가족 확인
+            val selectedPosition = binding.sFamily.selectedItemPosition
+            if (selectedPosition != AdapterView.INVALID_POSITION) {
+                val selectedFamily: Family? = familyAdapter.getItem(selectedPosition) as? Family
+                selectedFamily?.let {
+
+                    // 편지 보내는 기능 추가
+                    if (letterType == "record"){   // 녹음일 때
+                        val myUri: Uri = Uri.parse("file://$recordFilePath")
+                        val file = File(myUri.path)
+                        val requestFile = file.asRequestBody("audio/*".toMediaTypeOrNull())
+                        val recordPart = MultipartBody.Part.createFormData("record", file.name, requestFile)
+                        val request = VoiceRequest(it.snsId, binding.randomQTv.text.toString(), recordPart)
+                        // api 연결
+                        val voiceService = VoiceService()
+                        voiceService.sendVoice(loadedToken, request) { voiceDTO ->
+                            Log.d("확2", voiceDTO.toString())
+                            if (voiceDTO != null) {
+                                if (voiceDTO.isSuccess.toString() == "true") {
+                                    binding.recordInfo1.visibility = View.GONE
+                                    binding.recordInfo2.visibility = View.GONE
+                                    binding.recordInfo3.visibility = View.GONE
+                                    binding.recordInfo4.visibility = View.GONE
+                                    letterType = ""
+                                }
+                            }
+                        }
+                    }
+                    else {  // 텍스트일 때
+                        if (binding.letterEt.text.isNotBlank()) {   // 텍스트가 있을 때
+                            val request = TextRequest(it.snsId, binding.randomQTv.text.toString(),binding.letterEt.text.toString())
+                            // api 연결
+                            val textService = TextService()
+                            textService.sendText(loadedToken, request) { textDTO ->
+                                if (textDTO != null) {
+                                    if (textDTO.isSuccess.toString() == "true") {
+                                        //텍스트 초기화
+                                        binding.letterEt.setText("")
+                                        letterType = ""
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            else if (letterType == "record"){   // 녹음일 때
-                binding.recordInfo1.visibility = View.GONE
-                binding.recordInfo2.visibility = View.GONE
-                binding.recordInfo3.visibility = View.GONE
-                binding.recordInfo4.visibility = View.GONE
-                letterType = ""
-            }
+
         }
 
         return binding.root
@@ -206,23 +262,23 @@ class PostboxFragment : Fragment() {
         for (i in 1..7) {
             val currentDateForDay = nearestMonday.plusDays(i.toLong() - 1)
             val dateTextView = when (i) {
-                1 -> binding.date1
-                2 -> binding.date2
-                3 -> binding.date3
-                4 -> binding.date4
-                5 -> binding.date5
-                6 -> binding.date6
-                7 -> binding.date7
+                1 -> binding.postDate1
+                2 -> binding.postDate2
+                3 -> binding.postDate3
+                4 -> binding.postDate4
+                5 -> binding.postDate5
+                6 -> binding.postDate6
+                7 -> binding.postDate7
                 else -> null
             }
             val dayTextView = when (i) {
-                1 -> binding.day1
-                2 -> binding.day2
-                3 -> binding.day3
-                4 -> binding.day4
-                5 -> binding.day5
-                6 -> binding.day6
-                7 -> binding.day7
+                1 -> binding.postDay1
+                2 -> binding.postDay2
+                3 -> binding.postDay3
+                4 -> binding.postDay4
+                5 -> binding.postDay5
+                6 -> binding.postDay6
+                7 -> binding.postDay7
                 else -> null
             }
 
@@ -302,4 +358,10 @@ class PostboxFragment : Fragment() {
         binding.recordInfo4.visibility = View.GONE
     }
 
+    // 토큰 불러오기
+    private fun loadJwt(): String {
+        val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
+//        return spf.getString("jwtToken", null).toString()
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+    }
 }
