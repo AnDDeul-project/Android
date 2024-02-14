@@ -72,6 +72,7 @@
         <activity android:name=".invite.JoinGroupSendActivity" />
         <activity android:name=".home.PostUploadActivity" />
         <activity android:name=".home.PostModifyActivity" />
+        <activity android:name=".checklist.AddChecklistActivity" />
     </application>
 
 </manifest>
