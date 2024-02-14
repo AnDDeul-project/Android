@@ -13,5 +13,6 @@ data class Post(
     @SerializedName("postbox_idx") val postboxIdx: Long,
     @SerializedName("sender_idx") val senderIdx: String,
     val voice: Long,
+    val content: String?,
     @SerializedName("is_read") val isRead: Long,
 )
