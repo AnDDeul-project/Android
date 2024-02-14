@@ -11,6 +11,10 @@ import com.umc.anddeul.start.signin.SignupActivity
 class TermsActivity: AppCompatActivity()  {
     private lateinit var binding: ActivityTermsBinding
     private var termsCheckedCnt : Int = 0
+    private var termsOpen1 : Boolean = false
+    private var termsOpen2 : Boolean = false
+    private var termsOpen3 : Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +27,44 @@ class TermsActivity: AppCompatActivity()  {
         binding.termsBackBtn.setOnClickListener {
             val signupIntent = Intent(this, SignupActivity::class.java)
             startActivity(signupIntent)
+        }
+
+        //// 약관 펼치기 접기
+
+        // 첫 번째 약관
+        binding.terms1.setOnClickListener {
+            if (!termsOpen1) {
+                termsOpen1 = true
+                binding.termChild1.visibility = View.VISIBLE
+            }
+            else{
+                termsOpen1 = false
+                binding.termChild1.visibility = View.GONE
+            }
+        }
+
+        // 두 번째 약관
+        binding.terms2.setOnClickListener {
+            if (!termsOpen2) {
+                termsOpen2 = true
+                binding.termChild2.visibility = View.VISIBLE
+            }
+            else{
+                termsOpen2 = false
+                binding.termChild2.visibility = View.GONE
+            }
+        }
+
+        // 세 번째 약관
+        binding.terms3.setOnClickListener {
+            if (!termsOpen3) {
+                termsOpen3 = true
+                binding.termChild3.visibility = View.VISIBLE
+            }
+            else{
+                termsOpen3 = false
+                binding.termChild3.visibility = View.GONE
+            }
         }
 
         //// 약관 체크 버튼
