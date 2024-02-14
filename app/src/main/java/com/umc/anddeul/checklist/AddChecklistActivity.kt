@@ -79,6 +79,10 @@ class AddChecklistActivity : AppCompatActivity() {
             setWeek(currentStartOfWeek)
         }
 
+        //날짜 초기값
+        selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
+        Log.d("날짜", "${selectedDateText}")
+
         //토큰 가져오기
         val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
         val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzMwNzIzOTQzIl0sImlhdCI6MTcwNzgzMDU3NX0.4jF675wl0rS1i4ehIhtYtZVKmsSTScrxawrUJRtTxkM"
@@ -109,8 +113,8 @@ class AddChecklistActivity : AppCompatActivity() {
                 val dateList = selectedDateText.split("-")
                 val addChecklist = AddChecklist("sehseh", dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
                 Log.d("체크리스트 값 확인", "${addChecklist}")
-                addApi(service, addChecklist)
-                readApi(service)
+//                addApi(service, addChecklist)
+//                readApi(service)
             }
             true
         }
@@ -128,7 +132,7 @@ class AddChecklistActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
                     val result : List<Result>? = root?.result
-                    Log.d("추가", "Result : ${root}")
+                    Log.d("추가", "Result : ${result}")
                 }
             }
 
@@ -140,9 +144,9 @@ class AddChecklistActivity : AppCompatActivity() {
 
     private fun readApi(service : ChecklistInterface) {
         val readCall : Call<Root> = service.getChecklist(
-            "sehseh",
+            "3304133093",
             false,
-            "2001-12-15"
+            "2024-02-12"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -152,7 +156,7 @@ class AddChecklistActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
                     val result : List<Result>? = root?.result
-                    Log.d("조회", "Result : ${root}")
+                    Log.d("조회", "Result : ${result}")
 
                     result.let {
 

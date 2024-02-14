@@ -4,10 +4,13 @@ import com.umc.anddeul.checklist.model.AddChecklist
 import com.umc.anddeul.checklist.model.Root
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Field
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import java.io.File
 
 interface ChecklistInterface {
 
@@ -30,4 +33,10 @@ interface ChecklistInterface {
     fun complete (
         @Path("checkid") checkid : String
     ) : Call<Root>
+
+    @PATCH("/check/img")
+    fun imgPic (
+        @Field("image") image : File,
+        @Field("checkid") checkid: String
+    )
 }

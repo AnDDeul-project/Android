@@ -45,12 +45,6 @@ class ChecklistFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChecklistBinding.inflate(inflater, container, false)
-//        checklist.add(Checklist("체크리스트 내용", "율", "이미지파일", false))
-//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
-//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
-//        checklist.add(Checklist("체크리스트 내용", "율", "이미지파일", false))
-//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
-//        checklist.add(Checklist("체크리스트 내용", "도도", "d", false))
 
         //리사이클러뷰 연결
         val checklistRVAdapter = ChecklistRVAdapter()
@@ -81,10 +75,13 @@ class ChecklistFragment : Fragment() {
             startActivity(intent)
         }
 
-        //토큰 가져오기
-        val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA1NzU2OTgwIl0sImlhdCI6MTcwNjY4ODU3NX0.ybGPKOM9GYOxsT_aJqMr_Ozp30urJ2JSRCzk3GIFCnQ"
+        selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
+        Log.d("날짜", "${selectedDateText}")
 
+        //토큰 가져오기
+        val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val spfMyId : SharedPreferences = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -94,7 +91,7 @@ class ChecklistFragment : Fragment() {
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
                             .build()
-                        Log.d("retrofitBearer", "Token: " + token.orEmpty())
+                        Log.d("retrofit", "Token: " + token.orEmpty())
                         chain.proceed(request)
                     }
                     .build()
@@ -106,9 +103,9 @@ class ChecklistFragment : Fragment() {
         val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         val readCall : Call<Root> = service.getChecklist(
-            "sehseh",
+            "3304133093",
             false,
-            "2001-12-15"
+            "2024-02-12"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -117,8 +114,9 @@ class ChecklistFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
+//                    Log.d("조회", "Root : ${root}")
                     val result : List<Result>? = root?.result
-                    Log.d("조회", "Result : ${root}")
+                    Log.d("조회", "Result : ${result}")
 
                     result.let {
 
@@ -136,9 +134,9 @@ class ChecklistFragment : Fragment() {
 
     private fun readApi(service : ChecklistInterface) {
         val readCall : Call<Root> = service.getChecklist(
-            "sehseh",
+            "3304133093",
             false,
-            "2001-12-15"
+            "2024-02-12"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -147,8 +145,9 @@ class ChecklistFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
+//                    Log.d("조회", "Root : ${root}")
                     val result : List<Result>? = root?.result
-                    Log.d("조회", "Result : ${root}")
+                    Log.d("조회", "Result : ${result}")
 
                     result.let {
 
