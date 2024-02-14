@@ -2,20 +2,23 @@ package com.umc.anddeul.home
 
 import PostsInterface
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -39,7 +42,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ConfirmDialogListener {
     lateinit var binding: FragmentHomeBinding
     private var postService = context?.let { PostService(it) }
     lateinit var postRVAdapter: PostRVAdapter
@@ -287,6 +290,17 @@ class HomeFragment : Fragment() {
                         // 가족 초대 코드 설정
                         binding.homeMenuCodeNumTv.text = memberData.family_code
 
+                        binding.homeMenuCopyBt.setOnClickListener {
+                            // 가족 코드를 클립보드에 복사
+                            val familyCode = binding.homeMenuCodeNumTv.text.toString()
+                            val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clipData = ClipData.newPlainText("Family Code", familyCode)
+                            clipboardManager.setPrimaryClip(clipData)
+
+                            // 복사 완료 메시지 등을 사용자에게 표시 (옵션)
+                            Toast.makeText(requireContext(), "가족 코드가 복사되었습니다.", Toast.LENGTH_SHORT).show()
+                        }
+
                         // 내 프로필 이름 설정
                         binding.homeMenuMyProfileNameIv.text = me.nickname
                         // 내 프로필 사진 설정
@@ -301,6 +315,7 @@ class HomeFragment : Fragment() {
                         }
 
                         val memberLayout = binding.homeMenuMembersLinear
+                        memberLayout.removeAllViews() // 기존 뷰들을 모두 제거
 
                         for (memberData in familyList) {
                             val memberBinding = FragmentHomeMenuMemberBinding.inflate(
@@ -340,6 +355,7 @@ class HomeFragment : Fragment() {
                         }
 
                         val waitLayout = binding.homeMenuRequestMembersLinear
+                        waitLayout.removeAllViews() // 기존 뷰들을 모두 제거
 
                         for (waitData in waitList) {
                             val waitBinding = FragmentHomeMenuRequestMemberBinding.inflate(
@@ -350,7 +366,7 @@ class HomeFragment : Fragment() {
 
                             // 수락하기 버튼 클릭시 (api 연결하기)
                             waitBinding.homeMenuRequestAcceptBt.setOnClickListener {
-                                val dialog = ConfirmDialog(waitData.nickname, "행복한 우리 가족")
+                                val dialog = ConfirmDialog(waitData.nickname, "행복한 우리 가족", waitData.snsId, this@HomeFragment)
                                 dialog.isCancelable = false
                                 dialog.show(parentFragmentManager, "home accept confirm dialog")
                             }
@@ -450,4 +466,10 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    override fun onAcceptClicked() {
+        loadMemberList()
+    }
+
+    override fun onCancelClicked() { }
 }
