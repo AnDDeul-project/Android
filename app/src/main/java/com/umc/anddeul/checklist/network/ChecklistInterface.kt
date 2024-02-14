@@ -1,6 +1,7 @@
 package com.umc.anddeul.checklist.network
 
 import com.umc.anddeul.checklist.model.AddChecklist
+import com.umc.anddeul.checklist.model.AddRoot
 import com.umc.anddeul.checklist.model.Root
 import retrofit2.Call
 import retrofit2.http.Body
@@ -15,10 +16,10 @@ import java.io.File
 interface ChecklistInterface {
 
     //체크리스트 추가
-    @POST("/check/")
+    @POST("/check/add")
     fun addCheckliist (
         @Body add : AddChecklist
-    ) : Call<Root>
+    ) : Call<AddRoot>
 
     //체크리스트 불러오기
     @GET("/check/{userid}/{mode}/{date}")

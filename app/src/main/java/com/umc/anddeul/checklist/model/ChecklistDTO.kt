@@ -1,13 +1,13 @@
 package com.umc.anddeul.checklist.model
 
 data class Root (
-    val result : List<Result>
+    val checklist : List<Checklist>
 )
 
-data class Result (
-    val checkid : Int,
-    val sender : String,
+data class Checklist (
+    val check_idx : Int,
     val complete : Int,
     val picture : String,
-    val content : String
+    val content : String,
+    val sender : String
 )
