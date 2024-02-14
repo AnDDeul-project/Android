@@ -9,6 +9,7 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -68,17 +69,17 @@
         android:id="@+id/groupCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="355dp"
-        android:text="TextView"
-        android:textSize="26sp"
+        android:layout_marginTop="45dp"
         android:fontFamily="@font/font_pretendard_bold"
+        android:text="TextView"
         android:textColor="@color/primary"
+        android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/groupExplainTv" />
 
     <ImageView
-        android:id="@+id/copyCodeBtn"
+        android:id="@+id/gotoStartBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="639dp"
@@ -91,14 +92,14 @@
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="복사하기"
-        android:textSize="18sp"
         android:fontFamily="@font/font_pretendard_bold"
+        android:text="시작하기"
         android:textColor="@color/primary"
-        app:layout_constraintBottom_toBottomOf="@+id/copyCodeBtn"
-        app:layout_constraintEnd_toEndOf="@+id/copyCodeBtn"
-        app:layout_constraintStart_toStartOf="@+id/copyCodeBtn"
-        app:layout_constraintTop_toTopOf="@+id/copyCodeBtn" />
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/gotoStartBtn"
+        app:layout_constraintEnd_toEndOf="@+id/gotoStartBtn"
+        app:layout_constraintStart_toStartOf="@+id/gotoStartBtn"
+        app:layout_constraintTop_toTopOf="@+id/gotoStartBtn" />
 
     <TextView
         android:id="@+id/textView19"
@@ -112,5 +113,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/copyCodeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupCode"
+        app:srcCompat="@drawable/img_copybox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
