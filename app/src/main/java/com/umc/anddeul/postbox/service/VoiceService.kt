@@ -1,5 +1,6 @@
 package com.umc.anddeul.postbox.service
 
+import android.util.Log
 import com.umc.anddeul.postbox.model.VoiceRequest
 import com.umc.anddeul.postbox.model.VoiceResponse
 import com.umc.anddeul.postbox.network.VoiceInterface
@@ -22,6 +23,7 @@ class VoiceService {
         val call = voiceService.voiceSend("Bearer $accessToken", textRequest)
         call.enqueue(object : Callback<VoiceResponse> {
             override fun onResponse(call: Call<VoiceResponse>, response: Response<VoiceResponse>) {
+                Log.d("확1", "${response}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())

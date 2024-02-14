@@ -89,22 +89,22 @@ class PostboxFragment : Fragment() {
         postAdapter = LetterAdapter()
 
         // api 연결
-        val currentDate = LocalDate.now()
-        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val today = currentDate.format(dateFormat)
-//        val today = "2024-02-08"
-        Log.d("오늘날짜", currentDate.format(dateFormat))
+//        val currentDate = LocalDate.now()
+//        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//        val today = currentDate.format(dateFormat)
+////        val today = "2024-02-08"
+//        Log.d("오늘날짜", currentDate.format(dateFormat))
         val loadedToken = loadJwt() // jwt토큰
-        val mailService = MailService()
-        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
-            if (mailDTO != null) {
-                if (mailDTO.isSuccess.toString() == "true") {
-                    postAdapter.letters = mailDTO.post
-                    postAdapter.notifyDataSetChanged()
-                }
-            } else {
-            }
-        }
+//        val mailService = MailService()
+//        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
+//            if (mailDTO != null) {
+//                if (mailDTO.isSuccess.toString() == "true") {
+//                    postAdapter.letters = mailDTO.post
+//                    postAdapter.notifyDataSetChanged()
+//                }
+//            } else {
+//            }
+//        }
 
 
         //// 편지 보기(팝업)
@@ -122,15 +122,15 @@ class PostboxFragment : Fragment() {
 
 
         //// 랜덤 질문
-        // api 연결
-        val questionService = QuestionService()
-        questionService.randomQuestion(loadedToken) { questionDTO ->
-            if (questionDTO != null) {
-                if (questionDTO.isSuccess.toString() == "true") {
-                    binding.randomQTv.text = questionDTO.question[0].content
-                }
-            }
-        }
+//        // api 연결
+//        val questionService = QuestionService()
+//        questionService.randomQuestion(loadedToken) { questionDTO ->
+//            if (questionDTO != null) {
+//                if (questionDTO.isSuccess.toString() == "true") {
+//                    binding.randomQTv.text = questionDTO.question[0].content
+//                }
+//            }
+//        }
 
 
         //// 가족 리스트
@@ -209,16 +209,15 @@ class PostboxFragment : Fragment() {
 
                     // 편지 보내는 기능 추가
                     if (letterType == "record"){   // 녹음일 때
-                        val snsIdList = listOf(it.snsId.toLong())
-                        Log.d("확인", snsIdList.toString())
                         val myUri: Uri = Uri.parse("file://$recordFilePath")
                         val file = File(myUri.path)
                         val requestFile = file.asRequestBody("audio/*".toMediaTypeOrNull())
                         val recordPart = MultipartBody.Part.createFormData("record", file.name, requestFile)
-                        val request = VoiceRequest(snsIdList, binding.randomQTv.text.toString(), recordPart)
+                        val request = VoiceRequest(it.snsId, binding.randomQTv.text.toString(), recordPart)
                         // api 연결
                         val voiceService = VoiceService()
                         voiceService.sendVoice(loadedToken, request) { voiceDTO ->
+                            Log.d("확2", voiceDTO.toString())
                             if (voiceDTO != null) {
                                 if (voiceDTO.isSuccess.toString() == "true") {
                                     binding.recordInfo1.visibility = View.GONE
@@ -362,6 +361,7 @@ class PostboxFragment : Fragment() {
     // 토큰 불러오기
     private fun loadJwt(): String {
         val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-        return spf.getString("jwtToken", null).toString()
+//        return spf.getString("jwtToken", null).toString()
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
     }
 }

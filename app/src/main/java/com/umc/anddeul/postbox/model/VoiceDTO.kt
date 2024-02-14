@@ -3,13 +3,13 @@ package com.umc.anddeul.postbox.model
 import okhttp3.MultipartBody
 
 data class VoiceRequest (
-    val member : List<Long>,
+    val member : String,
     val question : String,
     val record: MultipartBody.Part
 )
 
 data class VoiceResponse (
+    val status: Int,
     val isSuccess: Boolean,
-    val code: Int,
     val message: String
 )

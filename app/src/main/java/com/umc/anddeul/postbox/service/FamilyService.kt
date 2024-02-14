@@ -23,7 +23,6 @@ class FamilyService {
 
         call.enqueue(object : Callback<FamilyResponse> {
             override fun onResponse(call: Call<FamilyResponse>, response: Response<FamilyResponse>) {
-                Log.d("확2", response.toString())
                 when (response.code()) {
                     200 -> {
                         callback(response.body())
