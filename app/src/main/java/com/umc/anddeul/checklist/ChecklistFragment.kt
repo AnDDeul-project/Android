@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
-import com.umc.anddeul.checklist.model.Result
+import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.databinding.FragmentChecklistBinding
@@ -114,8 +114,8 @@ class ChecklistFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
-//                    Log.d("조회", "Root : ${root}")
-                    val result : List<Result>? = root?.result
+                    Log.d("조회", "Root : ${root}")
+                    val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
 
                     result.let {
@@ -146,7 +146,7 @@ class ChecklistFragment : Fragment() {
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
 //                    Log.d("조회", "Root : ${root}")
-                    val result : List<Result>? = root?.result
+                    val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
 
                     result.let {

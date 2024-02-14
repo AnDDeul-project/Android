@@ -17,7 +17,7 @@ import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.checklist.model.Result
+import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.databinding.ItemChecklistBinding
 import java.io.File
 import java.io.IOException
@@ -28,7 +28,7 @@ import java.util.Date
 class ChecklistRVAdapter() : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
     val GALLERY_REQUEST_CODE = 405
     val REQUEST_IMAGE_CAPTURE = 200
-    val checklist : List<Result>? = null
+    val checklist : List<Checklist>? = null
 
     override fun getItemCount(): Int {
         return checklist?.size ?: 0
@@ -84,7 +84,7 @@ class ChecklistRVAdapter() : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>
     }
 
     inner class ViewHolder(val binding: ItemChecklistBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(checklist : Result) {
+        fun bind(checklist : Checklist) {
             binding.checkliTvChecklist.text = checklist?.content
             binding.checkliTvWriter.text = checklist?.sender + "님이 남기셨습니다."
             if (binding.checkliIvPhoto != null) {

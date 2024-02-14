@@ -3,7 +3,7 @@ package com.umc.anddeul.checklist.service
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.umc.anddeul.checklist.model.AddChecklist
+import com.umc.anddeul.checklist.model.AddRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import kotlinx.coroutines.flow.callbackFlow
@@ -68,7 +68,7 @@ class ChecklistService(context : Context) {
         val addCallback = object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
                 if (response.isSuccessful) {
-                    callbackFlow<AddChecklist> {
+                    callbackFlow<AddRoot> {
                         response.body()
                     }
                 }

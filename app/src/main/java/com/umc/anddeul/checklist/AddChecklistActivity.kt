@@ -1,28 +1,25 @@
 package com.umc.anddeul.checklist
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.model.AddChecklist
-import com.umc.anddeul.checklist.model.Result
+import com.umc.anddeul.checklist.model.AddRoot
+import com.umc.anddeul.checklist.model.Check
+import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.databinding.ActivityAddChecklistBinding
-import com.umc.anddeul.databinding.FragmentChecklistBinding
-import com.umc.anddeul.postbox.LetterListFragment
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -85,7 +82,7 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //토큰 가져오기
         val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzMwNzIzOTQzIl0sImlhdCI6MTcwNzgzMDU3NX0.4jF675wl0rS1i4ehIhtYtZVKmsSTScrxawrUJRtTxkM"
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -113,7 +110,7 @@ class AddChecklistActivity : AppCompatActivity() {
                 val dateList = selectedDateText.split("-")
                 val addChecklist = AddChecklist("sehseh", dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
                 Log.d("체크리스트 값 확인", "${addChecklist}")
-//                addApi(service, addChecklist)
+                addApi(service, addChecklist)
 //                readApi(service)
             }
             true
@@ -121,22 +118,22 @@ class AddChecklistActivity : AppCompatActivity() {
     }
 
     private fun addApi(service : ChecklistInterface, addChecklist: AddChecklist) {
-        val addCall : Call<Root> = service.addCheckliist(
+        val addCall : Call<AddRoot> = service.addCheckliist(
             addChecklist
         )
         Log.d("추가", "readCall ${addCall}")
-        addCall.enqueue(object : Callback<Root> {
-            override fun onResponse(call: Call<Root>, response: Response<Root>) {
+        addCall.enqueue(object : Callback<AddRoot> {
+            override fun onResponse(call: Call<AddRoot>, response: Response<AddRoot>) {
                 Log.d("api 추가", "Response ${response}")
 
                 if (response.isSuccessful) {
-                    val root : Root? = response.body()
-                    val result : List<Result>? = root?.result
-                    Log.d("추가", "Result : ${result}")
+                    val root : AddRoot? = response.body()
+                    val checklist: List<Check>? = root?.check
+                    Log.d("추가", "Result : ${checklist}")
                 }
             }
 
-            override fun onFailure(call: Call<Root>, t: Throwable) {
+            override fun onFailure(call: Call<AddRoot>, t: Throwable) {
                 Log.d("add 실패", "readCall: ${t.message}")
             }
         })
@@ -155,7 +152,7 @@ class AddChecklistActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
-                    val result : List<Result>? = root?.result
+                    val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
 
                     result.let {
