@@ -32,6 +32,7 @@ import com.umc.anddeul.postbox.service.TextService
 import com.umc.anddeul.postbox.service.VoiceService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.time.DayOfWeek
@@ -216,7 +217,10 @@ class PostboxFragment : Fragment() {
                         val request = VoiceRequest(it.snsId, binding.randomQTv.text.toString(), recordPart)
                         // api 연결
                         val voiceService = VoiceService()
-                        voiceService.sendVoice(loadedToken, request) { voiceDTO ->
+                        val memberRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), it.snsId)
+                        val questionRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.randomQTv.text.toString())
+
+                        voiceService.sendVoice(loadedToken, memberRequestBody, questionRequestBody, recordPart) { voiceDTO ->
                             Log.d("확2", voiceDTO.toString())
                             if (voiceDTO != null) {
                                 if (voiceDTO.isSuccess.toString() == "true") {
@@ -361,7 +365,6 @@ class PostboxFragment : Fragment() {
     // 토큰 불러오기
     private fun loadJwt(): String {
         val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-//        return spf.getString("jwtToken", null).toString()
-        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+        return spf.getString("jwtToken", null).toString()
     }
 }
