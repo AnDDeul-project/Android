@@ -9,41 +9,42 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="202dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="267dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_start_logo" />
+        app:srcCompat="@drawable/signin_start_logo" />
 
     <ImageView
         android:id="@+id/longinBtn"
-        android:layout_width="306dp"
+        android:layout_width="296dp"
         android:layout_height="50dp"
-        android:layout_marginTop="571dp"
+        android:layout_marginTop="243dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_start_button" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@drawable/signin_start_button" />
 
     <ImageView
         android:id="@+id/signupBtn"
-        android:layout_width="306dp"
+        android:layout_width="296dp"
         android:layout_height="50dp"
-        android:layout_marginTop="639dp"
+        android:layout_marginTop="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_start_button" />
+        app:layout_constraintTop_toBottomOf="@+id/longinBtn"
+        app:srcCompat="@drawable/signin_start_button" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="로그인"
-        android:textSize="18sp"
         android:fontFamily="@font/font_pretendard_regular"
+        android:text="로그인"
+        android:textColor="#261710"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/longinBtn"
         app:layout_constraintEnd_toEndOf="@+id/longinBtn"
         app:layout_constraintStart_toStartOf="@+id/longinBtn"
@@ -55,6 +56,7 @@
         android:layout_height="wrap_content"
         android:text="회원가입"
         android:textSize="18sp"
+        android:textColor="#261710"
         android:fontFamily="@font/font_pretendard_regular"
         app:layout_constraintBottom_toBottomOf="@+id/signupBtn"
         app:layout_constraintEnd_toEndOf="@+id/signupBtn"
