@@ -17,7 +17,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
@@ -41,41 +41,42 @@ import java.io.File
 
 class MyPageModifyFragment : Fragment() {
     lateinit var binding: FragmentMypageModifyProfileBinding
-    val myPageViewModel: MyPageViewModel by viewModels({ requireActivity().supportFragmentManager.fragments.first() })
+    private val myPageViewModel: MyPageViewModel by activityViewModels()
 
-
-    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            // 권한이 허용되면 갤러리 액티비티로 이동
-            openGallery()
-        } else {
-            val permissionDialog = PermissionDialog()
-            permissionDialog.isCancelable = false
-            permissionDialog.show(parentFragmentManager, "permission dialog")
-        }
-    }
-
-    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // 갤러리에서 선택한 이미지의 Uri를 가져옵니다.
-            val selectedImageUri: Uri? = result.data?.data
-
-            // 선택한 이미지 화면에 동그랗게 크롭 후 띄우기
-            val imageView = binding.mypageModifyProfileIv
-            selectedImageUri?.let { uri ->
-                Glide.with(this)
-                    .load(uri)
-                    .circleCrop()
-                    .into(imageView)
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                // 권한이 허용되면 갤러리 액티비티로 이동
+                openGallery()
+            } else {
+                val permissionDialog = PermissionDialog()
+                permissionDialog.isCancelable = false
+                permissionDialog.show(parentFragmentManager, "permission dialog")
             }
+        }
 
-            binding.mypageModifyStoreBtn.setOnClickListener {
-                if (selectedImageUri != null) {
-                    modifyMyProfile(selectedImageUri)
+    private val galleryLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // 갤러리에서 선택한 이미지의 Uri를 가져옵니다.
+                val selectedImageUri: Uri? = result.data?.data
+
+                // 선택한 이미지 화면에 동그랗게 크롭 후 띄우기
+                val imageView = binding.mypageModifyProfileIv
+                selectedImageUri?.let { uri ->
+                    Glide.with(this)
+                        .load(uri)
+                        .circleCrop()
+                        .into(imageView)
+                }
+
+                binding.mypageModifyStoreBtn.setOnClickListener {
+                    if (selectedImageUri != null) {
+                        modifyMyProfile(selectedImageUri)
+                    }
                 }
             }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,7 +84,7 @@ class MyPageModifyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMypageModifyProfileBinding.inflate(inflater, container, false)
-        val myProfileData : UserProfileData? = myPageViewModel.getMyProfile().value
+        val myProfileData: UserProfileData? = myPageViewModel.getMyProfile()
 
         // 프로필 이미지, 닉네임 정보 담아 띄우기
         val imageView = binding.mypageModifyProfileIv
@@ -134,11 +135,13 @@ class MyPageModifyFragment : Fragment() {
             return File(filePath)
         }
 
+        // return File(uri.toString())
         throw IllegalArgumentException("Invalid URI")
     }
 
-    fun modifyMyProfile(newImage : Uri) {
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+    fun modifyMyProfile(newImage: Uri) {
+        val spf: SharedPreferences =
+            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
@@ -170,34 +173,35 @@ class MyPageModifyFragment : Fragment() {
 
         Log.e("modifyProfileService", "${usernameRequestBody}, ${newUsername}")
 
-        modifyService.modifyProfile(usernameRequestBody, newProfileImage).enqueue(object : Callback<ModifyProfileResponse> {
-            override fun onResponse(
-                call: Call<ModifyProfileResponse>,
-                response: Response<ModifyProfileResponse>
-            ) {
-                Log.e("modifyProfileService", "onResponse")
-                Log.e("modifyProfileService", "${response.code()}")
-                Log.e("modifyProfileService", "${response.body()}")
+        modifyService.modifyProfile(usernameRequestBody, newProfileImage)
+            .enqueue(object : Callback<ModifyProfileResponse> {
+                override fun onResponse(
+                    call: Call<ModifyProfileResponse>,
+                    response: Response<ModifyProfileResponse>
+                ) {
+                    Log.e("modifyProfileService", "onResponse")
+                    Log.e("modifyProfileService", "${response.code()}")
+                    Log.e("modifyProfileService", "${response.body()}")
 
-                if (response.isSuccessful) {
-                    Log.e("modifyProfileService", "프로필 수정 성공")
+                    if (response.isSuccessful) {
+                        Log.e("modifyProfileService", "프로필 수정 성공")
 
-                    // MyPageFragment로 이동
-                    (context as MainActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.mypage_modify_profile_layout, MyPageFragment())
-                        .commit()
+                        // MyPageFragment로 이동
+                        (context as MainActivity).supportFragmentManager.beginTransaction()
+                            .replace(R.id.mypage_modify_profile_layout, MyPageFragment())
+                            .commit()
 
-                } else {
-                    Log.e("modifyProfileService", "프로필 수정 실패")
+                    } else {
+                        Log.e("modifyProfileService", "프로필 수정 실패")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ModifyProfileResponse>, t: Throwable) {
-                Log.e("modifyProfileService", "onFailure")
-                Log.e("modifyProfileService", "Failure message: ${t.message}")
-            }
+                override fun onFailure(call: Call<ModifyProfileResponse>, t: Throwable) {
+                    Log.e("modifyProfileService", "onFailure")
+                    Log.e("modifyProfileService", "Failure message: ${t.message}")
+                }
 
-        })
+            })
     }
 
     // 갤러리 접근 권한 확인 함수

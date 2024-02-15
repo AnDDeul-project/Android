@@ -1,5 +1,6 @@
 package com.umc.anddeul.start
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -29,4 +30,10 @@ class StartActivity : AppCompatActivity() {
             startActivity(signupIntent)
         }
     }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    override fun onBackPressed() {
+    }
+
 }

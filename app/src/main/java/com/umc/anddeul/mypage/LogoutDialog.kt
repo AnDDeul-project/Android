@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
 import com.umc.anddeul.home.model.LogoutDTO
 import com.umc.anddeul.home.network.LogoutInterface
@@ -24,7 +23,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class LogoutDialog : DialogFragment() {
-    lateinit var binding : FragmentDialogPermissionBinding
+    lateinit var binding: FragmentDialogPermissionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +50,8 @@ class LogoutDialog : DialogFragment() {
     }
 
     fun myPageLogout() {
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val spf: SharedPreferences =
+            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
@@ -85,13 +85,8 @@ class LogoutDialog : DialogFragment() {
 
                     // 로그인 화면으로 이동
                     val intent = Intent(activity, StartActivity::class.java)
-                    // FLAG_ACTIVITY_NO_HISTORY 플래그를 사용하여 해당 액티비티를 백 스택에서 제거
-                    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-
-                    val fragmentManager = requireActivity().supportFragmentManager
-                    fragmentManager.popBackStack()
-
                     startActivity(intent)
+
                 } else {
                     Log.e("logoutService", "로그아웃 실패")
                 }
