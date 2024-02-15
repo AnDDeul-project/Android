@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_pretendard_bold"
-        android:text="카카오톡으로 전송하기"
+        android:text="공유하기"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/sendCodeBtn"
