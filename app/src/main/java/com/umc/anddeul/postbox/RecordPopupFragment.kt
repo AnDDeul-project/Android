@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,10 @@ class RecordPopupFragment(private val context: Context) {
     private var mediaRecorder : MediaRecorder? = null
     private var state : Boolean = false
     private var hasRecorded : Boolean = false
+
+    private var timerHandler: Handler? = null
+    private var timerRunnable: Runnable? = null
+    private var secondsElapsed: Int = 0
 
     fun show(){
         binding = FragmentPopupRecordBinding.inflate(LayoutInflater.from(context))
@@ -129,7 +134,26 @@ class RecordPopupFragment(private val context: Context) {
             mediaRecorder?.resume()
             Toast.makeText(context, "녹음이 다시 시작되었습니다.", Toast.LENGTH_SHORT).show()
         }
+        startTimer()
     }
+
+    // 초수 증가
+    private fun startTimer() {
+        timerHandler = Handler()
+        timerRunnable = object : Runnable {
+            override fun run() {
+                if (secondsElapsed < 10) {
+                    binding.timerTv.text = "00:0" + secondsElapsed++.toString()
+                }
+                else{
+                    binding.timerTv.text = "00:" + secondsElapsed++.toString()
+                }
+                timerHandler?.postDelayed(this, 1000) // 1초씩 증가
+            }
+        }
+        timerHandler?.postDelayed(timerRunnable!!, 0)
+    }
+
 
     // 일시정지
     private fun pauseRecording(){
@@ -140,6 +164,7 @@ class RecordPopupFragment(private val context: Context) {
         } else {
             Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
+        timerRunnable?.let { timerHandler?.removeCallbacks(it) }
     }
 
     // 정지
@@ -154,6 +179,7 @@ class RecordPopupFragment(private val context: Context) {
         } else {
             Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
+        timerRunnable?.let { timerHandler?.removeCallbacks(it) }
     }
 
     // 초기화
@@ -170,5 +196,8 @@ class RecordPopupFragment(private val context: Context) {
         } else {
             Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
+        timerRunnable?.let { timerHandler?.removeCallbacks(it) }
+        secondsElapsed = 0
+        binding.timerTv.text = "00:00"
     }
 }
