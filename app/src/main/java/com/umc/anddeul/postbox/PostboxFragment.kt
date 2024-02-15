@@ -32,6 +32,7 @@ import com.umc.anddeul.postbox.service.TextService
 import com.umc.anddeul.postbox.service.VoiceService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.time.DayOfWeek
@@ -54,6 +55,8 @@ class PostboxFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPostboxBinding.inflate(inflater, container, false)
+
+        val loadedToken = loadJwt() // jwt토큰
 
         //// 화분 키우기 페이지로 이동
         binding.gotoPotBtn.setOnClickListener {
@@ -87,31 +90,17 @@ class PostboxFragment : Fragment() {
 
         //// 편지 리스트
         postAdapter = LetterAdapter()
-
-        // api 연결
-//        val currentDate = LocalDate.now()
-//        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//        val today = currentDate.format(dateFormat)
-////        val today = "2024-02-08"
-//        Log.d("오늘날짜", currentDate.format(dateFormat))
-        val loadedToken = loadJwt() // jwt토큰
-//        val mailService = MailService()
-//        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
-//            if (mailDTO != null) {
-//                if (mailDTO.isSuccess.toString() == "true") {
-//                    postAdapter.letters = mailDTO.post
-//                    postAdapter.notifyDataSetChanged()
-//                }
-//            } else {
-//            }
-//        }
+        showLetterList()
 
 
         //// 편지 보기(팝업)
         val onClickListener = object: LetterAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, pos: Int) {
                 val selectedPost = postAdapter.letters?.get(pos)
-                val postPopupFragment = LetterPopupFragment(requireContext())
+                val postPopupFragment = LetterPopupFragment(requireContext()) {
+                    // This block is executed after the dialog is dismissed
+                    showLetterList() // Call the function to refresh the mail list
+                }
                 selectedPost?.let { postPopupFragment.show(it) }
             }
         }
@@ -122,15 +111,15 @@ class PostboxFragment : Fragment() {
 
 
         //// 랜덤 질문
-//        // api 연결
-//        val questionService = QuestionService()
-//        questionService.randomQuestion(loadedToken) { questionDTO ->
-//            if (questionDTO != null) {
-//                if (questionDTO.isSuccess.toString() == "true") {
-//                    binding.randomQTv.text = questionDTO.question[0].content
-//                }
-//            }
-//        }
+        // api 연결
+        val questionService = QuestionService()
+        questionService.randomQuestion(loadedToken) { questionDTO ->
+            if (questionDTO != null) {
+                if (questionDTO.isSuccess.toString() == "true") {
+                    binding.randomQTv.text = questionDTO.question[0].content
+                }
+            }
+        }
 
 
         //// 가족 리스트
@@ -143,6 +132,7 @@ class PostboxFragment : Fragment() {
                 if (familyDTO.isSuccess.toString() == "true") {
                     familyAdapter.families = familyDTO.result.family
                     binding.sFamily.adapter = familyAdapter
+                    binding.userTitleTv.text = familyDTO.result.me.nickname
                 }
             }
         }
@@ -216,7 +206,10 @@ class PostboxFragment : Fragment() {
                         val request = VoiceRequest(it.snsId, binding.randomQTv.text.toString(), recordPart)
                         // api 연결
                         val voiceService = VoiceService()
-                        voiceService.sendVoice(loadedToken, request) { voiceDTO ->
+                        val memberRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), it.snsId)
+                        val questionRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.randomQTv.text.toString())
+
+                        voiceService.sendVoice(loadedToken, memberRequestBody, questionRequestBody, recordPart) { voiceDTO ->
                             Log.d("확2", voiceDTO.toString())
                             if (voiceDTO != null) {
                                 if (voiceDTO.isSuccess.toString() == "true") {
@@ -252,6 +245,27 @@ class PostboxFragment : Fragment() {
 
         return binding.root
     }
+
+    //// 편지 리스트
+
+    // api 연결
+    private fun showLetterList(){
+        val currentDate = LocalDate.now()
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val today = currentDate.format(dateFormat)
+        val loadedToken = loadJwt() // jwt토큰
+        val mailService = MailService()
+        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
+            if (mailDTO != null) {
+                if (mailDTO.isSuccess.toString() == "true") {
+                    postAdapter.letters = mailDTO.post
+                    postAdapter.notifyDataSetChanged()
+                }
+            } else {
+            }
+        }
+    }
+
 
     // 달력 세팅
     private fun setWeek(startOfWeek: LocalDate) {
@@ -361,7 +375,6 @@ class PostboxFragment : Fragment() {
     // 토큰 불러오기
     private fun loadJwt(): String {
         val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-//        return spf.getString("jwtToken", null).toString()
-        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+        return spf.getString("jwtToken", null).toString()
     }
 }

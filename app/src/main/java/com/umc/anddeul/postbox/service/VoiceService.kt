@@ -4,6 +4,8 @@ import android.util.Log
 import com.umc.anddeul.postbox.model.VoiceRequest
 import com.umc.anddeul.postbox.model.VoiceResponse
 import com.umc.anddeul.postbox.network.VoiceInterface
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,8 +21,8 @@ class VoiceService {
 
     private val voiceService = retrofit.create(VoiceInterface::class.java)
 
-    fun sendVoice(accessToken: String, textRequest: VoiceRequest, callback: (VoiceResponse?) -> Unit) {
-        val call = voiceService.voiceSend("Bearer $accessToken", textRequest)
+    fun sendVoice(accessToken: String, member: RequestBody, question: RequestBody, record: MultipartBody.Part, callback: (VoiceResponse?) -> Unit) {
+        val call = voiceService.voiceSend("Bearer $accessToken", member, question, record)
         call.enqueue(object : Callback<VoiceResponse> {
             override fun onResponse(call: Call<VoiceResponse>, response: Response<VoiceResponse>) {
                 Log.d("확1", "${response}")

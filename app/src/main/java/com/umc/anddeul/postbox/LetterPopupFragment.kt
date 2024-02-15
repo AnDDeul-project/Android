@@ -21,13 +21,17 @@ import com.umc.anddeul.postbox.service.ReadMailService
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class LetterPopupFragment(private val context: Context)  {
+class LetterPopupFragment(private val context: Context, private val onDismissCallback: () -> Unit)  {
     private lateinit var binding : FragmentPopupLetterBinding
     private val dlg = Dialog(context)
     private var mediaPlayer: MediaPlayer? = null
 
     fun show(content: Post) {
         binding = FragmentPopupLetterBinding.inflate(LayoutInflater.from(context))
+
+        dlg.setOnDismissListener {
+            onDismissCallback.invoke()
+        }
 
         // api 연결
         val idx = content.postboxIdx

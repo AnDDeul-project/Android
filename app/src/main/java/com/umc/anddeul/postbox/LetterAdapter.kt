@@ -10,6 +10,10 @@ import com.umc.anddeul.postbox.model.Post
 
 class LetterAdapter : RecyclerView.Adapter<LetterAdapter.LetterHolder>() {
     var letters: List<Post>? = null
+        set(value) {
+            field = value?.sortedWith(compareBy { it.isRead })
+            notifyDataSetChanged()
+        }
 
     override fun getItemCount(): Int {
         return letters?.size ?: 0
