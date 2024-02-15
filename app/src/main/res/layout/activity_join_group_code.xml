@@ -9,10 +9,11 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_topbox" />
+        app:srcCompat="@drawable/sginin_term_topbar" />
 
     <TextView
         android:id="@+id/textView14"
@@ -36,7 +37,6 @@
         android:text="해당 가족 그룹에\n참여하시겠습니까?"
         android:textAlignment="center"
         android:textColor="@color/primary"
-
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_long_green_button" />
+        app:srcCompat="@drawable/signin_green_button" />
 
     <TextView
         android:id="@+id/textView16"
@@ -67,13 +67,13 @@
 
     <ImageView
         android:id="@+id/codeBackBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="62dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="65dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_back" />
+        app:srcCompat="@drawable/signin_arrow_back" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -83,20 +83,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_invite_codebox" />
+        app:srcCompat="@drawable/invite_codebox" />
 
     <TextView
         android:id="@+id/GroupNameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="381dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:text="행복한 우리 가족"
         android:textColor="@color/primary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
     <TextView
         android:id="@+id/familyCntTv"
@@ -115,14 +115,14 @@
         android:id="@+id/inviteCodeTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="427dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="11dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:text="초대코드 "
         android:textColor="@color/text_medium"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/GroupNameTv" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFamiles"

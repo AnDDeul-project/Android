@@ -54,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/randomQTv"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -75,7 +75,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/randomQTv"
                 app:srcCompat="@drawable/img_letterbox_small" />
 
             <ImageView
@@ -127,7 +127,7 @@
                 app:srcCompat="@drawable/calendar_circle" />
 
             <TextView
-                android:id="@+id/date1"
+                android:id="@+id/postDate1"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="16dp"
@@ -141,7 +141,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/date2"
+                android:id="@+id/postDate2"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
@@ -150,13 +150,13 @@
                 android:text="2"
                 android:textColor="#666666"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/date3"
+                app:layout_constraintEnd_toStartOf="@+id/postDate3"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/date1"
+                app:layout_constraintStart_toEndOf="@+id/postDate1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/date4"
+                android:id="@+id/postDate4"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
@@ -165,13 +165,13 @@
                 android:text="3"
                 android:textColor="#666666"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/date5"
+                app:layout_constraintEnd_toStartOf="@+id/postDate5"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/date3"
+                app:layout_constraintStart_toEndOf="@+id/postDate3"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/date3"
+                android:id="@+id/postDate3"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
@@ -180,13 +180,13 @@
                 android:text="4"
                 android:textColor="#666666"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/date4"
+                app:layout_constraintEnd_toStartOf="@+id/postDate4"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/date2"
+                app:layout_constraintStart_toEndOf="@+id/postDate2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/date5"
+                android:id="@+id/postDate5"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
@@ -195,13 +195,13 @@
                 android:text="5"
                 android:textColor="#666666"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/date6"
+                app:layout_constraintEnd_toStartOf="@+id/postDate6"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/date4"
+                app:layout_constraintStart_toEndOf="@+id/postDate4"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/date6"
+                android:id="@+id/postDate6"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
@@ -210,13 +210,13 @@
                 android:text="6"
                 android:textColor="@color/system_informative"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/date7"
+                app:layout_constraintEnd_toStartOf="@+id/postDate7"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/date5"
+                app:layout_constraintStart_toEndOf="@+id/postDate5"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/date7"
+                android:id="@+id/postDate7"
                 android:layout_width="21dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
@@ -230,7 +230,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/day1"
+                android:id="@+id/postDay1"
                 android:layout_width="11dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="21dp"
@@ -244,7 +244,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/day2"
+                android:id="@+id/postDay2"
                 android:layout_width="11dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="158dp"
@@ -253,13 +253,13 @@
                 android:text="화"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/day3"
+                app:layout_constraintEnd_toStartOf="@+id/postDay3"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/day1"
+                app:layout_constraintStart_toEndOf="@+id/postDay1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/day3"
+                android:id="@+id/postDay3"
                 android:layout_width="11dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="158dp"
@@ -268,13 +268,13 @@
                 android:text="수"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/day4"
+                app:layout_constraintEnd_toStartOf="@+id/postDay4"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/day2"
+                app:layout_constraintStart_toEndOf="@+id/postDay2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/day4"
+                android:id="@+id/postDay4"
                 android:layout_width="11dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="158dp"
@@ -283,13 +283,13 @@
                 android:text="목"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/day5"
+                app:layout_constraintEnd_toStartOf="@+id/postDay5"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/day3"
+                app:layout_constraintStart_toEndOf="@+id/postDay3"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/day5"
+                android:id="@+id/postDay5"
                 android:layout_width="11dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="158dp"
@@ -298,13 +298,13 @@
                 android:text="금"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/day6"
+                app:layout_constraintEnd_toStartOf="@+id/postDay6"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/day4"
+                app:layout_constraintStart_toEndOf="@+id/postDay4"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/day6"
+                android:id="@+id/postDay6"
                 android:layout_width="11dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="158dp"
@@ -313,13 +313,13 @@
                 android:text="토"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/day7"
+                app:layout_constraintEnd_toStartOf="@+id/postDay7"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/day5"
+                app:layout_constraintStart_toEndOf="@+id/postDay5"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/day7"
+                android:id="@+id/postDay7"
                 android:layout_width="11dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="158dp"
@@ -364,26 +364,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="@+id/imageView2"
-                app:srcCompat="@drawable/img_letter_namebox" />
-
             <Spinner
                 android:id="@+id/sFamily"
                 android:layout_width="104dp"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                android:background="@drawable/img_primary_outline"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/img_primary_inline"
                 android:popupBackground="@drawable/img_primary_outline"
-                app:layout_constraintEnd_toEndOf="@+id/imageView12"
-                app:layout_constraintStart_toStartOf="@+id/imageView12"
-                app:layout_constraintTop_toBottomOf="@+id/imageView12"
+                android:spinnerMode="dropdown"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="@+id/imageView2"
                 tools:listitem="@layout/item_familylist" />
 
             <ImageView
@@ -391,10 +382,10 @@
                 android:layout_width="11dp"
                 android:layout_height="11dp"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView12"
-                app:layout_constraintEnd_toEndOf="@+id/imageView12"
-                app:layout_constraintTop_toTopOf="@+id/imageView12"
-                app:srcCompat="@drawable/ic_see_more" />
+                app:layout_constraintBottom_toBottomOf="@+id/sFamily"
+                app:layout_constraintEnd_toEndOf="@+id/sFamily"
+                app:layout_constraintTop_toTopOf="@+id/sFamily"
+                app:srcCompat="@drawable/ic_arrow_down" />
 
             <TextView
                 android:id="@+id/textView24"
@@ -402,11 +393,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="에게"
                 android:fontFamily="@font/font_pretendard_regular"
+                android:text="에게"
                 android:textColor="@color/text_medium"
                 android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView12"
+                app:layout_constraintStart_toEndOf="@+id/sFamily"
                 app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
             <ImageView
@@ -414,11 +405,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="86dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/imageView12"
-                app:srcCompat="@drawable/img_recordbar2"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toBottomOf="@+id/textView24"
+                app:srcCompat="@drawable/img_recordbar2" />
 
             <TextView
                 android:id="@+id/recordInfo2"
@@ -484,7 +475,7 @@
         app:srcCompat="@drawable/ic_goto_pot" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/userTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -505,7 +496,7 @@
         android:fontFamily="@font/font_pretendard_regular"
         android:text="님의 우체통"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintStart_toEndOf="@+id/userTitleTv"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

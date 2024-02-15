@@ -9,17 +9,18 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_topbox" />
+        app:srcCompat="@drawable/sginin_term_topbar" />
 
     <TextView
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="67dp"
-        android:text="생성할 그룹 만들기"
+        android:text="새로운 그룹 만들기"
         android:textSize="20sp"
         android:fontFamily="@font/font_pretendard_bold"
         android:textColor="@color/text_high"
@@ -31,9 +32,9 @@
         android:id="@+id/groupExplainTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="251dp"
+        android:layout_marginTop="228dp"
         android:fontFamily="@font/font_pretendard_bold"
-        android:text="'행복한 우리 가족'\n그룹 초대코드"
+        android:text="'행복한 우리 가족'"
         android:textAlignment="center"
         android:textColor="@color/text_medium"
         android:textSize="20sp"
@@ -41,22 +42,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/groupExplainTv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:text="그룹 초대코드"
+        android:textAlignment="center"
+        android:textColor="@color/text_medium"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupExplainTv" />
+
     <ImageView
         android:id="@+id/sendCodeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="571dp"
+        android:layout_marginTop="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_green_button" />
+        app:layout_constraintTop_toBottomOf="@+id/textView19"
+        app:srcCompat="@drawable/signin_green_button" />
 
     <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_pretendard_bold"
-        android:text="카카오톡으로 전송하기"
+        android:text="공유하기"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/sendCodeBtn"
@@ -68,49 +83,59 @@
         android:id="@+id/groupCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="355dp"
-        android:text="TextView"
-        android:textSize="26sp"
+        android:layout_marginTop="45dp"
         android:fontFamily="@font/font_pretendard_bold"
+        android:text="TextView"
         android:textColor="@color/primary"
+        android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/groupExplainTv2" />
 
     <ImageView
-        android:id="@+id/copyCodeBtn"
+        android:id="@+id/gotoStartBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="639dp"
+        android:layout_marginTop="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_white_button" />
+        app:layout_constraintTop_toBottomOf="@+id/sendCodeBtn"
+        app:srcCompat="@drawable/invite_white_button" />
 
     <TextView
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="복사하기"
-        android:textSize="18sp"
         android:fontFamily="@font/font_pretendard_bold"
+        android:text="시작하기"
         android:textColor="@color/primary"
-        app:layout_constraintBottom_toBottomOf="@+id/copyCodeBtn"
-        app:layout_constraintEnd_toEndOf="@+id/copyCodeBtn"
-        app:layout_constraintStart_toStartOf="@+id/copyCodeBtn"
-        app:layout_constraintTop_toTopOf="@+id/copyCodeBtn" />
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/gotoStartBtn"
+        app:layout_constraintEnd_toEndOf="@+id/gotoStartBtn"
+        app:layout_constraintStart_toStartOf="@+id/gotoStartBtn"
+        app:layout_constraintTop_toTopOf="@+id/gotoStartBtn" />
 
     <TextView
         android:id="@+id/textView19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="533dp"
-        android:text="해당 코드를 가족에게 보내보세요!"
-        android:textSize="16sp"
-        android:textColor="@color/text_disabled"
+        android:layout_marginTop="96dp"
         android:fontFamily="@font/font_pretendard_bold"
+        android:text="해당 코드를 가족에게 보내보세요!"
+        android:textColor="@color/text_disabled"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/copyCodeBtn" />
+
+    <ImageView
+        android:id="@+id/copyCodeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupCode"
+        app:srcCompat="@drawable/img_copybox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

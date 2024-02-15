@@ -17,6 +17,13 @@ class CreateGroupActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        //// 뒤로가기
+        binding.groupGobackBtn.setOnClickListener {
+            val startIntent = Intent(this, InviteStartActivity::class.java)
+            startActivity(startIntent)
+        }
+
+
         //// 새로운 그룹 만들기
         binding.groupNmBtn.setOnClickListener {
             if(binding.groupNm.text.toString().isNotBlank()) {

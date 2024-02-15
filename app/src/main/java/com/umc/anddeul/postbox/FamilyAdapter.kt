@@ -4,10 +4,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SpinnerAdapter
 import com.umc.anddeul.databinding.ItemFamilylistBinding
-import com.umc.anddeul.postbox.model.FamilyDTO
+import com.umc.anddeul.postbox.model.Family
+
 
 class FamilyAdapter : SpinnerAdapter {
-    var families: List<FamilyDTO>? = null
+    var families: List<Family>? = null
     private val dataSetObservers = mutableListOf<DataSetObserver>()
 
     override fun getCount(): Int {
@@ -28,13 +29,13 @@ class FamilyAdapter : SpinnerAdapter {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemBinding = ItemFamilylistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        itemBinding.famNm.text = families?.get(position)?.name.toString()
+        itemBinding.famNm.text = families?.get(position)?.nickname.toString()
         return itemBinding.root
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemBinding = ItemFamilylistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        itemBinding.famNm.text = families?.get(position)?.name.toString()
+        itemBinding.famNm.text = families?.get(position)?.nickname.toString()
         return itemBinding.root
     }
 

@@ -9,10 +9,11 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_topbox" />
+        app:srcCompat="@drawable/sginin_term_topbar" />
 
     <TextView
         android:id="@+id/textView14"
@@ -31,12 +32,11 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="353dp"
+        android:layout_marginTop="334dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:text="참여 요청을 보냈습니다!"
         android:textAlignment="center"
         android:textColor="@color/primary"
-
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_long_green_button" />
+        app:srcCompat="@drawable/signin_green_button" />
 
     <TextView
         android:id="@+id/textView16"
@@ -69,12 +69,12 @@
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textSize="14sp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/font_pretendard_bold"
-        android:textColor="@color/text_medium"
-        android:textAlignment="center"
         android:text="방장이 요청을 수락할 때 까지 기다려주세요.\n완료 시 알람을 보내드리겠습니다."
+        android:textAlignment="center"
+        android:textColor="@color/text_medium"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />

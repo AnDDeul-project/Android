@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.ActivityGalleryAllImageBinding
 
 class GalleryAdapter(
@@ -77,7 +78,7 @@ class GalleryViewHolder(
                     selectedImages.add(imageUri)
                 }
                 else {
-                    Toast.makeText(context, "사진은 최대 10장 선택 가능합니다", Toast.LENGTH_SHORT).show()
+                    AnddeulToast.createToast(context, "사진은 최대 10장 선택 가능합니다")?.show()
 
                     Log.e("seletedImages", "${selectedImages.size}")
                     binding.galleryCheckBox.isChecked = false

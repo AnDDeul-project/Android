@@ -3,7 +3,11 @@ package com.umc.anddeul.checklist.service
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.umc.anddeul.checklist.model.AddChecklist
+import com.umc.anddeul.checklist.ChecklistRVAdapter
+import com.umc.anddeul.checklist.model.AddRoot
+import com.umc.anddeul.checklist.model.Checklist
+import com.umc.anddeul.checklist.model.CompleteCheck
+import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import kotlinx.coroutines.flow.callbackFlow
@@ -15,6 +19,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ChecklistService(context : Context) {
+//    var checklistRVAdapter : ChecklistRVAdapter = ChecklistRVAdapter(context)
 
     //토큰 가져오기
     val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
@@ -37,38 +42,69 @@ class ChecklistService(context : Context) {
         .build()
 
     val service = retrofit.create(ChecklistInterface::class.java)
-    fun readCheck() {
-        val readCallback = object : Callback<Root> {
+    fun readApi() {
+        val readCall : Call<Root> = service.getChecklist(
+            "3304133093",
+            false,
+            "2024-02-12"
+        )
+        Log.d("조회", "readCall ${readCall}")
+        readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
+                Log.d("api 조회", "Response ${response}")
+
                 if (response.isSuccessful) {
-                    val root: Root? = response.body()
-//                    checklistRVAdapter.list = root?.result
-//                    checklistRVAdapter.notifyDataSetChanged()
-                } else {
-                    Log.d("apiCallback", "response unsuccessful")
-                    Log.d("apiCallback", response.errorBody()!!.toString())
+                    val root : Root? = response.body()
+                    Log.d("조회", "Root : ${root}")
+                    val result : List<Checklist>? = root?.checklist
+                    Log.d("조회", "Result : ${result}")
+
+                    result?.let {
+//                        checklistRVAdapter.setChecklistData(it)
+//                        checklistRVAdapter.notifyDataSetChanged()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
-                Log.d("read apiCallback", "API CALL Failure ${t.message}")
+                Log.d("read 실패", "readCall: ${t.message}")
             }
-        }
+        })
+    }
 
-        val readCall: Call<Root> = service.getChecklist(
-            "userid",
-            false,
-            "2000-01-01"
+    fun completeApi() {
+        val completeCall : Call<CompleteRoot> = service.complete(
+            17
         )
+        Log.d("완료", "completeCall : ${completeCall}")
+        completeCall.enqueue(object : Callback<CompleteRoot> {
+            override fun onResponse(call: Call<CompleteRoot>, response: Response<CompleteRoot>) {
+                Log.d("api 완료 변경", "Response ${response}")
 
-        readCall.enqueue(readCallback)
+                if (response.isSuccessful) {
+                    val root : CompleteRoot? = response.body()
+                    Log.d("완료", "Complete Root : ${root}")
+                    val check : CompleteCheck? = root?.check
+                    Log.d("완료", "Check: ${check}")
+
+                    if (root?.isSuccess == true) {
+                        check.let {
+                            readApi()
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<CompleteRoot>, t: Throwable) {
+                Log.d("complete 실패", "completeCall : ${t.message}")
+            }
+        })
     }
 
     fun addCheck() {
         val addCallback = object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
                 if (response.isSuccessful) {
-                    callbackFlow<AddChecklist> {
+                    callbackFlow<AddRoot> {
                         response.body()
                     }
                 }
