@@ -24,5 +24,10 @@ class JoinGroupActivity : AppCompatActivity() {
             }
         }
 
+        //// 뒤로 가기
+        binding.createGoBackBtn.setOnClickListener {
+            val startIntent = Intent(this, InviteStartActivity::class.java)
+            startActivity(startIntent)
+        }
     }
 }
