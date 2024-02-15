@@ -7,16 +7,13 @@ import androidx.lifecycle.ViewModel
 import com.umc.anddeul.home.model.UserProfileData
 
 class MyPageViewModel : ViewModel() {
-    private val myProfileData = MutableLiveData<UserProfileData>()
+    private var myProfileData: UserProfileData? = null
 
-    fun setMyProfile(myProfile : UserProfileData) {
-        myProfileData.value = myProfile
-        Log.e("setMyProfile", "${myProfileData.value}")
+    fun setMyProfile(myProfile: UserProfileData) {
+        myProfileData = myProfile
     }
 
-    fun getMyProfile() : LiveData<UserProfileData> {
+    fun getMyProfile(): UserProfileData? {
         return myProfileData
-        Log.e("setMyProfile", " getMyProfile 호출 : ${myProfileData.value}")
-
     }
 }

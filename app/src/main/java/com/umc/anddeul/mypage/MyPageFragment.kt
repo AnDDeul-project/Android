@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
@@ -23,7 +23,6 @@ import com.umc.anddeul.databinding.FragmentMypageBinding
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.PostUploadActivity
 import com.umc.anddeul.home.LoadProfileImage
-import com.umc.anddeul.home.UserPostFragment
 import com.umc.anddeul.home.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
@@ -37,9 +36,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
-    private val myPageViewModel : MyPageViewModel by viewModels()
+    private val myPageViewModel: MyPageViewModel by activityViewModels()
 
-    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 // 권한이 허용되면 갤러리 액티비티로 이동
                 val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
@@ -151,7 +151,8 @@ class MyPageFragment : Fragment() {
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
 
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val spf: SharedPreferences =
+            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
@@ -192,12 +193,17 @@ class MyPageFragment : Fragment() {
                             binding.mypageUsernameTv.text = myProfileData.nickname
                             binding.mypagePostNumTv.text = "게시물 ${myProfileData.postCount}개"
 
-                            val myProfileRVAdapter = UserProfileRVAdapter(myProfileData.firstPostImages, myProfileData.postIdx)
+                            val myProfileRVAdapter = UserProfileRVAdapter(
+                                myProfileData.firstPostImages,
+                                myProfileData.postIdx
+                            )
 
-                            binding.mypageProfileRv.layoutManager = GridLayoutManager(requireContext(), 3)
+                            binding.mypageProfileRv.layoutManager =
+                                GridLayoutManager(requireContext(), 3)
                             binding.mypageProfileRv.adapter = myProfileRVAdapter
 
-                            myProfileRVAdapter.setMyItemClickListener(object : UserProfileRVAdapter.MyItemClickInterface {
+                            myProfileRVAdapter.setMyItemClickListener(object :
+                                UserProfileRVAdapter.MyItemClickInterface {
                                 override fun onItemClick(postIdx: Int) {
                                     // 선택한 게시글 단일 조회
                                     getPost(postIdx)
@@ -211,7 +217,8 @@ class MyPageFragment : Fragment() {
 
                             val gson = Gson()
                             val myProfile = myProfileData
-                            val myProfileDTO = gson.fromJson(gson.toJson(myProfile), UserProfileData::class.java)
+                            val myProfileDTO =
+                                gson.fromJson(gson.toJson(myProfile), UserProfileData::class.java)
                             myPageViewModel.setMyProfile(myProfileDTO)
 
                         }
