@@ -301,7 +301,7 @@
         app:srcCompat="@drawable/ic_goto_pot" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/userTitleTv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -322,6 +322,6 @@
         android:fontFamily="@font/font_pretendard_regular"
         android:text="님의 우체통"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/textView17"
+        app:layout_constraintStart_toEndOf="@+id/userTitleTv2"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentLetterlistBinding
+import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -90,7 +91,19 @@ class LetterListFragment : Fragment() {
             } else {
             }
         }
-        
+
+
+        //// 상단바 이름
+        // api 연결
+        val familyService = FamilyService()
+        familyService.getFamilyList(loadedToken) { familyDTO ->
+            if (familyDTO != null) {
+                if (familyDTO.isSuccess.toString() == "true") {
+                    binding.userTitleTv2.text = familyDTO.result.me.nickname
+                }
+            }
+        }
+
 
         //// 편지 보기(팝업)
         val onClickListener = object: LetterListAdapter.OnItemClickListener {

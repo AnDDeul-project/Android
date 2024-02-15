@@ -144,6 +144,7 @@ class PostboxFragment : Fragment() {
                 if (familyDTO.isSuccess.toString() == "true") {
                     familyAdapter.families = familyDTO.result.family
                     binding.sFamily.adapter = familyAdapter
+                    binding.userTitleTv.text = familyDTO.result.me.nickname
                 }
             }
         }
