@@ -56,6 +56,8 @@ class PostboxFragment : Fragment() {
     ): View {
         binding = FragmentPostboxBinding.inflate(inflater, container, false)
 
+        val loadedToken = loadJwt() // jwt토큰
+
         //// 화분 키우기 페이지로 이동
         binding.gotoPotBtn.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -88,31 +90,17 @@ class PostboxFragment : Fragment() {
 
         //// 편지 리스트
         postAdapter = LetterAdapter()
-
-        // api 연결
-//        val currentDate = LocalDate.now()
-//        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//        val today = currentDate.format(dateFormat)
-////        val today = "2024-02-08"
-//        Log.d("오늘날짜", currentDate.format(dateFormat))
-        val loadedToken = loadJwt() // jwt토큰
-//        val mailService = MailService()
-//        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
-//            if (mailDTO != null) {
-//                if (mailDTO.isSuccess.toString() == "true") {
-//                    postAdapter.letters = mailDTO.post
-//                    postAdapter.notifyDataSetChanged()
-//                }
-//            } else {
-//            }
-//        }
+        showLetterList()
 
 
         //// 편지 보기(팝업)
         val onClickListener = object: LetterAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, pos: Int) {
                 val selectedPost = postAdapter.letters?.get(pos)
-                val postPopupFragment = LetterPopupFragment(requireContext())
+                val postPopupFragment = LetterPopupFragment(requireContext()) {
+                    // This block is executed after the dialog is dismissed
+                    showLetterList() // Call the function to refresh the mail list
+                }
                 selectedPost?.let { postPopupFragment.show(it) }
             }
         }
@@ -123,15 +111,15 @@ class PostboxFragment : Fragment() {
 
 
         //// 랜덤 질문
-//        // api 연결
-//        val questionService = QuestionService()
-//        questionService.randomQuestion(loadedToken) { questionDTO ->
-//            if (questionDTO != null) {
-//                if (questionDTO.isSuccess.toString() == "true") {
-//                    binding.randomQTv.text = questionDTO.question[0].content
-//                }
-//            }
-//        }
+        // api 연결
+        val questionService = QuestionService()
+        questionService.randomQuestion(loadedToken) { questionDTO ->
+            if (questionDTO != null) {
+                if (questionDTO.isSuccess.toString() == "true") {
+                    binding.randomQTv.text = questionDTO.question[0].content
+                }
+            }
+        }
 
 
         //// 가족 리스트
@@ -257,6 +245,27 @@ class PostboxFragment : Fragment() {
 
         return binding.root
     }
+
+    //// 편지 리스트
+
+    // api 연결
+    private fun showLetterList(){
+        val currentDate = LocalDate.now()
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val today = currentDate.format(dateFormat)
+        val loadedToken = loadJwt() // jwt토큰
+        val mailService = MailService()
+        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
+            if (mailDTO != null) {
+                if (mailDTO.isSuccess.toString() == "true") {
+                    postAdapter.letters = mailDTO.post
+                    postAdapter.notifyDataSetChanged()
+                }
+            } else {
+            }
+        }
+    }
+
 
     // 달력 세팅
     private fun setWeek(startOfWeek: LocalDate) {

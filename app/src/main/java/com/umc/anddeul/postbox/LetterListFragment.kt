@@ -109,7 +109,7 @@ class LetterListFragment : Fragment() {
         val onClickListener = object: LetterListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, pos: Int) {
                 val selectedPost = letterlistAdapter.letters?.get(pos)
-                val postPopupFragment = LetterPopupFragment(requireContext())
+                val postPopupFragment = LetterPopupFragment(requireContext()) {}
                 selectedPost?.let { postPopupFragment.show(it) }
             }
         }
