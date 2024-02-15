@@ -2,6 +2,7 @@ package com.umc.anddeul.checklist.network
 
 import com.umc.anddeul.checklist.model.AddChecklist
 import com.umc.anddeul.checklist.model.AddRoot
+import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import retrofit2.Call
 import retrofit2.http.Body
@@ -32,8 +33,8 @@ interface ChecklistInterface {
     //체크리스트 완료 여부 변경
     @PUT("/check/{checkid}/complete")
     fun complete (
-        @Path("checkid") checkid : String
-    ) : Call<Root>
+        @Path("checkid") checkid : Int
+    ) : Call<CompleteRoot>
 
     @PATCH("/check/img")
     fun imgPic (

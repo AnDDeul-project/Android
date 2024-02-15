@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/add_checkli_todayCircle"
+                android:id="@+id/checkli_todayCircle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="180dp"
@@ -236,7 +236,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/add_checkli_beforeBtn"
+                android:id="@+id/checkli_beforeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -246,7 +246,7 @@
                 app:srcCompat="@drawable/ic_navi_left" />
 
             <ImageView
-                android:id="@+id/add_checkli_afterBtn"
+                android:id="@+id/checkli_afterBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="122dp"
@@ -256,7 +256,7 @@
                 app:srcCompat="@drawable/ic_navi_right" />
 
             <TextView
-                android:id="@+id/add_checkli_selectDateTv"
+                android:id="@+id/checkli_selectDateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="125dp"

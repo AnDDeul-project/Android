@@ -39,6 +39,7 @@ class AddChecklistActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddChecklistBinding
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     lateinit var selectedDateText : String
+    lateinit var addChecklistRVAdapter: AddChecklistRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +54,7 @@ class AddChecklistActivity : AppCompatActivity() {
 //        checklist.add(Checklist("달력 UI 수정할 예정이에요", "율", "image", false))
 
         //리사이클러뷰 연결
-        val addChecklistRVAdapter = AddChecklistRVAdapter()
+        addChecklistRVAdapter = AddChecklistRVAdapter()
         binding.checklistAddRecylerView.adapter = addChecklistRVAdapter
         binding.checklistAddRecylerView.layoutManager = LinearLayoutManager(this@AddChecklistActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -141,9 +142,9 @@ class AddChecklistActivity : AppCompatActivity() {
 
     private fun readApi(service : ChecklistInterface) {
         val readCall : Call<Root> = service.getChecklist(
-            "3304133093",
-            false,
-            "2024-02-12"
+            "sehseh",
+            true,
+            "2024-02-15"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -152,11 +153,13 @@ class AddChecklistActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
+                    Log.d("조회", "Root : ${root}")
                     val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
 
-                    result.let {
-
+                    result?.let {
+                        addChecklistRVAdapter.setChecklistData(it)
+                        addChecklistRVAdapter.notifyDataSetChanged()
                     }
                 }
             }
