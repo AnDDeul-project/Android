@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.MainActivity
+import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.ActivityCreateGroupCodeBinding
 
 class CreateGroupCodeActivity : AppCompatActivity() {
@@ -31,6 +32,8 @@ class CreateGroupCodeActivity : AppCompatActivity() {
             val clipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("가족코드", binding.groupCode.text.toString())
             clipboard.setPrimaryClip(clip)
+            // 복사 완료 메시지
+            AnddeulToast.createToast(this, "가족 코드가 복사되었습니다")?.show()
         }
         
         //// 메인 페이지로 이동
