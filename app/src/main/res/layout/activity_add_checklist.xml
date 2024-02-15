@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/add_checkli_todayCircle"
+                android:id="@+id/addCheckli_todayCircle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="180dp"
@@ -236,7 +236,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/add_checkli_beforeBtn"
+                android:id="@+id/addCheckli_beforeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -246,7 +246,7 @@
                 app:srcCompat="@drawable/ic_navi_left" />
 
             <ImageView
-                android:id="@+id/add_checkli_afterBtn"
+                android:id="@+id/addCheckli_afterBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="122dp"
@@ -256,7 +256,7 @@
                 app:srcCompat="@drawable/ic_navi_right" />
 
             <TextView
-                android:id="@+id/add_checkli_selectDateTv"
+                android:id="@+id/addCheckli_selectDateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="125dp"
@@ -288,7 +288,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_checkli_todayCircle"
+                app:layout_constraintTop_toBottomOf="@+id/addCheckli_todayCircle"
                 app:srcCompat="@drawable/checkli_img_add_circle" />
 
             <EditText
@@ -306,7 +306,7 @@
                 android:textColor="@color/grey_500"
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/add_checkli_et_circle"
-                app:layout_constraintTop_toBottomOf="@+id/add_checkli_todayCircle" />
+                app:layout_constraintTop_toBottomOf="@+id/addCheckli_todayCircle" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/checklist_add_recylerView"

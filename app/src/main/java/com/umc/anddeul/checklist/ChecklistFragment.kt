@@ -17,10 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.model.Checklist
+import com.umc.anddeul.checklist.model.CompleteCheck
+import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.databinding.FragmentChecklistBinding
+import com.umc.anddeul.databinding.ItemChecklistBinding
 import com.umc.anddeul.postbox.LetterListFragment
+import com.umc.anddeul.postbox.PostboxFragment
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,31 +46,43 @@ class ChecklistFragment : Fragment() {
     lateinit var binding: FragmentChecklistBinding
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     lateinit var selectedDateText : String
+    private var checklist : ArrayList<Checklist>? = null
+    lateinit var checklistRVAdapter : ChecklistRVAdapter
+    private lateinit var selectedDay: LocalDate
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChecklistBinding.inflate(inflater, container, false)
 
         //리사이클러뷰 연결
-        val checklistRVAdapter = ChecklistRVAdapter()
+        checklistRVAdapter = ChecklistRVAdapter(requireContext())
         binding.checklistRecylerView.adapter = checklistRVAdapter
         binding.checklistRecylerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        //// 달력
+//        val selectedDateStr = arguments?.getString("selectedDate")
+//        var selectedDate = selectedDateStr.let {
+//            LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+//        }
+//        selectedDay = selectedDateStr?.let {
+//            LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+//        } ?: LocalDate.now()
 
         // 초기 세팅
         setWeek(currentStartOfWeek)
 
         // 저번주
-        binding.addCheckliBeforeBtn.setOnClickListener {
+        binding.checkliBeforeBtn.setOnClickListener {
             currentStartOfWeek = currentStartOfWeek.minusWeeks(1)
             val yearMonth = YearMonth.from(currentStartOfWeek)
-            binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+            binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             setWeek(currentStartOfWeek)
         }
 
         // 다음주
-        binding.addCheckliAfterBtn.setOnClickListener {
+        binding.checkliAfterBtn.setOnClickListener {
             currentStartOfWeek = currentStartOfWeek.plusWeeks(1)
             val yearMonth = YearMonth.from(currentStartOfWeek)
-            binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+            binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             setWeek(currentStartOfWeek)
         }
 
@@ -118,8 +134,9 @@ class ChecklistFragment : Fragment() {
                     val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
 
-                    result.let {
-
+                    result?.let {
+                        checklistRVAdapter.setChecklistData(it)
+                        checklistRVAdapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -129,10 +146,14 @@ class ChecklistFragment : Fragment() {
             }
         })
 
+        binding.checkliTvTodaylist.setOnClickListener {
+            completeApi(service)
+        }
+
         return binding.root
     }
 
-    private fun readApi(service : ChecklistInterface) {
+    fun readApi(service : ChecklistInterface) {
         val readCall : Call<Root> = service.getChecklist(
             "3304133093",
             false,
@@ -145,12 +166,13 @@ class ChecklistFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
-//                    Log.d("조회", "Root : ${root}")
+                    Log.d("조회", "Root : ${root}")
                     val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
 
-                    result.let {
-
+                    result?.let {
+                        checklistRVAdapter.setChecklistData(it)
+                        checklistRVAdapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -161,10 +183,38 @@ class ChecklistFragment : Fragment() {
         })
     }
 
+    fun completeApi(service: ChecklistInterface) {
+        val completeCall : Call<CompleteRoot> = service.complete(
+            17
+        )
+        Log.d("완료", "completeCall : ${completeCall}")
+        completeCall.enqueue(object : Callback<CompleteRoot> {
+            override fun onResponse(call: Call<CompleteRoot>, response: Response<CompleteRoot>) {
+                Log.d("api 완료 변경", "Response ${response}")
+
+                if (response.isSuccessful) {
+                    val root : CompleteRoot? = response.body()
+                    Log.d("완료", "Complete Root : ${root}")
+                    val check : CompleteCheck? = root?.check
+                    Log.d("완료", "Check: ${check}")
+
+                    if (root?.isSuccess == true) {
+                        check.let {
+                            readApi(service)
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<CompleteRoot>, t: Throwable) {
+                Log.d("complete 실패", "completeCall : ${t.message}")
+            }
+        })
+    }
+
     private fun setWeek(startOfWeek: LocalDate) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
-        binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+        binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
 
         for (i in 1..7) {
             val currentDateForDay = nearestMonday.plusDays(i.toLong() - 1)
@@ -195,17 +245,20 @@ class ChecklistFragment : Fragment() {
             val today = LocalDate.now()
             val isTodayInWeek = startOfWeek <= today && today <= startOfWeek.plusDays(6)
 
+            // 선택한 날짜에 동그라미 표시
+//            val isSelectedDay = startOfWeek <= selectedDay && selectedDay <= startOfWeek.plusDays(6)
+
             if (isTodayInWeek) {
                 if (today == currentDateForDay) {
-                    binding.addCheckliTodayCircle.visibility = View.VISIBLE
+                    binding.checkliTodayCircle.visibility = View.VISIBLE
                     dateTextView?.viewTreeObserver?.addOnPreDrawListener(object :
                         ViewTreeObserver.OnPreDrawListener {
                         override fun onPreDraw(): Boolean {
                             dateTextView.viewTreeObserver.removeOnPreDrawListener(this)
                             val dateTextViewX = dateTextView.x
                             val dateTextViewWidth = dateTextView.width.toFloat()
-                            val circleWidth = binding.addCheckliTodayCircle.width.toFloat()
-                            binding.addCheckliTodayCircle.x =
+                            val circleWidth = binding.checkliTodayCircle.width.toFloat()
+                            binding.checkliTodayCircle.x =
                                 dateTextViewX + (dateTextViewWidth - circleWidth) / 2
                             return true
                         }
@@ -220,7 +273,7 @@ class ChecklistFragment : Fragment() {
                 dayTextView?.setTextColor(Color.parseColor("#666666"))
                 dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
-                binding.addCheckliTodayCircle.visibility = View.GONE
+                binding.checkliTodayCircle.visibility = View.GONE
             }
 
             // 날짜 선택 시
@@ -228,6 +281,26 @@ class ChecklistFragment : Fragment() {
                 val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 selectedDateText = currentDateForDay.format(dateFormat)
                 Log.d("날짜 선택", "${selectedDateText}")
+
+                if (currentDateForDay == LocalDate.now()) {
+                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, ChecklistFragment())
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss()
+                }
+                else {
+                    val checklistFragment = ChecklistFragment()
+
+                    val bundle = Bundle()
+                    bundle.putString("selectedDate", selectedDateText)
+                    checklistFragment.arguments = bundle
+
+                    // 날짜별 편지 확인 페이지로 이동
+                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, checklistFragment)
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss()
+                }
             }
 
         }
