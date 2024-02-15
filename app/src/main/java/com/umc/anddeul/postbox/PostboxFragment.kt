@@ -98,8 +98,7 @@ class PostboxFragment : Fragment() {
             override fun onItemClickListener(view: View, pos: Int) {
                 val selectedPost = postAdapter.letters?.get(pos)
                 val postPopupFragment = LetterPopupFragment(requireContext()) {
-                    // This block is executed after the dialog is dismissed
-                    showLetterList() // Call the function to refresh the mail list
+                    showLetterList() 
                 }
                 selectedPost?.let { postPopupFragment.show(it) }
             }
@@ -112,11 +111,14 @@ class PostboxFragment : Fragment() {
 
         //// 랜덤 질문
         // api 연결
+        Log.d("확인1", "${loadedToken}")
         val questionService = QuestionService()
         questionService.randomQuestion(loadedToken) { questionDTO ->
             if (questionDTO != null) {
                 if (questionDTO.isSuccess.toString() == "true") {
-                    binding.randomQTv.text = questionDTO.question[0].content
+                    if (questionDTO?.question?.isNotEmpty() == true) {
+                        binding.randomQTv.text = questionDTO?.question?.get(0)?.content ?: ""
+                    }
                 }
             }
         }
