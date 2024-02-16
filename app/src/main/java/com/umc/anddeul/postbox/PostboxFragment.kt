@@ -378,6 +378,7 @@ class PostboxFragment : Fragment() {
         binding.recordInfo2.visibility = View.GONE
         binding.recordInfo3.visibility = View.GONE
         binding.recordInfo4.visibility = View.GONE
+        binding.letterEt.visibility = View.VISIBLE
     }
 
     // 토큰 불러오기
