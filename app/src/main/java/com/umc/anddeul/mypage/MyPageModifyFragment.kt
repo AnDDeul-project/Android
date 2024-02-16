@@ -98,6 +98,11 @@ class MyPageModifyFragment : Fragment() {
             checkPermission()
         }
 
+        // 사진 수정하기 글씨 클릭 시 갤러리 권한 확인
+        binding.mypageModifyProfileTv.setOnClickListener {
+            checkPermission()
+        }
+
         val imagePath = myProfileData!!.image
         val profileImageUri = Uri.parse(imagePath)
         Log.e("profileImageUri", "string : $imagePath")

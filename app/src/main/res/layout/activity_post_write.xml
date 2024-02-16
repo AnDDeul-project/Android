@@ -23,10 +23,11 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/upload_write_selected_vp"
-        android:layout_width="match_parent"
-        android:layout_height="342dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="328dp"
+        android:layout_height="328dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar" />
@@ -36,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/post_write_selector"
         android:fontFamily="@font/font_pretendard_regular"
         android:gravity="start"
@@ -44,6 +45,7 @@
         android:maxLength="100"
         android:padding="14dp"
         android:textSize="14sp"
+        android:textColor="@color/text_high"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_write_selected_vp" />
@@ -55,6 +57,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/font_pretendard_bold"
+        android:textColor="@color/text_white"
         android:text="게시하기"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
