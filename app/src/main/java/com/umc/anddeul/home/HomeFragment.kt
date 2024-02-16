@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.checklist.AddChecklistActivity
 import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
@@ -344,6 +345,16 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                                 // drawerLayout 자동 닫기
                                 drawerLayout.closeDrawers()
                                 changeUserProfile(memberData.snsId)
+                            }
+
+                            memberBinding.homeMenuMemberCheckBtn.setOnClickListener {
+                                // drawerLayout 자동 닫기
+                                drawerLayout.closeDrawers()
+
+                                // 체크리스트 화면으로 이동
+                                val intent = Intent(context, AddChecklistActivity::class.java)
+                                intent.putExtra("checkUserId", memberData.snsId)
+                                startActivity(intent)
                             }
                         }
 
