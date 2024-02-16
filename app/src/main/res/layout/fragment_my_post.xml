@@ -37,16 +37,17 @@
         android:layout_height="wrap_content"
         android:text="사용자 이름"
         android:textSize="18sp"
+        android:textColor="@color/text_high"
         android:fontFamily="@font/font_pretendard_bold"
         app:layout_constraintStart_toEndOf="@+id/my_post_profile_iv"
         app:layout_constraintTop_toBottomOf="@+id/my_post_toolbar"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="18dp"/>
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="17dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/my_post_image_vp"
-        android:layout_width="342dp"
-        android:layout_height="342dp"
+        android:layout_width="328dp"
+        android:layout_height="328dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_post_profile_iv"
@@ -56,8 +57,8 @@
 
     <ImageButton
         android:id="@+id/my_post_emoji_ib"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:src="@drawable/ic_home_emoji"
         android:background="@color/background"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +86,7 @@
             android:layout_weight="1"
             android:src="@drawable/ic_emoji_happy"
             android:background="@color/clear"
-            android:layout_marginEnd="14dp"
+            android:layout_marginEnd="16dp"
             android:onClick="onEmojiClick"
             />
 
@@ -96,7 +97,7 @@
             android:layout_weight="1"
             android:src="@drawable/ic_emoji_laugh"
             android:background="@color/clear"
-            android:layout_marginEnd="14dp"
+            android:layout_marginEnd="16dp"
             android:onClick="onEmojiClick"
             />
 
@@ -125,7 +126,7 @@
         app:layout_constraintTop_toBottomOf="@id/my_post_emoji_ib"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="18dp"/>
+        android:layout_marginStart="19dp"/>
 
     <ImageView
         android:id="@+id/my_post_menu"

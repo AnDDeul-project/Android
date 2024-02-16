@@ -1,99 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="10dp"
-    android:background="@color/background"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+    android:background="@color/background">
+
     <ImageView
         android:id="@+id/home_upload_profile_iv"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@drawable/ic_profile_person"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/default_profile"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/home_upload_username_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="17dp"
+        android:fontFamily="@font/font_pretendard_bold"
         android:text="사용자 이름"
         android:textSize="18sp"
-        android:fontFamily="@font/font_pretendard_bold"
         app:layout_constraintStart_toEndOf="@+id/home_upload_profile_iv"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/home_upload_image_vp"
-        android:layout_width="342dp"
-        android:layout_height="342dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="328dp"
+        android:layout_height="328dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_upload_profile_iv"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_upload_profile_iv" />
 
     <ImageButton
         android:id="@+id/home_upload_emoji_ib"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_home_emoji"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
         android:background="@color/background"
+        android:src="@drawable/ic_home_emoji"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_upload_image_vp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="18dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/home_upload_image_vp" />
 
     <LinearLayout
         android:id="@+id/home_emoji_linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/emoji_back_selector"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:background="@drawable/emoji_back_selector"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/home_upload_emoji_ib"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="10dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
             android:id="@+id/home_emoji_happy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_happy"
             android:background="@color/clear"
-            android:layout_marginEnd="20dp"
             android:onClick="onEmojiClick"
-            />
+            android:src="@drawable/ic_emoji_happy" />
 
         <ImageButton
             android:id="@+id/home_emoji_laugh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_laugh"
             android:background="@color/clear"
-            android:layout_marginEnd="20dp"
             android:onClick="onEmojiClick"
-             />
+            android:src="@drawable/ic_emoji_laugh" />
 
         <ImageButton
             android:id="@+id/home_emoji_sad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_sad"
             android:background="@color/clear"
             android:onClick="onEmojiClick"
-             />
+            android:src="@drawable/ic_emoji_sad" />
 
 
     </LinearLayout>
@@ -103,15 +100,16 @@
         android:id="@+id/home_upload_explain_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="게시물에 대한 사용자의 설명들"
-        android:textSize="16sp"
-        android:textColor="@color/secondary"
-        android:fontFamily="@font/font_pretendard_regular"
-        app:layout_constraintTop_toBottomOf="@id/home_upload_emoji_ib"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="19dp"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="18dp"/>
-
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:text="게시물에 대한 사용자의 설명들"
+        android:textColor="@color/secondary"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/home_upload_emoji_ib" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
