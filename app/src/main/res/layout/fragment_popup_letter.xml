@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_letterbox_big" />
+        app:srcCompat="@drawable/postbox_letterbox_big" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:srcCompat="@drawable/img_letterbox_title" />
+        app:srcCompat="@drawable/postbox_letterbox_title" />
 
     <TextView
         android:id="@+id/letterDateTv"
@@ -99,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/userTv"
-        app:srcCompat="@drawable/img_recordbars" />
+        app:srcCompat="@drawable/postbox_recordbars" />
 
     <ImageView
         android:id="@+id/recordPop3"
@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/recordPop2"
-        app:srcCompat="@drawable/img_record_play_circle" />
+        app:srcCompat="@drawable/postbox_img_record_play_circle" />
 
     <TextView
         android:id="@+id/recordPop4"
