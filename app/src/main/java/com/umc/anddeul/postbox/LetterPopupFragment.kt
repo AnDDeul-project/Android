@@ -25,11 +25,13 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
     private lateinit var binding : FragmentPopupLetterBinding
     private val dlg = Dialog(context)
     private var mediaPlayer: MediaPlayer? = null
+    private var isMediaPaused: Boolean = false
 
     fun show(content: Post) {
         binding = FragmentPopupLetterBinding.inflate(LayoutInflater.from(context))
 
         dlg.setOnDismissListener {
+            releaseMediaPlayer()
             onDismissCallback.invoke()
         }
 
@@ -62,19 +64,39 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
                         binding.recordPop3.setOnClickListener {
                             binding.recordPop3.visibility = View.GONE
                             binding.recordPop4.visibility = View.GONE
+                            binding.recordPop5.visibility = View.VISIBLE
                             val myUri: Uri = Uri.parse(mailDTO.post[0].content)
-                            mediaPlayer = MediaPlayer().apply {
-                                setAudioStreamType(AudioManager.STREAM_MUSIC)
-                                setDataSource(context, myUri)
-                                prepare()
-                                start()
+                            if (mediaPlayer == null) {  // 일지정지한 적 없을 때
+                                mediaPlayer = MediaPlayer().apply {
+                                    setAudioStreamType(AudioManager.STREAM_MUSIC)
+                                    setDataSource(context, myUri)
+                                    prepare()
+                                    start()
 
-                                // 음성 실행 완료 시 (다시 재생 버튼 등장)
-                                setOnCompletionListener {
-                                    binding.recordPop3.visibility = View.VISIBLE
-                                    binding.recordPop4.visibility = View.VISIBLE
-                                    mediaPlayer?.reset()
+                                    // 음성 실행 완료 시 (다시 재생 버튼 등장)
+                                    setOnCompletionListener {
+                                        binding.recordPop3.visibility = View.VISIBLE
+                                        binding.recordPop4.visibility = View.VISIBLE
+                                        binding.recordPop5.visibility = View.GONE
+                                        mediaPlayer?.reset()
+                                        mediaPlayer = null
+                                    }
                                 }
+                            }
+                            else if (isMediaPaused) {
+                                mediaPlayer?.start()
+                                isMediaPaused = false
+                            }
+                        }
+
+                        // 음성 일시정지
+                        binding.recordPop5.setOnClickListener {
+                            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                                mediaPlayer?.pause()
+                                isMediaPaused = true
+                                binding.recordPop3.visibility = View.VISIBLE
+                                binding.recordPop4.visibility = View.VISIBLE
+                                binding.recordPop5.visibility = View.GONE
                             }
                         }
                     }
@@ -95,6 +117,12 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
         dlg.setCanceledOnTouchOutside(true)
 
         dlg.show()
+    }
+
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+        isMediaPaused = false
     }
 
     // 토큰 불러오기
