@@ -2,6 +2,7 @@ package com.umc.anddeul.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.checklist.AddChecklistActivity
 import com.umc.anddeul.databinding.FragmentUserProfileBinding
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.network.UserProfileInterface
@@ -34,6 +36,11 @@ class UserProfileFragment : Fragment() {
     ): View? {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false)
 
+        // 선택한 유저의 아이디 가져오기
+        val idJson = arguments?.getString("selectedId")
+        val snsId = gson.fromJson(idJson, String::class.java)
+        Log.e("userProfileService", "선택된 Id : ${snsId}")
+
         binding.userProfileToolbar.apply {
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationOnClickListener {
@@ -43,17 +50,19 @@ class UserProfileFragment : Fragment() {
             }
         }
 
-        loadProfile()
+        loadProfile(snsId)
+
+        binding.userProfileCheckIv.setOnClickListener {
+            // 체크리스트 화면으로 이동
+            val intent = Intent(context, AddChecklistActivity::class.java)
+            intent.putExtra("checkUserId", snsId)
+            startActivity(intent)
+        }
 
         return  binding.root
     }
 
-    fun loadProfile() {
-        // 선택한 유저의 아이디 가져오기
-        val idJson = arguments?.getString("selectedId")
-        val snsId = gson.fromJson(idJson, String::class.java)
-        Log.e("userProfileService", "선택된 Id : ${snsId}")
-
+    fun loadProfile(snsId : String) {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
