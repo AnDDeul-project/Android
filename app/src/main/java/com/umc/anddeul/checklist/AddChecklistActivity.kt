@@ -1,5 +1,6 @@
 package com.umc.anddeul.checklist
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
@@ -50,9 +51,6 @@ class AddChecklistActivity : AppCompatActivity() {
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
         binding.addCheckliSelectDateTv.text = dateStamp
 
-//        checklist.add(Checklist("메모메모", "율", "image", true))
-//        checklist.add(Checklist("달력 UI 수정할 예정이에요", "율", "image", false))
-
         //리사이클러뷰 연결
         addChecklistRVAdapter = AddChecklistRVAdapter()
         binding.checklistAddRecylerView.adapter = addChecklistRVAdapter
@@ -101,18 +99,29 @@ class AddChecklistActivity : AppCompatActivity() {
             )
             .build()
 
+        //서비스 생성
         val service = retrofit.create(ChecklistInterface::class.java)
-        readApi(service)
 
+        //인텐트 정보 추출
+        val checkUserId = intent.getStringExtra("checkUserId")
+        val checkUserName = intent.getStringExtra("checkUserName")
+
+        //현재 체크리스트 불러오기
+        readApi(service, checkUserId!!)
+
+        //이름 설정
+        binding.checkliAddTvName.text = checkUserName
+
+        //체크리스트 추가 동작
         binding.addCheckliEtContents.setOnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
                 //체크리스트 추가 코드
                 val text = binding.addCheckliEtContents.text.toString()
                 val dateList = selectedDateText.split("-")
-                val addChecklist = AddChecklist("sehseh", dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+                val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
                 Log.d("체크리스트 값 확인", "${addChecklist}")
                 addApi(service, addChecklist)
-//                readApi(service)
+                readApi(service, checkUserId!!)
             }
             true
         }
@@ -140,9 +149,9 @@ class AddChecklistActivity : AppCompatActivity() {
         })
     }
 
-    private fun readApi(service : ChecklistInterface) {
+    private fun readApi(service : ChecklistInterface, userId : String) {
         val readCall : Call<Root> = service.getChecklist(
-            "sehseh",
+            userId,
             true,
             "2024-02-15"
         )

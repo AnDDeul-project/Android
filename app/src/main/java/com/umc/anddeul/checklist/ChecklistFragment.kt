@@ -1,16 +1,24 @@
 package com.umc.anddeul.checklist
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +39,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -49,6 +59,8 @@ class ChecklistFragment : Fragment() {
     private var checklist : ArrayList<Checklist>? = null
     lateinit var checklistRVAdapter : ChecklistRVAdapter
     private lateinit var selectedDay: LocalDate
+    val CAMERA_REQUEST_CODE = 405
+    val REQUEST_IMAGE_CAPTURE = 406
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChecklistBinding.inflate(inflater, container, false)
@@ -84,11 +96,6 @@ class ChecklistFragment : Fragment() {
             val yearMonth = YearMonth.from(currentStartOfWeek)
             binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             setWeek(currentStartOfWeek)
-        }
-
-        binding.checkliTvName.setOnClickListener {
-            val intent = Intent(activity, AddChecklistActivity::class.java)
-            startActivity(intent)
         }
 
         selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
@@ -148,6 +155,10 @@ class ChecklistFragment : Fragment() {
 
         binding.checkliTvTodaylist.setOnClickListener {
             completeApi(service)
+        }
+
+        binding.checkliTvName.setOnClickListener {
+            checklistRVAdapter.checkCameraPermission()
         }
 
         return binding.root

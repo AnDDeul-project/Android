@@ -2,6 +2,7 @@ package com.umc.anddeul.checklist.network
 
 import com.umc.anddeul.checklist.model.AddChecklist
 import com.umc.anddeul.checklist.model.AddRoot
+import com.umc.anddeul.checklist.model.CheckImgRoot
 import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import retrofit2.Call
@@ -39,6 +40,6 @@ interface ChecklistInterface {
     @PATCH("/check/img")
     fun imgPic (
         @Field("image") image : File,
-        @Field("checkid") checkid: String
-    )
+        @Field("checkid") checkid: Int
+    ) : Call<CheckImgRoot>
 }
