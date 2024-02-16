@@ -11,18 +11,18 @@
         android:layout_height="66dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_letterbox" />
+        app:srcCompat="@drawable/postbox_letterbox" />
 
     <ImageView
         android:id="@+id/minibox"
-        android:layout_width="260dp"
-        android:layout_height="66dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="82dp"
         android:layout_marginBottom="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_textbox" />
+        app:srcCompat="@drawable/postbox_textbox" />
 
     <TextView
         android:id="@+id/userNmTv"
@@ -56,5 +56,5 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_recordbox" />
+        app:srcCompat="@drawable/postbox_recordbox" />
 </androidx.constraintlayout.widget.ConstraintLayout>
