@@ -12,14 +12,15 @@ import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.databinding.FragmentPotBinding
+import com.umc.anddeul.home.LoadImage
 import com.umc.anddeul.pot.GardenFragment
+import com.umc.anddeul.pot.model.ChangedImg
 import com.umc.anddeul.pot.model.Flower
 import com.umc.anddeul.pot.model.FlowerRoot
 import com.umc.anddeul.pot.model.LoveRoot
 import com.umc.anddeul.pot.model.Point
 import com.umc.anddeul.pot.model.PointRoot
 import com.umc.anddeul.pot.model.Result
-import com.umc.anddeul.pot.model.ResultImg
 import com.umc.anddeul.pot.network.PotInterface
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -110,7 +111,11 @@ class PotFragment : Fragment() {
 
                     flower.let {
                         binding.potTvPlantsName.text = it?.name.toString()
-                        //이미지뷰에 it?.img 값 넣기
+                        //이미지뷰에 변경
+                        val loadFlower = LoadImage(binding.potImgPlants)
+                        loadFlower.execute(it?.img)
+                        val loadGauge = LoadImage(binding.potImageGauge)
+                        loadGauge.execute(it?.gauge)
                     }
                 }
             }
@@ -134,12 +139,23 @@ class PotFragment : Fragment() {
                     Log.d("사랑주기", "root: ${root}")
                     val result : Result? = root?.result
                     Log.d("사랑주기", "result: ${result}")
-                    val img : ResultImg? = result?.img
-                    Log.d("사랑주기", "img: ${img}")
+                    val changedImg : List<ChangedImg>? = result?.changed_img
+                    Log.d("사랑주기", "img: ${changedImg}")
 
                     result.let {
+                        Log.d("사랑주기", "하트포인트 변환: ${it?.point}")
                         binding.potTvHeartPoint.text = it?.point.toString()
+                    }
+                    changedImg.let {
+                        Log.d("사랑주기", "꽃 사진: ${it?.get(0)?.img_3}")
+                        Log.d("사랑주기", "프로그레스바: ${it?.get(0)?.gauge}")
+                        //꽃 사진 변경
+                        val laodFlower = LoadImage(binding.potImgPlants)
+                        laodFlower.execute(it?.get(0)?.img_3)
+
                         //프로그레스바 이미지 변경
+                        val loadGauge = LoadImage(binding.potImageGauge)
+                        loadGauge.execute(it?.get(0)?.gauge)
                     }
                 }
             }
