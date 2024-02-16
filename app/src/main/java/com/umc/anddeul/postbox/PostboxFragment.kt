@@ -332,6 +332,12 @@ class PostboxFragment : Fragment() {
                 dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 binding.todayCircle.visibility = View.GONE
+                if (dateTextView?.id == binding.postDate6.id){
+                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.system_informative))
+                }
+                if (dateTextView?.id == binding.postDate7.id){
+                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.system_error))
+                }
             }
 
             // 날짜 선택 시
