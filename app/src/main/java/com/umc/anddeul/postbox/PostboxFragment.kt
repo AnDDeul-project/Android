@@ -172,7 +172,7 @@ class PostboxFragment : Fragment() {
                 setDataSource(requireContext(), myUri)
                 prepare()
                 start()
-                Toast.makeText(context, "음성이 시작되었습니다.", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "음성이 시작되었습니다.", Toast.LENGTH_SHORT).show()
 
                 // 음성 실행 완료 시 (다시 재생 버튼 등장)
                 setOnCompletionListener {

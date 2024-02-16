@@ -60,8 +60,6 @@ class RecordPopupFragment(private val context: Context) {
                 // 권한 부여 되었을 경우
             } else {
                 startRecording()
-                binding.recordPlayBtn.visibility = View.GONE
-                binding.recordPauseBtn.visibility = View.VISIBLE
             }
 
         }
@@ -111,30 +109,34 @@ class RecordPopupFragment(private val context: Context) {
     // 녹음 시작
     private fun startRecording(){
 
-        if (hasRecorded == false) {     // 녹음 시작 (일시정지한 적 없는 경우)
-            hasRecorded = true
+        if (secondsElapsed < 50) {
+            if (hasRecorded == false) {     // 녹음 시작 (일시정지한 적 없는 경우)
+                hasRecorded = true
 
-            val fileName = "Anddeul" + Date().getTime().toString() + ".mp3"
+                val fileName = "Anddeul" + Date().getTime().toString() + ".mp3"
 
-            outputPath =
-                Environment.getExternalStorageDirectory().absolutePath + "/Download/" + fileName
-            mediaRecorder = MediaRecorder()
-            mediaRecorder?.setAudioSource((MediaRecorder.AudioSource.MIC))
-            mediaRecorder?.setOutputFormat((MediaRecorder.OutputFormat.MPEG_4))
-            mediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            mediaRecorder?.setOutputFile(outputPath)
+                outputPath =
+                    Environment.getExternalStorageDirectory().absolutePath + "/Download/" + fileName
+                mediaRecorder = MediaRecorder()
+                mediaRecorder?.setAudioSource((MediaRecorder.AudioSource.MIC))
+                mediaRecorder?.setOutputFormat((MediaRecorder.OutputFormat.MPEG_4))
+                mediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                mediaRecorder?.setOutputFile(outputPath)
 
-            mediaRecorder?.prepare()
-            mediaRecorder?.start()
-            state = true
-            Toast.makeText(context, "녹음이 시작되었습니다.", Toast.LENGTH_SHORT).show()
+                mediaRecorder?.prepare()
+                mediaRecorder?.start()
+                state = true
+//                Toast.makeText(context, "녹음이 시작되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            else{     // 녹음 시작 (일시정지한 적 있는 경우)
+                state = true
+                mediaRecorder?.resume()
+//                Toast.makeText(context, "녹음이 다시 시작되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            startTimer()
+            binding.recordPlayBtn.visibility = View.GONE
+            binding.recordPauseBtn.visibility = View.VISIBLE
         }
-        else{     // 녹음 시작 (일시정지한 적 있는 경우)
-            state = true
-            mediaRecorder?.resume()
-            Toast.makeText(context, "녹음이 다시 시작되었습니다.", Toast.LENGTH_SHORT).show()
-        }
-        startTimer()
     }
 
     // 초수 증가
@@ -142,13 +144,18 @@ class RecordPopupFragment(private val context: Context) {
         timerHandler = Handler()
         timerRunnable = object : Runnable {
             override fun run() {
-                if (secondsElapsed < 10) {
-                    binding.timerTv.text = "00:0" + secondsElapsed++.toString()
+                if (secondsElapsed <= 50) {
+                    if (secondsElapsed < 10) {
+                        binding.timerTv.text = "00:0" + secondsElapsed++.toString()
+                    } else {
+                        binding.timerTv.text = "00:" + secondsElapsed++.toString()
+                    }
+                    timerHandler?.postDelayed(this, 1000) // 1초씩 증가
+                } else {
+                    stopRecording()
+                    binding.recordPlayBtn.visibility = View.VISIBLE
+                    binding.recordPauseBtn.visibility = View.GONE
                 }
-                else{
-                    binding.timerTv.text = "00:" + secondsElapsed++.toString()
-                }
-                timerHandler?.postDelayed(this, 1000) // 1초씩 증가
             }
         }
         timerHandler?.postDelayed(timerRunnable!!, 0)
@@ -160,9 +167,9 @@ class RecordPopupFragment(private val context: Context) {
         if(state){
             mediaRecorder?.pause()
             binding.restartBtn.visibility = View.VISIBLE
-            Toast.makeText(context, "녹음이 정지되었습니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "녹음이 정지되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
         timerRunnable?.let { timerHandler?.removeCallbacks(it) }
     }
@@ -170,14 +177,15 @@ class RecordPopupFragment(private val context: Context) {
     // 정지
     private fun stopRecording(){
         if(state){
+            state = false
+            hasRecorded = false
             mediaRecorder?.stop()
             mediaRecorder?.reset()
             mediaRecorder?.release()
-            state = false
             binding.restartBtn.visibility = View.VISIBLE
-            Toast.makeText(context, "녹음이 되었습니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "녹음이 되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
         timerRunnable?.let { timerHandler?.removeCallbacks(it) }
     }
@@ -192,9 +200,9 @@ class RecordPopupFragment(private val context: Context) {
             hasRecorded = false
             outputPath = null
             binding.restartBtn.visibility = View.GONE
-            Toast.makeText(context, "녹음이 초기화되었습니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "녹음이 초기화되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
         timerRunnable?.let { timerHandler?.removeCallbacks(it) }
         secondsElapsed = 0
