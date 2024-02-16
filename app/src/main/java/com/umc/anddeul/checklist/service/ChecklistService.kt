@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.AddRoot
+import com.umc.anddeul.checklist.model.CheckImg
+import com.umc.anddeul.checklist.model.CheckImgRoot
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.CompleteCheck
 import com.umc.anddeul.checklist.model.CompleteRoot
@@ -17,6 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 class ChecklistService(context : Context) {
 //    var checklistRVAdapter : ChecklistRVAdapter = ChecklistRVAdapter(context)
@@ -68,6 +71,36 @@ class ChecklistService(context : Context) {
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
                 Log.d("read 실패", "readCall: ${t.message}")
+            }
+        })
+    }
+
+    fun imgApi(file : File, checkId : Int) {
+        val imgCall : Call<CheckImgRoot> = service.imgPic(
+            file,
+            checkId
+        )
+        Log.d("이미지 추가", "imgCall: ${imgCall}")
+        imgCall.enqueue(object : Callback<CheckImgRoot> {
+            override fun onResponse(call: Call<CheckImgRoot>, response: Response<CheckImgRoot>) {
+                Log.d("이미지 추가 api", "Response: ${response}")
+
+                if (response.isSuccessful) {
+                    val root : CheckImgRoot? = response.body()
+                    Log.d("이미지 추가", "CheckImg Root: ${root}")
+                    val checkImg : CheckImg? = root?.check
+                    Log.d("이미지 추가", "CheckImg: ${checkImg}")
+
+                    if (root?.isSuccess == true) {
+                        checkImg?.let {
+                            readApi()
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<CheckImgRoot>, t: Throwable) {
+                Log.d("이미지 추가 실패", "imgCall: ${t.message}")
             }
         })
     }

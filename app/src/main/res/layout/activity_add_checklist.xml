@@ -334,7 +334,7 @@
         app:srcCompat="@drawable/checkli_top_box" />
 
     <TextView
-        android:id="@+id/checkli__tv_name"
+        android:id="@+id/checkli_add_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -358,7 +358,7 @@
         android:text="님의 오늘의 할 일"
         android:textColor="@color/text_high"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/checkli__tv_name"
+        app:layout_constraintStart_toEndOf="@+id/checkli_add_tv_name"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
