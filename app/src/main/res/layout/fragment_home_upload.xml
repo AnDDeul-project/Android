@@ -71,7 +71,7 @@
             android:layout_weight="1"
             android:background="@color/clear"
             android:onClick="onEmojiClick"
-            android:src="@drawable/ic_emoji_happy" />
+            android:src="@drawable/emoji_heart" />
 
         <ImageButton
             android:id="@+id/home_emoji_laugh"
@@ -81,7 +81,7 @@
             android:layout_weight="1"
             android:background="@color/clear"
             android:onClick="onEmojiClick"
-            android:src="@drawable/ic_emoji_laugh" />
+            android:src="@drawable/emoji_fun" />
 
         <ImageButton
             android:id="@+id/home_emoji_sad"
@@ -90,7 +90,7 @@
             android:layout_weight="1"
             android:background="@color/clear"
             android:onClick="onEmojiClick"
-            android:src="@drawable/ic_emoji_sad" />
+            android:src="@drawable/emoji_sad" />
 
 
     </LinearLayout>
