@@ -41,6 +41,7 @@ class AddChecklistActivity : AppCompatActivity() {
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     lateinit var selectedDateText : String
     lateinit var addChecklistRVAdapter: AddChecklistRVAdapter
+    val today : String = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +49,10 @@ class AddChecklistActivity : AppCompatActivity() {
         binding = ActivityAddChecklistBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //날짜
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
         binding.addCheckliSelectDateTv.text = dateStamp
+        Log.d("날짜", "오늘 날짜: ${today}")
 
         //리사이클러뷰 연결
         addChecklistRVAdapter = AddChecklistRVAdapter()
@@ -104,24 +107,26 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //인텐트 정보 추출
         val checkUserId = intent.getStringExtra("checkUserId")
-        val checkUserName = intent.getStringExtra("checkUserName")
 
         //현재 체크리스트 불러오기
         readApi(service, checkUserId!!)
 
-        //이름 설정
-        binding.checkliAddTvName.text = checkUserName
-
         //체크리스트 추가 동작
         binding.addCheckliEtContents.setOnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
-                //체크리스트 추가 코드
+                //체크리스트 객체 생성 코드
                 val text = binding.addCheckliEtContents.text.toString()
                 val dateList = selectedDateText.split("-")
-                val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+                val todayList = today.split("-")
+                val addChecklist = AddChecklist(checkUserId, todayList[0].toInt(), todayList[1].toInt(), todayList[2].toInt(), text)
                 Log.d("체크리스트 값 확인", "${addChecklist}")
+
+                //체크리스트 추가 api
                 addApi(service, addChecklist)
+
+                //체크리스트 변환된 거 불러오기
                 readApi(service, checkUserId!!)
+                binding.addCheckliEtContents.text.clear()
             }
             true
         }
@@ -153,7 +158,7 @@ class AddChecklistActivity : AppCompatActivity() {
         val readCall : Call<Root> = service.getChecklist(
             userId,
             true,
-            "2024-02-15"
+            today
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -169,6 +174,7 @@ class AddChecklistActivity : AppCompatActivity() {
                     result?.let {
                         addChecklistRVAdapter.setChecklistData(it)
                         addChecklistRVAdapter.notifyDataSetChanged()
+                        binding.checkliAddTvName.text = result?.get(0)?.receiver
                     }
                 }
             }
