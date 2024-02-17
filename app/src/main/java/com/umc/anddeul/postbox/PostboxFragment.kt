@@ -30,6 +30,7 @@ import com.umc.anddeul.postbox.service.MailService
 import com.umc.anddeul.postbox.service.QuestionService
 import com.umc.anddeul.postbox.service.TextService
 import com.umc.anddeul.postbox.service.VoiceService
+import com.umc.anddeul.pot.PotFragment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
