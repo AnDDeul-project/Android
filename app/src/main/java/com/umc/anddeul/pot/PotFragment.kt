@@ -1,4 +1,4 @@
-package com.umc.anddeul.postbox
+package com.umc.anddeul.pot
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -52,6 +52,7 @@ class PotFragment : Fragment() {
         val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
         val spfMyId : SharedPreferences = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+//        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -139,7 +140,7 @@ class PotFragment : Fragment() {
                     Log.d("사랑주기", "root: ${root}")
                     val result : Result? = root?.result
                     Log.d("사랑주기", "result: ${result}")
-                    val changedImg : List<ChangedImg>? = result?.changed_img
+                    var changedImg : MutableList<ChangedImg>? = result?.changed_img
                     Log.d("사랑주기", "img: ${changedImg}")
 
                     result.let {
@@ -157,6 +158,7 @@ class PotFragment : Fragment() {
                         val loadGauge = LoadImage(binding.potImageGauge)
                         loadGauge.execute(it?.get(0)?.gauge)
                     }
+                    changedImg?.removeAt(0)
                 }
             }
 

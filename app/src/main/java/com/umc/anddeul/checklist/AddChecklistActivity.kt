@@ -84,8 +84,7 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //토큰 가져오기
         val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
-
+        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -118,7 +117,7 @@ class AddChecklistActivity : AppCompatActivity() {
                 val text = binding.addCheckliEtContents.text.toString()
                 val dateList = selectedDateText.split("-")
                 val todayList = today.split("-")
-                val addChecklist = AddChecklist(checkUserId, todayList[0].toInt(), todayList[1].toInt(), todayList[2].toInt(), text)
+                val addChecklist = AddChecklist("3305756980", todayList[0].toInt(), todayList[1].toInt(), todayList[2].toInt(), text)
                 Log.d("체크리스트 값 확인", "${addChecklist}")
 
                 //체크리스트 추가 api

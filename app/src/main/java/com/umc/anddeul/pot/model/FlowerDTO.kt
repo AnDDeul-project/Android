@@ -16,7 +16,7 @@ data class LoveRoot (
 
 data class Result (
     val point : Int,
-    val changed_img : List<ChangedImg>
+    val changed_img :MutableList<ChangedImg>
 )
 
 data class ChangedImg (
