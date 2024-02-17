@@ -220,6 +220,8 @@ class PostboxFragment : Fragment() {
                                     binding.recordInfo4.visibility = View.GONE
                                     binding.letterEt.visibility = View.VISIBLE
                                     letterType = ""
+                                    val postSendPopupFragment = DialogPostSendFragment(requireContext())
+                                    postSendPopupFragment.show()
                                 }
                             }
                         }
@@ -235,6 +237,8 @@ class PostboxFragment : Fragment() {
                                         //텍스트 초기화
                                         binding.letterEt.setText("")
                                         letterType = ""
+                                        val postSendPopupFragment = DialogPostSendFragment(requireContext())
+                                        postSendPopupFragment.show()
                                     }
                                 }
                             }
