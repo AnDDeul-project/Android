@@ -102,9 +102,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
                         android:fontFamily="@font/font_pretendard_bold"
-                        android:text="서비스 이용약관 (필수)"
-                        android:textSize="14sp"
+                        android:text="개인정보 처리 약관 동의 (필수)"
                         android:textColor="@color/secondary"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -163,7 +163,7 @@
                             android:paddingTop="15dp">
 
                             <TextView
-                                android:id="@+id/textViewq22"
+                                android:id="@+id/termsText1"
                                 android:layout_width="296dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/font_pretendard_regular"
@@ -210,9 +210,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
                         android:fontFamily="@font/font_pretendard_bold"
-                        android:text="개인정보처리 동의 (필수)"
-                        android:textSize="14sp"
+                        android:text="데이터 정책 동의 (필수)"
                         android:textColor="@color/secondary"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -260,6 +260,7 @@
                     <ScrollView
                         android:layout_width="328dp"
                         android:layout_height="160dp"
+                        android:nestedScrollingEnabled="true"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView151"
                         app:layout_constraintEnd_toEndOf="@+id/imageView151"
                         app:layout_constraintStart_toStartOf="@+id/imageView151"
@@ -271,7 +272,7 @@
                             android:paddingTop="15dp">
 
                             <TextView
-                                android:id="@+id/textView22"
+                                android:id="@+id/termsText2"
                                 android:layout_width="296dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/font_pretendard_regular"
@@ -291,7 +292,8 @@
                     android:id="@+id/terms3"
                     android:layout_width="409dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp">
+                    android:layout_marginTop="24dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/termNotChecked3"
@@ -319,8 +321,8 @@
                         android:layout_marginStart="50dp"
                         android:fontFamily="@font/font_pretendard_bold"
                         android:text="알림 서비스 수락 (선택)"
-                        android:textSize="14sp"
                         android:textColor="@color/secondary"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
