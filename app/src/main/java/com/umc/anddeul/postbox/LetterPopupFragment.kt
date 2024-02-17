@@ -49,13 +49,13 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
 
                     if (content.voice == 0.toLong()){
                         binding.letterPop1.text = mailDTO.post[0].content
-                        binding.letterPop1.visibility = View.VISIBLE
+                        binding.letterPop2.visibility = View.VISIBLE
                         binding.recordPop2.visibility = View.GONE
                         binding.recordPop3.visibility = View.GONE
                         binding.recordPop4.visibility = View.GONE
                     }
                     else {
-                        binding.letterPop1.visibility = View.GONE
+                        binding.letterPop2.visibility = View.GONE
                         binding.recordPop2.visibility = View.VISIBLE
                         binding.recordPop3.visibility = View.VISIBLE
                         binding.recordPop4.visibility = View.VISIBLE
