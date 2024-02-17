@@ -59,7 +59,7 @@
         android:id="@+id/my_post_emoji_ib"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/ic_home_emoji"
+        android:src="@drawable/emoji_btn"
         android:background="@color/background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_post_image_vp"
@@ -91,7 +91,7 @@
             />
 
         <ImageButton
-            android:id="@+id/user_post_emoji_laugh"
+            android:id="@+id/my_post_emoji_laugh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -102,7 +102,7 @@
             />
 
         <ImageButton
-            android:id="@+id/user_post_emoji_sad"
+            android:id="@+id/my_post_emoji_sad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -113,6 +113,76 @@
 
 
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/my_post_emoji_happy_layout"
+        android:layout_width="65dp"
+        android:layout_height="34dp"
+        android:background="@drawable/emoji_back_non_select"
+        app:layout_constraintStart_toEndOf="@id/my_post_emoji_ib"
+        app:layout_constraintTop_toBottomOf="@+id/my_post_image_vp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="13dp">
+
+        <ImageView
+            android:id="@+id/my_post_emoji_happy_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_heart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/my_post_emoji_happy_count"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/my_post_emoji_happy_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textColor="@color/primary"
+            android:textSize="16sp"
+            android:fontFamily="@font/font_pretendard_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/my_post_emoji_happy_one"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/my_post_emoji_fun_layout"
+        android:layout_width="65dp"
+        android:layout_height="34dp"
+        android:background="@drawable/emoji_back_non_select"
+        app:layout_constraintStart_toEndOf="@id/my_post_emoji_happy_layout"
+        app:layout_constraintTop_toBottomOf="@+id/my_post_image_vp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="13dp">
+
+        <ImageView
+            android:id="@+id/my_post_emoji_fun_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_fun"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/my_post_emoji_fun_count"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/my_post_emoji_fun_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textColor="@color/primary"
+            android:textSize="16sp"
+            android:fontFamily="@font/font_pretendard_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/my_post_emoji_fun_one"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <TextView
