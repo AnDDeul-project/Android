@@ -111,7 +111,6 @@ class PostboxFragment : Fragment() {
 
         //// 랜덤 질문
         // api 연결
-        Log.d("확인1", "${loadedToken}")
         val questionService = QuestionService()
         questionService.randomQuestion(loadedToken) { questionDTO ->
             if (questionDTO != null) {
@@ -219,6 +218,7 @@ class PostboxFragment : Fragment() {
                                     binding.recordInfo2.visibility = View.GONE
                                     binding.recordInfo3.visibility = View.GONE
                                     binding.recordInfo4.visibility = View.GONE
+                                    binding.letterEt.visibility = View.VISIBLE
                                     letterType = ""
                                 }
                             }
