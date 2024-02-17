@@ -39,7 +39,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".home.PostWriteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -76,7 +77,8 @@
         <activity android:name=".invite.JoinGroupCodeActivity" />
         <activity android:name=".invite.JoinGroupSendActivity" />
         <activity android:name=".home.PostUploadActivity" />
-        <activity android:name=".home.PostModifyActivity" />
+        <activity android:name=".home.PostModifyActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".checklist.AddChecklistActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"

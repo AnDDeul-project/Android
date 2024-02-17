@@ -62,7 +62,7 @@ class PostModifyActivity : AppCompatActivity() {
         val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
         // val token = spf.getString("jwtToken", "")
         val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMjkzNjU1Njg2Il0sImlhdCI6MTcwNzU3NzEwM30.YUGCoUltwrvyj8FQdP0nxJKT5OMjZHUX2aLlS8XjLq8"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")

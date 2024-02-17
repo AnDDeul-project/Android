@@ -1,6 +1,7 @@
 package com.umc.anddeul.mypage
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -14,9 +15,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMyPostBinding
 import com.umc.anddeul.databinding.FragmentUserPostBinding
+import com.umc.anddeul.home.DeleteDialog
 import com.umc.anddeul.home.LoadProfileImage
+import com.umc.anddeul.home.PostModifyActivity
 import com.umc.anddeul.home.PostVPAdapter
 import com.umc.anddeul.home.model.OnePostDTO
+import com.umc.anddeul.home.model.OnePostData
 import com.umc.anddeul.home.model.PostData
 import com.umc.anddeul.home.network.OnePostInterface
 import okhttp3.OkHttpClient
@@ -100,7 +104,7 @@ class MyPostFragment : Fragment() {
 
                         // 메뉴 설정 (수정, 삭제)
                         binding.myPostMenu.setOnClickListener {
-                            //showPopupMenu()
+                            showPopupMenu(it, postData)
                         }
 
                         // 프로필 사진 설정
@@ -125,32 +129,51 @@ class MyPostFragment : Fragment() {
         })
     }
 
-//    private fun showPopupMenu(view: View, postData: PostData) {
-//        val popupMenu = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenuStyle)
-//
-//        popupMenu.inflate(R.menu.home_upload_my_menu)
-//
-//        val postIdx = postData.post_idx
-//        val postImages = postData.picture
-//        val postContent = postData.content
-//        // 팝업 메뉴 버튼 클릭 시
-//        popupMenu.setOnMenuItemClickListener { menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.home_my_upload_menu_modify -> {
-//                    // 수정하기
-//                    mItemClickListener.onModifyClick(postIdx, postImages, postContent)
-//                    true
-//                }
-//                R.id.home_my_upload_menu_delete -> {
-//                    // 삭제하기
-//                    mItemClickListener.onDeleteClick(postIdx)
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
-//
-//        popupMenu.show()
-//
-//    }
+    private fun showPopupMenu(view: View, postData: OnePostData) {
+        val popupMenu = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenuStyle)
+
+        popupMenu.inflate(R.menu.home_upload_my_menu)
+
+        val postIdx = postData.post_idx
+        val postImages = postData.picture
+        val postContent = postData.content
+        // 팝업 메뉴 버튼 클릭 시
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home_my_upload_menu_modify -> {
+                    // 수정하기
+                    onModifyClick(postIdx, postImages, postContent)
+                    true
+                }
+                R.id.home_my_upload_menu_delete -> {
+                    // 삭제하기
+                    onDeleteClick(postIdx)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.show()
+
+    }
+
+    fun onDeleteClick(postId: Int) {
+        val deleteDialog = DeleteDialog(postId)
+        deleteDialog.isCancelable = false
+        deleteDialog.show(requireActivity().supportFragmentManager, "delete dialog")
+
+    }
+
+    fun onModifyClick(postId: Int, selectedImages: List<String>, postContent: String) {
+        val intent = Intent(requireContext(), PostModifyActivity::class.java)
+
+        intent.putStringArrayListExtra("selectedImages", ArrayList(selectedImages))
+        intent.putExtra("postId", postId)
+        intent.putExtra("postContent", postContent)
+
+        // 다음 액티비티 시작
+        startActivity(intent)
+    }
+
 }
