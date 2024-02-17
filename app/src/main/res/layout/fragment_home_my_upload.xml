@@ -41,8 +41,8 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/home_my_upload_image_vp"
-        android:layout_width="342dp"
-        android:layout_height="342dp"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_my_upload_profile_iv"

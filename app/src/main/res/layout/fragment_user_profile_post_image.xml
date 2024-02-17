@@ -7,9 +7,10 @@
 
     <ImageView
         android:id="@+id/user_profile_post_iv"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="145dp"
+        android:layout_height="145dp"
         android:src="@drawable/img_upload_feed"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

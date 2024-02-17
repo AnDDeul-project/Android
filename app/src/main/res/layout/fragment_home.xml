@@ -13,10 +13,12 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/home_tb"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="77dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/background"
+            android:elevation="10dp">
 
             <ImageView
                 android:id="@+id/home_toolbar_logo_iv"
@@ -36,6 +38,14 @@
                 android:src="@drawable/ic_home_hamburger_menu" />
 
         </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_200"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_tb"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/home_floating_bt"

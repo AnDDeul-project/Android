@@ -78,6 +78,8 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
         drawerLayout = binding.homeDrawerLayout
 
+        // 게시글 조회
+        loadPost()
         // 메뉴 가족 구성원 정보 가져오기
         loadMemberList()
 
@@ -241,7 +243,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                 Log.e("postService", "Failure message: ${t.message}")
             }
         })
-
     }
 
 
@@ -310,6 +311,10 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                         val imageView = binding.homeMenuMyProfileIv
                         val loadImage = LoadProfileImage(imageView)
                         loadImage.execute(profileImageUrl)
+
+                        // 내 프로필 사진, 이름 클릭 시 클릭 막기
+                        binding.homeMenuMyProfileNameIv.setOnClickListener {}
+                        binding.homeMenuMyProfileIv.setOnClickListener {}
 
                         // 가족 구성원 정보 리스트
                         val familyList = family.map { member ->
