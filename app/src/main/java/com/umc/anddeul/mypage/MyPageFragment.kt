@@ -85,6 +85,11 @@ class MyPageFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadMyProfile()
+    }
+
     fun checkPermission() {
         val permissionImages = android.Manifest.permission.READ_MEDIA_IMAGES
         val permissionVideos = android.Manifest.permission.READ_MEDIA_VIDEO

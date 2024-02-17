@@ -1,6 +1,7 @@
 package com.umc.anddeul.home
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,7 +14,17 @@ import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeMyUploadBinding
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
+import com.umc.anddeul.home.model.EmojiDTO
+import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.PostData
+import com.umc.anddeul.home.network.EmojiInterface
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class PostRVAdapter(private val context: Context, var postList: List<PostData>, var authorTypeList: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -101,7 +112,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
             binding.homeUploadUsernameTv.text = postData.nickname
             binding.homeUploadExplainTv.text = postData.content
             binding.homeUploadEmojiIb.setOnClickListener {
-                showEmojiPopup(binding)
+                showEmojiPopup(binding, postData.post_idx)
             }
 
             val profileImageUrl = postData.userImage
@@ -174,7 +185,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
         }
     }
 
-    fun showEmojiPopup(binding: FragmentHomeUploadBinding) {
+    fun showEmojiPopup(binding: FragmentHomeUploadBinding, postId: Int) {
 
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         binding.homeEmojiLinear.startAnimation(slideUpAnimation)
@@ -185,8 +196,54 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
 
         binding.homeEmojiHappy.setOnClickListener{
             // 이모티콘 선택과 관련된 작업 수행
-            binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.homeEmojiLinear.visibility = View.GONE
+            val spf: SharedPreferences = context.getSharedPreferences("myToken", Context.MODE_PRIVATE)
+            // val token = spf.getString("jwtToken", "")
+            val token =
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+
+            val retrofitBearer = Retrofit.Builder()
+                .baseUrl("http://umc-garden.store")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor { chain ->
+                            val request = chain.request().newBuilder()
+                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .build()
+                            Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
+                            chain.proceed(request)
+                        }
+                        .build()
+                )
+                .build()
+
+            val emojiService = retrofitBearer.create(EmojiInterface::class.java)
+            val emojiRequest = EmojiRequest("happy_emj")
+
+            emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+                override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
+                    Log.e("emojiService", "선택한 게시글 id : $postId")
+                    Log.e("emojiService", "onResponse code : ${response.code()}")
+                    Log.e("emojiService", "${response.body()}")
+
+                    val emojiResponse = response.body()?.result
+
+                    if (response.isSuccessful) {
+                        binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
+                        binding.homeEmojiLinear.visibility = View.GONE
+
+                        binding.homeEmojiHappyLayout.visibility = View.VISIBLE
+                        binding.homeEmojiHappyCount.text = emojiResponse?.happyEmj?.size.toString()
+                    }
+                }
+
+                override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                    Log.e("emojiService", "onFailure")
+                    Log.e("emojiService", "Failure message: ${t.message}")
+                }
+
+            })
+
 
         }
         binding.homeEmojiLaugh.setOnClickListener {
