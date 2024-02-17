@@ -102,14 +102,14 @@
         android:id="@+id/familyCntTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="388dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="24dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:text="3 명"
         android:textColor="@color/text_disabled"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
     <TextView
         android:id="@+id/inviteCodeTv"
@@ -128,9 +128,9 @@
         android:id="@+id/rvFamiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="259dp"
-        android:layout_marginTop="414dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toBottomOf="@+id/familyCntTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

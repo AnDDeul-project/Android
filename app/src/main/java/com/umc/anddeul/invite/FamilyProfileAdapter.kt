@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.umc.anddeul.databinding.ItemFamilyIconBinding
 import com.umc.anddeul.invite.model.FamilyImage
+import kotlin.math.min
 
 class FamilyProfileAdapter : RecyclerView.Adapter<FamilyProfileAdapter.FamilyProfileHolder>() {
     var families: List<FamilyImage>? = null
 
     override fun getItemCount(): Int {
-        return families?.size ?: 0
+        return min(families?.size ?: 0, 5)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FamilyProfileHolder {
@@ -43,7 +44,7 @@ class FamilyProfileAdapter : RecyclerView.Adapter<FamilyProfileAdapter.FamilyPro
             if (position > 0) {
                 outRect.left = -leftSpace
             } else {
-                outRect.left = 0  // No negative space for the first item
+                outRect.left = 0
             }
         }
     }
