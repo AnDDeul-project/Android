@@ -52,17 +52,4 @@
         app:layout_constraintStart_toEndOf="@+id/checkli_add_btn_checking"
         app:layout_constraintTop_toBottomOf="@+id/checkli_add_tv_checklist" />
 
-    <ImageView
-        android:id="@+id/checkli_add_iv_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkli_add_tv_writer"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_launcher_background"
-        tools:visibility="gone" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.CompleteCheck
 import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
+import com.umc.anddeul.checklist.model.TargetImg
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import kotlinx.coroutines.flow.callbackFlow
 import okhttp3.OkHttpClient
@@ -45,9 +46,9 @@ class ChecklistService(context : Context) {
         .build()
 
     val service = retrofit.create(ChecklistInterface::class.java)
-    fun readApi() {
+    fun readApi(checklist: Checklist) {
         val readCall : Call<Root> = service.getChecklist(
-            "3304133093",
+            "userId",
             false,
             "2024-02-12"
         )
@@ -75,9 +76,11 @@ class ChecklistService(context : Context) {
         })
     }
 
-    fun imgApi(file : File, checkId : Int) {
+    fun imgApi(targetImg: TargetImg) {
+        val checkId = targetImg.checklist.check_idx
+        val checkFile = targetImg.img
         val imgCall : Call<CheckImgRoot> = service.imgPic(
-            file,
+            checkFile,
             checkId
         )
         Log.d("이미지 추가", "imgCall: ${imgCall}")
@@ -93,7 +96,8 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         checkImg?.let {
-                            readApi()
+                            readApi(targetImg.checklist)
+                            completeApi(targetImg.checklist)
                         }
                     }
                 }
@@ -105,9 +109,9 @@ class ChecklistService(context : Context) {
         })
     }
 
-    fun completeApi() {
+    fun completeApi(checklist: Checklist) {
         val completeCall : Call<CompleteRoot> = service.complete(
-            17
+            checklist.check_idx
         )
         Log.d("완료", "completeCall : ${completeCall}")
         completeCall.enqueue(object : Callback<CompleteRoot> {
@@ -122,7 +126,7 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         check.let {
-                            readApi()
+                            readApi(checklist)
                         }
                     }
                 }

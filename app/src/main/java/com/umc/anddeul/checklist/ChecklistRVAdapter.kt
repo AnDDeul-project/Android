@@ -1,6 +1,7 @@
 package com.umc.anddeul.checklist
 
 import android.app.Activity
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.checklist.model.Checklist
+import com.umc.anddeul.checklist.model.TargetImg
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.databinding.ItemChecklistBinding
@@ -36,7 +38,8 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
     val CAMERA_REQUEST_CODE = 405
     val REQUEST_IMAGE_CAPTURE = 200
     var checklist: List<Checklist>? = null
-//    val checklistService = ChecklistService(context)
+    lateinit var targetList : Checklist
+    lateinit var file : File
 
     override fun getItemCount(): Int {
         return checklist?.size ?: 0
@@ -60,15 +63,15 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         //카메라 앱 연동 함수
         holder.binding.checkliBtnCamera.setOnClickListener {
             Log.d("카메라", "클릭")
-            checkCameraPermission()
-//            checklistService.completeApi()
+            checkCameraPermission(checklist!!.get(position))
+//            targetList = checklist!!.get(position)
+//            ChecklistService(context).imgApi(targetList)
 
             //체크
             holder.binding.checkliBtnChecking.visibility = View.INVISIBLE
             holder.binding.checkliBtnChecked.visibility = View.VISIBLE
             holder.binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
             holder.binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
-
         }
 
     }
@@ -77,9 +80,11 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         fun bind(checklist : Checklist) {
             binding.checkliTvChecklist.text = checklist?.content
             binding.checkliTvWriter.text = checklist?.sender + "님이 남기셨습니다."
-            if (binding.checkliIvPhoto != null) {
+            if (checklist.picture != null) {
                 binding.checkliIvPhoto.visibility = View.VISIBLE
                 val loadCheckImg = LoadCheckImg(binding.checkliIvPhoto)
+                Log.d("사진", "load Img: ${loadCheckImg}")
+                Log.d("사진", "넣을 사진 값: ${checklist.picture}")
                 loadCheckImg.execute(checklist.picture)
             } else {
                 binding.checkliIvPhoto.visibility = View.GONE
@@ -96,6 +101,10 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
     lateinit var currentPhotoPath: String   // 현재 이미지 파일의 경로 저장
     var currentPhotoFileName: String? = null
 
+    fun getTarget() : TargetImg {
+        return TargetImg(targetList, file)
+    }
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -110,7 +119,7 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         return file
     }
 
-    fun checkCameraPermission() {
+    fun checkCameraPermission(checklist: Checklist) {
         Log.d("카메라", "권한 함수")
         if (ContextCompat.checkSelfPermission(
                 context,
@@ -128,13 +137,12 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         } else {
             // 권한이 이미 허용되어 있으면 카메라 열기
             Log.d("카메라", "권한 허용 되어있음")
-            openCamera()
+            openCamera(checklist)
         }
     }
 
-    fun openCamera() {
-        val activity = context as? MainActivity
-        activity.let {
+    fun openCamera(checklist: Checklist) {
+
             Log.d("카메라", "dispatchTakePictureIntent 호출 완료")
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             Log.d("카메라", "takePictureIntent 생성 완료")
@@ -154,16 +162,16 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                         "com.umc.anddeul.fileprovider",
                         it
                     )
-                    Log.d("카메라", "file : ${photoURI}")
+                    Log.d("카메라", "file : ${photoFile}, ${photoURI}")
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     (context as Activity).startActivityForResult(
                         takePictureIntent,
-                        CAMERA_REQUEST_CODE
+                        CAMERA_REQUEST_CODE,
                     )
                     Log.d("카메라", "startActivityForResult")
-                    ChecklistService(context).imgApi(photoFile!!, 17) //되려나
+                    file = photoFile
                 }
-            }
+
         }
     }
 }

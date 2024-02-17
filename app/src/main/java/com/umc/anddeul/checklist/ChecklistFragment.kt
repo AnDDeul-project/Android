@@ -101,9 +101,11 @@ class ChecklistFragment : Fragment() {
         selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
         Log.d("날짜", "${selectedDateText}")
 
-        //토큰 가져오기
+        //spf 받아오기
         val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val spfMyId : SharedPreferences = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val spfMyId : String = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE).toString()
+
+        //토큰 가져오기
         val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -128,7 +130,7 @@ class ChecklistFragment : Fragment() {
         val readCall : Call<Root> = service.getChecklist(
             "3304133093",
             false,
-            "2024-02-12"
+            "2000-12-05"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -154,21 +156,17 @@ class ChecklistFragment : Fragment() {
         })
 
         binding.checkliTvTodaylist.setOnClickListener {
-            completeApi(service)
-        }
-
-        binding.checkliTvName.setOnClickListener {
-            checklistRVAdapter.checkCameraPermission()
+            completeApi(service, spfMyId)
         }
 
         return binding.root
     }
 
-    fun readApi(service : ChecklistInterface) {
+    fun readApi(service : ChecklistInterface, spfMyId : String) {
         val readCall : Call<Root> = service.getChecklist(
             "3304133093",
             false,
-            "2024-02-12"
+            "2000-12-05"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -184,6 +182,7 @@ class ChecklistFragment : Fragment() {
                     result?.let {
                         checklistRVAdapter.setChecklistData(it)
                         checklistRVAdapter.notifyDataSetChanged()
+                        binding.checkliTvName.text = result?.get(0)?.receiver
                     }
                 }
             }
@@ -194,7 +193,7 @@ class ChecklistFragment : Fragment() {
         })
     }
 
-    fun completeApi(service: ChecklistInterface) {
+    fun completeApi(service: ChecklistInterface, spfMyId : String) {
         val completeCall : Call<CompleteRoot> = service.complete(
             17
         )
@@ -211,7 +210,7 @@ class ChecklistFragment : Fragment() {
 
                     if (root?.isSuccess == true) {
                         check.let {
-                            readApi(service)
+                            readApi(service, spfMyId)
                         }
                     }
                 }

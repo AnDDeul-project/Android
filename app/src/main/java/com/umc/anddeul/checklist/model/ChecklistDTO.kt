@@ -9,5 +9,6 @@ data class Checklist (
     val complete : Int,
     val picture : String,
     val content : String,
-    val sender : String
+    val sender : String,
+    val receiver : String
 )
