@@ -8,13 +8,14 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="378dp"
+        android:layout_width="380dp"
         android:layout_height="225dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/img_recordbox" />
+        app:srcCompat="@drawable/postbox_img_recordbox" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -25,7 +26,7 @@
         app:layout_constraintHorizontal_bias="0.472"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="@+id/imageView4"
-        app:srcCompat="@drawable/img_recordbar" />
+        app:srcCompat="@drawable/postbox_img_recordbar" />
 
     <ImageView
         android:id="@+id/recordPlayBtn"
@@ -35,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:srcCompat="@drawable/img_record_play_button" />
+        app:srcCompat="@drawable/postbox_img_record_play_button" />
 
     <ImageView
         android:id="@+id/recordPauseBtn"
@@ -45,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:srcCompat="@drawable/img_record_pause_button"
+        app:srcCompat="@drawable/postbox_ic_pause_button"
         android:visibility="gone"/>
 
     <TextView
@@ -55,6 +56,7 @@
         android:layout_marginTop="24dp"
         android:text="음성 메세지"
         android:textSize="20sp"
+        android:textColor="@color/text_high"
         android:fontFamily="@font/font_pretendard_bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
@@ -66,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="최대 50초 녹음 가능"
+        android:textColor="#686868"
         android:fontFamily="@font/font_pretendard_regular"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
@@ -75,23 +78,11 @@
         android:id="@+id/okBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="18dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:srcCompat="@drawable/img_ok_button1" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="확인"
-        android:textColor="@color/onPrimary"
-        android:fontFamily="@font/font_pretendard_bold"
-        app:layout_constraintBottom_toBottomOf="@+id/okBtn"
-        app:layout_constraintEnd_toEndOf="@+id/okBtn"
-        app:layout_constraintStart_toStartOf="@+id/okBtn"
-        app:layout_constraintTop_toTopOf="@+id/okBtn" />
+        app:srcCompat="@drawable/postbox_img_ok_button1" />
 
     <TextView
         android:id="@+id/timerTv"
@@ -110,10 +101,10 @@
         android:id="@+id/restartBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:srcCompat="@drawable/ic_restart_button"
+        app:srcCompat="@drawable/postbox_ic_restart_button"
         android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

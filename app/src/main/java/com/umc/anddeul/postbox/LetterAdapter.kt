@@ -27,9 +27,9 @@ class LetterAdapter : RecyclerView.Adapter<LetterAdapter.LetterHolder>() {
     override fun onBindViewHolder(holder: LetterHolder, position: Int) {
         holder.itemBinding.letterNm.text = letters?.get(position)?.senderIdx
         if (letters?.get(position)?.isRead == 1.toLong()){
-            holder.itemBinding.miniLetterIv.setImageResource(R.drawable.ic_post2)
+            holder.itemBinding.miniLetterIv.setImageResource(R.drawable.postbox_ic_post2)
         } else {
-            holder.itemBinding.miniLetterIv.setImageResource(R.drawable.ic_post)
+            holder.itemBinding.miniLetterIv.setImageResource(R.drawable.postbox_ic_post)
         }
         holder.itemBinding.root.setOnClickListener{
             itemClickListener?.onItemClickListener(it, position)
