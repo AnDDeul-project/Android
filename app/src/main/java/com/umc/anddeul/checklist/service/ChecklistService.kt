@@ -3,8 +3,6 @@ package com.umc.anddeul.checklist.service
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.AddRoot
 import com.umc.anddeul.checklist.model.CheckImg
@@ -13,7 +11,6 @@ import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.CompleteCheck
 import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
-import com.umc.anddeul.checklist.model.TargetImg
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import kotlinx.coroutines.flow.callbackFlow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -32,8 +29,7 @@ class ChecklistService(context : Context) {
 
     //토큰 가져오기
     val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-    val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMjkzNjU1Njg2Il0sImlhdCI6MTcwNTY5ODI5OX0.9IWWuq_wRaZI_g-f8rpq4iiMrf12JhAUP2tLbsEvFCo"
-//    val token = spf.getString("jwtToken", "")
+    val token = spf.getString("jwtToken", "")
 
     val retrofit = Retrofit.Builder()
         .baseUrl("http://umc-garden.store")

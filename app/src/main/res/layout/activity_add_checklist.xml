@@ -9,12 +9,14 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:background="@color/background"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -29,6 +31,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/calendar_circle" />
+
+            <ImageView
+                android:id="@+id/add_checklist_selectCircle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="180dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/calendar_circle2" />
 
             <TextView
                 android:id="@+id/date1"
@@ -261,9 +274,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="125dp"
+                android:fontFamily="@font/font_pretendard_bold"
                 android:text="TextView"
                 android:textSize="14sp"
-                android:fontFamily="@font/font_pretendard_bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -287,9 +300,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="28dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addCheckli_todayCircle"
+                app:layout_constraintTop_toBottomOf="@+id/date1"
                 app:srcCompat="@drawable/checkli_img_add_circle" />
 
             <EditText
@@ -297,7 +310,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="30dp"
                 android:background="@null"
                 android:drawableEnd="@drawable/checkli_img_inkpen"
                 android:fontFamily="@font/pretendard_bold"
@@ -307,14 +320,14 @@
                 android:textColor="@color/grey_500"
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/add_checkli_et_circle"
-                app:layout_constraintTop_toBottomOf="@+id/addCheckli_todayCircle" />
+                app:layout_constraintTop_toBottomOf="@+id/date1" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/checklist_add_recylerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="300dp"
+                android:layout_marginTop="285dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

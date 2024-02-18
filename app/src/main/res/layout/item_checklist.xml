@@ -35,13 +35,14 @@
 
     <TextView
         android:id="@+id/checkli_tv_checklist"
-        android:layout_width="wrap_content"
+        android:layout_width="248dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="22dp"
         android:fontFamily="@font/pretendard_bold"
-        android:lineSpacingExtra="22dp"
+        android:lineSpacingExtra="2dp"
         android:text="체크리스트 내용"
+        android:maxLines="4"
         android:textColor="@color/secondary"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/checkli_btn_checking"
