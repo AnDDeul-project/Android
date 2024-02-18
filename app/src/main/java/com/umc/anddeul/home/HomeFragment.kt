@@ -359,6 +359,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                                 // 체크리스트 화면으로 이동
                                 val intent = Intent(context, AddChecklistActivity::class.java)
                                 intent.putExtra("checkUserId", memberData.snsId)
+                                intent.putExtra("checkUserName", memberData.nickname)
                                 startActivity(intent)
                             }
                         }
