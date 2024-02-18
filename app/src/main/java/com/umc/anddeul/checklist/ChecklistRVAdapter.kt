@@ -66,20 +66,22 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
 
         //카메라 앱 연동 함수
         holder.binding.checkliBtnCamera.setOnClickListener {
-            Log.d("카메라", "클릭")
             //함수 호출
-            checkCameraPermission(checklist!!.get(position))
             currentChecklist = checklist!!.get(position)
+            checkCameraPermission(currentChecklist)
 
-            val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
-            Log.d("onBindView 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
+            val delayMillis : Long = 2000
+            holder.binding.checkliBtnCamera.postDelayed({
+                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
+                Log.d("delay 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
+                ChecklistService(context).imgApi(currentChecklist, file!!)
+            }, delayMillis)
 
             //체크
-            checking(holder.binding)
+//            checking(holder.binding)
         }
 
         holder.binding.checkliBtnChecking.setOnClickListener {
-            Log.d("checklist 확인", "checklist: ${checklist!!.get(position)}")
             //complete
             ChecklistService(context).completeApi(checklist!!.get(position))
             //체크
@@ -102,8 +104,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             if (checklist.picture != null) {
                 binding.checkliIvPhoto.visibility = View.VISIBLE
                 val loadCheckImg = LoadCheckImg(binding.checkliIvPhoto)
-                Log.d("사진", "load Img: ${loadCheckImg}")
-                Log.d("사진", "넣을 사진 값: ${checklist.picture}")
                 loadCheckImg.execute(checklist.picture)
             } else {
                 binding.checkliIvPhoto.visibility = View.GONE
@@ -125,7 +125,11 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 //        storageDir?.mkdirs()
 
-        val file = File("${storageDir?.path}/${timeStamp}.jpg")
+        val file = File.createTempFile(
+            timeStamp,
+            ".jpg",
+            storageDir
+        )
 //        val file = File("${storageDir?.path}${File.separator}${timeStamp}.jpg")
         Log.d("카메라", "file ${file}")
 
@@ -145,28 +149,22 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             // 권한이 없으면 권한 요청
-            Log.d("카메라", "권한 요청")
             ActivityCompat.requestPermissions(
                 context as Activity,
                 arrayOf(android.Manifest.permission.CAMERA),
                 CAMERA_REQUEST_CODE
             )
-            Log.d("카메라", "권한 요청 성공")
+
         } else {
             // 권한이 이미 허용되어 있으면 카메라 열기
-            Log.d("카메라", "권한 허용 되어있음")
             openCamera(checklist)
         }
     }
 
     fun openCamera(checklist: Checklist) {
-
-            Log.d("카메라", "dispatchTakePictureIntent 호출 완료")
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            Log.d("카메라", "takePictureIntent 생성 완료")
             if (takePictureIntent.resolveActivity(context.packageManager) != null) {
                 // 파일을 저장할 디렉토리 생성
-                Log.d("카메라", "인텐트")
                 val photoFile: File? = try {
                     val file = createImageFile()
                     Log.d("파일 생성 위치", "파일 경로: ${file.absolutePath}")
@@ -183,10 +181,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                         "com.umc.anddeul.fileprovider",
                         it
                     )
-                    Log.d("카메라", "file : ${photoFile}")
-                    val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
-                    Log.d("openCamera 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
-
                     if (file == photoFile) {
                         Log.d("같은 파일", "${photoFile}")
                     }
@@ -195,14 +189,8 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                         takePictureIntent,
                         CAMERA_REQUEST_CODE,
                     )
-                    Log.d("카메라", "startActivityForResult")
                 }
-                Log.d("카메라 체크리스트", "해당 체크리스트: ${checklist}")
                 currentChecklist = checklist
-                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
-                Log.d("openCamera 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
-//                ChecklistService(context).imgApi(checklist, photoFile!!)
-
             }
         }
     }

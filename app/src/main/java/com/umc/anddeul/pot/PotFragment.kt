@@ -51,8 +51,8 @@ class PotFragment : Fragment() {
         //토큰 가져오기
         val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
         val spfMyId : SharedPreferences = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
-//        val token = spf.getString("jwtToken", "")
+//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -131,28 +131,22 @@ class PotFragment : Fragment() {
 
     fun giveLove(service: PotInterface) {
         val loveCall: Call<LoveRoot> = service.giveLove()
-        Log.d("사랑주기", "loveCall: ${loveCall}")
         loveCall.enqueue(object : Callback<LoveRoot> {
             override fun onResponse(call: Call<LoveRoot>, response: Response<LoveRoot>) {
                 Log.d("사랑주기", "Response: ${response}")
                 if(response.isSuccessful) {
                     val root : LoveRoot? = response.body()
-                    Log.d("사랑주기", "root: ${root}")
                     val result : Result? = root?.result
-                    Log.d("사랑주기", "result: ${result}")
                     var changedImg : List<ChangedImg>? = result?.changed_img
                     Log.d("사랑주기", "img: ${changedImg}")
 
                     result.let {
-                        Log.d("사랑주기", "하트포인트 변환: ${it?.point}")
                         binding.potTvHeartPoint.text = it?.point.toString()
                     }
                     changedImg.let {
-                        Log.d("사랑주기", "꽃 사진: ${it?.get(0)?.img_3}")
-                        Log.d("사랑주기", "프로그레스바: ${it?.get(1)?.gauge}")
                         //꽃 사진 변경
                         val laodFlower = LoadImage(binding.potImgPlants)
-                        laodFlower.execute(it?.get(0)?.img_3)
+                        laodFlower.execute(it?.get(0)?.img)
 
                         //프로그레스바 이미지 변경
                         val loadGauge = LoadImage(binding.potImageGauge)
