@@ -3,7 +3,6 @@ package com.umc.anddeul.postbox
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,11 +78,9 @@ class LetterListFragment : Fragment() {
         letterlistAdapter = LetterListAdapter()
 
         val today = selectedDate
-        Log.d("해당날짜", today.toString())
         val loadedToken = loadJwt() // jwt토큰
         val mailService = MailService()
         mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
-            Log.d("확2", mailDTO.toString())
             if (mailDTO != null) {
                 if (mailDTO.isSuccess.toString() == "true") {
                     letterlistAdapter.letters = mailDTO.post
