@@ -68,9 +68,10 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         holder.binding.checkliBtnCamera.setOnClickListener {
             //함수 호출
             currentChecklist = checklist!!.get(position)
+            ChecklistService(context).completeApi(currentChecklist)
             checkCameraPermission(currentChecklist)
 
-            val delayMillis : Long = 2000
+            val delayMillis : Long = 1000 * 13
             holder.binding.checkliBtnCamera.postDelayed({
                 val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
                 Log.d("delay 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
@@ -78,7 +79,7 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             }, delayMillis)
 
             //체크
-//            checking(holder.binding)
+            checking(holder.binding)
         }
 
         holder.binding.checkliBtnChecking.setOnClickListener {
@@ -181,9 +182,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                         "com.umc.anddeul.fileprovider",
                         it
                     )
-                    if (file == photoFile) {
-                        Log.d("같은 파일", "${photoFile}")
-                    }
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     (context as Activity).startActivityForResult(
                         takePictureIntent,
