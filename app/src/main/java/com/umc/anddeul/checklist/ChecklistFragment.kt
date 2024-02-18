@@ -104,10 +104,14 @@ class ChecklistFragment : Fragment() {
 
         //spf 받아오기
         val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val spfMyId : String = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE).toString()
+        val spfMyId = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val myId = spfMyId.getString("myId", "")
+        Log.d("myId", "${myId}")
+
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
 
         //토큰 가져오기
-        val token = spf.getString("jwtToken", "")
+//        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -129,9 +133,9 @@ class ChecklistFragment : Fragment() {
         val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         val readCall : Call<Root> = service.getChecklist(
-            "3304133093",
+            "3324185004",
             false,
-            "2000-12-05"
+            "2024-02-17"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -155,10 +159,6 @@ class ChecklistFragment : Fragment() {
                 Log.d("read 실패", "readCall: ${t.message}")
             }
         })
-
-        binding.checkliTvTodaylist.setOnClickListener {
-            completeApi(service, spfMyId)
-        }
 
         return binding.root
     }

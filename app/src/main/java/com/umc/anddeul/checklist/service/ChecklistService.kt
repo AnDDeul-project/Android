@@ -3,6 +3,8 @@ package com.umc.anddeul.checklist.service
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.AddRoot
 import com.umc.anddeul.checklist.model.CheckImg
@@ -14,7 +16,10 @@ import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.model.TargetImg
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import kotlinx.coroutines.flow.callbackFlow
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,11 +28,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 class ChecklistService(context : Context) {
-//    var checklistRVAdapter : ChecklistRVAdapter = ChecklistRVAdapter(context)
+    val checklistRVAdapter = ChecklistRVAdapter(context)
 
     //토큰 가져오기
     val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
     val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMjkzNjU1Njg2Il0sImlhdCI6MTcwNTY5ODI5OX0.9IWWuq_wRaZI_g-f8rpq4iiMrf12JhAUP2tLbsEvFCo"
+//    val token = spf.getString("jwtToken", "")
 
     val retrofit = Retrofit.Builder()
         .baseUrl("http://umc-garden.store")
@@ -48,9 +54,9 @@ class ChecklistService(context : Context) {
     val service = retrofit.create(ChecklistInterface::class.java)
     fun readApi(checklist: Checklist) {
         val readCall : Call<Root> = service.getChecklist(
-            "userId",
+            "3324185004",
             false,
-            "2024-02-12"
+            "2024-02-17"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -64,8 +70,8 @@ class ChecklistService(context : Context) {
                     Log.d("조회", "Result : ${result}")
 
                     result?.let {
-//                        checklistRVAdapter.setChecklistData(it)
-//                        checklistRVAdapter.notifyDataSetChanged()
+                        checklistRVAdapter.setChecklistData(it)
+                        checklistRVAdapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -76,12 +82,20 @@ class ChecklistService(context : Context) {
         })
     }
 
-    fun imgApi(targetImg: TargetImg) {
-        val checkId = targetImg.checklist.check_idx
-        val checkFile = targetImg.img
+    fun imgApi(checklist: Checklist, file: File) {
+        val checkId = checklist.check_idx
+        val checkFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        Log.d("이미지 추가", "checkId: ${checkId}, checkFile: ${checkFile}")
+
+        val imageFileRequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        val imagePart = MultipartBody.Part.createFormData("image", file.name, imageFileRequestBody)
+        val checkidRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), checkId.toString())
+
+        Log.d("이미지 추가", "imagePart: ${imagePart}, checkidRequestBody: ${checkidRequestBody}")
+
         val imgCall : Call<CheckImgRoot> = service.imgPic(
-            checkFile,
-            checkId
+            imagePart,
+            checkidRequestBody
         )
         Log.d("이미지 추가", "imgCall: ${imgCall}")
         imgCall.enqueue(object : Callback<CheckImgRoot> {
@@ -96,8 +110,8 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         checkImg?.let {
-                            readApi(targetImg.checklist)
-                            completeApi(targetImg.checklist)
+//                            readApi(checklist)
+//                            completeApi(checklist)
                         }
                     }
                 }
