@@ -244,6 +244,10 @@ class MyPostFragment : Fragment() {
                         binding.myPostEmojiFunOne.visibility = View.GONE
                         binding.myPostEmojiSadOne.visibility = View.GONE
                         binding.myPostEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.myPostEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if(emojiType == "laugh_emj") {
@@ -251,6 +255,10 @@ class MyPostFragment : Fragment() {
                         binding.myPostEmojiFunOne.visibility = View.VISIBLE
                         binding.myPostEmojiSadOne.visibility = View.GONE
                         binding.myPostEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.myPostEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if (emojiType == "sad_emj") {
@@ -258,6 +266,10 @@ class MyPostFragment : Fragment() {
                         binding.myPostEmojiFunOne.visibility = View.GONE
                         binding.myPostEmojiSadOne.visibility = View.VISIBLE
                         binding.myPostEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.myPostEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
