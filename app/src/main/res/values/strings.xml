@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Anddeul</string>
+    <string name="app_name">안뜰</string>
 
     <string name="kakao_app_key"></string>
     <string name="scheme_kakao_app_key"></string>
