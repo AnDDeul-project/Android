@@ -54,6 +54,11 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //인텐트 정보 추출
         val checkUserId = intent.getStringExtra("checkUserId")
+        val checkUserName = intent.getStringExtra("checkUserName")
+
+        //체크리스트 주인 이름
+        binding.checkliAddTvName.text = checkUserName
+        binding.addCheckliEtReader.text = checkUserName + "님에게 할 일을 남겨보세요"
 
         //날짜
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
@@ -92,6 +97,7 @@ class AddChecklistActivity : AppCompatActivity() {
         val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
         val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
 //        val token = spf.getString("jwtToken", "")
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())

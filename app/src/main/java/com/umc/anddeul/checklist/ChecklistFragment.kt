@@ -107,9 +107,12 @@ class ChecklistFragment : Fragment() {
         val spfMyId = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "")
         Log.d("myId", "${myId}")
+        val spfMyName = context!!.getSharedPreferences("checkUserName", Context.MODE_PRIVATE)
+        val myName = spfMyName.getString("checkUserName", "")
+
+        binding.checkliTvName.text = myName
 
         val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
-
         //토큰 가져오기
 //        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
@@ -137,16 +140,13 @@ class ChecklistFragment : Fragment() {
             false,
             "2024-02-17"
         )
-        Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
                 Log.d("api 조회", "Response ${response}")
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
-                    Log.d("조회", "Root : ${root}")
                     val result : List<Checklist>? = root?.checklist
-                    Log.d("조회", "Result : ${result}")
 
                     result?.let {
                         checklistRVAdapter.setChecklistData(it)
@@ -198,16 +198,13 @@ class ChecklistFragment : Fragment() {
         val completeCall : Call<CompleteRoot> = service.complete(
             17
         )
-        Log.d("완료", "completeCall : ${completeCall}")
         completeCall.enqueue(object : Callback<CompleteRoot> {
             override fun onResponse(call: Call<CompleteRoot>, response: Response<CompleteRoot>) {
-                Log.d("api 완료 변경", "Response ${response}")
+                Log.d("complete", "Response ${response}")
 
                 if (response.isSuccessful) {
                     val root : CompleteRoot? = response.body()
-                    Log.d("완료", "Complete Root : ${root}")
                     val check : CompleteCheck? = root?.check
-                    Log.d("완료", "Check: ${check}")
 
                     if (root?.isSuccess == true) {
                         check.let {

@@ -22,7 +22,7 @@ data class Result (
 )
 
 data class ChangedImg (
-    val img_3 : String?,
+    val img : String?,
     val gauge : String?
 )
 
