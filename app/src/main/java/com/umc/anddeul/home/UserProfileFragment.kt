@@ -52,13 +52,6 @@ class UserProfileFragment : Fragment() {
 
         loadProfile(snsId)
 
-        binding.userProfileCheckIv.setOnClickListener {
-            // 체크리스트 화면으로 이동
-            val intent = Intent(context, AddChecklistActivity::class.java)
-            intent.putExtra("checkUserId", snsId)
-            startActivity(intent)
-        }
-
         return  binding.root
     }
 
@@ -121,6 +114,14 @@ class UserProfileFragment : Fragment() {
                         val imageView = binding.userProfileIv
                         val loadImage = LoadProfileImage(imageView)
                         loadImage.execute(profileImageUrl)
+
+                        binding.userProfileCheckIv.setOnClickListener {
+                            // 체크리스트 화면으로 이동
+                            val intent = Intent(context, AddChecklistActivity::class.java)
+                            intent.putExtra("checkUserId", snsId)
+                            intent.putExtra("checkUserName", userProfileData.nickname)
+                            startActivity(intent)
+                        }
                     }
                 }
             }
