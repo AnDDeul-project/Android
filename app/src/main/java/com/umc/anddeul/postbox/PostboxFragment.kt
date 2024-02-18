@@ -6,7 +6,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -212,7 +211,6 @@ class PostboxFragment : Fragment() {
                         val questionRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.randomQTv.text.toString())
 
                         voiceService.sendVoice(loadedToken, memberRequestBody, questionRequestBody, recordPart) { voiceDTO ->
-                            Log.d("확2", voiceDTO.toString())
                             if (voiceDTO != null) {
                                 if (voiceDTO.isSuccess.toString() == "true") {
                                     binding.recordInfo1.visibility = View.GONE

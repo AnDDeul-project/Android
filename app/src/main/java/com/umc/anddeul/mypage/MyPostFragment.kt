@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMyPostBinding
-import com.umc.anddeul.databinding.FragmentUserPostBinding
 import com.umc.anddeul.home.DeleteDialog
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostModifyActivity
@@ -24,7 +23,6 @@ import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.OnePostDTO
 import com.umc.anddeul.home.model.OnePostData
-import com.umc.anddeul.home.model.PostData
 import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
 import okhttp3.OkHttpClient
@@ -68,9 +66,7 @@ class MyPostFragment : Fragment() {
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -92,7 +88,6 @@ class MyPostFragment : Fragment() {
 
         onePostService.onePost(postId).enqueue(object : Callback<OnePostDTO> {
             override fun onResponse(call: Call<OnePostDTO>, response: Response<OnePostDTO>) {
-                Log.e("myPostService", "onResponse")
                 Log.e("myPostService response code : ", "${response.code()}")
                 Log.e("myPostService response body : ", "${response.body()}")
 
@@ -128,7 +123,6 @@ class MyPostFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<OnePostDTO>, t: Throwable) {
-                Log.e("myPostService", "onFailure")
                 Log.e("myPostService", "Failure message: ${t.message}")
             }
         })
@@ -186,70 +180,96 @@ class MyPostFragment : Fragment() {
         binding.myPostEmojiLinear.startAnimation(slideUpAnimation)
         binding.myPostEmojiLinear.visibility = View.VISIBLE
 
+        binding.myPostEmojiHappy.setOnClickListener{
+            selectEmoji(postId, "happy_emj")
+        }
+        binding.myPostEmojiLaugh.setOnClickListener {
+            selectEmoji(postId, "laugh_emj")
+        }
+        binding.myPostEmojiSad.setOnClickListener {
+            selectEmoji(postId, "sad_emj")
+        }
+    }
+
+    fun selectEmoji(postId: Int, emojiType: String) {
         // 사라지는 애니메이션
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
-        binding.myPostEmojiHappy.setOnClickListener{
-            // 이모티콘 선택과 관련된 작업 수행
-            val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-            // val token = spf.getString("jwtToken", "")
-            val token =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val token = spf.getString("jwtToken", "")
 
-            val retrofitBearer = Retrofit.Builder()
-                .baseUrl("http://umc-garden.store")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(
-                    OkHttpClient.Builder()
-                        .addInterceptor { chain ->
-                            val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
-                                .build()
-                            Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                            chain.proceed(request)
-                        }
-                        .build()
-                )
-                .build()
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://umc-garden.store")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
 
-            val emojiService = retrofitBearer.create(EmojiInterface::class.java)
-            val emojiRequest = EmojiRequest("happy_emj")
+        val emojiService = retrofitBearer.create(EmojiInterface::class.java)
+        val emojiRequest = EmojiRequest(emojiType)
 
-            emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
-                override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
-                    Log.e("emojiService", "선택한 게시글 id : $postId")
-                    Log.e("emojiService", "onResponse code : ${response.code()}")
-                    Log.e("emojiService", "${response.body()}")
+        emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+            override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
+                Log.e("emojiService", "onResponse code : ${response.code()}")
+                Log.e("emojiService", "${response.body()}")
 
-                    val emojiResponse = response.body()?.result
+                val emojiResponse = response.body()?.result
 
-                    if (response.isSuccessful) {
-                        binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
-                        binding.myPostEmojiLinear.visibility = View.GONE
+                if (response.isSuccessful) {
+                    binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
+                    binding.myPostEmojiLinear.visibility = View.GONE
 
-                        binding.myPostEmojiHappyLayout.visibility = View.VISIBLE
+                    binding.myPostEmojiHappyLayout.visibility = View.VISIBLE
+
+                    if(emojiType == "happy_emj") {
+                        binding.myPostEmojiHappyOne.visibility = View.VISIBLE
+                        binding.myPostEmojiFunOne.visibility = View.GONE
+                        binding.myPostEmojiSadOne.visibility = View.GONE
                         binding.myPostEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.myPostEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+
+                    if(emojiType == "laugh_emj") {
+                        binding.myPostEmojiHappyOne.visibility = View.GONE
+                        binding.myPostEmojiFunOne.visibility = View.VISIBLE
+                        binding.myPostEmojiSadOne.visibility = View.GONE
+                        binding.myPostEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.myPostEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+
+                    if (emojiType == "sad_emj") {
+                        binding.myPostEmojiHappyOne.visibility = View.GONE
+                        binding.myPostEmojiFunOne.visibility = View.GONE
+                        binding.myPostEmojiSadOne.visibility = View.VISIBLE
+                        binding.myPostEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.myPostEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
-                    Log.e("emojiService", "onFailure")
-                    Log.e("emojiService", "Failure message: ${t.message}")
-                }
-            })
-        }
-        binding.myPostEmojiLaugh.setOnClickListener {
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.myPostEmojiLinear.visibility = View.GONE
+            override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                Log.e("emojiService", "Failure message: ${t.message}")
+            }
+        })
 
-        }
-        binding.myPostEmojiSad.setOnClickListener {
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.myPostEmojiLinear.visibility = View.GONE
-
-        }
     }
 
 }

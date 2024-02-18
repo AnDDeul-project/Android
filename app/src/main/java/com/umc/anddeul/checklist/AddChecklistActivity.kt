@@ -54,6 +54,11 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //인텐트 정보 추출
         val checkUserId = intent.getStringExtra("checkUserId")
+        val checkUserName = intent.getStringExtra("checkUserName")
+
+        //체크리스트 주인 이름
+        binding.checkliAddTvName.text = checkUserName
+        binding.addCheckliEtReader.text = checkUserName + "님에게 할 일을 남겨보세요"
 
         //날짜
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
@@ -90,8 +95,9 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //토큰 가져오기
         val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
-//        val token = spf.getString("jwtToken", "")
+//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+        val token = spf.getString("jwtToken", "")
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -170,16 +176,12 @@ class AddChecklistActivity : AppCompatActivity() {
             true,
             today
         )
-        Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
                 Log.d("api 조회", "Response ${response}")
-
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
-                    Log.d("조회", "Root : ${root}")
                     val result : List<Checklist>? = root?.checklist
-                    Log.d("조회", "Result : ${result}")
                     val checklist : Checklist? = root?.checklist?.get(0)
 
                     result?.let {

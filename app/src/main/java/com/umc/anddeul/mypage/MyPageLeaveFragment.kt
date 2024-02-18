@@ -79,9 +79,7 @@ class MyPageLeaveFragment : Fragment() {
 
     fun leaveAnddeul() {
         val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -103,7 +101,6 @@ class MyPageLeaveFragment : Fragment() {
 
         leaveService.leaveApp().enqueue(object : Callback<LeaveDTO> {
             override fun onResponse(call: Call<LeaveDTO>, response: Response<LeaveDTO>) {
-                Log.e("leaveService", "onResponse")
                 Log.e("leaveService", "${response.code()}")
                 Log.e("leaveService", "${response.body()}")
 
@@ -120,7 +117,6 @@ class MyPageLeaveFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<LeaveDTO>, t: Throwable) {
-                Log.e("leaveService", "onFailure")
                 Log.e("leaveService", "Failure message: ${t.message}")
             }
 

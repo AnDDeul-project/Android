@@ -110,8 +110,7 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         checkImg?.let {
-//                            readApi(checklist)
-//                            completeApi(checklist)
+                            readApi(checklist)
                         }
                     }
                 }
