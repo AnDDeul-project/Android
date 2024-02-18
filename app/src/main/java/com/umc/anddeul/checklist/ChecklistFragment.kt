@@ -58,7 +58,7 @@ class ChecklistFragment : Fragment() {
     lateinit var selectedDateText : String
     lateinit var checklistRVAdapter : ChecklistRVAdapter
     val today : String = SimpleDateFormat("yyyy-MM-dd").format(Date())
-    private lateinit var selectedDay: LocalDate
+    private var selectedDay: LocalDate = LocalDate.now()
     val CAMERA_REQUEST_CODE = 405
     val REQUEST_IMAGE_CAPTURE = 406
 
@@ -77,7 +77,7 @@ class ChecklistFragment : Fragment() {
 
         // 저번주
         binding.checkliBeforeBtn.setOnClickListener {
-            selectedDay = currentStartOfWeek.minusWeeks(1)
+            selectedDay = selectedDay.minusWeeks(1)
             val yearMonth = YearMonth.from(selectedDay)
             binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             setSelectedWeek(selectedDay)
@@ -85,7 +85,7 @@ class ChecklistFragment : Fragment() {
 
         // 다음주
         binding.checkliAfterBtn.setOnClickListener {
-            selectedDay = currentStartOfWeek.plusWeeks(1)
+            selectedDay = selectedDay.plusWeeks(1)
             val yearMonth = YearMonth.from(selectedDay)
             binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             setSelectedWeek(selectedDay)
@@ -186,34 +186,6 @@ class ChecklistFragment : Fragment() {
         })
     }
 
-    fun completeApi(service: ChecklistInterface, spfMyId : String) {
-        val completeCall : Call<CompleteRoot> = service.complete(
-            17
-        )
-        Log.d("완료", "completeCall : ${completeCall}")
-        completeCall.enqueue(object : Callback<CompleteRoot> {
-            override fun onResponse(call: Call<CompleteRoot>, response: Response<CompleteRoot>) {
-                Log.d("api 완료 변경", "Response ${response}")
-
-                if (response.isSuccessful) {
-                    val root : CompleteRoot? = response.body()
-                    Log.d("완료", "Complete Root : ${root}")
-                    val check : CompleteCheck? = root?.check
-                    Log.d("완료", "Check: ${check}")
-
-                    if (root?.isSuccess == true) {
-                        check.let {
-                            readApi(service, spfMyId)
-                        }
-                    }
-                }
-            }
-            override fun onFailure(call: Call<CompleteRoot>, t: Throwable) {
-                Log.d("complete 실패", "completeCall : ${t.message}")
-            }
-        })
-    }
-
     private fun setWeek(startOfWeek: LocalDate) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
@@ -248,9 +220,9 @@ class ChecklistFragment : Fragment() {
             // 오늘 날짜에 동그라미 표시
             val today = LocalDate.now()
             val isTodayInWeek = startOfWeek <= today && today <= startOfWeek.plusDays(6)
-
+//            Log.d("날짜", "startOfWeek.plus ${startOfWeek.plusDays(6)}")
             if (isTodayInWeek) {
-                Log.d("날짜", "선택 날짜 ${isTodayInWeek} 현재${currentDateForDay}")
+//                Log.d("날짜", "선택 날짜 ${isTodayInWeek} 현재${currentDateForDay}")
                 if (today == currentDateForDay) {
                     binding.checkliTodayCircle.visibility = View.VISIBLE
                     dateTextView?.viewTreeObserver?.addOnPreDrawListener(object :
@@ -324,7 +296,7 @@ class ChecklistFragment : Fragment() {
             val isSelectedDay = startOfWeek <= selectedDay && selectedDay <= startOfWeek.plusDays(6)
 
             if (isSelectedDay) {
-                Log.d("날짜", "선택 날짜 ${isSelectedDay} 현재${currentDateForDay}")
+//                Log.d("날짜", "선택 날짜 ${selectedDay} 현재${currentDateForDay}")
                 if (selectedDay == currentDateForDay) {
                     binding.checkliTodayCircle.visibility = View.VISIBLE
                     dateTextView?.viewTreeObserver?.addOnPreDrawListener(object :
@@ -358,7 +330,7 @@ class ChecklistFragment : Fragment() {
                 selectedDateText = currentDateForDay.format(dateFormat)
                 Log.d("날짜 선택", "${selectedDateText}")
                 Log.d("날짜 선택", "${currentDateForDay}")
-
+                setSelectedWeek(selectedDay)
             }
 
         }
