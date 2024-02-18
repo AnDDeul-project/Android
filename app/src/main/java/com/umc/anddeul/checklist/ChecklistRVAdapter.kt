@@ -1,7 +1,6 @@
 package com.umc.anddeul.checklist
 
 import android.app.Activity
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,21 +12,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.checklist.model.Checklist
-import com.umc.anddeul.checklist.model.TargetImg
-import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.databinding.ItemChecklistBinding
-import com.umc.anddeul.home.LoadImage
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -36,9 +27,7 @@ import java.util.Date
 
 class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
     val CAMERA_REQUEST_CODE = 405
-    val REQUEST_IMAGE_CAPTURE = 200
     var checklist: List<Checklist>? = null
-    lateinit var targetList : Checklist
     lateinit var file : File
 
     lateinit var currentPhotoPath: String   // 현재 이미지 파일의 경로 저장
@@ -134,16 +123,13 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         Log.d("카메라", "시간 ${timeStamp}")
-//        val storageDir: File? = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-//        storageDir?.mkdirs()
 
         val file = File.createTempFile(
             timeStamp,
             ".jpg",
             storageDir
         )
-//        val file = File("${storageDir?.path}${File.separator}${timeStamp}.jpg")
         Log.d("카메라", "file ${file}")
 
         currentPhotoFileName = file.name
