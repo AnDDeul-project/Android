@@ -20,6 +20,14 @@
         android:theme="@style/GalleryToolBar"
         app:titleTextColor="@color/text_high"
         app:titleCentered="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_leave_toolbar"/>
     
     <ImageView
         android:id="@+id/mypage_leave_emoji_iv"
