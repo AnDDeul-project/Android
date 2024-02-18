@@ -13,5 +13,7 @@ data class EmojiDTO (
 
 data class EmojiResult(
     val postIdx: Int,
-    val happy_emj: List<String>
+    val happy_emj: List<String>?,
+    val laugh_emj: List<String>?,
+    val sad_emj: List<String>?
 )
