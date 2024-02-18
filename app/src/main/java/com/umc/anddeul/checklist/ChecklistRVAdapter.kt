@@ -89,6 +89,11 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             checking(holder.binding)
         }
 
+        holder.binding.checkliBtnChecked.setOnClickListener {
+            ChecklistService(context).completeApi(checklist!!.get(position))
+            checked(holder.binding)
+        }
+
     }
 
     fun checking(binding : ItemChecklistBinding) {
@@ -96,6 +101,13 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         binding.checkliBtnChecked.visibility = View.VISIBLE
         binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
         binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
+    }
+
+    fun checked(binding : ItemChecklistBinding) {
+        binding.checkliBtnChecking.visibility = View.VISIBLE
+        binding.checkliBtnChecked.visibility = View.INVISIBLE
+        binding.checkliTvWriter.setTextColor(Color.parseColor("#261710"))
+        binding.checkliTvChecklist.setTextColor(Color.parseColor("#261710"))
     }
 
     inner class ViewHolder(val binding: ItemChecklistBinding) : RecyclerView.ViewHolder(binding.root) {
