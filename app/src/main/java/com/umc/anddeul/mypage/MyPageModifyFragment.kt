@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -85,6 +86,13 @@ class MyPageModifyFragment : Fragment() {
     ): View? {
         binding = FragmentMypageModifyProfileBinding.inflate(inflater, container, false)
         val myProfileData: UserProfileData? = myPageViewModel.getMyProfile()
+
+        // 프래그먼트의 레이아웃에 포커스를 설정합니다.
+        view?.requestFocus()
+
+        // 키보드 조정 모드를 adjustNothing으로 설정합니다.
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+
 
         // 프로필 이미지, 닉네임 정보 담아 띄우기
         val imageView = binding.mypageModifyProfileIv
