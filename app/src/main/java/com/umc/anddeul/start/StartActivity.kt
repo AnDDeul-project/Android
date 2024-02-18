@@ -1,6 +1,7 @@
 package com.umc.anddeul.start
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,9 +11,13 @@ import com.umc.anddeul.start.signin.SignupActivity
 
 class StartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartBinding
+    companion object {
+        lateinit var _startActivity: StartActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _startActivity = this
 
         binding = ActivityStartBinding.inflate(layoutInflater)
 
