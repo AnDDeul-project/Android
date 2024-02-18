@@ -7,11 +7,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentUserPostBinding
+import com.umc.anddeul.home.model.EmojiDTO
+import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.OnePostDTO
+import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -90,6 +94,7 @@ class UserPostFragment : Fragment() {
                         binding.userPostExplainTv.text = postData.content
                         binding.userPostEmojiIb.setOnClickListener {
                             // 이모지 설정
+                            showEmojiPopup(postId)
                         }
 
                         // 프로필 사진 설정
@@ -112,5 +117,76 @@ class UserPostFragment : Fragment() {
                 Log.e("onePostService", "Failure message: ${t.message}")
             }
         })
+    }
+
+    fun showEmojiPopup(postId : Int) {
+        val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+        binding.userPostEmojiLinear.startAnimation(slideUpAnimation)
+        binding.userPostEmojiLinear.visibility = View.VISIBLE
+
+        // 사라지는 애니메이션
+        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
+        binding.userPostEmojiHappy.setOnClickListener{
+            // 이모티콘 선택과 관련된 작업 수행
+            val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+            // val token = spf.getString("jwtToken", "")
+            val token =
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+
+            val retrofitBearer = Retrofit.Builder()
+                .baseUrl("http://umc-garden.store")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor { chain ->
+                            val request = chain.request().newBuilder()
+                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .build()
+                            Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
+                            chain.proceed(request)
+                        }
+                        .build()
+                )
+                .build()
+
+            val emojiService = retrofitBearer.create(EmojiInterface::class.java)
+            val emojiRequest = EmojiRequest("happy_emj")
+
+            emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+                override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
+                    Log.e("emojiService", "선택한 게시글 id : $postId")
+                    Log.e("emojiService", "onResponse code : ${response.code()}")
+                    Log.e("emojiService", "${response.body()}")
+
+                    val emojiResponse = response.body()?.result
+
+                    if (response.isSuccessful) {
+                        binding.userPostEmojiLinear.startAnimation(fadeOutAnimation)
+                        binding.userPostEmojiLinear.visibility = View.GONE
+
+                        binding.userPostEmojiHappyLayout.visibility = View.VISIBLE
+                        binding.userPostEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+                    }
+                }
+
+                override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                    Log.e("emojiService", "onFailure")
+                    Log.e("emojiService", "Failure message: ${t.message}")
+                }
+            })
+        }
+        binding.userPostEmojiLaugh.setOnClickListener {
+            // 이모티콘 선택과 관련된 작업 수행
+            binding.userPostEmojiLinear.startAnimation(fadeOutAnimation)
+            binding.userPostEmojiLinear.visibility = View.GONE
+
+        }
+        binding.userPostEmojiSad.setOnClickListener {
+            // 이모티콘 선택과 관련된 작업 수행
+            binding.userPostEmojiLinear.startAnimation(fadeOutAnimation)
+            binding.userPostEmojiLinear.visibility = View.GONE
+
+        }
     }
 }

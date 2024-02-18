@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_happy"
+            android:src="@drawable/emoji_heart"
             android:background="@color/clear"
             android:layout_marginEnd="16dp"
             android:onClick="onEmojiClick"
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_laugh"
+            android:src="@drawable/emoji_fun"
             android:background="@color/clear"
             android:layout_marginEnd="16dp"
             android:onClick="onEmojiClick"
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_sad"
+            android:src="@drawable/emoji_sad"
             android:background="@color/clear"
             android:onClick="onEmojiClick"
             />
@@ -118,11 +118,12 @@
         android:id="@+id/my_post_emoji_happy_layout"
         android:layout_width="65dp"
         android:layout_height="34dp"
-        android:background="@drawable/emoji_back_non_select"
+        android:background="@drawable/emoji_back_selected"
         app:layout_constraintStart_toEndOf="@id/my_post_emoji_ib"
         app:layout_constraintTop_toBottomOf="@+id/my_post_image_vp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="13dp">
+        android:layout_marginTop="13dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/my_post_emoji_happy_one"
@@ -138,8 +139,8 @@
             android:id="@+id/my_post_emoji_happy_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2"
-            android:textColor="@color/primary"
+            android:text="0"
+            android:textColor="@color/background"
             android:textSize="16sp"
             android:fontFamily="@font/font_pretendard_regular"
             app:layout_constraintTop_toTopOf="parent"
@@ -157,7 +158,8 @@
         app:layout_constraintStart_toEndOf="@id/my_post_emoji_happy_layout"
         app:layout_constraintTop_toBottomOf="@+id/my_post_image_vp"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="13dp">
+        android:layout_marginTop="13dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/my_post_emoji_fun_one"

@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -19,9 +20,12 @@ import com.umc.anddeul.home.DeleteDialog
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostModifyActivity
 import com.umc.anddeul.home.PostVPAdapter
+import com.umc.anddeul.home.model.EmojiDTO
+import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.OnePostDTO
 import com.umc.anddeul.home.model.OnePostData
 import com.umc.anddeul.home.model.PostData
+import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -100,6 +104,7 @@ class MyPostFragment : Fragment() {
                         binding.myPostExplainTv.text = postData.content
                         binding.myPostEmojiIb.setOnClickListener {
                             // 이모지 설정
+                            showEmojiPopup(postId)
                         }
 
                         // 메뉴 설정 (수정, 삭제)
@@ -174,6 +179,77 @@ class MyPostFragment : Fragment() {
 
         // 다음 액티비티 시작
         startActivity(intent)
+    }
+
+    fun showEmojiPopup(postId : Int) {
+        val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+        binding.myPostEmojiLinear.startAnimation(slideUpAnimation)
+        binding.myPostEmojiLinear.visibility = View.VISIBLE
+
+        // 사라지는 애니메이션
+        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
+        binding.myPostEmojiHappy.setOnClickListener{
+            // 이모티콘 선택과 관련된 작업 수행
+            val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
+            // val token = spf.getString("jwtToken", "")
+            val token =
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+
+            val retrofitBearer = Retrofit.Builder()
+                .baseUrl("http://umc-garden.store")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor { chain ->
+                            val request = chain.request().newBuilder()
+                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .build()
+                            Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
+                            chain.proceed(request)
+                        }
+                        .build()
+                )
+                .build()
+
+            val emojiService = retrofitBearer.create(EmojiInterface::class.java)
+            val emojiRequest = EmojiRequest("happy_emj")
+
+            emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+                override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
+                    Log.e("emojiService", "선택한 게시글 id : $postId")
+                    Log.e("emojiService", "onResponse code : ${response.code()}")
+                    Log.e("emojiService", "${response.body()}")
+
+                    val emojiResponse = response.body()?.result
+
+                    if (response.isSuccessful) {
+                        binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
+                        binding.myPostEmojiLinear.visibility = View.GONE
+
+                        binding.myPostEmojiHappyLayout.visibility = View.VISIBLE
+                        binding.myPostEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+                    }
+                }
+
+                override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                    Log.e("emojiService", "onFailure")
+                    Log.e("emojiService", "Failure message: ${t.message}")
+                }
+            })
+        }
+        binding.myPostEmojiLaugh.setOnClickListener {
+            // 이모티콘 선택과 관련된 작업 수행
+            binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
+            binding.myPostEmojiLinear.visibility = View.GONE
+
+        }
+        binding.myPostEmojiSad.setOnClickListener {
+            // 이모티콘 선택과 관련된 작업 수행
+            binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
+            binding.myPostEmojiLinear.visibility = View.GONE
+
+        }
     }
 
 }
