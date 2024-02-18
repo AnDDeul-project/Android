@@ -17,12 +17,10 @@ import com.umc.anddeul.R
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
 import com.umc.anddeul.home.model.BoardResponse
 import com.umc.anddeul.home.network.BoardInterface
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -83,9 +81,7 @@ class PostWriteActivity : AppCompatActivity() {
 
     fun boardPost() {
         val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -138,7 +134,6 @@ class PostWriteActivity : AppCompatActivity() {
                     call: Call<BoardResponse>,
                     response: Response<BoardResponse>
                 ) {
-                    Log.e("boardService", "onResponse")
                     Log.e("boardService", "${response.code()}")
                     Log.e("boardService", "${response.body()}")
 
@@ -159,7 +154,6 @@ class PostWriteActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
-                    Log.e("boardService", "onFailure")
                     Log.e("boardService", "Failure message: ${t.message}")
                 }
             })

@@ -109,8 +109,6 @@ class MyPageModifyFragment : Fragment() {
 
         val imagePath = myProfileData!!.image
         val profileImageUri = Uri.parse(imagePath)
-        Log.e("profileImageUri", "string : $imagePath")
-        Log.e("profileImageUri", "Uri : $profileImageUri")
 
         // 이름만 변경할 때
         binding.mypageModifyStoreBtn.setOnClickListener {
@@ -143,8 +141,6 @@ class MyPageModifyFragment : Fragment() {
             val filePath = it.getString(columnIndex)
             return File(filePath)
         }
-
-        // return File(uri.toString())
         throw IllegalArgumentException("Invalid URI")
     }
 
@@ -167,9 +163,7 @@ class MyPageModifyFragment : Fragment() {
     fun modifyMyProfile(newImage: Uri) {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -198,21 +192,16 @@ class MyPageModifyFragment : Fragment() {
         val newUsername = binding.mypageModifyUsername.text.toString()
         val usernameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), newUsername)
 
-        Log.e("modifyProfileService", "${usernameRequestBody}, ${newUsername}")
-
         modifyService.modifyProfile(usernameRequestBody, newProfileImage)
             .enqueue(object : Callback<ModifyProfileResponse> {
                 override fun onResponse(
                     call: Call<ModifyProfileResponse>,
                     response: Response<ModifyProfileResponse>
                 ) {
-                    Log.e("modifyProfileService", "onResponse")
                     Log.e("modifyProfileService", "${response.code()}")
                     Log.e("modifyProfileService", "${response.body()}")
 
                     if (response.isSuccessful) {
-                        Log.e("modifyProfileService", "프로필 수정 성공")
-
                         // MyPageFragment로 이동
                         (context as MainActivity).supportFragmentManager.beginTransaction()
                             .replace(R.id.mypage_modify_profile_layout, MyPageFragment())
@@ -224,7 +213,6 @@ class MyPageModifyFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<ModifyProfileResponse>, t: Throwable) {
-                    Log.e("modifyProfileService", "onFailure")
                     Log.e("modifyProfileService", "Failure message: ${t.message}")
                 }
 
