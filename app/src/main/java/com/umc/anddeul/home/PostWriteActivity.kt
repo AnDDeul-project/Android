@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,6 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 @Suppress("DEPRECATION")
@@ -108,12 +111,21 @@ class PostWriteActivity : AppCompatActivity() {
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
         val copiedImagesUri: List<Uri> = ArrayList(selectedImagesUri)
 
+        fun compressBitmap(bitmap: Bitmap, quality: Int): ByteArray {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+            return byteArrayOutputStream.toByteArray()
+        }
+
         // 이미지 파일들을 MultipartBody.Part로 변환
         val imageParts: List<MultipartBody.Part> = copiedImagesUri.map { uri ->
             val file = getFileFromUri(this, uri)
-            val requestImage = file.asRequestBody("image/".toMediaTypeOrNull())
+            val bitmap = BitmapFactory.decodeFile(file.path)
+            val compressedImage = compressBitmap(bitmap, 30) // 품질을 조절하여 압축 (예: 80)
+            val requestImage = RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressedImage)
             MultipartBody.Part.createFormData("image", file.name, requestImage)
         }
+
 
         val content = binding.uploadWriteEdit.text.toString()
         val contentRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), content)
