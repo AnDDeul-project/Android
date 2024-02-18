@@ -71,15 +71,6 @@ class ChecklistFragment : Fragment() {
         binding.checklistRecylerView.adapter = checklistRVAdapter
         binding.checklistRecylerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        //// 달력
-//        val selectedDateStr = arguments?.getString("selectedDate")
-//        var selectedDate = selectedDateStr.let {
-//            LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-//        }
-//        selectedDay = selectedDateStr?.let {
-//            LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-//        } ?: LocalDate.now()
-
         // 초기 세팅
         setWeek(currentStartOfWeek)
 
@@ -112,9 +103,9 @@ class ChecklistFragment : Fragment() {
 
         binding.checkliTvName.text = myName
 
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
         //토큰 가져오기
-//        val token = spf.getString("jwtToken", "")
+        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -136,7 +127,7 @@ class ChecklistFragment : Fragment() {
         val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         val readCall : Call<Root> = service.getChecklist(
-            "3324185004",
+            myId!!,
             false,
             "2024-02-17"
         )

@@ -68,9 +68,10 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         holder.binding.checkliBtnCamera.setOnClickListener {
             //함수 호출
             currentChecklist = checklist!!.get(position)
+            ChecklistService(context).completeApi(currentChecklist)
             checkCameraPermission(currentChecklist)
 
-            val delayMillis : Long = 2000
+            val delayMillis : Long = 1000 * 13
             holder.binding.checkliBtnCamera.postDelayed({
                 val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
                 Log.d("delay 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
@@ -78,7 +79,7 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             }, delayMillis)
 
             //체크
-//            checking(holder.binding)
+            checking(holder.binding)
         }
 
         holder.binding.checkliBtnChecking.setOnClickListener {
@@ -88,6 +89,11 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             checking(holder.binding)
         }
 
+        holder.binding.checkliBtnChecked.setOnClickListener {
+            ChecklistService(context).completeApi(checklist!!.get(position))
+            checked(holder.binding)
+        }
+
     }
 
     fun checking(binding : ItemChecklistBinding) {
@@ -95,6 +101,13 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         binding.checkliBtnChecked.visibility = View.VISIBLE
         binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
         binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
+    }
+
+    fun checked(binding : ItemChecklistBinding) {
+        binding.checkliBtnChecking.visibility = View.VISIBLE
+        binding.checkliBtnChecked.visibility = View.INVISIBLE
+        binding.checkliTvWriter.setTextColor(Color.parseColor("#261710"))
+        binding.checkliTvChecklist.setTextColor(Color.parseColor("#261710"))
     }
 
     inner class ViewHolder(val binding: ItemChecklistBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -181,9 +194,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                         "com.umc.anddeul.fileprovider",
                         it
                     )
-                    if (file == photoFile) {
-                        Log.d("같은 파일", "${photoFile}")
-                    }
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     (context as Activity).startActivityForResult(
                         takePictureIntent,
