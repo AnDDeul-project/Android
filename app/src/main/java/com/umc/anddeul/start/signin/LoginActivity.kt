@@ -50,6 +50,8 @@ class LoginActivity: AppCompatActivity()  {
                                 if (signinResponse.has == true){
                                     val mainIntent = Intent(this, MainActivity::class.java)
                                     startActivity(mainIntent)
+                                    StartActivity._startActivity.finish()
+                                    finish()
                                 }
                                 else {
                                     val termsIntent = Intent(this, TermsActivity::class.java)
@@ -85,6 +87,8 @@ class LoginActivity: AppCompatActivity()  {
                                     if (signinResponse.has == true){
                                         val mainIntent = Intent(this, MainActivity::class.java)
                                         startActivity(mainIntent)
+                                        StartActivity._startActivity.finish()
+                                        finish()
                                     }
                                     else {
                                         val termsIntent = Intent(this, TermsActivity::class.java)
@@ -117,6 +121,8 @@ class LoginActivity: AppCompatActivity()  {
                                 if (signinResponse.has == true){
                                     val mainIntent = Intent(this, MainActivity::class.java)
                                     startActivity(mainIntent)
+                                    StartActivity._startActivity.finish()
+                                    finish()
                                 }
                                 else {
                                     val termsIntent = Intent(this, TermsActivity::class.java)
