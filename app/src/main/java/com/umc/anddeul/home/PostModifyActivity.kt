@@ -60,9 +60,7 @@ class PostModifyActivity : AppCompatActivity() {
 
     fun modify(postIdx: Int) {
         val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMjkzNjU1Njg2Il0sImlhdCI6MTcwNzU3NzEwM30.YUGCoUltwrvyj8FQdP0nxJKT5OMjZHUX2aLlS8XjLq8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -88,7 +86,6 @@ class PostModifyActivity : AppCompatActivity() {
 
         modifyService.modifyPost(postIdx, modifyRequest).enqueue(object : Callback<PostModifyDTO> {
             override fun onResponse(call: Call<PostModifyDTO>, response: Response<PostModifyDTO>) {
-                Log.e("modifyService", "onResponse")
                 Log.e("modifyService", "${response.code()}")
                 Log.e("modifyService", "${response.body()}")
 
@@ -105,7 +102,6 @@ class PostModifyActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostModifyDTO>, t: Throwable) {
-                Log.e("modifyService", "onFailure")
                 Log.e("modifyService", "Failure message: ${t.message}")
             }
         })

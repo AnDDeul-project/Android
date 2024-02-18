@@ -1,16 +1,24 @@
 package com.umc.anddeul.checklist
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +39,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -48,7 +58,10 @@ class ChecklistFragment : Fragment() {
     lateinit var selectedDateText : String
     private var checklist : ArrayList<Checklist>? = null
     lateinit var checklistRVAdapter : ChecklistRVAdapter
+    val today : String = SimpleDateFormat("yyyy-MM-dd").format(Date())
     private lateinit var selectedDay: LocalDate
+    val CAMERA_REQUEST_CODE = 405
+    val REQUEST_IMAGE_CAPTURE = 406
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChecklistBinding.inflate(inflater, container, false)
@@ -86,18 +99,22 @@ class ChecklistFragment : Fragment() {
             setWeek(currentStartOfWeek)
         }
 
-        binding.checkliTvName.setOnClickListener {
-            val intent = Intent(activity, AddChecklistActivity::class.java)
-            startActivity(intent)
-        }
-
         selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
         Log.d("날짜", "${selectedDateText}")
 
-        //토큰 가져오기
+        //spf 받아오기
         val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val spfMyId : SharedPreferences = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val spfMyId = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val myId = spfMyId.getString("myId", "")
+        Log.d("myId", "${myId}")
+        val spfMyName = context!!.getSharedPreferences("checkUserName", Context.MODE_PRIVATE)
+        val myName = spfMyName.getString("checkUserName", "")
+
+        binding.checkliTvName.text = myName
+
         val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+        //토큰 가져오기
+//        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -119,20 +136,17 @@ class ChecklistFragment : Fragment() {
         val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         val readCall : Call<Root> = service.getChecklist(
-            "3304133093",
+            "3324185004",
             false,
-            "2024-02-12"
+            "2024-02-17"
         )
-        Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
                 Log.d("api 조회", "Response ${response}")
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
-                    Log.d("조회", "Root : ${root}")
                     val result : List<Checklist>? = root?.checklist
-                    Log.d("조회", "Result : ${result}")
 
                     result?.let {
                         checklistRVAdapter.setChecklistData(it)
@@ -145,19 +159,15 @@ class ChecklistFragment : Fragment() {
                 Log.d("read 실패", "readCall: ${t.message}")
             }
         })
-
-        binding.checkliTvTodaylist.setOnClickListener {
-            completeApi(service)
-        }
 
         return binding.root
     }
 
-    fun readApi(service : ChecklistInterface) {
+    fun readApi(service : ChecklistInterface, spfMyId : String) {
         val readCall : Call<Root> = service.getChecklist(
             "3304133093",
             false,
-            "2024-02-12"
+            "2000-12-05"
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -173,6 +183,7 @@ class ChecklistFragment : Fragment() {
                     result?.let {
                         checklistRVAdapter.setChecklistData(it)
                         checklistRVAdapter.notifyDataSetChanged()
+                        binding.checkliTvName.text = result?.get(0)?.receiver
                     }
                 }
             }
@@ -183,24 +194,21 @@ class ChecklistFragment : Fragment() {
         })
     }
 
-    fun completeApi(service: ChecklistInterface) {
+    fun completeApi(service: ChecklistInterface, spfMyId : String) {
         val completeCall : Call<CompleteRoot> = service.complete(
             17
         )
-        Log.d("완료", "completeCall : ${completeCall}")
         completeCall.enqueue(object : Callback<CompleteRoot> {
             override fun onResponse(call: Call<CompleteRoot>, response: Response<CompleteRoot>) {
-                Log.d("api 완료 변경", "Response ${response}")
+                Log.d("complete", "Response ${response}")
 
                 if (response.isSuccessful) {
                     val root : CompleteRoot? = response.body()
-                    Log.d("완료", "Complete Root : ${root}")
                     val check : CompleteCheck? = root?.check
-                    Log.d("완료", "Check: ${check}")
 
                     if (root?.isSuccess == true) {
                         check.let {
-                            readApi(service)
+                            readApi(service, spfMyId)
                         }
                     }
                 }

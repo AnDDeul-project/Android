@@ -21,7 +21,6 @@ class UserProfileRVAdapter(private val userPostList : List<String>?, private val
 
     inner class UserProfileViewHolder(val binding: FragmentUserProfilePostImageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(image: String) {
-            Log.e("UserProfileBind", "bind image : ${image}")
             val imageView = binding.userProfilePostIv
             val loadImage = LoadImage(imageView)
             loadImage.execute(image)

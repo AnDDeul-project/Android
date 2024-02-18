@@ -14,7 +14,6 @@ import com.umc.anddeul.databinding.ActivityPostUploadBinding
 
 class PostUploadActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPostUploadBinding
-    lateinit var galleryAdapter : GalleryAdapter
     private val selectedImages: ArrayList<Uri> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +21,6 @@ class PostUploadActivity : AppCompatActivity() {
 
         binding = ActivityPostUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Log.e("PostUploadActivity", "open")
 
         binding.uploadGalleryToolbar.apply {
             inflateMenu(R.menu.post_gallery_menu)

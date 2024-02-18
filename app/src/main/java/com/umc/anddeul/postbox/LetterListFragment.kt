@@ -3,7 +3,6 @@ package com.umc.anddeul.postbox
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentLetterlistBinding
 import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
+import com.umc.anddeul.pot.PotFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -78,15 +78,16 @@ class LetterListFragment : Fragment() {
         letterlistAdapter = LetterListAdapter()
 
         val today = selectedDate
-        Log.d("해당날짜", today.toString())
         val loadedToken = loadJwt() // jwt토큰
         val mailService = MailService()
         mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
-            Log.d("확2", mailDTO.toString())
             if (mailDTO != null) {
                 if (mailDTO.isSuccess.toString() == "true") {
                     letterlistAdapter.letters = mailDTO.post
                     letterlistAdapter.notifyDataSetChanged()
+                    if (mailDTO.post.isEmpty()) {
+                        binding.noLetterlistTv.visibility = View.VISIBLE
+                    }
                 }
             } else {
             }
@@ -182,6 +183,12 @@ class LetterListFragment : Fragment() {
                 dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 binding.selectCircle.visibility = View.GONE
+                if (dateTextView?.id == binding.letterDate6.id){
+                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.system_informative))
+                }
+                if (dateTextView?.id == binding.letterDate7.id){
+                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.system_error))
+                }
             }
 
             // 날짜 선택 시

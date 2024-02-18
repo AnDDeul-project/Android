@@ -2,6 +2,7 @@ package com.umc.anddeul.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.checklist.AddChecklistActivity
 import com.umc.anddeul.databinding.FragmentUserProfileBinding
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.network.UserProfileInterface
@@ -34,6 +36,10 @@ class UserProfileFragment : Fragment() {
     ): View? {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false)
 
+        // 선택한 유저의 아이디 가져오기
+        val idJson = arguments?.getString("selectedId")
+        val snsId = gson.fromJson(idJson, String::class.java)
+
         binding.userProfileToolbar.apply {
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationOnClickListener {
@@ -43,22 +49,15 @@ class UserProfileFragment : Fragment() {
             }
         }
 
-        loadProfile()
+        loadProfile(snsId)
 
         return  binding.root
     }
 
-    fun loadProfile() {
-        // 선택한 유저의 아이디 가져오기
-        val idJson = arguments?.getString("selectedId")
-        val snsId = gson.fromJson(idJson, String::class.java)
-        Log.e("userProfileService", "선택된 Id : ${snsId}")
-
+    fun loadProfile(snsId : String) {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -84,7 +83,6 @@ class UserProfileFragment : Fragment() {
                 call: Call<UserProfileDTO>,
                 response: Response<UserProfileDTO>
             ) {
-                Log.e("userProfileService", "onResponse")
                 Log.e("userProfileService response code : ", "${response.code()}")
                 Log.e("userProfileService response body : ", "${response.body()}")
 
@@ -96,7 +94,6 @@ class UserProfileFragment : Fragment() {
                         binding.userProfilePostNumTv.text = "게시물 ${userProfileData.postCount}개"
 
                         val userProfileRVAdapter = UserProfileRVAdapter(userProfileData.firstPostImages, userProfileData.postIdx)
-                        Log.e("UserProfileBind", "게시물 첫번째 사진들 리스트 : ${userProfileData.firstPostImages}")
 
                         binding.userProfilePostRv.layoutManager = GridLayoutManager(requireContext(),3)
                         binding.userProfilePostRv.adapter = userProfileRVAdapter
@@ -112,14 +109,20 @@ class UserProfileFragment : Fragment() {
                         val imageView = binding.userProfileIv
                         val loadImage = LoadProfileImage(imageView)
                         loadImage.execute(profileImageUrl)
+
+                        binding.userProfileCheckIv.setOnClickListener {
+                            // 체크리스트 화면으로 이동
+                            val intent = Intent(context, AddChecklistActivity::class.java)
+                            intent.putExtra("checkUserId", snsId)
+                            intent.putExtra("checkUserName", userProfileData.nickname)
+                            startActivity(intent)
+                        }
                     }
                 }
             }
 
             override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                Log.e("userProfileService", "onFailure")
                 Log.e("userProfileService", "Failure message: ${t.message}")
-
             }
         })
     }

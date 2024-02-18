@@ -85,6 +85,11 @@ class MyPageFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadMyProfile()
+    }
+
     fun checkPermission() {
         val permissionImages = android.Manifest.permission.READ_MEDIA_IMAGES
         val permissionVideos = android.Manifest.permission.READ_MEDIA_VIDEO
@@ -153,9 +158,7 @@ class MyPageFragment : Fragment() {
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -182,7 +185,6 @@ class MyPageFragment : Fragment() {
                     call: Call<UserProfileDTO>,
                     response: Response<UserProfileDTO>
                 ) {
-                    Log.e("myProfileService", "onResponse")
                     Log.e("myProfileService response code : ", "${response.code()}")
                     Log.e("myProfileService response body : ", "${response.body()}")
 
@@ -226,7 +228,6 @@ class MyPageFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                    Log.e("myProfileService", "onFailure")
                     Log.e("myProfileService", "Failure message: ${t.message}")
                 }
             })

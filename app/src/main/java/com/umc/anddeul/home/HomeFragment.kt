@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.checklist.AddChecklistActivity
 import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
@@ -77,6 +78,8 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
         drawerLayout = binding.homeDrawerLayout
 
+        // 게시글 조회
+        loadPost()
         // 메뉴 가족 구성원 정보 가져오기
         loadMemberList()
 
@@ -103,8 +106,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
         binding.homeSwipeRefresh.setOnRefreshListener {
-            Log.d("getPost", "swipe")
-            // getPostData()
             loadPost()
         }
 
@@ -140,22 +141,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         return binding.root
     }
 
-
-//    fun getPostData() {
-//        Log.e("getPost", "call")
-//
-//        postService?.getPost { post ->
-//            if (post != null) {
-//                if (post.isSuccess) { // 응답 코드 200 (연결 성공)
-//                    Log.e("postData", "${post.result}")
-//                } else {
-//                    Log.e("postData", "${post.code}")
-//                }
-//            }
-//
-//        }
-//    }
-
     fun saveMyId(context: Context, myId: String) {
         val spfMyId = context.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val editor = spfMyId.edit()
@@ -164,24 +149,13 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
     }
 
     fun loadPost() {
-
-        // 저장된 sns id 리스트 가져오기
-        val spfSnsId = requireActivity().getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
-        val size = spfSnsId.all.size
-        val snsIds = (0 until size).mapNotNull {
-            val snsId = spfSnsId.getString("snsId_$it", "not found")
-            if (snsId != "not found") snsId else null
-        }
-
         // 내 sns id 가져오기
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -204,7 +178,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         postService.homePosts().enqueue(object : Callback<Post> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                Log.e("postService", "onResponse")
                 Log.e("postService response code : ", "${response.code()}")
                 Log.e("postService response body : ", "${response.body()}")
 
@@ -236,20 +209,15 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.e("postService", "onFailure")
                 Log.e("postService", "Failure message: ${t.message}")
             }
         })
-
     }
-
 
     fun loadMemberList() {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzc1MjQ1OH0.gv84EPPvswVZnhSp6KAaNSGCx6oDoYXR37e46cGxvvo"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -274,7 +242,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                 call: Call<MemberResponse>,
                 response: Response<MemberResponse>
             ) {
-                Log.e("memberService", "onResponse")
                 Log.e("memberService response code : ", "${response.code()}")
                 Log.e("memberService response body : ", "${response.body()}")
 
@@ -310,6 +277,10 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                         val loadImage = LoadProfileImage(imageView)
                         loadImage.execute(profileImageUrl)
 
+                        // 내 프로필 사진, 이름 클릭 시 클릭 막기
+                        binding.homeMenuMyProfileNameIv.setOnClickListener {}
+                        binding.homeMenuMyProfileIv.setOnClickListener {}
+
                         // 가족 구성원 정보 리스트
                         val familyList = family.map { member ->
                             Member(member.snsId, member.nickname, member.image)
@@ -344,6 +315,17 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                                 // drawerLayout 자동 닫기
                                 drawerLayout.closeDrawers()
                                 changeUserProfile(memberData.snsId)
+                            }
+
+                            memberBinding.homeMenuMemberCheckBtn.setOnClickListener {
+                                // drawerLayout 자동 닫기
+                                drawerLayout.closeDrawers()
+
+                                // 체크리스트 화면으로 이동
+                                val intent = Intent(context, AddChecklistActivity::class.java)
+                                intent.putExtra("checkUserId", memberData.snsId)
+                                intent.putExtra("checkUserName", memberData.nickname)
+                                startActivity(intent)
                             }
                         }
 
@@ -385,7 +367,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
-                Log.e("memberService", "onFailure")
                 Log.e("memberService", "Failure message: ${t.message}")
             }
 

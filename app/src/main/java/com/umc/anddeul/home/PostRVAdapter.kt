@@ -1,6 +1,7 @@
 package com.umc.anddeul.home
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,7 +14,18 @@ import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentHomeMyUploadBinding
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
+import com.umc.anddeul.home.model.EmojiDTO
+import com.umc.anddeul.home.model.EmojiRequest
+import com.umc.anddeul.home.model.EmojiResult
 import com.umc.anddeul.home.model.PostData
+import com.umc.anddeul.home.network.EmojiInterface
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class PostRVAdapter(private val context: Context, var postList: List<PostData>, var authorTypeList: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -101,7 +113,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
             binding.homeUploadUsernameTv.text = postData.nickname
             binding.homeUploadExplainTv.text = postData.content
             binding.homeUploadEmojiIb.setOnClickListener {
-                showEmojiPopup(binding)
+                showEmojiPopup(binding, postData.post_idx)
             }
 
             val profileImageUrl = postData.userImage
@@ -124,7 +136,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
             binding.homeMyUploadUsernameTv.text = postData.nickname
             binding.homeMyUploadExplainTv.text = postData.content
             binding.homeMyUploadEmojiIb.setOnClickListener {
-                showMyEmojiPopup(binding)
+                showMyEmojiPopup(binding, postData.post_idx)
             }
 
             val profileImageUrl = postData.userImage
@@ -174,61 +186,202 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
         }
     }
 
-    fun showEmojiPopup(binding: FragmentHomeUploadBinding) {
+    fun showEmojiPopup(binding: FragmentHomeUploadBinding, postId: Int) {
 
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         binding.homeEmojiLinear.startAnimation(slideUpAnimation)
         binding.homeEmojiLinear.visibility = View.VISIBLE
 
-        // 사라지는 애니메이션
-        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-
+        // happy 이모지 클릭 시
         binding.homeEmojiHappy.setOnClickListener{
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.homeEmojiLinear.visibility = View.GONE
-
+            selectEmoji(binding, postId, "happy_emj")
         }
+
+        // fun 이모지 클릭 시
         binding.homeEmojiLaugh.setOnClickListener {
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.homeEmojiLinear.visibility = View.GONE
-
+            selectEmoji(binding, postId, "laugh_emj")
         }
-        binding.homeEmojiSad.setOnClickListener {
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.homeEmojiLinear.visibility = View.GONE
 
+        // sad 이모지 클릭 시
+        binding.homeEmojiSad.setOnClickListener {
+            selectEmoji(binding, postId, "sad_emj")
         }
     }
 
-    fun showMyEmojiPopup(binding: FragmentHomeMyUploadBinding) {
+    fun showMyEmojiPopup(binding: FragmentHomeMyUploadBinding, postId: Int) {
 
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         binding.homeMyEmojiLinear.startAnimation(slideUpAnimation)
         binding.homeMyEmojiLinear.visibility = View.VISIBLE
 
+        binding.homeMyEmojiHappy.setOnClickListener{
+            selectMyEmoji(binding, postId, "happy_emj")
+        }
+        binding.homeMyEmojiLaugh.setOnClickListener {
+            selectMyEmoji(binding, postId, "laugh_emj")
+        }
+        binding.homeMyEmojiSad.setOnClickListener {
+            selectMyEmoji(binding, postId, "sad_emj")
+        }
+    }
+
+    fun selectEmoji(binding: FragmentHomeUploadBinding, postId: Int, emojiType: String) {
         // 사라지는 애니메이션
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
-        binding.homeMyEmojiHappy.setOnClickListener{
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.homeMyEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.homeMyEmojiLinear.visibility = View.GONE
+        val spf: SharedPreferences = context.getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val token = spf.getString("jwtToken", "")
 
-        }
-        binding.homeMyEmojiLaugh.setOnClickListener {
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.homeMyEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.homeMyEmojiLinear.visibility = View.GONE
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://umc-garden.store")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
 
-        }
-        binding.homeMyEmojiSad.setOnClickListener {
-            // 이모티콘 선택과 관련된 작업 수행
-            binding.homeMyEmojiLinear.startAnimation(fadeOutAnimation)
-            binding.homeMyEmojiLinear.visibility = View.GONE
+        val emojiService = retrofitBearer.create(EmojiInterface::class.java)
+        val emojiRequest = EmojiRequest(emojiType)
 
-        }
+        emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+            override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
+                Log.e("emojiService", "onResponse code : ${response.code()}")
+                Log.e("emojiService", "${response.body()}")
+
+                val emojiResponse = response.body()?.result
+
+                if (response.isSuccessful) {
+                    binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
+                    binding.homeEmojiLinear.visibility = View.GONE
+
+                    binding.homeEmojiHappyLayout.visibility = View.VISIBLE
+
+                    if(emojiType == "happy_emj") {
+                        binding.homeEmojiHappyOne.visibility = View.VISIBLE
+                        binding.homeEmojiFunOne.visibility = View.GONE
+                        binding.homeEmojiSadOne.visibility = View.GONE
+                        binding.homeEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+
+                    if(emojiType == "laugh_emj") {
+                        binding.homeEmojiHappyOne.visibility = View.GONE
+                        binding.homeEmojiFunOne.visibility = View.VISIBLE
+                        binding.homeEmojiSadOne.visibility = View.GONE
+                        binding.homeEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+
+                    if (emojiType == "sad_emj") {
+                        binding.homeEmojiHappyOne.visibility = View.GONE
+                        binding.homeEmojiFunOne.visibility = View.GONE
+                        binding.homeEmojiSadOne.visibility = View.VISIBLE
+                        binding.homeEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                Log.e("emojiService", "onFailure")
+                Log.e("emojiService", "Failure message: ${t.message}")
+            }
+        })
+
+    }
+
+    fun selectMyEmoji(binding: FragmentHomeMyUploadBinding, postId: Int, emojiType: String) {
+        // 사라지는 애니메이션
+        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
+        val spf: SharedPreferences = context.getSharedPreferences("myToken", Context.MODE_PRIVATE)
+        val token = spf.getString("jwtToken", "")
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://umc-garden.store")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val emojiService = retrofitBearer.create(EmojiInterface::class.java)
+        val emojiRequest = EmojiRequest(emojiType)
+
+        emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+            override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
+                Log.e("emojiService", "onResponse code : ${response.code()}")
+                Log.e("emojiService", "${response.body()}")
+
+                val emojiResponse = response.body()?.result
+
+                if (response.isSuccessful) {
+                    binding.homeMyEmojiLinear.startAnimation(fadeOutAnimation)
+                    binding.homeMyEmojiLinear.visibility = View.GONE
+
+                    binding.homeMyEmojiHappyLayout.visibility = View.VISIBLE
+
+                    if(emojiType == "happy_emj") {
+                        binding.homeMyEmojiHappyOne.visibility = View.VISIBLE
+                        binding.homeMyEmojiFunOne.visibility = View.GONE
+                        binding.homeMyEmojiSadOne.visibility = View.GONE
+                        binding.homeMyEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+
+                    if(emojiType == "laugh_emj") {
+                        binding.homeMyEmojiHappyOne.visibility = View.GONE
+                        binding.homeMyEmojiFunOne.visibility = View.VISIBLE
+                        binding.homeMyEmojiSadOne.visibility = View.GONE
+                        binding.homeMyEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+
+                    if (emojiType == "sad_emj") {
+                        binding.homeMyEmojiHappyOne.visibility = View.GONE
+                        binding.homeMyEmojiFunOne.visibility = View.GONE
+                        binding.homeMyEmojiSadOne.visibility = View.VISIBLE
+                        binding.homeMyEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                Log.e("emojiService", "Failure message: ${t.message}")
+            }
+        })
     }
 }

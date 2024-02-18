@@ -6,7 +6,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,7 @@ import com.umc.anddeul.postbox.service.MailService
 import com.umc.anddeul.postbox.service.QuestionService
 import com.umc.anddeul.postbox.service.TextService
 import com.umc.anddeul.postbox.service.VoiceService
+import com.umc.anddeul.pot.PotFragment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -111,7 +111,6 @@ class PostboxFragment : Fragment() {
 
         //// 랜덤 질문
         // api 연결
-        Log.d("확인1", "${loadedToken}")
         val questionService = QuestionService()
         questionService.randomQuestion(loadedToken) { questionDTO ->
             if (questionDTO != null) {
@@ -212,14 +211,16 @@ class PostboxFragment : Fragment() {
                         val questionRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.randomQTv.text.toString())
 
                         voiceService.sendVoice(loadedToken, memberRequestBody, questionRequestBody, recordPart) { voiceDTO ->
-                            Log.d("확2", voiceDTO.toString())
                             if (voiceDTO != null) {
                                 if (voiceDTO.isSuccess.toString() == "true") {
                                     binding.recordInfo1.visibility = View.GONE
                                     binding.recordInfo2.visibility = View.GONE
                                     binding.recordInfo3.visibility = View.GONE
                                     binding.recordInfo4.visibility = View.GONE
+                                    binding.letterEt.visibility = View.VISIBLE
                                     letterType = ""
+                                    val postSendPopupFragment = DialogPostSendFragment(requireContext())
+                                    postSendPopupFragment.show()
                                 }
                             }
                         }
@@ -235,6 +236,8 @@ class PostboxFragment : Fragment() {
                                         //텍스트 초기화
                                         binding.letterEt.setText("")
                                         letterType = ""
+                                        val postSendPopupFragment = DialogPostSendFragment(requireContext())
+                                        postSendPopupFragment.show()
                                     }
                                 }
                             }
@@ -332,6 +335,12 @@ class PostboxFragment : Fragment() {
                 dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 binding.todayCircle.visibility = View.GONE
+                if (dateTextView?.id == binding.postDate6.id){
+                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.system_informative))
+                }
+                if (dateTextView?.id == binding.postDate7.id){
+                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.system_error))
+                }
             }
 
             // 날짜 선택 시
@@ -372,6 +381,7 @@ class PostboxFragment : Fragment() {
         binding.recordInfo2.visibility = View.GONE
         binding.recordInfo3.visibility = View.GONE
         binding.recordInfo4.visibility = View.GONE
+        binding.letterEt.visibility = View.VISIBLE
     }
 
     // 토큰 불러오기

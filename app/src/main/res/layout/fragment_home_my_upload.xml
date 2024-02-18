@@ -32,7 +32,7 @@
         android:id="@+id/home_my_upload_menu_ib"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@drawable/home_my_menu"
+        android:src="@drawable/my_post_menu"
         android:background="@color/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,8 +41,8 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/home_my_upload_image_vp"
-        android:layout_width="342dp"
-        android:layout_height="342dp"
+        android:layout_width="match_parent"
+        android:layout_height="390dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_my_upload_profile_iv"
@@ -54,11 +54,11 @@
         android:id="@+id/home_my_upload_emoji_ib"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:src="@drawable/ic_home_emoji"
+        android:src="@drawable/emoji_btn"
         android:background="@color/background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_my_upload_image_vp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="13dp"
         android:layout_marginStart="18dp"/>
 
     <LinearLayout
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_happy"
+            android:src="@drawable/emoji_heart"
             android:background="@color/clear"
             android:layout_marginEnd="20dp"
             android:onClick="onEmojiClick"
@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_laugh"
+            android:src="@drawable/emoji_fun"
             android:background="@color/clear"
             android:layout_marginEnd="20dp"
             android:onClick="onEmojiClick"
@@ -101,11 +101,71 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_emoji_sad"
+            android:src="@drawable/emoji_sad"
             android:background="@color/clear"
             android:onClick="onEmojiClick"
             />
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_my_emoji_happy_layout"
+        android:layout_width="65dp"
+        android:layout_height="34dp"
+        android:background="@drawable/emoji_back_selected"
+        app:layout_constraintStart_toEndOf="@id/home_my_upload_emoji_ib"
+        app:layout_constraintTop_toBottomOf="@+id/home_my_upload_image_vp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="13dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/home_my_emoji_happy_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_heart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/home_my_emoji_fun_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_fun"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/home_my_emoji_sad_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_sad"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/home_my_emoji_happy_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/background"
+            android:textSize="16sp"
+            android:fontFamily="@font/font_pretendard_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="15dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <TextView

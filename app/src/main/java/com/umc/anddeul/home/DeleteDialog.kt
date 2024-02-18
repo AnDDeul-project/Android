@@ -49,9 +49,7 @@ class DeleteDialog(val postId : Int) : DialogFragment() {
     fun delete(postId : Int) {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -73,7 +71,6 @@ class DeleteDialog(val postId : Int) : DialogFragment() {
 
         deleteService.deletePost(postId).enqueue(object : Callback<PostDelete> {
             override fun onResponse(call: Call<PostDelete>, response: Response<PostDelete>) {
-                Log.e("deleteService", "onResponse")
                 Log.e("deleteService response code : ", "${response.code()}")
                 Log.e("deleteService response body : ", "${response.body()}")
 
@@ -92,7 +89,6 @@ class DeleteDialog(val postId : Int) : DialogFragment() {
             }
 
             override fun onFailure(call: Call<PostDelete>, t: Throwable) {
-                Log.e("deleteService", "onFailure")
                 Log.e("deleteService", "Failure message: ${t.message}")
             }
 

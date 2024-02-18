@@ -5,6 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/letterlist_tb"
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        android:background="@color/background"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/gotoPotBtn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/postbox_goto_pot" />
+
+        <TextView
+            android:id="@+id/userTitleTv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="이솜솜"
+            android:textColor="@color/primary"
+            android:textSize="26sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/font_pretendard_regular"
+            android:text="님의 우체통"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/userTitleTv2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
@@ -244,7 +290,7 @@
                 android:layout_marginTop="122dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_navi_left" />
+                app:srcCompat="@drawable/postbox_ic_navi_left" />
 
             <ImageView
                 android:id="@+id/afterBtn2"
@@ -254,7 +300,7 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_navi_right" />
+                app:srcCompat="@drawable/postbox_ic_navi_right" />
 
             <TextView
                 android:id="@+id/selectDateTv2"
@@ -280,48 +326,27 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/imageView11"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_postbox_topbox" />
-
-    <ImageView
-        android:id="@+id/gotoPotBtn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_goto_pot" />
-
     <TextView
-        android:id="@+id/userTitleTv2"
+        android:id="@+id/noLetterlistTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="59dp"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="이솜솜"
-        android:textColor="@color/primary"
-        android:textSize="26sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginTop="450dp"
         android:fontFamily="@font/font_pretendard_regular"
-        android:text="님의 우체통"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/userTitleTv2"
+        android:text="받은 편지가 없습니다"
+        android:textColor="@color/text_medium"
+        android:textSize="20dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/letterlist_tb" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

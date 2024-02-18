@@ -32,9 +32,6 @@ class AddChecklistRVAdapter() : RecyclerView.Adapter<AddChecklistRVAdapter.ViewH
         fun bind(checklist: Checklist) {
             binding.checkliAddTvChecklist.text = checklist.content
             binding.checkliAddTvWriter.text = checklist.sender + "님이 남기셨습니다."
-            if (binding.checkliAddIvPhoto != null) {
-                binding.checkliAddIvPhoto.visibility = View.VISIBLE
-            }
             if (checklist.complete == 0) { //체크 안 되어 있을 때
                 binding.checkliAddBtnChecked.visibility = View.INVISIBLE
                 binding.checkliAddBtnChecking.visibility = View.VISIBLE

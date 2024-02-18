@@ -14,10 +14,10 @@ interface PotInterface {
     @PUT("/garden/flower/givelove")
     fun giveLove() : Call<LoveRoot>
 
-    @GET("/garden/flower/mypoint")
+    @GET("/garden/mypoint")
     fun getMyPoint() : Call<PointRoot>
 
-    @GET("/garden/flower/{flowerid}")
+    @GET("/garden/get/{flowerid}")
     fun getFlowerId(
         @Path("flowerid") flowerid : String
     )

@@ -1,5 +1,7 @@
 package com.umc.anddeul.checklist
 
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
@@ -8,6 +10,8 @@ import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -40,6 +44,7 @@ class AddChecklistActivity : AppCompatActivity() {
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     lateinit var selectedDateText : String
     lateinit var addChecklistRVAdapter: AddChecklistRVAdapter
+    val today : String = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +52,18 @@ class AddChecklistActivity : AppCompatActivity() {
         binding = ActivityAddChecklistBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //인텐트 정보 추출
+        val checkUserId = intent.getStringExtra("checkUserId")
+        val checkUserName = intent.getStringExtra("checkUserName")
+
+        //체크리스트 주인 이름
+        binding.checkliAddTvName.text = checkUserName
+        binding.addCheckliEtReader.text = checkUserName + "님에게 할 일을 남겨보세요"
+
+        //날짜
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
         binding.addCheckliSelectDateTv.text = dateStamp
-
-//        checklist.add(Checklist("메모메모", "율", "image", true))
-//        checklist.add(Checklist("달력 UI 수정할 예정이에요", "율", "image", false))
+        Log.d("날짜", "오늘 날짜: ${today}")
 
         //리사이클러뷰 연결
         addChecklistRVAdapter = AddChecklistRVAdapter()
@@ -84,6 +96,7 @@ class AddChecklistActivity : AppCompatActivity() {
         //토큰 가져오기
         val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
         val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+//        val token = spf.getString("jwtToken", "")
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -101,21 +114,38 @@ class AddChecklistActivity : AppCompatActivity() {
             )
             .build()
 
+        //서비스 생성
         val service = retrofit.create(ChecklistInterface::class.java)
-        readApi(service)
 
-        binding.addCheckliEtContents.setOnKeyListener { v, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
-                //체크리스트 추가 코드
+        //현재 체크리스트 불러오기
+        readApi(service, checkUserId!!)
+
+        //체크리스트 추가 동작
+        binding.addCheckliEtContents.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                //체크리스트 객체 생성 코드
                 val text = binding.addCheckliEtContents.text.toString()
                 val dateList = selectedDateText.split("-")
-                val addChecklist = AddChecklist("sehseh", dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+                val todayList = today.split("-")
+                val addChecklist = AddChecklist(checkUserId, todayList[0].toInt(), todayList[1].toInt(), todayList[2].toInt(), text)
                 Log.d("체크리스트 값 확인", "${addChecklist}")
+
+                //체크리스트 추가 api
                 addApi(service, addChecklist)
-//                readApi(service)
+
+                //체크리스트 변환된 거 불러오기
+                readApi(service, checkUserId!!)
+                binding.addCheckliEtContents.text.clear()
+
+                // 키보드 숨기기
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.addCheckliEtContents.windowToken, 0)
+
+                return@setOnEditorActionListener true
             }
-            true
+            false
         }
+
     }
 
     private fun addApi(service : ChecklistInterface, addChecklist: AddChecklist) {
@@ -140,11 +170,11 @@ class AddChecklistActivity : AppCompatActivity() {
         })
     }
 
-    private fun readApi(service : ChecklistInterface) {
+    private fun readApi(service : ChecklistInterface, userId : String) {
         val readCall : Call<Root> = service.getChecklist(
-            "sehseh",
+            userId,
             true,
-            "2024-02-15"
+            today
         )
         Log.d("조회", "readCall ${readCall}")
         readCall.enqueue(object : Callback<Root> {
@@ -156,10 +186,12 @@ class AddChecklistActivity : AppCompatActivity() {
                     Log.d("조회", "Root : ${root}")
                     val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
+                    val checklist : Checklist? = root?.checklist?.get(0)
 
                     result?.let {
                         addChecklistRVAdapter.setChecklistData(it)
                         addChecklistRVAdapter.notifyDataSetChanged()
+                        binding.checkliAddTvName.text = checklist!!.receiver
                     }
                 }
             }

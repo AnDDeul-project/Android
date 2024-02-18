@@ -5,28 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView2"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/joinGroupCode_tb"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
+        android:layout_height="77dp"
+        android:background="@color/background"
+        android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/sginin_term_topbar" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="67dp"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="기존 그룹에 참여하기"
-        android:textColor="@color/text_high"
-        android:textSize="20sp"
+        <ImageView
+            android:id="@+id/codeBackBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/signin_arrow_back" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="기존 그룹에 참여하기"
+            android:textColor="@color/text_high"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupCode_tb" />
 
     <TextView
         android:id="@+id/textView15"
@@ -64,16 +84,6 @@
         app:layout_constraintEnd_toEndOf="@+id/existGroupJoinBtn"
         app:layout_constraintStart_toStartOf="@+id/existGroupJoinBtn"
         app:layout_constraintTop_toTopOf="@+id/existGroupJoinBtn" />
-
-    <ImageView
-        android:id="@+id/codeBackBtn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="65dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/signin_arrow_back" />
 
     <ImageView
         android:id="@+id/imageView6"
