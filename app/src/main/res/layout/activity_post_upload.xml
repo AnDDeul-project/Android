@@ -21,6 +21,14 @@
         app:titleTextColor="@color/text_high"
         tools:layout_editor_absoluteX="1dp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_gallery_toolbar"/>
+
     <ImageView
         android:id="@+id/upload_selected_iv"
         android:layout_width="match_parent"
