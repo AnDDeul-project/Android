@@ -87,6 +87,9 @@ class LetterListFragment : Fragment() {
                 if (mailDTO.isSuccess.toString() == "true") {
                     letterlistAdapter.letters = mailDTO.post
                     letterlistAdapter.notifyDataSetChanged()
+                    if (mailDTO.post.isEmpty()) {
+                        binding.noLetterlistTv.visibility = View.VISIBLE
+                    }
                 }
             } else {
             }
