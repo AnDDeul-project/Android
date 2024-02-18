@@ -272,6 +272,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiFunOne.visibility = View.GONE
                         binding.homeEmojiSadOne.visibility = View.GONE
                         binding.homeEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if(emojiType == "laugh_emj") {
@@ -279,6 +283,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiFunOne.visibility = View.VISIBLE
                         binding.homeEmojiSadOne.visibility = View.GONE
                         binding.homeEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if (emojiType == "sad_emj") {
@@ -286,6 +294,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiFunOne.visibility = View.GONE
                         binding.homeEmojiSadOne.visibility = View.VISIBLE
                         binding.homeEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -345,6 +357,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiFunOne.visibility = View.GONE
                         binding.homeMyEmojiSadOne.visibility = View.GONE
                         binding.homeMyEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if(emojiType == "laugh_emj") {
@@ -352,6 +368,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiFunOne.visibility = View.VISIBLE
                         binding.homeMyEmojiSadOne.visibility = View.GONE
                         binding.homeMyEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if (emojiType == "sad_emj") {
@@ -359,6 +379,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiFunOne.visibility = View.GONE
                         binding.homeMyEmojiSadOne.visibility = View.VISIBLE
                         binding.homeMyEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
