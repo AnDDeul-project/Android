@@ -11,7 +11,6 @@ import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
-import com.umc.anddeul.databinding.FragmentHomeUploadBinding
 import com.umc.anddeul.databinding.FragmentUserPostBinding
 import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
@@ -59,9 +58,7 @@ class UserPostFragment : Fragment() {
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -83,7 +80,6 @@ class UserPostFragment : Fragment() {
 
         onePostService.onePost(postId).enqueue(object : Callback<OnePostDTO> {
             override fun onResponse(call: Call<OnePostDTO>, response: Response<OnePostDTO>) {
-                Log.e("onePostService", "onResponse")
                 Log.e("onePostService response code : ", "${response.code()}")
                 Log.e("onePostService response body : ", "${response.body()}")
 
@@ -114,7 +110,6 @@ class UserPostFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<OnePostDTO>, t: Throwable) {
-                Log.e("onePostService", "onFailure")
                 Log.e("onePostService", "Failure message: ${t.message}")
             }
         })
@@ -124,9 +119,6 @@ class UserPostFragment : Fragment() {
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         binding.userPostEmojiLinear.startAnimation(slideUpAnimation)
         binding.userPostEmojiLinear.visibility = View.VISIBLE
-
-        // 사라지는 애니메이션
-        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
         binding.userPostEmojiHappy.setOnClickListener{
             selectEmoji(postId, "happy_emj")
@@ -144,9 +136,7 @@ class UserPostFragment : Fragment() {
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
         val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -221,6 +211,5 @@ class UserPostFragment : Fragment() {
                 Log.e("emojiService", "Failure message: ${t.message}")
             }
         })
-
     }
 }

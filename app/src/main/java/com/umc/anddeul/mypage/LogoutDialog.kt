@@ -52,9 +52,7 @@ class LogoutDialog : DialogFragment() {
     fun myPageLogout() {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -76,7 +74,6 @@ class LogoutDialog : DialogFragment() {
 
         logoutService.logout().enqueue(object : Callback<LogoutDTO> {
             override fun onResponse(call: Call<LogoutDTO>, response: Response<LogoutDTO>) {
-                Log.e("logoutService", "onResponse")
                 Log.e("logoutService", "${response.code()}")
                 Log.e("logoutService", "${response.body()}")
 
@@ -93,7 +90,6 @@ class LogoutDialog : DialogFragment() {
             }
 
             override fun onFailure(call: Call<LogoutDTO>, t: Throwable) {
-                Log.e("logoutService", "onFailure")
                 Log.e("logoutService", "Failure message: ${t.message}")
             }
         })

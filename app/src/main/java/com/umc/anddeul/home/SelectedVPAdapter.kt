@@ -37,5 +37,4 @@ class SelectedVPAdapter(private val selectedImages: MutableList<Uri>) :
             notifyItemInserted(selectedImages.size - 1)
         }
     }
-
 }

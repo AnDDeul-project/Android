@@ -106,8 +106,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
         binding.homeSwipeRefresh.setOnRefreshListener {
-            Log.d("getPost", "swipe")
-            // getPostData()
             loadPost()
         }
 
@@ -143,22 +141,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         return binding.root
     }
 
-
-//    fun getPostData() {
-//        Log.e("getPost", "call")
-//
-//        postService?.getPost { post ->
-//            if (post != null) {
-//                if (post.isSuccess) { // 응답 코드 200 (연결 성공)
-//                    Log.e("postData", "${post.result}")
-//                } else {
-//                    Log.e("postData", "${post.code}")
-//                }
-//            }
-//
-//        }
-//    }
-
     fun saveMyId(context: Context, myId: String) {
         val spfMyId = context.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val editor = spfMyId.edit()
@@ -167,24 +149,13 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
     }
 
     fun loadPost() {
-
-        // 저장된 sns id 리스트 가져오기
-        val spfSnsId = requireActivity().getSharedPreferences("saveSnsId", Context.MODE_PRIVATE)
-        val size = spfSnsId.all.size
-        val snsIds = (0 until size).mapNotNull {
-            val snsId = spfSnsId.getString("snsId_$it", "not found")
-            if (snsId != "not found") snsId else null
-        }
-
         // 내 sns id 가져오기
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -207,7 +178,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         postService.homePosts().enqueue(object : Callback<Post> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                Log.e("postService", "onResponse")
                 Log.e("postService response code : ", "${response.code()}")
                 Log.e("postService response body : ", "${response.body()}")
 
@@ -239,19 +209,15 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.e("postService", "onFailure")
                 Log.e("postService", "Failure message: ${t.message}")
             }
         })
     }
 
-
     fun loadMemberList() {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -276,7 +242,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                 call: Call<MemberResponse>,
                 response: Response<MemberResponse>
             ) {
-                Log.e("memberService", "onResponse")
                 Log.e("memberService response code : ", "${response.code()}")
                 Log.e("memberService response body : ", "${response.body()}")
 
@@ -402,7 +367,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
-                Log.e("memberService", "onFailure")
                 Log.e("memberService", "Failure message: ${t.message}")
             }
 

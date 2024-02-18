@@ -158,9 +158,7 @@ class MyPageFragment : Fragment() {
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -187,7 +185,6 @@ class MyPageFragment : Fragment() {
                     call: Call<UserProfileDTO>,
                     response: Response<UserProfileDTO>
                 ) {
-                    Log.e("myProfileService", "onResponse")
                     Log.e("myProfileService response code : ", "${response.code()}")
                     Log.e("myProfileService response body : ", "${response.body()}")
 
@@ -231,7 +228,6 @@ class MyPageFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                    Log.e("myProfileService", "onFailure")
                     Log.e("myProfileService", "Failure message: ${t.message}")
                 }
             })

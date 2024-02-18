@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMyPostBinding
-import com.umc.anddeul.databinding.FragmentUserPostBinding
 import com.umc.anddeul.home.DeleteDialog
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostModifyActivity
@@ -24,7 +23,6 @@ import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.OnePostDTO
 import com.umc.anddeul.home.model.OnePostData
-import com.umc.anddeul.home.model.PostData
 import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
 import okhttp3.OkHttpClient
@@ -68,9 +66,7 @@ class MyPostFragment : Fragment() {
 
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNzExNDkyMn0.xUiMr__vOcdjOVjcrmV3HiuWOqatI1PPmSPgJFljwTw"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -92,7 +88,6 @@ class MyPostFragment : Fragment() {
 
         onePostService.onePost(postId).enqueue(object : Callback<OnePostDTO> {
             override fun onResponse(call: Call<OnePostDTO>, response: Response<OnePostDTO>) {
-                Log.e("myPostService", "onResponse")
                 Log.e("myPostService response code : ", "${response.code()}")
                 Log.e("myPostService response body : ", "${response.body()}")
 
@@ -128,7 +123,6 @@ class MyPostFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<OnePostDTO>, t: Throwable) {
-                Log.e("myPostService", "onFailure")
                 Log.e("myPostService", "Failure message: ${t.message}")
             }
         })
@@ -202,9 +196,7 @@ class MyPostFragment : Fragment() {
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
         val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -227,7 +219,6 @@ class MyPostFragment : Fragment() {
 
         emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
             override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
-                Log.e("emojiService", "선택한 게시글 id : $postId")
                 Log.e("emojiService", "onResponse code : ${response.code()}")
                 Log.e("emojiService", "${response.body()}")
 
@@ -275,7 +266,6 @@ class MyPostFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
-                Log.e("emojiService", "onFailure")
                 Log.e("emojiService", "Failure message: ${t.message}")
             }
         })

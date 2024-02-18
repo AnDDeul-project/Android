@@ -67,9 +67,7 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
     fun approveMember(userId: String) {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -94,7 +92,6 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
                 call: Call<MemberApproveDTO>,
                 response: Response<MemberApproveDTO>
             ) {
-                Log.e("approveService", "onResponse")
                 Log.e("approveService response code : ", "${response.code()}")
                 Log.e("approveService response body : ", "${response.body()}")
 
