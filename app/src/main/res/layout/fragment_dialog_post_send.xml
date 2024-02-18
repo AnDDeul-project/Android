@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/font_pretendard_bold"
-        android:text="편지를 성공적으로 보냈습니다."
+        android:text="전송이 완료되었습니다."
         android:textAlignment="center"
         android:textColor="@color/text_high"
         android:textSize="20sp"
