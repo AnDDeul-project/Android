@@ -41,6 +41,10 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
     lateinit var targetList : Checklist
     lateinit var file : File
 
+    lateinit var currentPhotoPath: String   // 현재 이미지 파일의 경로 저장
+    lateinit var currentChecklist : Checklist
+    var currentPhotoFileName: String? = null
+
     override fun getItemCount(): Int {
         return checklist?.size ?: 0
     }
@@ -63,17 +67,32 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         //카메라 앱 연동 함수
         holder.binding.checkliBtnCamera.setOnClickListener {
             Log.d("카메라", "클릭")
+            //함수 호출
             checkCameraPermission(checklist!!.get(position))
-//            targetList = checklist!!.get(position)
-//            ChecklistService(context).imgApi(targetList)
+            currentChecklist = checklist!!.get(position)
+
+            val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
+            Log.d("onBindView 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
 
             //체크
-            holder.binding.checkliBtnChecking.visibility = View.INVISIBLE
-            holder.binding.checkliBtnChecked.visibility = View.VISIBLE
-            holder.binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
-            holder.binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
+            checking(holder.binding)
         }
 
+        holder.binding.checkliBtnChecking.setOnClickListener {
+            Log.d("checklist 확인", "checklist: ${checklist!!.get(position)}")
+            //complete
+            ChecklistService(context).completeApi(checklist!!.get(position))
+            //체크
+            checking(holder.binding)
+        }
+
+    }
+
+    fun checking(binding : ItemChecklistBinding) {
+        binding.checkliBtnChecking.visibility = View.INVISIBLE
+        binding.checkliBtnChecked.visibility = View.VISIBLE
+        binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
+        binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
     }
 
     inner class ViewHolder(val binding: ItemChecklistBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -98,24 +117,23 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         }
     }
 
-    lateinit var currentPhotoPath: String   // 현재 이미지 파일의 경로 저장
-    var currentPhotoFileName: String? = null
-
-    fun getTarget() : TargetImg {
-        return TargetImg(targetList, file)
-    }
-
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         Log.d("카메라", "시간 ${timeStamp}")
-        val storageDir: File? = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+//        val storageDir: File? = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+//        storageDir?.mkdirs()
 
         val file = File("${storageDir?.path}/${timeStamp}.jpg")
+//        val file = File("${storageDir?.path}${File.separator}${timeStamp}.jpg")
         Log.d("카메라", "file ${file}")
 
         currentPhotoFileName = file.name
         currentPhotoPath = file.absolutePath
+
+        Log.d("createFile 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
+
         return file
     }
 
@@ -150,7 +168,10 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 // 파일을 저장할 디렉토리 생성
                 Log.d("카메라", "인텐트")
                 val photoFile: File? = try {
-                    createImageFile()
+                    val file = createImageFile()
+                    Log.d("파일 생성 위치", "파일 경로: ${file.absolutePath}")
+                    Log.d("파일 존재 여부", "파일 존재 여부: ${file.exists()}")
+                    file
                 } catch (ex: IOException) {
                     null
                 }
@@ -162,16 +183,26 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                         "com.umc.anddeul.fileprovider",
                         it
                     )
-                    Log.d("카메라", "file : ${photoFile}, ${photoURI}")
+                    Log.d("카메라", "file : ${photoFile}")
+                    val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
+                    Log.d("openCamera 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
+
+                    if (file == photoFile) {
+                        Log.d("같은 파일", "${photoFile}")
+                    }
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     (context as Activity).startActivityForResult(
                         takePictureIntent,
                         CAMERA_REQUEST_CODE,
                     )
                     Log.d("카메라", "startActivityForResult")
-                    file = photoFile
                 }
+                Log.d("카메라 체크리스트", "해당 체크리스트: ${checklist}")
+                currentChecklist = checklist
+                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
+                Log.d("openCamera 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
+//                ChecklistService(context).imgApi(checklist, photoFile!!)
 
+            }
         }
     }
-}

@@ -11,12 +11,14 @@ data class Point (
 )
 
 data class LoveRoot (
+    val status: Int,
+    val isSuccess: Boolean,
     val result : Result
 )
 
 data class Result (
     val point : Int,
-    val changed_img :MutableList<ChangedImg>
+    val changed_img : List<ChangedImg>
 )
 
 data class ChangedImg (

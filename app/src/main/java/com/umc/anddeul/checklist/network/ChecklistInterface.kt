@@ -5,13 +5,17 @@ import com.umc.anddeul.checklist.model.AddRoot
 import com.umc.anddeul.checklist.model.CheckImgRoot
 import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import java.io.File
 
@@ -37,9 +41,10 @@ interface ChecklistInterface {
         @Path("checkid") checkid : Int
     ) : Call<CompleteRoot>
 
+    @Multipart
     @PATCH("/check/img")
     fun imgPic (
-        @Field("image") image : File,
-        @Field("checkid") checkid: Int
+        @Part image : MultipartBody.Part,
+        @Part("checkid") checkid: RequestBody
     ) : Call<CheckImgRoot>
 }

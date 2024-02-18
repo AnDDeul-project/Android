@@ -1,5 +1,6 @@
 package com.umc.anddeul.checklist
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -9,6 +10,8 @@ import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -49,6 +52,9 @@ class AddChecklistActivity : AppCompatActivity() {
         binding = ActivityAddChecklistBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //인텐트 정보 추출
+        val checkUserId = intent.getStringExtra("checkUserId")
+
         //날짜
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
         binding.addCheckliSelectDateTv.text = dateStamp
@@ -84,7 +90,8 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //토큰 가져오기
         val spf: SharedPreferences = this@AddChecklistActivity!!.getSharedPreferences("myToken", MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
+//        val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
@@ -104,20 +111,17 @@ class AddChecklistActivity : AppCompatActivity() {
         //서비스 생성
         val service = retrofit.create(ChecklistInterface::class.java)
 
-        //인텐트 정보 추출
-        val checkUserId = intent.getStringExtra("checkUserId")
-
         //현재 체크리스트 불러오기
         readApi(service, checkUserId!!)
 
         //체크리스트 추가 동작
-        binding.addCheckliEtContents.setOnKeyListener { v, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
+        binding.addCheckliEtContents.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
                 //체크리스트 객체 생성 코드
                 val text = binding.addCheckliEtContents.text.toString()
                 val dateList = selectedDateText.split("-")
                 val todayList = today.split("-")
-                val addChecklist = AddChecklist("3305756980", todayList[0].toInt(), todayList[1].toInt(), todayList[2].toInt(), text)
+                val addChecklist = AddChecklist(checkUserId, todayList[0].toInt(), todayList[1].toInt(), todayList[2].toInt(), text)
                 Log.d("체크리스트 값 확인", "${addChecklist}")
 
                 //체크리스트 추가 api
@@ -126,9 +130,16 @@ class AddChecklistActivity : AppCompatActivity() {
                 //체크리스트 변환된 거 불러오기
                 readApi(service, checkUserId!!)
                 binding.addCheckliEtContents.text.clear()
+
+                // 키보드 숨기기
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.addCheckliEtContents.windowToken, 0)
+
+                return@setOnEditorActionListener true
             }
-            true
+            false
         }
+
     }
 
     private fun addApi(service : ChecklistInterface, addChecklist: AddChecklist) {
@@ -169,11 +180,12 @@ class AddChecklistActivity : AppCompatActivity() {
                     Log.d("조회", "Root : ${root}")
                     val result : List<Checklist>? = root?.checklist
                     Log.d("조회", "Result : ${result}")
+                    val checklist : Checklist? = root?.checklist?.get(0)
 
                     result?.let {
                         addChecklistRVAdapter.setChecklistData(it)
                         addChecklistRVAdapter.notifyDataSetChanged()
-                        binding.checkliAddTvName.text = result?.get(0)?.receiver
+                        binding.checkliAddTvName.text = checklist!!.receiver
                     }
                 }
             }

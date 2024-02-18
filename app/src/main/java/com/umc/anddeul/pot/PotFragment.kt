@@ -140,7 +140,7 @@ class PotFragment : Fragment() {
                     Log.d("사랑주기", "root: ${root}")
                     val result : Result? = root?.result
                     Log.d("사랑주기", "result: ${result}")
-                    var changedImg : MutableList<ChangedImg>? = result?.changed_img
+                    var changedImg : List<ChangedImg>? = result?.changed_img
                     Log.d("사랑주기", "img: ${changedImg}")
 
                     result.let {
@@ -149,16 +149,15 @@ class PotFragment : Fragment() {
                     }
                     changedImg.let {
                         Log.d("사랑주기", "꽃 사진: ${it?.get(0)?.img_3}")
-                        Log.d("사랑주기", "프로그레스바: ${it?.get(0)?.gauge}")
+                        Log.d("사랑주기", "프로그레스바: ${it?.get(1)?.gauge}")
                         //꽃 사진 변경
                         val laodFlower = LoadImage(binding.potImgPlants)
                         laodFlower.execute(it?.get(0)?.img_3)
 
                         //프로그레스바 이미지 변경
                         val loadGauge = LoadImage(binding.potImageGauge)
-                        loadGauge.execute(it?.get(0)?.gauge)
+                        loadGauge.execute(it?.get(1)?.gauge)
                     }
-                    changedImg?.removeAt(0)
                 }
             }
 
