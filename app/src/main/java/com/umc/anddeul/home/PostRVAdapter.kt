@@ -230,9 +230,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
         val spf: SharedPreferences = context.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -243,7 +241,6 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
                             .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
                         chain.proceed(request)
                     }
                     .build()
@@ -255,7 +252,6 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
 
         emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
             override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
-                Log.e("emojiService", "선택한 게시글 id : $postId")
                 Log.e("emojiService", "onResponse code : ${response.code()}")
                 Log.e("emojiService", "${response.body()}")
 
@@ -272,6 +268,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiFunOne.visibility = View.GONE
                         binding.homeEmojiSadOne.visibility = View.GONE
                         binding.homeEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if(emojiType == "laugh_emj") {
@@ -279,6 +279,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiFunOne.visibility = View.VISIBLE
                         binding.homeEmojiSadOne.visibility = View.GONE
                         binding.homeEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if (emojiType == "sad_emj") {
@@ -286,6 +290,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiFunOne.visibility = View.GONE
                         binding.homeEmojiSadOne.visibility = View.VISIBLE
                         binding.homeEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.homeEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -303,9 +311,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
         val spf: SharedPreferences = context.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -316,7 +322,6 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
                             .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
                         chain.proceed(request)
                     }
                     .build()
@@ -328,7 +333,6 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
 
         emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
             override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
-                Log.e("emojiService", "선택한 게시글 id : $postId")
                 Log.e("emojiService", "onResponse code : ${response.code()}")
                 Log.e("emojiService", "${response.body()}")
 
@@ -345,6 +349,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiFunOne.visibility = View.GONE
                         binding.homeMyEmojiSadOne.visibility = View.GONE
                         binding.homeMyEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+
+                        if(emojiResponse?.happy_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if(emojiType == "laugh_emj") {
@@ -352,6 +360,10 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiFunOne.visibility = View.VISIBLE
                         binding.homeMyEmojiSadOne.visibility = View.GONE
                         binding.homeMyEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+
+                        if(emojiResponse?.laugh_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
 
                     if (emojiType == "sad_emj") {
@@ -359,12 +371,15 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiFunOne.visibility = View.GONE
                         binding.homeMyEmojiSadOne.visibility = View.VISIBLE
                         binding.homeMyEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+
+                        if(emojiResponse?.sad_emj?.size == 0) {
+                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
 
             override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
-                Log.e("emojiService", "onFailure")
                 Log.e("emojiService", "Failure message: ${t.message}")
             }
         })

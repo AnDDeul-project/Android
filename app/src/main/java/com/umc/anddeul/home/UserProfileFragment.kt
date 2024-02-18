@@ -39,7 +39,6 @@ class UserProfileFragment : Fragment() {
         // 선택한 유저의 아이디 가져오기
         val idJson = arguments?.getString("selectedId")
         val snsId = gson.fromJson(idJson, String::class.java)
-        Log.e("userProfileService", "선택된 Id : ${snsId}")
 
         binding.userProfileToolbar.apply {
             setNavigationIcon(R.drawable.ic_arrow_back)
@@ -52,22 +51,13 @@ class UserProfileFragment : Fragment() {
 
         loadProfile(snsId)
 
-        binding.userProfileCheckIv.setOnClickListener {
-            // 체크리스트 화면으로 이동
-            val intent = Intent(context, AddChecklistActivity::class.java)
-            intent.putExtra("checkUserId", snsId)
-            startActivity(intent)
-        }
-
         return  binding.root
     }
 
     fun loadProfile(snsId : String) {
         val spf: SharedPreferences =
             requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        // val token = spf.getString("jwtToken", "")
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcwODE0OTYzN30.gdMMpNYi6ewkV8ND2vsU138Z9nryiXQNfr-HvUnQUL8"
+        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -93,7 +83,6 @@ class UserProfileFragment : Fragment() {
                 call: Call<UserProfileDTO>,
                 response: Response<UserProfileDTO>
             ) {
-                Log.e("userProfileService", "onResponse")
                 Log.e("userProfileService response code : ", "${response.code()}")
                 Log.e("userProfileService response body : ", "${response.body()}")
 
@@ -105,7 +94,6 @@ class UserProfileFragment : Fragment() {
                         binding.userProfilePostNumTv.text = "게시물 ${userProfileData.postCount}개"
 
                         val userProfileRVAdapter = UserProfileRVAdapter(userProfileData.firstPostImages, userProfileData.postIdx)
-                        Log.e("UserProfileBind", "게시물 첫번째 사진들 리스트 : ${userProfileData.firstPostImages}")
 
                         binding.userProfilePostRv.layoutManager = GridLayoutManager(requireContext(),3)
                         binding.userProfilePostRv.adapter = userProfileRVAdapter
@@ -121,14 +109,20 @@ class UserProfileFragment : Fragment() {
                         val imageView = binding.userProfileIv
                         val loadImage = LoadProfileImage(imageView)
                         loadImage.execute(profileImageUrl)
+
+                        binding.userProfileCheckIv.setOnClickListener {
+                            // 체크리스트 화면으로 이동
+                            val intent = Intent(context, AddChecklistActivity::class.java)
+                            intent.putExtra("checkUserId", snsId)
+                            intent.putExtra("checkUserName", userProfileData.nickname)
+                            startActivity(intent)
+                        }
                     }
                 }
             }
 
             override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                Log.e("userProfileService", "onFailure")
                 Log.e("userProfileService", "Failure message: ${t.message}")
-
             }
         })
     }
