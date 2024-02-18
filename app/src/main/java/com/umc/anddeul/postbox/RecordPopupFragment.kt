@@ -14,7 +14,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.umc.anddeul.MainActivity
@@ -126,12 +125,10 @@ class RecordPopupFragment(private val context: Context) {
                 mediaRecorder?.prepare()
                 mediaRecorder?.start()
                 state = true
-//                Toast.makeText(context, "녹음이 시작되었습니다.", Toast.LENGTH_SHORT).show()
             }
             else{     // 녹음 시작 (일시정지한 적 있는 경우)
                 state = true
                 mediaRecorder?.resume()
-//                Toast.makeText(context, "녹음이 다시 시작되었습니다.", Toast.LENGTH_SHORT).show()
             }
             startTimer()
             binding.recordPlayBtn.visibility = View.GONE
@@ -167,9 +164,7 @@ class RecordPopupFragment(private val context: Context) {
         if(state){
             mediaRecorder?.pause()
             binding.restartBtn.visibility = View.VISIBLE
-//            Toast.makeText(context, "녹음이 정지되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
-//            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
         timerRunnable?.let { timerHandler?.removeCallbacks(it) }
     }
@@ -183,9 +178,7 @@ class RecordPopupFragment(private val context: Context) {
             mediaRecorder?.reset()
             mediaRecorder?.release()
             binding.restartBtn.visibility = View.VISIBLE
-//            Toast.makeText(context, "녹음이 되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
-//            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
         timerRunnable?.let { timerHandler?.removeCallbacks(it) }
     }
@@ -200,9 +193,7 @@ class RecordPopupFragment(private val context: Context) {
             hasRecorded = false
             outputPath = null
             binding.restartBtn.visibility = View.GONE
-//            Toast.makeText(context, "녹음이 초기화되었습니다.", Toast.LENGTH_SHORT).show()
         } else {
-//            Toast.makeText(context, "녹음 상태가 아닙니다.", Toast.LENGTH_SHORT).show()
         }
         timerRunnable?.let { timerHandler?.removeCallbacks(it) }
         secondsElapsed = 0
