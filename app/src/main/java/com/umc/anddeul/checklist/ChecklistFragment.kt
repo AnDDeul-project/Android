@@ -226,7 +226,7 @@ class ChecklistFragment : Fragment() {
             if (isTodayInWeek) {
                 if (today == currentDateForDay) {
                     binding.checkliTodayCircle.visibility = View.VISIBLE
-                    binding.checklistSelectCircle.visibility = View.INVISIBLE
+                    binding.checklistSelectCircle.visibility = View.GONE
                     dateTextView?.viewTreeObserver?.addOnPreDrawListener(object :
                         ViewTreeObserver.OnPreDrawListener {
                         override fun onPreDraw(): Boolean {
@@ -249,7 +249,7 @@ class ChecklistFragment : Fragment() {
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                     dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
-                    binding.checkliTodayCircle.visibility = View.GONE
+//                    binding.checkliTodayCircle.visibility = View.GONE
                 }
             }
 
@@ -314,7 +314,7 @@ class ChecklistFragment : Fragment() {
             if (isSelectedDay) {
                 if (selectedDay == currentDateForDay) {
                     binding.checklistSelectCircle.visibility = View.VISIBLE
-                    binding.checkliTodayCircle.visibility = View.INVISIBLE
+                    binding.checkliTodayCircle.visibility = View.GONE
                     dateTextView?.viewTreeObserver?.addOnPreDrawListener(object :
                         ViewTreeObserver.OnPreDrawListener {
                         override fun onPreDraw(): Boolean {
@@ -337,7 +337,7 @@ class ChecklistFragment : Fragment() {
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                     dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
-                    binding.checkliTodayCircle.visibility = View.GONE
+//                    binding.checkliTodayCircle.visibility = View.GONE
                 }
             }
 
