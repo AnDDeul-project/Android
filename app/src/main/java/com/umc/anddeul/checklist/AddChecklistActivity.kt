@@ -319,7 +319,6 @@ class AddChecklistActivity : AppCompatActivity() {
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.typeface = ResourcesCompat.getFont(this, R.font.font_pretendard_regular)
                     dateTextView?.typeface = ResourcesCompat.getFont(this, R.font.font_pretendard_regular)
-                    binding.addCheckliTodayCircle.visibility = View.GONE
                 }
             }
 
@@ -407,7 +406,6 @@ class AddChecklistActivity : AppCompatActivity() {
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.typeface = ResourcesCompat.getFont(this, R.font.font_pretendard_regular)
                     dateTextView?.typeface = ResourcesCompat.getFont(this, R.font.font_pretendard_regular)
-                    binding.addCheckliTodayCircle.visibility = View.GONE
                 }
             }
 
