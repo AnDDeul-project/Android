@@ -228,7 +228,7 @@ class AddChecklistActivity : AppCompatActivity() {
     fun readApi(service : ChecklistInterface, spfMyId : String) {
         val readCall : Call<Root> = service.getChecklist(
             spfMyId!!,
-            false,
+            true,
             selectedDay.toString()
         )
         readCall.enqueue(object : Callback<Root> {
