@@ -57,7 +57,9 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         holder.binding.checkliBtnCamera.setOnClickListener {
             //함수 호출
             currentChecklist = checklist!!.get(position)
-            ChecklistService(context).completeApi(currentChecklist)
+            if (currentChecklist.complete == 0) {
+                ChecklistService(context).completeApi(currentChecklist)
+            }
             checkCameraPermission(currentChecklist)
 
             val delayMillis : Long = 1000 * 13
