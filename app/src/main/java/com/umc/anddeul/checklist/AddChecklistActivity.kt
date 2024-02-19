@@ -163,44 +163,44 @@ class AddChecklistActivity : AppCompatActivity() {
         readApi(service, checkUserId!!)
 
         //체크리스트 추가 동작
-        binding.addCheckliEtContents.setOnEditorActionListener { _, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP)) {
+//        binding.addCheckliEtContents.setOnEditorActionListener { _, actionId, event ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP)) {
                 //체크리스트 객체 생성 코드
-                val text = binding.addCheckliEtContents.text.toString()
-                val dateList = selectedDateText.split("-")
-                val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
-                Log.d("체크리스트 값 확인", "${addChecklist}")
-
-                //체크리스트 추가 api
-                addApi(service, addChecklist)
-
-                //체크리스트 변환된 거 불러오기
-                readApi(service, checkUserId!!)
-                binding.addCheckliEtContents.text.clear()
-
-                // 키보드 숨기기
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.addCheckliEtContents.windowToken, 0)
-
-                return@setOnEditorActionListener true
-            }
-            false
-        }
+//                val text = binding.addCheckliEtContents.text.toString()
+//                val dateList = selectedDateText.split("-")
+//                val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+//                Log.d("체크리스트 값 확인", "${addChecklist}")
+//
+//                //체크리스트 추가 api
+//                addApi(service, addChecklist)
+//
+//                //체크리스트 변환된 거 불러오기
+//                readApi(service, checkUserId!!)
+//                binding.addCheckliEtContents.text.clear()
+//
+//                // 키보드 숨기기
+//                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                imm.hideSoftInputFromWindow(binding.addCheckliEtContents.windowToken, 0)
+//
+//                return@setOnEditorActionListener true
+//            }
+//            false
+//        }
 
 
         //동그라미 클릭시 추가
-//        binding.addCheckliEtCircle.setOnClickListener {
-//            val text = binding.addCheckliEtContents.text.toString()
-//            val dateList = selectedDateText.split("-")
-//            val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
-//
-//            //체크리스트 추가 api
-//            addApi(service, addChecklist)
-//
-//            //체크리스트 변환된 거 불러오기
-//            readApi(service, checkUserId!!)
-//            binding.addCheckliEtContents.text.clear()
-//        }
+        binding.addCheckliEtCircle.setOnClickListener {
+            val text = binding.addCheckliEtContents.text.toString()
+            val dateList = selectedDateText.split("-")
+            val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+
+            //체크리스트 추가 api
+            addApi(service, addChecklist)
+
+            //체크리스트 변환된 거 불러오기
+            readApi(service, checkUserId!!)
+            binding.addCheckliEtContents.text.clear()
+        }
 
     }
 
