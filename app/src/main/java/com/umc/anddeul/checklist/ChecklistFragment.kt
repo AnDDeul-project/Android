@@ -249,7 +249,6 @@ class ChecklistFragment : Fragment() {
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                     dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
-//                    binding.checkliTodayCircle.visibility = View.GONE
                 }
             }
 
@@ -337,7 +336,6 @@ class ChecklistFragment : Fragment() {
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                     dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
-//                    binding.checkliTodayCircle.visibility = View.GONE
                 }
             }
 
