@@ -36,7 +36,6 @@ class GardenFragment : Fragment() {
         //토큰 가져오기
         val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
         val spfMyId : SharedPreferences = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
         val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -64,9 +63,7 @@ class GardenFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val root : PointRoot? = response.body()
-                    Log.d("포인트", "Root: ${root}")
                     val point : Point? = root?.point
-                    Log.d("포인트", "Result: ${point}")
 
                     point.let {
                         binding.gardenTvHeartPoint.text = it?.point.toString()
@@ -80,16 +77,13 @@ class GardenFragment : Fragment() {
         })
 
         val flowerCall : Call<FlowerRoot> = service.getFlower()
-        Log.d("현재 꽃", "flowerCall: ${flowerCall}")
         flowerCall.enqueue(object: Callback<FlowerRoot> {
             override fun onResponse(call: Call<FlowerRoot>, response: Response<FlowerRoot>) {
                 Log.d("현재 꽃", "Response : ${response}")
 
                 if (response.isSuccessful) {
                     val root : FlowerRoot? = response.body()
-                    Log.d("현재 꽃", "root : ${root}")
                     val flower : Flower? = root?.flower
-                    Log.d("현재 꽃", "flower : ${flower}")
 
                     flower.let {
                         //이미지뷰에 변경

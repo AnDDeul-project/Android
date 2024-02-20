@@ -50,8 +50,6 @@ class PotFragment : Fragment() {
 
         //토큰 가져오기
         val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val spfMyId : SharedPreferences = context!!.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzA0MTMzMDkzIl0sImlhdCI6MTcwNjY4MzkxMH0.ncVxzwxBVaiMegGD0VU5pI5i9GJjhrU8kUIYtQrSLSg"
         val token = spf.getString("jwtToken", "")
         val retrofit = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -76,16 +74,13 @@ class PotFragment : Fragment() {
         }
 
         val myPointCall : Call<PointRoot> = service.getMyPoint()
-        Log.d("포인트", "mypointCall: ${myPointCall}")
         myPointCall.enqueue(object : Callback<PointRoot> {
             override fun onResponse(call: Call<PointRoot>, response: Response<PointRoot>) {
                 Log.d("포인트", "Response: ${response}")
 
                 if (response.isSuccessful) {
                     val root : PointRoot? = response.body()
-                    Log.d("포인트", "Root: ${root}")
                     val point : Point? = root?.point
-                    Log.d("포인트", "Result: ${point}")
 
                     point.let {
                         binding.potTvHeartPoint.text = it?.point.toString()
@@ -102,13 +97,10 @@ class PotFragment : Fragment() {
         Log.d("현재 꽃", "flowerCall: ${flowerCall}")
         flowerCall.enqueue(object: Callback<FlowerRoot> {
             override fun onResponse(call: Call<FlowerRoot>, response: Response<FlowerRoot>) {
-                Log.d("현재 꽃", "Response : ${response}")
 
                 if (response.isSuccessful) {
                     val root : FlowerRoot? = response.body()
-                    Log.d("현재 꽃", "root : ${root}")
                     val flower : Flower? = root?.flower
-                    Log.d("현재 꽃", "flower : ${flower}")
 
                     flower.let {
                         binding.potTvPlantsName.text = it?.name.toString()
@@ -138,7 +130,6 @@ class PotFragment : Fragment() {
                     val root : LoveRoot? = response.body()
                     val result : Result? = root?.result
                     var changedImg : List<ChangedImg>? = result?.changed_img
-                    Log.d("사랑주기", "img: ${changedImg}")
 
                     result.let {
                         binding.potTvHeartPoint.text = it?.point.toString()
