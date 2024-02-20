@@ -65,7 +65,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             val delayMillis : Long = 1000 * 13
             holder.binding.checkliBtnCamera.postDelayed({
                 val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
-                Log.d("delay 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
                 ChecklistService(context).imgApi(currentChecklist, file!!)
             }, delayMillis)
 
@@ -132,12 +131,9 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             ".jpg",
             storageDir
         )
-        Log.d("카메라", "file ${file}")
 
         currentPhotoFileName = file.name
         currentPhotoPath = file.absolutePath
-
-        Log.d("createFile 파일 존재 여부", "파일 존재 여부: ${file} ${file.exists()}")
 
         return file
     }
@@ -168,8 +164,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 // 파일을 저장할 디렉토리 생성
                 val photoFile: File? = try {
                     val file = createImageFile()
-                    Log.d("파일 생성 위치", "파일 경로: ${file.absolutePath}")
-                    Log.d("파일 존재 여부", "파일 존재 여부: ${file.exists()}")
                     file
                 } catch (ex: IOException) {
                     null

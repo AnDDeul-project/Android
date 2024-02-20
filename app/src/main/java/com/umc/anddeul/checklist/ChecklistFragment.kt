@@ -125,8 +125,6 @@ class ChecklistFragment : Fragment() {
             selectedDay = selectedDay.minusWeeks(1)
             val yearMonth = YearMonth.from(selectedDay)
             binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            Log.d("날짜", "selectedDateText ${selectedDateText}")
-            Log.d("날짜", "selectedDay ${selectedDay}")
             if (selectedDay == today) {
                 setWeek(selectedDay, service, myId!!)
             }
@@ -140,8 +138,6 @@ class ChecklistFragment : Fragment() {
             selectedDay = selectedDay.plusWeeks(1)
             val yearMonth = YearMonth.from(selectedDay)
             binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            Log.d("날짜", "selectedDateText ${selectedDateText}")
-            Log.d("날짜", "selectedDay ${selectedDay}")
             if (selectedDay == today) {
                 setWeek(selectedDay, service, myId!!)
             }
@@ -195,7 +191,6 @@ class ChecklistFragment : Fragment() {
 
         for (i in 1..7) {
             val currentDateForDay = nearestMonday.plusDays(i.toLong() - 1)
-            Log.d("날짜", "currentDateForDay ${currentDateForDay}")
             val dateTextView = when (i) {
                 1 -> binding.date1
                 2 -> binding.date2
@@ -254,17 +249,11 @@ class ChecklistFragment : Fragment() {
 
             // 날짜 선택 시
             dateTextView?.setOnClickListener {
-                Log.d("날짜 선택 함수", "날짜 선택 함수 들어옴")
                 val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 selectedDateText = currentDateForDay.format(dateFormat)
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 val selectDate = LocalDate.parse(selectedDateText, formatter)
                 selectedDay = selectDate
-                Log.d("날짜 선택", "selectedDate ${selectedDateText}")
-                Log.d("날짜 선택", "currentDateForDay ${currentDateForDay}")
-                Log.d("날짜 선택", "selectDate ${selectDate}")
-                Log.d("날짜 선택", "selectedDay ${selectedDay}")
-                Log.d("날짜 선택", "today ${today}")
                 if (selectedDay == today) {
                     setWeek(selectedDay, service, spfMyId)
                 }
@@ -346,11 +335,6 @@ class ChecklistFragment : Fragment() {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 val selectDate = LocalDate.parse(selectedDateText, formatter)
                 selectedDay = selectDate
-                Log.d("날짜 선택", "selectDate ${selectDate}")
-                Log.d("날짜 선택", "selectedDate ${selectedDateText}")
-                Log.d("날짜 선택", "currentDateForDay ${currentDateForDay}")
-                Log.d("날짜 선택", "selectedDay ${selectedDay}")
-                Log.d("날짜 선택", "today ${today}")
                 if (selectedDay == today) {
                     setWeek(selectedDay, service, spfMyId)
                 }

@@ -114,7 +114,6 @@ class AddChecklistActivity : AppCompatActivity() {
         //날짜
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
         binding.addCheckliSelectDateTv.text = dateStamp
-        Log.d("날짜", "오늘 날짜: ${today}")
 
         //리사이클러뷰 연결
         addChecklistRVAdapter = AddChecklistRVAdapter()
@@ -129,8 +128,6 @@ class AddChecklistActivity : AppCompatActivity() {
             selectedDay = selectedDay.minusWeeks(1)
             val yearMonth = YearMonth.from(selectedDay)
             binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            Log.d("날짜", "selectedDateText ${selectedDateText}")
-            Log.d("날짜", "selectedDay ${selectedDay}")
             if (selectedDay == today) {
                 setWeek(selectedDay, service, myId!!)
             }
@@ -144,8 +141,6 @@ class AddChecklistActivity : AppCompatActivity() {
             selectedDay = selectedDay.plusWeeks(1)
             val yearMonth = YearMonth.from(selectedDay)
             binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            Log.d("날짜", "selectedDateText ${selectedDateText}")
-            Log.d("날짜", "selectedDay ${selectedDay}")
             if (selectedDay == today) {
                 setWeek(selectedDay, service, myId!!)
             }
@@ -155,38 +150,9 @@ class AddChecklistActivity : AppCompatActivity() {
         }
 
         selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
-        Log.d("날짜", "selectedDateText ${selectedDateText}")
-        Log.d("날짜", "selectedDay ${selectedDay}")
-
 
         //현재 체크리스트 불러오기
         readApi(service, checkUserId!!)
-
-        //체크리스트 추가 동작
-//        binding.addCheckliEtContents.setOnEditorActionListener { _, actionId, event ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP)) {
-                //체크리스트 객체 생성 코드
-//                val text = binding.addCheckliEtContents.text.toString()
-//                val dateList = selectedDateText.split("-")
-//                val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
-//                Log.d("체크리스트 값 확인", "${addChecklist}")
-//
-//                //체크리스트 추가 api
-//                addApi(service, addChecklist)
-//
-//                //체크리스트 변환된 거 불러오기
-//                readApi(service, checkUserId!!)
-//                binding.addCheckliEtContents.text.clear()
-//
-//                // 키보드 숨기기
-//                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm.hideSoftInputFromWindow(binding.addCheckliEtContents.windowToken, 0)
-//
-//                return@setOnEditorActionListener true
-//            }
-//            false
-//        }
-
 
         //동그라미 클릭시 추가
         binding.addCheckliEtCircle.setOnClickListener {
@@ -329,11 +295,6 @@ class AddChecklistActivity : AppCompatActivity() {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 val selectDate = LocalDate.parse(selectedDateText, formatter)
                 selectedDay = selectDate
-                Log.d("날짜 선택", "selectedDate ${selectedDateText}")
-                Log.d("날짜 선택", "currentDateForDay ${currentDateForDay}")
-                Log.d("날짜 선택", "selectDate ${selectDate}")
-                Log.d("날짜 선택", "selectedDay ${selectedDay}")
-                Log.d("날짜 선택", "today ${today}")
                 if (selectedDay == today) {
                     setWeek(selectedDay, service, spfMyId)
                 }
@@ -416,11 +377,6 @@ class AddChecklistActivity : AppCompatActivity() {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 val selectDate = LocalDate.parse(selectedDateText, formatter)
                 selectedDay = selectDate
-                Log.d("날짜 선택", "selectDate ${selectDate}")
-                Log.d("날짜 선택", "selectedDate ${selectedDateText}")
-                Log.d("날짜 선택", "currentDateForDay ${currentDateForDay}")
-                Log.d("날짜 선택", "selectedDay ${selectedDay}")
-                Log.d("날짜 선택", "today ${today}")
                 if (selectedDay == today) {
                     setWeek(selectedDay, service, spfMyId)
                 }

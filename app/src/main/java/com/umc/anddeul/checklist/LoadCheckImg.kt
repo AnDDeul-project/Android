@@ -13,13 +13,12 @@ class LoadCheckImg(private val imageView: ImageView) : AsyncTask<String, Void, B
 
     override fun doInBackground(vararg urls: String): Bitmap? {
         val imageUrl = urls[0]
-        Log.d("이미지 url", "imageUrl: ${imageUrl}")
         var bitmap: Bitmap? = null
+
         try {
             val url = URL(imageUrl)
             Log.d("url", "url: ${url}")
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-            Log.d("connection", "connection: ${connection}")
             connection.doInput = true
             connection.connect()
             val inputStream = connection.inputStream
