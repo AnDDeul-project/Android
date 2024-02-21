@@ -1,6 +1,6 @@
-package com.umc.anddeul.home.model
+package com.umc.anddeul.mypage.model
 
-data class LeaveDTO(
+data class LogoutDTO(
     val status : Int,
     val isSuccess : Boolean,
     val accesstoken : String

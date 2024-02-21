@@ -12,8 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
-import com.umc.anddeul.home.model.LogoutDTO
-import com.umc.anddeul.home.network.LogoutInterface
+import com.umc.anddeul.mypage.model.LogoutDTO
+import com.umc.anddeul.mypage.network.LogoutInterface
 import com.umc.anddeul.start.StartActivity
 import okhttp3.OkHttpClient
 import retrofit2.Call

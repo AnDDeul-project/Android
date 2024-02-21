@@ -1,6 +1,6 @@
-package com.umc.anddeul.home.network
+package com.umc.anddeul.mypage.network
 
-import com.umc.anddeul.home.model.LogoutDTO
+import com.umc.anddeul.mypage.model.LogoutDTO
 import retrofit2.Call
 import retrofit2.http.POST
 
