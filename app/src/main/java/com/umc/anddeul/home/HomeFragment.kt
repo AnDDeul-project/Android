@@ -34,7 +34,6 @@ import com.umc.anddeul.home.model.MemberResponse
 import com.umc.anddeul.home.model.Post
 import com.umc.anddeul.home.model.PostData
 import com.umc.anddeul.home.network.MemberInterface
-import com.umc.anddeul.home.service.PostService
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +43,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class HomeFragment : Fragment(), ConfirmDialogListener {
     lateinit var binding: FragmentHomeBinding
-    private var postService = context?.let { PostService(it) }
     lateinit var postRVAdapter: PostRVAdapter
     lateinit var drawerLayout: DrawerLayout
 

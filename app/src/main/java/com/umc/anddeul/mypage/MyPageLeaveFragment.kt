@@ -16,8 +16,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMypageLeaveBinding
-import com.umc.anddeul.home.model.LeaveDTO
-import com.umc.anddeul.home.network.LeaveInterface
+import com.umc.anddeul.mypage.model.LeaveDTO
+import com.umc.anddeul.mypage.network.LeaveInterface
 import com.umc.anddeul.start.StartActivity
 import okhttp3.OkHttpClient
 import retrofit2.Call
