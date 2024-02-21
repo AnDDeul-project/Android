@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/home_drawer_layout"
+    android:background="@color/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/home_tb"
+            android:layout_width="match_parent"
+            android:layout_height="77dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/background"
+            android:elevation="10dp">
+
+            <ImageView
+                android:id="@+id/home_toolbar_logo_iv"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/anddeul_logo" />
+
+            <ImageButton
+                android:id="@+id/home_toolbar_menu_ib"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:background="@color/background"
+                android:src="@drawable/ic_home_hamburger_menu" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_200"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_tb"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/home_floating_bt"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_home_plus_bt"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:shapeAppearance="@drawable/floating_round_button"
+            app:tint="@color/onPrimary" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/home_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/home_tb"
+            app:layout_constraintVertical_bias="1.0">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_feed_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/main_bnv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/home_tb" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_menu_layout"
+        android:layout_width="360dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@color/background"
+        android:clickable="true"
+        android:layout_marginStart="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/home_tb">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/home_menu_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/font_pretendard_bold"
+                    android:text="행복한 우리 가족"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/home_menu_myProfile_iv"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/img_upload_feed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_menu_title_tv"
+                    app:shapeAppearanceOverlay="@style/ProfileCircle" />
+
+                <TextView
+                    android:id="@+id/home_menu_myProfile_name_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/font_pretendard_bold"
+                    android:text="사용자 본인"
+                    android:textColor="@color/text_high"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@id/home_menu_myProfile_iv"
+                    app:layout_constraintTop_toBottomOf="@+id/home_menu_title_tv" />
+
+                <TextView
+                    android:id="@+id/home_menu_family_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:fontFamily="@font/font_pretendard_bold"
+                    android:text="우리 가족 구성원"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/home_menu_myProfile_iv" />
+
+                <LinearLayout
+                    android:id="@+id/home_menu_members_linear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_menu_family_tv" />
+
+                <View
+                    android:id="@+id/home_menu_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/icon_disabled"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_menu_members_linear" />
+
+                <TextView
+                    android:id="@+id/home_menu_request_member_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/font_pretendard_bold"
+                    android:text="수락 요청"
+                    android:textColor="@color/grey_700"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_menu_line" />
+
+                <LinearLayout
+                    android:id="@+id/home_menu_request_members_linear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/home_menu_request_member_tv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_menu_invite_code_layout"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:background="@color/background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/home_menu_invite_code_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="그룹 초대 코드"
+            android:textColor="@color/primary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/home_menu_code_num_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="KJ12345"
+            android:textColor="@color/text_medium"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/home_menu_invite_code_tv" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_menu_copy_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:backgroundTint="@color/background"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="복사하기"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/home_menu_code_num_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            app:shapeAppearance="@style/RoundButton"
+            app:strokeColor="@color/primary"
+            app:strokeWidth="1dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_post_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/user_post_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/GalleryToolBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="게시글"
+        app:titleCentered="true"
+        app:titleTextColor="@color/text_high" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_post_toolbar"/>
+
+    <ImageView
+        android:id="@+id/user_post_profile_iv"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/ic_profile_person"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_post_toolbar" />
+
+    <TextView
+        android:id="@+id/user_post_username_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="17dp"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:text="사용자 이름"
+        android:textSize="18sp"
+        android:textColor="@color/text_high"
+        app:layout_constraintStart_toEndOf="@+id/user_post_profile_iv"
+        app:layout_constraintTop_toBottomOf="@+id/user_post_toolbar" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/user_post_image_vp"
+        android:layout_width="match_parent"
+        android:layout_height="390dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_post_profile_iv" />
+
+    <ImageButton
+        android:id="@+id/user_post_emoji_ib"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/background"
+        android:src="@drawable/emoji_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_post_image_vp" />
+
+    <LinearLayout
+        android:id="@+id/user_post_emoji_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/emoji_back_selector"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/user_post_emoji_ib"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/user_post_emoji_happy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:background="@color/clear"
+            android:onClick="onEmojiClick"
+            android:src="@drawable/emoji_heart" />
+
+        <ImageButton
+            android:id="@+id/user_post_emoji_laugh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:background="@color/clear"
+            android:onClick="onEmojiClick"
+            android:src="@drawable/emoji_fun" />
+
+        <ImageButton
+            android:id="@+id/user_post_emoji_sad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/clear"
+            android:onClick="onEmojiClick"
+            android:src="@drawable/emoji_sad" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_post_emoji_happy_layout"
+        android:layout_width="65dp"
+        android:layout_height="34dp"
+        android:background="@drawable/emoji_back_selected"
+        app:layout_constraintStart_toEndOf="@id/user_post_emoji_ib"
+        app:layout_constraintTop_toBottomOf="@+id/user_post_image_vp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="13dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/user_post_emoji_happy_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_heart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/user_post_emoji_fun_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_fun"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/user_post_emoji_sad_one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/emoji_sad"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/user_post_emoji_happy_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/background"
+            android:textSize="16sp"
+            android:fontFamily="@font/font_pretendard_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="15dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/user_post_explain_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:text="게시물에 대한 사용자의 설명들"
+        android:textColor="@color/secondary"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_post_emoji_ib" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

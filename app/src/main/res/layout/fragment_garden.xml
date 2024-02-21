@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/garden_img_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/garden_btn_back" />
+
+    <ImageView
+        android:id="@+id/garden_img_my_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/garden_img_point" />
+
+    <ImageView
+        android:id="@+id/garden_img_rectangle1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/garden_img_rectangle1" />
+
+    <ImageView
+        android:id="@+id/garden_img_us_garden"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/garden_img_us_garden" />
+
+    <TextView
+        android:id="@+id/garden_tv_heart_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="0"
+        android:textColor="@color/icon_white"
+        android:textSize="22dp"
+        app:layout_constraintBottom_toBottomOf="@+id/garden_img_my_point"
+        app:layout_constraintEnd_toEndOf="@+id/garden_img_my_point"
+        app:layout_constraintStart_toStartOf="@+id/garden_img_my_point"
+        app:layout_constraintTop_toTopOf="@+id/garden_img_my_point" />
+
+    <TextView
+        android:id="@+id/garden_tv_us_garden"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="26dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:textColor="@color/onPrimary"
+        android:text="우리 가족 정원: 봄"
+        app:layout_constraintBottom_toBottomOf="@+id/garden_img_us_garden"
+        app:layout_constraintEnd_toEndOf="@id/garden_img_us_garden"
+        app:layout_constraintStart_toStartOf="@+id/garden_img_us_garden"
+        app:layout_constraintTop_toTopOf="@+id/garden_img_us_garden" />
+
+    <ImageView
+        android:id="@+id/garden_iv_flower1"
+        android:layout_width="130dp"
+        android:layout_height="163dp"
+        android:layout_marginStart="38dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toTopOf="@+id/garden_img_rectangle1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/garden_img_tulip" />
+
+    <ImageView
+        android:id="@+id/garden_iv_flower2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        app:layout_constraintBottom_toTopOf="@+id/garden_img_rectangle1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/garden_img_plants1" />
+
+    <ImageView
+        android:id="@+id/garden_iv_flower3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        app:layout_constraintBottom_toTopOf="@+id/garden_img_us_garden"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/garden_img_plants2" />
+
+    <ImageView
+        android:id="@+id/garden_iv_flower4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        app:layout_constraintBottom_toTopOf="@+id/garden_img_us_garden"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/garden_img_plants3" />
+</androidx.constraintlayout.widget.ConstraintLayout>

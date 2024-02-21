@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mypage_notification"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/mypage_notification_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="알림 설정"
+        android:theme="@style/GalleryToolBar"
+        app:titleTextColor="@color/text_high"
+        app:titleCentered="true"
+        android:background="@color/background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_notification_toolbar"/>
+
+    <ImageView
+        android:id="@+id/mypage_notification_bell_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/mypage_notification_bell"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_notification_toolbar"
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="32dp"/>
+
+    <TextView
+        android:id="@+id/mypage_notification_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="알림을 켜주세요"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_notification_toolbar"
+        app:layout_constraintStart_toEndOf="@+id/mypage_notification_bell_iv"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="10dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mypage_notification_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:text="알림 켜키"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_notification_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="32dp"
+        app:shapeAppearance="@style/RoundButton" />
+
+    <TextView
+        android:id="@+id/mypage_notification_explain_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="알림이 꺼져있으면 메세지와 알림을 받을 수 없어요.\n\n휴대폰 [설정-> 알림] 메뉴에서 안뜰 알림을 허용으로\n변경해주세요 :)"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_notification_bell_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="37dp"
+        android:lineSpacingExtra="6dp"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

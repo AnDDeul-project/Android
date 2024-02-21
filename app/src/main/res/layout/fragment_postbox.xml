@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/postbox_tb"
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        android:background="@color/background"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/gotoPotBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/postbox_goto_pot" />
+
+        <TextView
+            android:id="@+id/userTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="이솜솜"
+            android:textColor="@color/primary"
+            android:textSize="26sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/font_pretendard_regular"
+            android:text="님의 우체통"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/userTitleTv"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="238dp"
+                android:elevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/img_letter_shadow" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvLetters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="238dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="333dp"
+                android:fontFamily="@font/font_pretendard_bold"
+                android:text="오늘의 질문!"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/randomQTv"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="358dp"
+                android:fontFamily="@font/font_pretendard_bold"
+                android:text="상대방이 갑자기 좀비로 변한다면?"
+                android:textColor="#3C9D80"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/randomQTv"
+                app:srcCompat="@drawable/postbox_img_letterbox_small" />
+
+            <ImageView
+                android:id="@+id/voiceIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@+id/mailIv"
+                app:layout_constraintTop_toTopOf="@+id/imageView2"
+                app:srcCompat="@drawable/postbox_ic_keyboard_voice" />
+
+            <ImageView
+                android:id="@+id/mailIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="@+id/imageView2"
+                app:srcCompat="@drawable/postbox_ic_outgoing_mail" />
+
+            <EditText
+                android:id="@+id/letterEt"
+                android:layout_width="293dp"
+                android:layout_height="265dp"
+                android:layout_marginTop="30dp"
+                android:background="@null"
+                android:ems="10"
+                android:fontFamily="@font/font_ongothic_regular"
+                android:gravity="top"
+                android:hint="텍스트를 입력해주세요"
+                android:inputType="textMultiLine"
+                android:text=""
+                android:textColor="@color/text_medium"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+            <ImageView
+                android:id="@+id/todayCircle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="180dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/calendar_circle" />
+
+            <TextView
+                android:id="@+id/postDate1"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="186dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDate2"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="186dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDate3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDate1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDate4"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="186dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDate5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDate3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDate3"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="186dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="4"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDate4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDate2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDate5"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="186dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="5"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDate6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDate4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDate6"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="186dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="6"
+                android:textColor="@color/system_informative"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDate7"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDate5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDate7"
+                android:layout_width="21dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="186dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="@color/system_error"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDay1"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="158dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="월"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDay2"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="158dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="화"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDay3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDay1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDay3"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="158dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="수"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDay4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDay2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDay4"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="158dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="목"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDay5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDay3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDay5"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="158dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="금"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDay6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDay4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDay6"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="158dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="토"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/postDay7"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/postDay5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postDay7"
+                android:layout_width="11dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="158dp"
+                android:layout_marginEnd="21dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:text="일"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/beforeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="122dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/postbox_ic_navi_left" />
+
+            <ImageView
+                android:id="@+id/afterBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="122dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/postbox_ic_navi_right" />
+
+            <TextView
+                android:id="@+id/selectDateTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="125dp"
+                android:text="TextView"
+                android:textSize="14sp"
+                android:fontFamily="@font/font_pretendard_bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/sFamily"
+                android:layout_width="104dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/img_primary_inline"
+                android:popupBackground="@drawable/img_primary_outline"
+                android:spinnerMode="dropdown"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="@+id/imageView2"
+                tools:listitem="@layout/item_familylist" />
+
+            <ImageView
+                android:id="@+id/imageView13"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/sFamily"
+                app:layout_constraintEnd_toEndOf="@+id/sFamily"
+                app:layout_constraintTop_toTopOf="@+id/sFamily"
+                app:srcCompat="@drawable/postbox_ic_arrow_down" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/font_pretendard_regular"
+                android:text="에게"
+                android:textColor="@color/text_medium"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/sFamily"
+                app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+            <ImageView
+                android:id="@+id/recordInfo1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="86dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView24"
+                app:srcCompat="@drawable/postbox_img_recordbar2" />
+
+            <TextView
+                android:id="@+id/recordInfo2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:fontFamily="@font/font_pretendard_regular"
+                android:text="글자 편지를 작성하고 싶다면,\n녹음을 삭제해 주세요"
+                android:textAlignment="center"
+                android:textColor="@color/text_medium"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/recordInfo1" />
+
+            <TextView
+                android:id="@+id/recordInfo3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/font_pretendard_bold"
+                android:text="녹음 삭제하기"
+                android:textColor="@color/system_error"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/recordInfo2" />
+
+            <ImageView
+                android:id="@+id/recordInfo4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/recordInfo1"
+                app:layout_constraintEnd_toEndOf="@+id/recordInfo1"
+                app:layout_constraintStart_toStartOf="@+id/recordInfo1"
+                app:layout_constraintTop_toTopOf="@+id/recordInfo1"
+                app:srcCompat="@drawable/postbox_img_record_play" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postbox_tb" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

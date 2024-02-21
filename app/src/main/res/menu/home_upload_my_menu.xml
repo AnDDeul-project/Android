@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home_my_upload_menu_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="게시물 수정하기" />
+    <item
+        android:id="@+id/home_my_upload_menu_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="게시물 삭제하기" />
+</menu>

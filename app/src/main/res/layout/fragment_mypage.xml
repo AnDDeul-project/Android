@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mypage_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/mypage_profile_iv"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/default_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ProfileCircle"
+        tools:layout_editor_absoluteY="79dp" />
+
+    <TextView
+        android:id="@+id/mypage_username_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/font_pretendard_bold"
+        android:text="이솜뭉"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/mypage_profile_iv"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="79dp" />
+
+    <TextView
+        android:id="@+id/mypage_post_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:text="게시물 11개"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/mypage_profile_iv"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_username_tv" />
+
+    <ImageButton
+        android:id="@+id/mypage_setting_ib"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/background"
+        android:src="@drawable/mypage_setting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="84dp" />
+
+    <LinearLayout
+        android:id="@+id/mypage_button_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_post_num_tv">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mypage_modify_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/background"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="프로필 수정하기"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:shapeAppearance="@style/RoundButton"
+            app:strokeColor="@color/primary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mypage_upload_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="게시물 올리기"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mypage_profile_iv"
+            app:shapeAppearance="@style/RoundButton" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_button_linear">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mypage_profile_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginEnd="9dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mypage_button_linear" />
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
