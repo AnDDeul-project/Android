@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostModifyBinding
 import com.umc.anddeul.home.model.ModifyRequest
 import com.umc.anddeul.home.model.PostModifyDTO
@@ -22,12 +23,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class PostModifyActivity : AppCompatActivity() {
     lateinit var binding: ActivityPostModifyBinding
+    var token: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityPostModifyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        token = TokenManager.getToken()
 
         val selectedImages = intent.getStringArrayListExtra("selectedImages")
         val postIdx: Int = intent.getIntExtra("postId", -1)
@@ -59,8 +63,6 @@ class PostModifyActivity : AppCompatActivity() {
     }
 
     fun modify(postIdx: Int) {
-        val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")

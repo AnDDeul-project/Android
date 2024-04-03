@@ -14,6 +14,7 @@ import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMyPostBinding
 import com.umc.anddeul.home.DeleteDialog
 import com.umc.anddeul.home.LoadProfileImage
@@ -34,6 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPostFragment : Fragment() {
     lateinit var binding: FragmentMyPostBinding
+    var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +43,8 @@ class MyPostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyPostBinding.inflate(inflater, container, false)
+
+        token = TokenManager.getToken()
 
         setToolbar()
         loadPost()
@@ -63,10 +67,6 @@ class MyPostFragment : Fragment() {
     fun loadPost() {
         val postIdxJson = arguments?.getInt("postIdx")
         val postId: Int = postIdxJson ?: 0
-
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
@@ -194,9 +194,6 @@ class MyPostFragment : Fragment() {
     fun selectEmoji(postId: Int, emojiType: String) {
         // 사라지는 애니메이션
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")

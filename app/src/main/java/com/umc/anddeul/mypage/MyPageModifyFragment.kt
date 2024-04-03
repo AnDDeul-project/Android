@@ -24,6 +24,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageModifyProfileBinding
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PermissionDialog
@@ -46,6 +47,7 @@ import java.io.File
 class MyPageModifyFragment : Fragment() {
     lateinit var binding: FragmentMypageModifyProfileBinding
     private val myPageViewModel: MyPageViewModel by activityViewModels()
+    var token: String? = null
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -89,6 +91,8 @@ class MyPageModifyFragment : Fragment() {
     ): View? {
         binding = FragmentMypageModifyProfileBinding.inflate(inflater, container, false)
         val myProfileData: UserProfileData? = myPageViewModel.getMyProfile()
+
+        token = TokenManager.getToken()
 
         // 프로필 이미지, 닉네임 정보 담아 띄우기
         val imageView = binding.mypageModifyProfileIv
@@ -161,10 +165,6 @@ class MyPageModifyFragment : Fragment() {
     }
 
     fun modifyMyProfile(newImage: Uri) {
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())

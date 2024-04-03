@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
 import com.umc.anddeul.mypage.model.LogoutDTO
 import com.umc.anddeul.mypage.network.LogoutInterface
@@ -24,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class LogoutDialog : DialogFragment() {
     lateinit var binding: FragmentDialogPermissionBinding
+    var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +33,8 @@ class LogoutDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDialogPermissionBinding.inflate(layoutInflater, container, false)
+
+        token = TokenManager.getToken()
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명
         binding.dialogPermissionTv.text = "로그아웃 하시겠어요?"
@@ -50,10 +54,6 @@ class LogoutDialog : DialogFragment() {
     }
 
     fun myPageLogout() {
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())
