@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.DialogConfirmBinding
 import com.umc.anddeul.home.model.MemberApproveDTO
 import com.umc.anddeul.home.network.MemberApproveInterface
@@ -32,6 +33,7 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
     private var name : String = ""
     private var groupName : String = ""
     private var userId : String = ""
+    var token: String? = null
 
     init {
         this.name = name
@@ -46,6 +48,8 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogConfirmBinding.inflate(layoutInflater, container, false)
+
+        token = TokenManager.getToken()
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명
         binding.dialogNameTv.text = "'${name}'님을"
@@ -65,10 +69,6 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
     }
 
     fun approveMember(userId: String) {
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())

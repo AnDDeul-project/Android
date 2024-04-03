@@ -14,6 +14,7 @@ import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
 import com.umc.anddeul.home.model.BoardResponse
 import com.umc.anddeul.home.network.BoardInterface
@@ -32,11 +33,14 @@ import java.io.File
 @Suppress("DEPRECATION")
 class PostWriteActivity : AppCompatActivity() {
     lateinit var binding: ActivityPostWriteBinding
+    var token : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityPostWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        token = TokenManager.getToken()
 
         binding.uploadWriteToolbar.apply {
             setNavigationIcon(R.drawable.ic_arrow_back)
@@ -80,9 +84,6 @@ class PostWriteActivity : AppCompatActivity() {
     }
 
     fun boardPost() {
-        val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())

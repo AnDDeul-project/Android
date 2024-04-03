@@ -15,6 +15,7 @@ import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.AddChecklistActivity
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserProfileBinding
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.network.UserProfileInterface
@@ -28,6 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class UserProfileFragment : Fragment() {
     lateinit var binding: FragmentUserProfileBinding
     private var gson : Gson = Gson()
+    var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +37,8 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false)
+
+        token = TokenManager.getToken()
 
         // 선택한 유저의 아이디 가져오기
         val idJson = arguments?.getString("selectedId")
@@ -55,10 +59,6 @@ class UserProfileFragment : Fragment() {
     }
 
     fun loadProfile(snsId : String) {
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())

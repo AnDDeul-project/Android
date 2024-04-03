@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.umc.anddeul.R
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageLeaveBinding
 import com.umc.anddeul.mypage.model.LeaveDTO
 import com.umc.anddeul.mypage.network.LeaveInterface
@@ -28,6 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageLeaveFragment : Fragment() {
     lateinit var binding: FragmentMypageLeaveBinding
+    var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +37,8 @@ class MyPageLeaveFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMypageLeaveBinding.inflate(inflater, container, false)
+
+        token = TokenManager.getToken()
 
         // 탈퇴하기 버튼 색상 설정
         binding.mypageLeaveReasonEdit.addTextChangedListener(object : TextWatcher {
@@ -78,9 +82,6 @@ class MyPageLeaveFragment : Fragment() {
     }
 
     fun leaveAnddeul() {
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
             .addConverterFactory(GsonConverterFactory.create())

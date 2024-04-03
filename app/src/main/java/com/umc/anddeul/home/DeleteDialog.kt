@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
 import com.umc.anddeul.home.model.PostDelete
 import com.umc.anddeul.home.network.PostDeleteInterface
@@ -22,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DeleteDialog(val postId : Int) : DialogFragment() {
     lateinit var binding: FragmentDialogPermissionBinding
+    var token : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +31,8 @@ class DeleteDialog(val postId : Int) : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDialogPermissionBinding.inflate(layoutInflater, container, false)
+
+        token = TokenManager.getToken()
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명
         binding.dialogPermissionTv.text = "게시물을 삭제 하시겠어요?"
@@ -47,9 +51,6 @@ class DeleteDialog(val postId : Int) : DialogFragment() {
     }
 
     fun delete(postId : Int) {
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")

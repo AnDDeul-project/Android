@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageBinding
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.PostUploadActivity
@@ -37,6 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
     private val myPageViewModel: MyPageViewModel by activityViewModels()
+    var token: String? = null
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -57,6 +59,8 @@ class MyPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMypageBinding.inflate(inflater, container, false)
+
+        token = TokenManager.getToken()
 
         binding.mypageSettingIb.setOnClickListener {
             // MyPageSettingFragment로 이동
@@ -155,10 +159,6 @@ class MyPageFragment : Fragment() {
         // 내 sns id 가져오기
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
-
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://umc-garden.store")
