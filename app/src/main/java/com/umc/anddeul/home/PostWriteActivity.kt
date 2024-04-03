@@ -3,7 +3,6 @@ package com.umc.anddeul.home
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -14,19 +13,18 @@ import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
 import com.umc.anddeul.home.model.BoardResponse
 import com.umc.anddeul.home.network.BoardInterface
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -34,6 +32,8 @@ import java.io.File
 class PostWriteActivity : AppCompatActivity() {
     lateinit var binding: ActivityPostWriteBinding
     var token : String? = null
+    lateinit var retrofitBearer: Retrofit
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,6 +41,7 @@ class PostWriteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         binding.uploadWriteToolbar.apply {
             setNavigationIcon(R.drawable.ic_arrow_back)
@@ -84,22 +85,6 @@ class PostWriteActivity : AppCompatActivity() {
     }
 
     fun boardPost() {
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         val boardService = retrofitBearer.create(BoardInterface::class.java)
 
         // 이미지 URI 목록 받아오기

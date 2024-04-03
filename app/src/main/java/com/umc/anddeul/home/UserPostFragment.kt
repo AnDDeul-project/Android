@@ -1,7 +1,5 @@
 package com.umc.anddeul.home
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +9,7 @@ import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
+import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserPostBinding
 import com.umc.anddeul.home.model.EmojiDTO
@@ -18,16 +17,15 @@ import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.OnePostDTO
 import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class UserPostFragment : Fragment() {
     lateinit var binding: FragmentUserPostBinding
     var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +35,7 @@ class UserPostFragment : Fragment() {
         binding = FragmentUserPostBinding.inflate(inflater, container, false)
 
         token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         setToolbar()
         loadPost()
@@ -59,22 +58,6 @@ class UserPostFragment : Fragment() {
     fun loadPost() {
         val postIdxJson = arguments?.getInt("postIdx")
         val postId: Int = postIdxJson ?: 0
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
 
         val onePostService = retrofitBearer.create(OnePostInterface::class.java)
 
@@ -134,22 +117,6 @@ class UserPostFragment : Fragment() {
     fun selectEmoji(postId: Int, emojiType: String) {
         // 사라지는 애니메이션
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
 
         val emojiService = retrofitBearer.create(EmojiInterface::class.java)
         val emojiRequest = EmojiRequest(emojiType)

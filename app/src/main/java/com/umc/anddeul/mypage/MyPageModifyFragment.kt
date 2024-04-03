@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -16,7 +15,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -24,6 +22,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageModifyProfileBinding
 import com.umc.anddeul.home.LoadProfileImage
@@ -35,7 +34,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,6 +46,7 @@ class MyPageModifyFragment : Fragment() {
     lateinit var binding: FragmentMypageModifyProfileBinding
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -93,6 +92,7 @@ class MyPageModifyFragment : Fragment() {
         val myProfileData: UserProfileData? = myPageViewModel.getMyProfile()
 
         token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         // 프로필 이미지, 닉네임 정보 담아 띄우기
         val imageView = binding.mypageModifyProfileIv
@@ -165,22 +165,6 @@ class MyPageModifyFragment : Fragment() {
     }
 
     fun modifyMyProfile(newImage: Uri) {
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         val modifyService = retrofitBearer.create(ModifyProfileInterface::class.java)
 
         val file = getFileFromUri(requireContext(), newImage)

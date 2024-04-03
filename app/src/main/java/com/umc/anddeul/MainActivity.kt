@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.umc.anddeul.checklist.ChecklistFragment
+import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityMainBinding
 import com.umc.anddeul.home.HomeFragment
@@ -31,7 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         TokenManager.initialize(this) // 토큰 매니저 초기화
         TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcxMjE1MjQ4M30.uETHaKkhdBRbQ30Luc2UyD-8ATrocOLpLAXtCdQrFZc")
-        
+
+        RetrofitManager.initialize("http://umc-garden.store") // RetrofitManager 초기화
     }
 
     private fun initBottomNavigation() {
