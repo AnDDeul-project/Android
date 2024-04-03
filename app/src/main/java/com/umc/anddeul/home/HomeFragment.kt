@@ -6,7 +6,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +25,7 @@ import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.AddChecklistActivity
 import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
@@ -35,18 +35,17 @@ import com.umc.anddeul.home.model.MemberResponse
 import com.umc.anddeul.home.model.Post
 import com.umc.anddeul.home.model.PostData
 import com.umc.anddeul.home.network.MemberInterface
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class HomeFragment : Fragment(), ConfirmDialogListener {
     lateinit var binding: FragmentHomeBinding
     lateinit var postRVAdapter: PostRVAdapter
     lateinit var drawerLayout: DrawerLayout
     var token : String? = null
+    lateinit var retrofitBearer: Retrofit
 
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -79,6 +78,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         drawerLayout = binding.homeDrawerLayout
 
         token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         // 게시글 조회
         loadPost()
@@ -155,22 +155,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
 
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         val postService = retrofitBearer.create(PostsInterface::class.java)
 
         postService.homePosts().enqueue(object : Callback<Post> {
@@ -213,22 +197,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
     }
 
     fun loadMemberList() {
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         val memberListService = retrofitBearer.create(MemberInterface::class.java)
 
         memberListService.memberList().enqueue(object : Callback<MemberResponse> {
