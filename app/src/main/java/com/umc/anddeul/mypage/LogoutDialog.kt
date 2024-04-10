@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
 import com.umc.anddeul.mypage.model.LogoutDTO
@@ -79,6 +80,12 @@ class LogoutDialog : DialogFragment() {
 
                 if (response.isSuccessful) {
                     dismiss()
+
+                    // 토큰 초기화
+                    val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
+                    val editor = spf.edit()
+                    editor.putString("jwtToken", "")
+                    editor.apply()
 
                     // 로그인 화면으로 이동
                     val intent = Intent(activity, StartActivity::class.java)
