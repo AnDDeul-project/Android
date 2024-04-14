@@ -247,9 +247,9 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiHappyOne.visibility = View.VISIBLE
                         binding.homeEmojiFunOne.visibility = View.GONE
                         binding.homeEmojiSadOne.visibility = View.GONE
-                        binding.homeEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+                        binding.homeEmojiHappyCount.text = emojiResponse?.emojis?.happy?.count.toString()
 
-                        if(emojiResponse?.happy_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.happy?.count == 0) {
                             binding.homeEmojiHappyLayout.visibility = View.GONE
                         }
                     }
@@ -258,9 +258,9 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiHappyOne.visibility = View.GONE
                         binding.homeEmojiFunOne.visibility = View.VISIBLE
                         binding.homeEmojiSadOne.visibility = View.GONE
-                        binding.homeEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+                        binding.homeEmojiHappyCount.text = emojiResponse?.emojis?.laugh?.count.toString()
 
-                        if(emojiResponse?.laugh_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.laugh?.count == 0) {
                             binding.homeEmojiHappyLayout.visibility = View.GONE
                         }
                     }
@@ -269,9 +269,9 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeEmojiHappyOne.visibility = View.GONE
                         binding.homeEmojiFunOne.visibility = View.GONE
                         binding.homeEmojiSadOne.visibility = View.VISIBLE
-                        binding.homeEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+                        binding.homeEmojiHappyCount.text = emojiResponse?.emojis?.sad?.count.toString()
 
-                        if(emojiResponse?.sad_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.sad?.count == 0) {
                             binding.homeEmojiHappyLayout.visibility = View.GONE
                         }
                     }
@@ -310,9 +310,9 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiHappyOne.visibility = View.VISIBLE
                         binding.homeMyEmojiFunOne.visibility = View.GONE
                         binding.homeMyEmojiSadOne.visibility = View.GONE
-                        binding.homeMyEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+                        binding.homeMyEmojiHappyCount.text = emojiResponse?.emojis?.happy?.count.toString()
 
-                        if(emojiResponse?.happy_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.happy?.count == 0) {
                             binding.homeMyEmojiHappyLayout.visibility = View.GONE
                         }
                     }
@@ -321,9 +321,9 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiHappyOne.visibility = View.GONE
                         binding.homeMyEmojiFunOne.visibility = View.VISIBLE
                         binding.homeMyEmojiSadOne.visibility = View.GONE
-                        binding.homeMyEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+                        binding.homeMyEmojiHappyCount.text = emojiResponse?.emojis?.laugh?.count.toString()
 
-                        if(emojiResponse?.laugh_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.laugh?.count == 0) {
                             binding.homeMyEmojiHappyLayout.visibility = View.GONE
                         }
                     }
@@ -332,9 +332,9 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                         binding.homeMyEmojiHappyOne.visibility = View.GONE
                         binding.homeMyEmojiFunOne.visibility = View.GONE
                         binding.homeMyEmojiSadOne.visibility = View.VISIBLE
-                        binding.homeMyEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+                        binding.homeMyEmojiHappyCount.text = emojiResponse?.emojis?.sad?.count.toString()
 
-                        if(emojiResponse?.sad_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.sad?.count == 0) {
                             binding.homeMyEmojiHappyLayout.visibility = View.GONE
                         }
                     }

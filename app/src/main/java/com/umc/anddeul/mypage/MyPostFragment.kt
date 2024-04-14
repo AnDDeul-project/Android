@@ -198,9 +198,9 @@ class MyPostFragment : Fragment() {
                         binding.myPostEmojiHappyOne.visibility = View.VISIBLE
                         binding.myPostEmojiFunOne.visibility = View.GONE
                         binding.myPostEmojiSadOne.visibility = View.GONE
-                        binding.myPostEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
+                        binding.myPostEmojiHappyCount.text = emojiResponse?.emojis?.happy?.count.toString()
 
-                        if(emojiResponse?.happy_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.happy?.count == 0) {
                             binding.myPostEmojiHappyLayout.visibility = View.GONE
                         }
                     }
@@ -209,9 +209,9 @@ class MyPostFragment : Fragment() {
                         binding.myPostEmojiHappyOne.visibility = View.GONE
                         binding.myPostEmojiFunOne.visibility = View.VISIBLE
                         binding.myPostEmojiSadOne.visibility = View.GONE
-                        binding.myPostEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+                        binding.myPostEmojiHappyCount.text = emojiResponse?.emojis?.laugh?.count.toString()
 
-                        if(emojiResponse?.laugh_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.laugh?.count == 0) {
                             binding.myPostEmojiHappyLayout.visibility = View.GONE
                         }
                     }
@@ -220,9 +220,9 @@ class MyPostFragment : Fragment() {
                         binding.myPostEmojiHappyOne.visibility = View.GONE
                         binding.myPostEmojiFunOne.visibility = View.GONE
                         binding.myPostEmojiSadOne.visibility = View.VISIBLE
-                        binding.myPostEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
+                        binding.myPostEmojiHappyCount.text = emojiResponse?.emojis?.sad?.count.toString()
 
-                        if(emojiResponse?.sad_emj?.size == 0) {
+                        if(emojiResponse?.emojis?.sad?.count == 0) {
                             binding.myPostEmojiHappyLayout.visibility = View.GONE
                         }
                     }
