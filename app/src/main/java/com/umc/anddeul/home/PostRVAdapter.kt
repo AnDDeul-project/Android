@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
@@ -15,6 +16,7 @@ import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentHomeMyUploadBinding
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
+import com.umc.anddeul.home.model.Emoji
 import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.PostData
@@ -241,40 +243,17 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                     binding.homeEmojiLinear.startAnimation(fadeOutAnimation)
                     binding.homeEmojiLinear.visibility = View.GONE
 
-                    binding.homeEmojiHappyLayout.visibility = View.VISIBLE
+                    val emojis = emojiResponse?.emojis
 
-                    if(emojiType == "happy_emj") {
-                        binding.homeEmojiHappyOne.visibility = View.VISIBLE
-                        binding.homeEmojiFunOne.visibility = View.GONE
-                        binding.homeEmojiSadOne.visibility = View.GONE
-                        binding.homeEmojiHappyCount.text = emojiResponse?.emojis?.happy?.count.toString()
+                    val emojiList : List<Emoji> = listOf(
+                        emojis!!.happy,
+                        emojis!!.laugh,
+                        emojis!!.sad
+                    )
 
-                        if(emojiResponse?.emojis?.happy?.count == 0) {
-                            binding.homeEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
-
-                    if(emojiType == "laugh_emj") {
-                        binding.homeEmojiHappyOne.visibility = View.GONE
-                        binding.homeEmojiFunOne.visibility = View.VISIBLE
-                        binding.homeEmojiSadOne.visibility = View.GONE
-                        binding.homeEmojiHappyCount.text = emojiResponse?.emojis?.laugh?.count.toString()
-
-                        if(emojiResponse?.emojis?.laugh?.count == 0) {
-                            binding.homeEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
-
-                    if (emojiType == "sad_emj") {
-                        binding.homeEmojiHappyOne.visibility = View.GONE
-                        binding.homeEmojiFunOne.visibility = View.GONE
-                        binding.homeEmojiSadOne.visibility = View.VISIBLE
-                        binding.homeEmojiHappyCount.text = emojiResponse?.emojis?.sad?.count.toString()
-
-                        if(emojiResponse?.emojis?.sad?.count == 0) {
-                            binding.homeEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
+                    val emojiRVAdapter = EmojiRVAdpater(emojiList)
+                    binding.homeUploadEmojiRv.adapter = emojiRVAdapter
+                    binding.homeUploadEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 }
             }
 
@@ -283,7 +262,6 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                 Log.e("emojiService", "Failure message: ${t.message}")
             }
         })
-
     }
 
     fun selectMyEmoji(binding: FragmentHomeMyUploadBinding, postId: Int, emojiType: String) {
@@ -304,40 +282,17 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
                     binding.homeMyEmojiLinear.startAnimation(fadeOutAnimation)
                     binding.homeMyEmojiLinear.visibility = View.GONE
 
-                    binding.homeMyEmojiHappyLayout.visibility = View.VISIBLE
+                    val emojis = emojiResponse?.emojis
 
-                    if(emojiType == "happy_emj") {
-                        binding.homeMyEmojiHappyOne.visibility = View.VISIBLE
-                        binding.homeMyEmojiFunOne.visibility = View.GONE
-                        binding.homeMyEmojiSadOne.visibility = View.GONE
-                        binding.homeMyEmojiHappyCount.text = emojiResponse?.emojis?.happy?.count.toString()
+                    val emojiList : List<Emoji> = listOf(
+                        emojis!!.happy,
+                        emojis!!.laugh,
+                        emojis!!.sad
+                    )
 
-                        if(emojiResponse?.emojis?.happy?.count == 0) {
-                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
-
-                    if(emojiType == "laugh_emj") {
-                        binding.homeMyEmojiHappyOne.visibility = View.GONE
-                        binding.homeMyEmojiFunOne.visibility = View.VISIBLE
-                        binding.homeMyEmojiSadOne.visibility = View.GONE
-                        binding.homeMyEmojiHappyCount.text = emojiResponse?.emojis?.laugh?.count.toString()
-
-                        if(emojiResponse?.emojis?.laugh?.count == 0) {
-                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
-
-                    if (emojiType == "sad_emj") {
-                        binding.homeMyEmojiHappyOne.visibility = View.GONE
-                        binding.homeMyEmojiFunOne.visibility = View.GONE
-                        binding.homeMyEmojiSadOne.visibility = View.VISIBLE
-                        binding.homeMyEmojiHappyCount.text = emojiResponse?.emojis?.sad?.count.toString()
-
-                        if(emojiResponse?.emojis?.sad?.count == 0) {
-                            binding.homeMyEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
+                    val emojiRVAdapter = EmojiRVAdpater(emojiList)
+                    binding.homeMyUploadEmojiRv.adapter = emojiRVAdapter
+                    binding.homeMyUploadEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 }
             }
 
