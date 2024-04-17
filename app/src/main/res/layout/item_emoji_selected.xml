@@ -4,10 +4,9 @@
     android:id="@+id/item_emoji_selected_layout"
     android:layout_width="wrap_content"
     android:layout_height="34dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="13dp"
+    android:layout_marginEnd="10dp"
     android:background="@drawable/emoji_back_selected"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <ImageView
         android:id="@+id/home_emoji_happy_one"
@@ -16,33 +15,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="15dp"
         android:src="@drawable/emoji_heart"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/home_emoji_count"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/home_emoji_fun_one"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="15dp"
-        android:src="@drawable/emoji_fun"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/home_emoji_count"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/home_emoji_sad_one"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="15dp"
-        android:src="@drawable/emoji_sad"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/home_emoji_count"
         app:layout_constraintStart_toStartOf="parent"

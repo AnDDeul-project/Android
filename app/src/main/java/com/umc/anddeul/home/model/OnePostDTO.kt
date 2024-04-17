@@ -13,5 +13,6 @@ data class OnePostData(
     val picture: List<String>,
     val create_at: String,
     val nickname: String,
-    val userImage: String
+    val userImage: String,
+    val emoji: EmojiResponse
 )

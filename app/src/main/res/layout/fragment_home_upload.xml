@@ -91,18 +91,16 @@
             android:background="@color/clear"
             android:onClick="onEmojiClick"
             android:src="@drawable/emoji_sad" />
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_upload_emoji_rv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toEndOf="@+id/home_upload_emoji_ib"
+        android:layout_marginStart="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/home_upload_emoji_ib"
+        app:layout_constraintStart_toEndOf="@+id/home_upload_emoji_ib"
         app:layout_constraintTop_toTopOf="@+id/home_upload_emoji_ib" />
-
 
     <TextView
         android:id="@+id/home_upload_explain_tv"

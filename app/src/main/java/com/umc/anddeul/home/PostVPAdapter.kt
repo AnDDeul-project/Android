@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.databinding.FragmentHomeUploadImageBinding
 
-class PostVPAdapter(private val imageList: List<String>):
-    RecyclerView.Adapter<PostVPAdapter.PostViewHolder>() {
+class PostVPAdapter(private val imageList: List<String>): RecyclerView.Adapter<PostVPAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(val binding: FragmentHomeUploadImageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(image: String) {

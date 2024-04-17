@@ -14,3 +14,9 @@ data class EmojiDTO (
 data class EmojiResponse(
     val emojis: Emojis
 )
+
+data class EmojiUiModel(
+    val type: String,
+    val selected: Boolean,
+    val count: Int
+)

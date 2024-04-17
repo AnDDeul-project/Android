@@ -104,16 +104,14 @@
             android:src="@drawable/emoji_sad" />
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_my_upload_emoji_rv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/home_my_upload_emoji_ib"
         app:layout_constraintStart_toEndOf="@+id/home_my_upload_emoji_ib"
-        app:layout_constraintTop_toTopOf="@+id/home_my_upload_emoji_ib"
-        app:layout_constraintBottom_toBottomOf="@+id/home_my_upload_emoji_ib"/>
+        app:layout_constraintTop_toTopOf="@+id/home_my_upload_emoji_ib" />
 
     <TextView
         android:id="@+id/home_my_upload_explain_tv"
