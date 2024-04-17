@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,10 +83,14 @@ class PostboxFragment : Fragment() {
         
         // 다음주
         binding.afterBtn.setOnClickListener {
-            currentStartOfWeek = currentStartOfWeek.plusWeeks(1)
-            val yearMonth = YearMonth.from(currentStartOfWeek)
-            binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            setWeek(currentStartOfWeek)
+            val today = LocalDate.now()
+
+            if (currentStartOfWeek != today) {
+                currentStartOfWeek = currentStartOfWeek.plusWeeks(1)
+                val yearMonth = YearMonth.from(currentStartOfWeek)
+                binding.selectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+                setWeek(currentStartOfWeek)
+            }
         }
 
         //// 편지 리스트
