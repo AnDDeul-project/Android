@@ -13,5 +13,17 @@ data class PostData(
     val nickname: String,
     val content: String,
     val picture: List<String>,
-    val userImage : String
+    val userImage : String,
+    val emojis : Emojis
+)
+
+data class Emojis(
+    val happy: Emoji,
+    val laugh: Emoji,
+    val sad: Emoji
+)
+
+data class Emoji(
+    val selected: Boolean,
+    val count: Int
 )
