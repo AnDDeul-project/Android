@@ -104,6 +104,30 @@ class MyPostFragment : Fragment() {
                         val postVPAdapter = PostVPAdapter(imageUrlsString)
                         binding.myPostImageVp.adapter = postVPAdapter
                         binding.myPostImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                        val emojis = postData.emojis
+
+                        val emojiList : List<EmojiUiModel> = listOf(
+                            emojis!!.happy,
+                            emojis!!.laugh,
+                            emojis!!.sad
+                        ).mapIndexed { index, emoji ->
+                            val type = when (index) {
+                                0 -> "happy"
+                                1 -> "laugh"
+                                else -> "sad"
+                            }
+                            EmojiUiModel(
+                                type = type,
+                                selected = emoji.selected,
+                                count = emoji.count
+                            )
+                        }.filter { it.count != 0 }
+
+                        val emojiRVAdapter = EmojiRVAdpater(requireContext(), emojiList)
+                        binding.myPostEmojiRv.adapter = emojiRVAdapter
+                        binding.myPostEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
                     }
                 }
             }

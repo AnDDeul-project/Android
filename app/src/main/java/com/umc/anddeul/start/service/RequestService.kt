@@ -1,37 +1,33 @@
-package com.umc.anddeul.invite.service
+package com.umc.anddeul.start.service
 
 import android.util.Log
-import com.umc.anddeul.invite.model.NewFamilyRequest
-import com.umc.anddeul.invite.model.NewFamilyResponse
-import com.umc.anddeul.invite.network.InviteInterface
+import com.umc.anddeul.start.model.RequestResponse
+import com.umc.anddeul.start.network.RequestInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class FamilyNewService {
+class RequestService {
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val familyNewService = retrofit.create(InviteInterface::class.java)
+    val requestService = retrofit.create(RequestInterface::class.java)
 
-    fun createFamily(accessToken: String, familyNameTemp: String, callback: (NewFamilyResponse?) -> Unit) {
-        val familyName = NewFamilyRequest(familyNameTemp)
-        val call = familyNewService.familyCreate("Bearer $accessToken", familyName)
-        call.enqueue(object : Callback<NewFamilyResponse> {
-            override fun onResponse(call: Call<NewFamilyResponse>, response: Response<NewFamilyResponse>) {
+    fun requestInfo(accessToken: String, callback: (RequestResponse?) -> Unit) {
+        val call = requestService.getRequests("Bearer $accessToken")
+
+        call.enqueue(object : Callback<RequestResponse> {
+            override fun onResponse(call: Call<RequestResponse>, response: Response<RequestResponse>) {
                 when (response.code()) {
                     200 -> {
                         callback(response.body())
                     }
                     401 -> {
-                        callback(response.body())
-                    }
-                    409 -> {
                         callback(response.body())
                     }
                     500 -> {
@@ -46,7 +42,7 @@ class FamilyNewService {
                 }
             }
 
-            override fun onFailure(call: Call<NewFamilyResponse>, t: Throwable) {
+            override fun onFailure(call: Call<RequestResponse>, t: Throwable) {
                 callback(null)
             }
         })
