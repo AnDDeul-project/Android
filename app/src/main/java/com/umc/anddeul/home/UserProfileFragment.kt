@@ -44,7 +44,7 @@ class UserProfileFragment : Fragment() {
         val snsId = gson.fromJson(idJson, String::class.java)
 
         binding.userProfileToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationIcon(R.drawable.ic_back_25)
             setNavigationOnClickListener {
                 // homeFragment로 이동
                 val fragmentManager = requireActivity().supportFragmentManager

@@ -48,7 +48,7 @@ class UserPostFragment : Fragment() {
 
     fun setToolbar() {
         binding.userPostToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationIcon(R.drawable.ic_back)
 
             setNavigationOnClickListener {
                 // UserProfileFragment로 이동
