@@ -92,6 +92,29 @@ class UserPostFragment : Fragment() {
                         binding.userPostImageVp.adapter = postVPAdapter
                         binding.userPostImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
+                        val emojis = postData?.emojis
+
+                        val emojiList : List<EmojiUiModel> = listOf(
+                            emojis!!.happy,
+                            emojis!!.laugh,
+                            emojis!!.sad
+                        ).mapIndexed { index, emoji ->
+                            val type = when (index) {
+                                0 -> "happy"
+                                1 -> "laugh"
+                                else -> "sad"
+                            }
+                            EmojiUiModel(
+                                type = type,
+                                selected = emoji.selected,
+                                count = emoji.count
+                            )
+                        }.filter { it.count != 0 }
+
+                        val emojiRVAdapter = EmojiRVAdpater(requireContext(), emojiList)
+                        binding.userPostEmojiRv.adapter = emojiRVAdapter
+                        binding.userPostEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
                     }
                 }
             }
