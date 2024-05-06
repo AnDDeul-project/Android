@@ -23,6 +23,7 @@
         android:layout_marginStart="7dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:text="사용자 이름"
+        android:textColor="@color/text_high"
         android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/home_my_upload_profile_iv"
         app:layout_constraintTop_toTopOf="@+id/home_my_upload_profile_iv"
