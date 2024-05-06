@@ -8,12 +8,15 @@ data class EmojiDTO (
     val isSuccess: Boolean,
     val code: Int,
     val message: String,
-    val result : EmojiResult
+    val result : EmojiResponse
 )
 
-data class EmojiResult(
-    val postIdx: Int,
-    val happy_emj: List<String>?,
-    val laugh_emj: List<String>?,
-    val sad_emj: List<String>?
+data class EmojiResponse(
+    val emojis: Emojis
+)
+
+data class EmojiUiModel(
+    val type: String,
+    val selected: Boolean,
+    val count: Int
 )

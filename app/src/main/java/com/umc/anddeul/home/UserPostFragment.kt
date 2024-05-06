@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.common.RetrofitManager
@@ -14,6 +16,7 @@ import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserPostBinding
 import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
+import com.umc.anddeul.home.model.EmojiUiModel
 import com.umc.anddeul.home.model.OnePostDTO
 import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
@@ -88,6 +91,30 @@ class UserPostFragment : Fragment() {
                         val postVPAdapter = PostVPAdapter(imageUrlsString)
                         binding.userPostImageVp.adapter = postVPAdapter
                         binding.userPostImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                        val emojis = postData?.emojis
+
+                        val emojiList : List<EmojiUiModel> = listOf(
+                            emojis!!.happy,
+                            emojis!!.laugh,
+                            emojis!!.sad
+                        ).mapIndexed { index, emoji ->
+                            val type = when (index) {
+                                0 -> "happy"
+                                1 -> "laugh"
+                                else -> "sad"
+                            }
+                            EmojiUiModel(
+                                type = type,
+                                selected = emoji.selected,
+                                count = emoji.count
+                            )
+                        }.filter { it.count != 0 }
+
+                        val emojiRVAdapter = EmojiRVAdpater(requireContext(), emojiList)
+                        binding.userPostEmojiRv.adapter = emojiRVAdapter
+                        binding.userPostEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
                     }
                 }
             }
@@ -133,40 +160,28 @@ class UserPostFragment : Fragment() {
                     binding.userPostEmojiLinear.startAnimation(fadeOutAnimation)
                     binding.userPostEmojiLinear.visibility = View.GONE
 
-                    binding.userPostEmojiHappyLayout.visibility = View.VISIBLE
+                    val emojis = emojiResponse?.emojis
 
-                    if(emojiType == "happy_emj") {
-                        binding.userPostEmojiHappyOne.visibility = View.VISIBLE
-                        binding.userPostEmojiFunOne.visibility = View.GONE
-                        binding.userPostEmojiSadOne.visibility = View.GONE
-                        binding.userPostEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
-
-                        if(emojiResponse?.happy_emj?.size == 0) {
-                            binding.userPostEmojiHappyLayout.visibility = View.GONE
+                    val emojiList : List<EmojiUiModel> = listOf(
+                        emojis!!.happy,
+                        emojis!!.laugh,
+                        emojis!!.sad
+                    ).mapIndexed { index, emoji ->
+                        val type = when (index) {
+                            0 -> "happy"
+                            1 -> "laugh"
+                            else -> "sad"
                         }
-                    }
+                        EmojiUiModel(
+                            type = type,
+                            selected = emoji.selected,
+                            count = emoji.count
+                        )
+                    }.filter { it.count != 0 }
 
-                    if(emojiType == "laugh_emj") {
-                        binding.userPostEmojiHappyOne.visibility = View.GONE
-                        binding.userPostEmojiFunOne.visibility = View.VISIBLE
-                        binding.userPostEmojiSadOne.visibility = View.GONE
-                        binding.userPostEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
-
-                        if(emojiResponse?.laugh_emj?.size == 0) {
-                            binding.userPostEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
-
-                    if (emojiType == "sad_emj") {
-                        binding.userPostEmojiHappyOne.visibility = View.GONE
-                        binding.userPostEmojiFunOne.visibility = View.GONE
-                        binding.userPostEmojiSadOne.visibility = View.VISIBLE
-                        binding.userPostEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
-
-                        if(emojiResponse?.sad_emj?.size == 0) {
-                            binding.userPostEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
+                    val emojiRVAdapter = EmojiRVAdpater(requireContext(), emojiList)
+                    binding.userPostEmojiRv.adapter = emojiRVAdapter
+                    binding.userPostEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 }
             }
 

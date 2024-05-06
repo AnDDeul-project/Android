@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         TokenManager.initialize(this) // 토큰 매니저 초기화
         TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcxMjE1MjQ4M30.uETHaKkhdBRbQ30Luc2UyD-8ATrocOLpLAXtCdQrFZc")
 
-        RetrofitManager.initialize("http://umc-garden.store") // RetrofitManager 초기화
+        RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
     }
 
     private fun initBottomNavigation() {

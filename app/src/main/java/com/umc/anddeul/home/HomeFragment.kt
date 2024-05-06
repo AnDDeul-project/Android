@@ -165,7 +165,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
                 if (response.isSuccessful) {
                     val postData = response.body()?.result?.map {
-                        PostData(it.post_idx, it.user_idx, it.nickname, it.content, it.picture, it.userImage)
+                        PostData(it.post_idx, it.user_idx, it.nickname, it.content, it.picture, it.userImage, it.emojis)
                     }
                     Log.e("postService", "$postData")
                     if (postData != null) {
