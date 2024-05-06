@@ -12,13 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="77dp"
         android:background="@color/background"
-        android:theme="@style/GalleryToolBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="게시글"
-        app:titleCentered="true"
-        app:titleTextColor="@color/text_high" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageButton
+            android:id="@+id/user_post_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:background="@color/background"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/user_post_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="게시글"
+            android:textColor="@color/text_high"
+            android:textSize="20dp" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <View
         android:layout_width="match_parent"

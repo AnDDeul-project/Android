@@ -43,12 +43,9 @@ class PostWriteActivity : AppCompatActivity() {
         token = TokenManager.getToken()
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
-        binding.uploadWriteToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
-            setNavigationOnClickListener {
-                // 현재 Activity를 종료
-                finish()
-            }
+        binding.uploadWriteBackIv.setOnClickListener {
+            // 현재 Activity를 종료
+            finish()
         }
 
         // 이미지 URI 목록 받아오기
