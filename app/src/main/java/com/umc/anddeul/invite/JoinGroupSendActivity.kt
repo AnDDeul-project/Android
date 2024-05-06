@@ -13,10 +13,7 @@ class JoinGroupSendActivity : AppCompatActivity() {
         binding = ActivityJoinGroupSendBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-
-        //// 가족 그룹에 참여 신청 완료
-        binding.groupJoinDoneBtn.setOnClickListener {
-        }
+        
 
     }
 }

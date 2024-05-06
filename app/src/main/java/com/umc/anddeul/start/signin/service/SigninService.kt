@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SigninService {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://umc-garden.store")
+        .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
