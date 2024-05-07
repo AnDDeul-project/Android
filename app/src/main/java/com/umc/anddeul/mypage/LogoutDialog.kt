@@ -1,13 +1,18 @@
 package com.umc.anddeul.mypage
 
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.umc.anddeul.common.RetrofitManager
@@ -25,6 +30,13 @@ class LogoutDialog : DialogFragment() {
     lateinit var binding: FragmentDialogPermissionBinding
     var token: String? = null
     lateinit var retrofitBearer: Retrofit
+
+    override fun onResume() {
+        super.onResume()
+
+        // 다이얼로그 크기 조정
+        context?.dialogResize(requireDialog(),0.9f)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,5 +95,33 @@ class LogoutDialog : DialogFragment() {
                 Log.e("logoutService", "Failure message: ${t.message}")
             }
         })
+    }
+
+    fun Context.dialogResize(dialog: Dialog, width: Float){
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        val originalLayoutParams = dialog.window?.attributes
+
+        val originalHeight = originalLayoutParams?.height ?: WindowManager.LayoutParams.WRAP_CONTENT
+
+        if (Build.VERSION.SDK_INT < 30){
+            val display = windowManager.defaultDisplay
+            val size = Point()
+
+            display.getSize(size)
+
+            val window = dialog.window
+            val x = (size.x * width).toInt()
+
+            window?.setLayout(x, originalHeight)
+
+        } else {
+            val rect = windowManager.currentWindowMetrics.bounds
+
+            val window = dialog.window
+            val x = (rect.width() * width).toInt()
+
+            window?.setLayout(x, originalHeight)
+        }
     }
 }

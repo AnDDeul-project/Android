@@ -311,7 +311,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
                             // 수락하기 버튼 클릭시 (api 연결하기)
                             waitBinding.homeMenuRequestAcceptBt.setOnClickListener {
-                                val dialog = ConfirmDialog(waitData.nickname, "행복한 우리 가족", waitData.snsId, this@HomeFragment)
+                                val dialog = ConfirmDialog(waitData.nickname, "그룹 이름", waitData.snsId, this@HomeFragment)
                                 dialog.isCancelable = false
                                 dialog.show(parentFragmentManager, "home accept confirm dialog")
                             }

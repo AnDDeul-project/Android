@@ -125,13 +125,10 @@ class MyPageModifyFragment : Fragment() {
     }
 
     fun setToolbar() {
-        binding.mypageModifyProfileToolbar.apply {
-            setNavigationIcon(R.drawable.mypage_setting_back)
-            setNavigationOnClickListener {
-                // MyPageFragment로 이동
-                val fragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.popBackStack()
-            }
+        binding.mypageModifyProfileBackIv.setOnClickListener {
+            // MyPageFragment로 이동
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
 

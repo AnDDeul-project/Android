@@ -55,14 +55,10 @@ class MyPostFragment : Fragment() {
     }
 
     fun setToolbar() {
-        binding.myPostToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
-
-            setNavigationOnClickListener {
-                // UserProfileFragment로 이동
-                val fragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.popBackStack()
-            }
+        binding.myPostBackIv.setOnClickListener {
+            // UserProfileFragment로 이동
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
 

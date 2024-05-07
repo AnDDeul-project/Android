@@ -1,13 +1,18 @@
 package com.umc.anddeul.home
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
@@ -36,6 +41,13 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
         this.name = name
         this.groupName = groupName
         this.userId = userId
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // 다이얼로그 크기 조정
+        context?.dialogResize(requireDialog(),0.9f)
     }
 
     @SuppressLint("SetTextI18n")
@@ -87,5 +99,33 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
                 Log.e("approveService", "Failure message: ${t.message}")
             }
         })
+    }
+
+    fun Context.dialogResize(dialog: Dialog, width: Float){
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        val originalLayoutParams = dialog.window?.attributes
+
+        val originalHeight = originalLayoutParams?.height ?: WindowManager.LayoutParams.WRAP_CONTENT
+
+        if (Build.VERSION.SDK_INT < 30){
+            val display = windowManager.defaultDisplay
+            val size = Point()
+
+            display.getSize(size)
+
+            val window = dialog.window
+            val x = (size.x * width).toInt()
+
+            window?.setLayout(x, originalHeight)
+
+        } else {
+            val rect = windowManager.currentWindowMetrics.bounds
+
+            val window = dialog.window
+            val x = (rect.width() * width).toInt()
+
+            window?.setLayout(x, originalHeight)
+        }
     }
 }

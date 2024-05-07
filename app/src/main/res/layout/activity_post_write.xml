@@ -5,38 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".home.PostWriteActivity"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".home.PostWriteActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/upload_write_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="77dp"
         android:background="@color/background"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/GalleryToolBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="새 게시물"
-        app:titleCentered="true"
-        app:titleTextColor="@color/text_high" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageButton
+            android:id="@+id/upload_write_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:background="@color/background"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/upload_write_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="새 게시물"
+            android:textColor="@color/text_high"
+            android:textSize="20dp" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey_200"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/upload_write_selected_vp"
         android:layout_width="match_parent"
-        android:layout_height="390dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_write_toolbar" />
@@ -53,8 +70,8 @@
         android:hint="설명을 입력하세요\n(최대 100자 입력 가능)"
         android:maxLength="100"
         android:padding="14dp"
-        android:textSize="14sp"
         android:textColor="@color/text_high"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_write_selected_vp" />
@@ -66,9 +83,9 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/font_pretendard_bold"
-        android:textColor="@color/text_white"
         android:text="게시하기"
-        android:textSize="18sp"
+        android:textColor="@color/text_white"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -53,11 +53,8 @@ class PostModifyActivity : AppCompatActivity() {
     }
 
     fun setToolbar() {
-        binding.postModifyToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
-            setNavigationOnClickListener {
-                finish()
-            }
+        binding.postModifyBackIv.setOnClickListener {
+            finish()
         }
     }
 
