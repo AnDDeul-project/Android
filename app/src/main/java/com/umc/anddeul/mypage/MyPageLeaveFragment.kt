@@ -70,13 +70,10 @@ class MyPageLeaveFragment : Fragment() {
     }
 
     fun setToolbar() {
-        binding.mypageLeaveToolbar.apply {
-            setNavigationIcon(R.drawable.mypage_setting_back)
-            setNavigationOnClickListener {
-                // MyPageSettingFragment로 이동
-                val fragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.popBackStack()
-            }
+        binding.mypageLeaveBackIv.setOnClickListener {
+            // MyPageSettingFragment로 이동
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
 
