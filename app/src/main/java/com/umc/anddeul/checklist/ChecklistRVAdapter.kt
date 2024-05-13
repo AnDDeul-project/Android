@@ -28,6 +28,7 @@ import java.util.Date
 class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
     val CAMERA_REQUEST_CODE = 405
     var checklist: List<Checklist>? = null
+    var filePath: String? = null
     lateinit var file : File
 
     lateinit var currentPhotoPath: String   // 현재 이미지 파일의 경로 저장
@@ -62,11 +63,11 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
             }
             checkCameraPermission(currentChecklist)
 
-            val delayMillis : Long = 1000 * 13
-            holder.binding.checkliBtnCamera.postDelayed({
-                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
-                ChecklistService(context).imgApi(currentChecklist, file!!)
-            }, delayMillis)
+//            val delayMillis : Long = 1000 * 13
+//            holder.binding.checkliBtnCamera.postDelayed({
+//                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
+//                ChecklistService(context).imgApi(currentChecklist, file!!)
+//            }, delayMillis)
 
             //체크
             checking(holder.binding)
@@ -117,6 +118,7 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
                 binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
             }
+            filePath = currentPhotoFileName
         }
     }
 

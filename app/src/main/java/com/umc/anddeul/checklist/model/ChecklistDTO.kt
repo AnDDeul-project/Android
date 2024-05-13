@@ -10,5 +10,6 @@ data class Checklist (
     val picture : String,
     val content : String,
     val sender : String,
-    val receiver : String
+    val receiver : String,
+    var picturePath: String? = null
 )
