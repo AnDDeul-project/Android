@@ -31,6 +31,11 @@ class DialogRecordRestartFragment(private val context: Context, private val reco
             dlg.dismiss()
         }
 
+        // 취소 버튼
+        binding.cancelbtn2.setOnClickListener {
+            dlg.dismiss()
+        }
+
         dlg.show()
     }
 }
