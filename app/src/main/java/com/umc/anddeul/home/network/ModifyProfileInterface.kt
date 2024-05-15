@@ -13,6 +13,6 @@ interface ModifyProfileInterface {
     @PATCH("/home/user/profile")
     fun modifyProfile(
         @Part("nickname") nickname : RequestBody,
-        @Part image : MultipartBody.Part
+        @Part image : MultipartBody.Part?
     ) : Call<ModifyProfileResponse>
 }
