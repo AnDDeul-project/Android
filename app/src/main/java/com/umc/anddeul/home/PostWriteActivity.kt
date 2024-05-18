@@ -10,9 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.R
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
@@ -29,8 +30,9 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 @Suppress("DEPRECATION")
-class PostWriteActivity : AppCompatActivity() {
+class PostWriteActivity : AppCompatActivity(){
     lateinit var binding: ActivityPostWriteBinding
+    lateinit var selectedVPAdapter : SelectedVPAdapter
     var token : String? = null
     lateinit var retrofitBearer: Retrofit
 
@@ -51,13 +53,12 @@ class PostWriteActivity : AppCompatActivity() {
         // 이미지 URI 목록 받아오기
         val selectedImagesUri: ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
 
-        val selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
+        selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
         binding.uploadWriteSelectedVp.adapter = selectedVPAdapter
         binding.uploadWriteSelectedVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
-        val copiedImagesUri: List<Uri> = ArrayList(selectedImagesUri)
-        for (imageUri in copiedImagesUri) {
+        for (imageUri in selectedImagesUri) {
             selectedVPAdapter.addImage(imageUri)
         }
 
@@ -65,6 +66,16 @@ class PostWriteActivity : AppCompatActivity() {
             // 서버에 데이터 전송
             boardPost()
         }
+
+        // 뷰 페이저 드래그 앤 드랍 설정
+        val dragAndDropHelper = DragAndDropHelper(listener = object : DragAndDropHelper.OnItemMovedListener {
+            override fun onItemMoved(fromPosition: Int, toPosition: Int) {
+                selectedVPAdapter.swapItems(fromPosition, toPosition)
+            }
+        })
+
+        val itemTouchHelper = ItemTouchHelper(dragAndDropHelper)
+        itemTouchHelper.attachToRecyclerView(binding.uploadWriteSelectedVp.getChildAt(0) as RecyclerView)
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File {
@@ -84,12 +95,6 @@ class PostWriteActivity : AppCompatActivity() {
     fun boardPost() {
         val boardService = retrofitBearer.create(BoardInterface::class.java)
 
-        // 이미지 URI 목록 받아오기
-        val selectedImagesUri: ArrayList<Uri> =
-            intent.getParcelableArrayListExtra("selectedImages")!!
-        // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
-        val copiedImagesUri: List<Uri> = ArrayList(selectedImagesUri)
-
         fun compressBitmap(bitmap: Bitmap, quality: Int): ByteArray {
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
@@ -97,14 +102,13 @@ class PostWriteActivity : AppCompatActivity() {
         }
 
         // 이미지 파일들을 MultipartBody.Part로 변환
-        val imageParts: List<MultipartBody.Part> = copiedImagesUri.map { uri ->
+        val imageParts: List<MultipartBody.Part> = selectedVPAdapter.getImages().map { uri ->
             val file = getFileFromUri(this, uri)
             val bitmap = BitmapFactory.decodeFile(file.path)
             val compressedImage = compressBitmap(bitmap, 30) // 품질을 조절하여 압축 (예: 80)
             val requestImage = RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressedImage)
             MultipartBody.Part.createFormData("image", file.name, requestImage)
         }
-
 
         val content = binding.uploadWriteEdit.text.toString()
         val contentRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), content)

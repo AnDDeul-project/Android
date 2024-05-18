@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +27,7 @@ import com.umc.anddeul.R
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageBinding
+import com.umc.anddeul.home.HomeFragment
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostWriteActivity
@@ -45,12 +45,49 @@ class MyPageFragment : Fragment() {
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     var token: String? = null
     lateinit var retrofitBearer: Retrofit
-    lateinit var albumLauncher: ActivityResultLauncher<Intent>
-    private val selectedImages: ArrayList<Uri> = ArrayList()
-    private lateinit var pickMultipleMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    private val pickMultipleMediaLauncher = registerForActivityResult(
+        ActivityResultContracts.PickMultipleVisualMedia(HomeFragment.MAX_UPLOAD_IMAGE)
+    ) { uris ->
+        // 선택한 이미지들의 URI 목록을 처리하는 콜백
+        if (uris.isNotEmpty()) {
+            // 선택한 이미지가 있을 경우
+            val selectedImagesList = ArrayList(uris)
 
-    // 이미지 등록 가능 갯수
-    private val imageUploadPossible = 10
+            startActivity(Intent(requireContext(), PostWriteActivity::class.java).apply {
+                putParcelableArrayListExtra("selectedImages", selectedImagesList)
+            })
+        } else {
+            // 선택한 이미지가 없을 경우
+        }
+    }
+
+    private val albumLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        // 사진 선택을 완료한 후 돌아왔다면
+        if (it.resultCode == AppCompatActivity.RESULT_OK) {
+            // 선택한 이미지의 경로 데이터를 관리하는 Uri 객체 리스트를 추출
+            val uriclip = it.data?.clipData
+            val selectedImages: List<Uri> = if (uriclip == null) {
+                emptyList()
+            } else {
+                List(uriclip.itemCount) {index ->  uriclip.getItemAt(index).uri}
+            }
+            if (selectedImages.size > HomeFragment.MAX_UPLOAD_IMAGE) {
+                Snackbar.make(
+                    binding.root,
+                    "사진 첨부는 최대 ${HomeFragment.MAX_UPLOAD_IMAGE}장까지 가능합니다.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+            if (selectedImages.isNotEmpty()) {
+                startActivity(Intent(requireContext(), PostWriteActivity::class.java).apply {
+                    putParcelableArrayListExtra(
+                        "selectedImages",
+                        ArrayList(selectedImages.take(HomeFragment.MAX_UPLOAD_IMAGE)) // take API 살펴보기
+                    )
+                })
+            }
+        }
+    }
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -100,11 +137,6 @@ class MyPageFragment : Fragment() {
         }
 
         loadMyProfile()
-
-        // 포토피커 세팅
-        settingPhotoPicker(imageUploadPossible)
-        // 갤러리 런처 세팅
-        settingAlbumLauncher(imageUploadPossible)
 
         return binding.root
     }
@@ -229,73 +261,6 @@ class MyPageFragment : Fragment() {
     }
 
     fun startPhotoPicker() {
-        pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
-    // 포토피커 설정
-    fun settingPhotoPicker(imageUploadPossible: Int) {
-        pickMultipleMedia = registerForActivityResult(
-            ActivityResultContracts.PickMultipleVisualMedia(
-                imageUploadPossible
-            )
-        ) { uris ->
-            // 선택한 이미지들의 URI 목록을 처리하는 콜백
-            if (uris.isNotEmpty()) {
-                // 선택한 이미지가 있을 경우
-                val selectedImagesList = ArrayList(uris)
-
-                // 다음 액티비티로 전달할 intent 생성
-                val intent = Intent(requireContext(), PostWriteActivity::class.java)
-                intent.putParcelableArrayListExtra("selectedImages", selectedImagesList)
-
-                // 선택한 이미지들을 다음 액티비티로 전달
-                startActivity(intent)
-            } else {
-                // 선택한 이미지가 없을 경우
-            }
-        }
-    }
-
-    // 앨범 런처 설정
-    fun settingAlbumLauncher(imageUploadPossible: Int) {
-        // 앨범 실행을 위한 런처
-        val contract2 = ActivityResultContracts.StartActivityForResult()
-        albumLauncher = registerForActivityResult(contract2) {
-            // 사진 선택을 완료한 후 돌아왔다면
-            if (it.resultCode == AppCompatActivity.RESULT_OK) {
-                // 선택한 이미지의 경로 데이터를 관리하는 Uri 객체 리스트를 추출
-                val uriclip = it.data?.clipData
-                uriclip?.let { clipData ->
-                    for (i in 0 until uriclip!!.itemCount) {
-                        if (selectedImages.size >= imageUploadPossible) {
-                            Snackbar.make(
-                                binding.root,
-                                "사진 첨부는 최대 ${imageUploadPossible}장까지 가능합니다.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                            break
-                        } else {
-                            val uri = uriclip.getItemAt(i).uri
-                            // 한 장씩 리스트에 추가
-                            selectedImages.add(uri)
-                        }
-                    }
-                }
-                if (selectedImages.isNotEmpty()) {
-                    // 글 작성 페이지로 이동
-                    val intent = Intent(requireContext(), PostWriteActivity::class.java)
-
-                    // 선택된 이미지들을 번들에 추가
-                    val selectedImagesUri: MutableList<Uri> = ArrayList()
-                    for (selectedImageUri in selectedImages) {
-                        selectedImagesUri.add(selectedImageUri)
-                    }
-                    intent.putParcelableArrayListExtra("selectedImages", ArrayList(selectedImagesUri))
-
-                    // 다음 액티비티 시작
-                    startActivity(intent)
-                }
-            }
-        }
+        pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 }

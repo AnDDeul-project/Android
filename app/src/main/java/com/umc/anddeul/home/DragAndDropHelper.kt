@@ -3,15 +3,10 @@ package com.umc.anddeul.home
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-class DragAndDropHelper(private val listener: OnItemMovedListener) : ItemTouchHelper.Callback() {
+class DragAndDropHelper(private val listener: OnItemMovedListener) : ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT, 0) {
 
     interface OnItemMovedListener {
         fun onItemMoved(fromPosition: Int, toPosition: Int)
-    }
-
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        val dragFlags = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        return makeMovementFlags(dragFlags, 0)
     }
 
     // 아이템을 이동할 때
@@ -21,9 +16,9 @@ class DragAndDropHelper(private val listener: OnItemMovedListener) : ItemTouchHe
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        // 스와이프 동작을 처리할 때
     }
 
-    override fun isLongPressDragEnabled(): Boolean = true
-
+    override fun getMoveThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+        return 0.3f
+    }
 }

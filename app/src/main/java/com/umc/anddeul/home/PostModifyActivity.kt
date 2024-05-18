@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.R
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostModifyBinding
@@ -40,6 +39,7 @@ class PostModifyActivity : AppCompatActivity() {
         val selectedVPAdapter = PostVPAdapter(selectedImages?.toList() ?: emptyList())
         binding.postModifySelectedVp.adapter = selectedVPAdapter
         binding.postModifySelectedVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
 
         // 원래 게시글 내용 담기
         binding.postModifyEdit.setText(postContent)
