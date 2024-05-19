@@ -44,7 +44,7 @@
         android:text="체크리스트 내용"
         android:maxLines="4"
         android:textColor="@color/secondary"
-        android:textSize="18sp"
+        android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/checkli_btn_checking"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,6 +58,7 @@
         android:letterSpacing="-0.01"
         android:lineSpacingExtra="16dp"
         android:text="이름님이 남기셨어요"
+        android:textSize="12dp"
         android:textColor="@color/text_high"
         app:layout_constraintStart_toEndOf="@+id/checkli_btn_checking"
         app:layout_constraintTop_toBottomOf="@+id/checkli_tv_checklist" />

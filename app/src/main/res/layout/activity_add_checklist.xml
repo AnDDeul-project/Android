@@ -24,7 +24,7 @@
             android:lineSpacingExtra="36dp"
             android:text="이름"
             android:textColor="@color/primary"
-            android:textSize="26sp"
+            android:textSize="26dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +38,7 @@
             android:lineSpacingExtra="22dp"
             android:text="님의 오늘의 할 일"
             android:textColor="@color/text_high"
-            android:textSize="18sp"
+            android:textSize="18dp"
             app:layout_constraintStart_toEndOf="@+id/checkli_add_tv_name"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.appcompat.widget.Toolbar>
@@ -91,7 +91,7 @@
                 android:gravity="center"
                 android:text="1"
                 android:textColor="#666666"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,7 +104,7 @@
                 android:gravity="center"
                 android:text="2"
                 android:textColor="#666666"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/date3"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/date1"
@@ -117,9 +117,9 @@
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
-                android:text="3"
+                android:text="4"
                 android:textColor="#666666"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/date5"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/date3"
@@ -132,9 +132,9 @@
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
-                android:text="4"
+                android:text="3"
                 android:textColor="#666666"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/date4"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/date2"
@@ -149,7 +149,7 @@
                 android:gravity="center"
                 android:text="5"
                 android:textColor="#666666"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/date6"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/date4"
@@ -164,7 +164,7 @@
                 android:gravity="center"
                 android:text="6"
                 android:textColor="@color/system_informative"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/date7"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/date5"
@@ -180,7 +180,7 @@
                 android:gravity="center"
                 android:text="7"
                 android:textColor="@color/system_error"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -194,7 +194,7 @@
                 android:gravity="center"
                 android:text="월"
                 android:textColor="#666666"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -207,7 +207,7 @@
                 android:gravity="center"
                 android:text="화"
                 android:textColor="#666666"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/day3"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day1"
@@ -222,7 +222,7 @@
                 android:gravity="center"
                 android:text="수"
                 android:textColor="#666666"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/day4"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day2"
@@ -237,7 +237,7 @@
                 android:gravity="center"
                 android:text="목"
                 android:textColor="#666666"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/day5"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day3"
@@ -252,7 +252,7 @@
                 android:gravity="center"
                 android:text="금"
                 android:textColor="#666666"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/day6"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day4"
@@ -267,7 +267,7 @@
                 android:gravity="center"
                 android:text="토"
                 android:textColor="#666666"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/day7"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/day5"
@@ -283,7 +283,7 @@
                 android:gravity="center"
                 android:text="일"
                 android:textColor="#666666"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -314,7 +314,7 @@
                 android:layout_marginTop="125dp"
                 android:fontFamily="@font/font_pretendard_bold"
                 android:text="TextView"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -330,6 +330,7 @@
                 android:lineSpacingExtra="16dp"
                 android:text="이름님에게 할 일을 남겨보세요"
                 android:textColor="@color/grey_500"
+                android:textSize="12dp"
                 app:layout_constraintStart_toEndOf="@+id/add_checkli_et_circle"
                 app:layout_constraintTop_toBottomOf="@+id/add_checkli_et_contents" />
 
@@ -356,7 +357,7 @@
                 android:inputType="text"
                 android:lineSpacingExtra="22dp"
                 android:textColor="@color/grey_500"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 app:layout_constraintStart_toEndOf="@+id/add_checkli_et_circle"
                 app:layout_constraintTop_toBottomOf="@+id/date1" />
 

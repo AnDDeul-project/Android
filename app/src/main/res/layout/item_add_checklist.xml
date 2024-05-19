@@ -35,7 +35,7 @@
         android:text="체크리스트 내용"
         android:maxLines="4"
         android:textColor="@color/secondary"
-        android:textSize="18sp"
+        android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/checkli_add_btn_checked"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,6 +48,7 @@
         android:fontFamily="@font/pretendard_regular"
         android:letterSpacing="-0.01"
         android:lineSpacingExtra="16dp"
+        android:textSize="12dp"
         android:text="이름님이 남기셨어요"
         android:textColor="@color/text_high"
         app:layout_constraintStart_toEndOf="@+id/checkli_add_btn_checking"
