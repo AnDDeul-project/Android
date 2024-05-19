@@ -3,7 +3,6 @@ package com.umc.anddeul.mypage
 import android.content.Intent
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +18,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageBinding
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.PostUploadActivity
@@ -27,16 +28,16 @@ import com.umc.anddeul.home.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
     private val myPageViewModel: MyPageViewModel by activityViewModels()
+    var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -57,6 +58,9 @@ class MyPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMypageBinding.inflate(inflater, container, false)
+
+        token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         binding.mypageSettingIb.setOnClickListener {
             // MyPageSettingFragment로 이동
@@ -155,26 +159,6 @@ class MyPageFragment : Fragment() {
         // 내 sns id 가져오기
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
-
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
 
         val userProfileService = retrofitBearer.create(UserProfileInterface::class.java)
 

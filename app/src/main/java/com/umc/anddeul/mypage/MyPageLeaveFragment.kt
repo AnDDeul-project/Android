@@ -1,8 +1,6 @@
 package com.umc.anddeul.mypage
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -15,19 +13,21 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.umc.anddeul.R
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageLeaveBinding
 import com.umc.anddeul.mypage.model.LeaveDTO
 import com.umc.anddeul.mypage.network.LeaveInterface
 import com.umc.anddeul.start.StartActivity
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageLeaveFragment : Fragment() {
     lateinit var binding: FragmentMypageLeaveBinding
+    var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +35,9 @@ class MyPageLeaveFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMypageLeaveBinding.inflate(inflater, container, false)
+
+        token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         // 탈퇴하기 버튼 색상 설정
         binding.mypageLeaveReasonEdit.addTextChangedListener(object : TextWatcher {
@@ -67,36 +70,14 @@ class MyPageLeaveFragment : Fragment() {
     }
 
     fun setToolbar() {
-        binding.mypageLeaveToolbar.apply {
-            setNavigationIcon(R.drawable.mypage_setting_back)
-            setNavigationOnClickListener {
-                // MyPageSettingFragment로 이동
-                val fragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.popBackStack()
-            }
+        binding.mypageLeaveBackIv.setOnClickListener {
+            // MyPageSettingFragment로 이동
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
 
     fun leaveAnddeul() {
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         val leaveService = retrofitBearer.create(LeaveInterface::class.java)
 
         leaveService.leaveApp().enqueue(object : Callback<LeaveDTO> {

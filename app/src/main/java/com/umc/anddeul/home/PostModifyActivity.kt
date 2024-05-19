@@ -1,33 +1,36 @@
 package com.umc.anddeul.home
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostModifyBinding
 import com.umc.anddeul.home.model.ModifyRequest
 import com.umc.anddeul.home.model.PostModifyDTO
 import com.umc.anddeul.home.network.PostModifyInterface
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class PostModifyActivity : AppCompatActivity() {
     lateinit var binding: ActivityPostModifyBinding
+    var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityPostModifyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         val selectedImages = intent.getStringArrayListExtra("selectedImages")
         val postIdx: Int = intent.getIntExtra("postId", -1)
@@ -50,34 +53,12 @@ class PostModifyActivity : AppCompatActivity() {
     }
 
     fun setToolbar() {
-        binding.postModifyToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
-            setNavigationOnClickListener {
-                finish()
-            }
+        binding.postModifyBackIv.setOnClickListener {
+            finish()
         }
     }
 
     fun modify(postIdx: Int) {
-        val spf: SharedPreferences = getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         // 수정한 게시글 내용 담기
         val modifyContent = binding.postModifyEdit.text.toString()
         val modifyRequest = ModifyRequest(modifyContent)

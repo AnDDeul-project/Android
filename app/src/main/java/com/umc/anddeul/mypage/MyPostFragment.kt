@@ -1,8 +1,6 @@
 package com.umc.anddeul.mypage
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -12,28 +10,33 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMyPostBinding
 import com.umc.anddeul.home.DeleteDialog
+import com.umc.anddeul.home.EmojiRVAdpater
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostModifyActivity
 import com.umc.anddeul.home.PostVPAdapter
 import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
+import com.umc.anddeul.home.model.EmojiUiModel
 import com.umc.anddeul.home.model.OnePostDTO
 import com.umc.anddeul.home.model.OnePostData
 import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPostFragment : Fragment() {
     lateinit var binding: FragmentMyPostBinding
+    var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +45,9 @@ class MyPostFragment : Fragment() {
     ): View? {
         binding = FragmentMyPostBinding.inflate(inflater, container, false)
 
+        token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
+
         setToolbar()
         loadPost()
 
@@ -49,40 +55,16 @@ class MyPostFragment : Fragment() {
     }
 
     fun setToolbar() {
-        binding.myPostToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
-
-            setNavigationOnClickListener {
-                // UserProfileFragment로 이동
-                val fragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.popBackStack()
-            }
+        binding.myPostBackIv.setOnClickListener {
+            // UserProfileFragment로 이동
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
 
     fun loadPost() {
         val postIdxJson = arguments?.getInt("postIdx")
         val postId: Int = postIdxJson ?: 0
-
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
 
         val onePostService = retrofitBearer.create(OnePostInterface::class.java)
 
@@ -118,6 +100,30 @@ class MyPostFragment : Fragment() {
                         val postVPAdapter = PostVPAdapter(imageUrlsString)
                         binding.myPostImageVp.adapter = postVPAdapter
                         binding.myPostImageVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                        val emojis = postData.emojis
+
+                        val emojiList : List<EmojiUiModel> = listOf(
+                            emojis!!.happy,
+                            emojis!!.laugh,
+                            emojis!!.sad
+                        ).mapIndexed { index, emoji ->
+                            val type = when (index) {
+                                0 -> "happy"
+                                1 -> "laugh"
+                                else -> "sad"
+                            }
+                            EmojiUiModel(
+                                type = type,
+                                selected = emoji.selected,
+                                count = emoji.count
+                            )
+                        }.filter { it.count != 0 }
+
+                        val emojiRVAdapter = EmojiRVAdpater(requireContext(), emojiList)
+                        binding.myPostEmojiRv.adapter = emojiRVAdapter
+                        binding.myPostEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
                     }
                 }
             }
@@ -195,25 +201,6 @@ class MyPostFragment : Fragment() {
         // 사라지는 애니메이션
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
-        val spf: SharedPreferences = requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         val emojiService = retrofitBearer.create(EmojiInterface::class.java)
         val emojiRequest = EmojiRequest(emojiType)
 
@@ -228,40 +215,29 @@ class MyPostFragment : Fragment() {
                     binding.myPostEmojiLinear.startAnimation(fadeOutAnimation)
                     binding.myPostEmojiLinear.visibility = View.GONE
 
-                    binding.myPostEmojiHappyLayout.visibility = View.VISIBLE
+                    val emojis = emojiResponse?.emojis
 
-                    if(emojiType == "happy_emj") {
-                        binding.myPostEmojiHappyOne.visibility = View.VISIBLE
-                        binding.myPostEmojiFunOne.visibility = View.GONE
-                        binding.myPostEmojiSadOne.visibility = View.GONE
-                        binding.myPostEmojiHappyCount.text = emojiResponse?.happy_emj?.size.toString()
-
-                        if(emojiResponse?.happy_emj?.size == 0) {
-                            binding.myPostEmojiHappyLayout.visibility = View.GONE
+                    val emojiList : List<EmojiUiModel> = listOf(
+                        emojis!!.happy,
+                        emojis!!.laugh,
+                        emojis!!.sad
+                    ).mapIndexed { index, emoji ->
+                        val type = when (index) {
+                            0 -> "happy"
+                            1 -> "laugh"
+                            else -> "sad"
                         }
-                    }
+                        EmojiUiModel(
+                            type = type,
+                            selected = emoji.selected,
+                            count = emoji.count
+                        )
+                    }.filter { it.count != 0 }
 
-                    if(emojiType == "laugh_emj") {
-                        binding.myPostEmojiHappyOne.visibility = View.GONE
-                        binding.myPostEmojiFunOne.visibility = View.VISIBLE
-                        binding.myPostEmojiSadOne.visibility = View.GONE
-                        binding.myPostEmojiHappyCount.text = emojiResponse?.laugh_emj?.size.toString()
+                    val emojiRVAdapter = EmojiRVAdpater(requireContext(), emojiList)
+                    binding.myPostEmojiRv.adapter = emojiRVAdapter
+                    binding.myPostEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-                        if(emojiResponse?.laugh_emj?.size == 0) {
-                            binding.myPostEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
-
-                    if (emojiType == "sad_emj") {
-                        binding.myPostEmojiHappyOne.visibility = View.GONE
-                        binding.myPostEmojiFunOne.visibility = View.GONE
-                        binding.myPostEmojiSadOne.visibility = View.VISIBLE
-                        binding.myPostEmojiHappyCount.text = emojiResponse?.sad_emj?.size.toString()
-
-                        if(emojiResponse?.sad_emj?.size == 0) {
-                            binding.myPostEmojiHappyLayout.visibility = View.GONE
-                        }
-                    }
                 }
             }
 
@@ -269,7 +245,5 @@ class MyPostFragment : Fragment() {
                 Log.e("emojiService", "Failure message: ${t.message}")
             }
         })
-
     }
-
 }

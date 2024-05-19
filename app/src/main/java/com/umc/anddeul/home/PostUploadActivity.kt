@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umc.anddeul.R
@@ -65,7 +64,7 @@ class PostUploadActivity : AppCompatActivity() {
         binding.uploadGalleryRv.adapter = galleryAdapter
 
         binding.uploadGalleryMultiImgBt.setOnClickListener {
-// 여러 장 선택 버튼을 눌렀을 때 처리
+            // 여러 장 선택 버튼을 눌렀을 때 처리
             binding.uploadGalleryRv.adapter?.let { adapter ->
                 if (adapter is GalleryAdapter) {
                     adapter.toggleCheckBoxVisibility()

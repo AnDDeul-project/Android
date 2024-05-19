@@ -1,26 +1,28 @@
 package com.umc.anddeul.home
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.DialogConfirmBinding
 import com.umc.anddeul.home.model.MemberApproveDTO
 import com.umc.anddeul.home.network.MemberApproveInterface
-import com.umc.anddeul.home.network.MemberInterface
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 interface ConfirmDialogListener {
     fun onAcceptClicked()
@@ -32,11 +34,20 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
     private var name : String = ""
     private var groupName : String = ""
     private var userId : String = ""
+    var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     init {
         this.name = name
         this.groupName = groupName
         this.userId = userId
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // 다이얼로그 크기 조정
+        context?.dialogResize(requireDialog(),0.9f)
     }
 
     @SuppressLint("SetTextI18n")
@@ -46,6 +57,9 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogConfirmBinding.inflate(layoutInflater, container, false)
+
+        token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명
         binding.dialogNameTv.text = "'${name}'님을"
@@ -65,26 +79,6 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
     }
 
     fun approveMember(userId: String) {
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
         val approveService = retrofitBearer.create(MemberApproveInterface::class.java)
 
         approveService.approveMember(userId).enqueue(object : Callback<MemberApproveDTO> {
@@ -104,9 +98,34 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
             override fun onFailure(call: Call<MemberApproveDTO>, t: Throwable) {
                 Log.e("approveService", "Failure message: ${t.message}")
             }
-
         })
+    }
 
+    fun Context.dialogResize(dialog: Dialog, width: Float){
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
+        val originalLayoutParams = dialog.window?.attributes
+
+        val originalHeight = originalLayoutParams?.height ?: WindowManager.LayoutParams.WRAP_CONTENT
+
+        if (Build.VERSION.SDK_INT < 30){
+            val display = windowManager.defaultDisplay
+            val size = Point()
+
+            display.getSize(size)
+
+            val window = dialog.window
+            val x = (size.x * width).toInt()
+
+            window?.setLayout(x, originalHeight)
+
+        } else {
+            val rect = windowManager.currentWindowMetrics.bounds
+
+            val window = dialog.window
+            val x = (rect.width() * width).toInt()
+
+            window?.setLayout(x, originalHeight)
+        }
     }
 }

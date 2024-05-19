@@ -2,39 +2,39 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toast_background"
+        android:elevation="5dp"
+        android:paddingStart="25dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="25dp"
+        android:paddingBottom="7dp">
+
+        <ImageView
+            android:id="@+id/toast_anddeul_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/toast_background"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:elevation="5dp">
+            android:src="@drawable/toast_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/toast_anddeul_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/toast_anddeul_iv"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:src="@drawable/toast_logo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/toast_anddeul_tv"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/toast_anddeul_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="custom toast"
+            android:textColor="@color/text_medium"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/toast_anddeul_iv"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/toast_anddeul_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="custom toast"
-                android:textColor="@color/text_medium"
-                android:fontFamily="@font/font_pretendard_bold"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/toast_anddeul_iv"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

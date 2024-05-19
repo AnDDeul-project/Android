@@ -51,14 +51,10 @@ class MypageSettingFragment : Fragment(){
 
     // 툴바 셋팅
     fun setToolbar() {
-        binding.mypageSettingToolbar.apply {
-            setNavigationIcon(R.drawable.mypage_setting_back)
-
-            setNavigationOnClickListener {
-                // MyPageFragment로 이동
-                val fragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.popBackStack()
-            }
+        binding.mypageSettingBackIv.setOnClickListener {
+            // MyPageFragment로 이동
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
 }

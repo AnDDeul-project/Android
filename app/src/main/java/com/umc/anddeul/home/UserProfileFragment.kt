@@ -1,9 +1,7 @@
 package com.umc.anddeul.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,19 +13,21 @@ import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.AddChecklistActivity
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserProfileBinding
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.network.UserProfileInterface
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class UserProfileFragment : Fragment() {
     lateinit var binding: FragmentUserProfileBinding
     private var gson : Gson = Gson()
+    var token: String? = null
+    lateinit var retrofitBearer: Retrofit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,12 +36,15 @@ class UserProfileFragment : Fragment() {
     ): View? {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false)
 
+        token = TokenManager.getToken()
+        retrofitBearer = RetrofitManager.getRetrofitInstance()
+
         // 선택한 유저의 아이디 가져오기
         val idJson = arguments?.getString("selectedId")
         val snsId = gson.fromJson(idJson, String::class.java)
 
         binding.userProfileToolbar.apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationIcon(R.drawable.ic_back_25)
             setNavigationOnClickListener {
                 // homeFragment로 이동
                 val fragmentManager = requireActivity().supportFragmentManager
@@ -55,25 +58,6 @@ class UserProfileFragment : Fragment() {
     }
 
     fun loadProfile(snsId : String) {
-        val spf: SharedPreferences =
-            requireActivity().getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
 
         val userProfileService = retrofitBearer.create(UserProfileInterface::class.java)
 

@@ -12,7 +12,9 @@ import com.kakao.sdk.user.UserApiClient
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.start.signin.service.SigninService
 import com.umc.anddeul.databinding.ActivitySignupBinding
+import com.umc.anddeul.invite.JoinGroupSendActivity
 import com.umc.anddeul.start.StartActivity
+import com.umc.anddeul.start.service.RequestService
 import com.umc.anddeul.start.terms.TermsActivity
 
 class SignupActivity: AppCompatActivity()  {
@@ -46,10 +48,7 @@ class SignupActivity: AppCompatActivity()  {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
                                 if (signinResponse.has == true){
-                                    val mainIntent = Intent(this, MainActivity::class.java)
-                                    startActivity(mainIntent)
-                                    StartActivity._startActivity.finish()
-                                    finish()
+                                    checkFamilyRequest(loadJwt())
                                 }
                                 else {
                                     val termsIntent = Intent(this, TermsActivity::class.java)
@@ -81,10 +80,7 @@ class SignupActivity: AppCompatActivity()  {
                                 if (signinResponse.isSuccess.toString() == "true") {
                                     saveJwt(signinResponse.accessToken.toString())
                                     if (signinResponse.has == true){
-                                        val mainIntent = Intent(this, MainActivity::class.java)
-                                        startActivity(mainIntent)
-                                        StartActivity._startActivity.finish()
-                                        finish()
+                                        checkFamilyRequest(loadJwt())
                                     }
                                     else {
                                         val termsIntent = Intent(this, TermsActivity::class.java)
@@ -113,10 +109,7 @@ class SignupActivity: AppCompatActivity()  {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
                                 if (signinResponse.has == true){
-                                    val mainIntent = Intent(this, MainActivity::class.java)
-                                    startActivity(mainIntent)
-                                    StartActivity._startActivity.finish()
-                                    finish()
+                                    checkFamilyRequest(loadJwt())
                                 }
                                 else {
                                     val termsIntent = Intent(this, TermsActivity::class.java)
@@ -138,5 +131,33 @@ class SignupActivity: AppCompatActivity()  {
 
         editor.putString("jwtToken", jwt)
         editor.apply()
+    }
+
+
+    // 토큰 불러오기
+    private fun loadJwt(): String {
+        val spf = getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
+        return spf.getString("jwtToken", null).toString()
+    }
+
+    // 가족 유무, 가족 요청 유무 확인
+    private fun checkFamilyRequest(accessToken: String) {
+        val requestService = RequestService()
+        requestService.requestInfo(loadJwt()) { requestDTO ->
+            if (requestDTO != null) {
+                if (requestDTO.isSuccess.toString() == "true") {
+                    if (requestDTO.infamily){   // 가족이 있을 때
+                        val mainIntent = Intent(this, MainActivity::class.java)
+                        startActivity(mainIntent)
+                        StartActivity._startActivity.finish()
+                        finish()
+                    }
+                    else if (requestDTO.request){   // 가족이 없고 요청이 있을 때
+                        val joinIntent = Intent(this, JoinGroupSendActivity::class.java)
+                        startActivity(joinIntent)
+                    }
+                }
+            }
+        }
     }
 }

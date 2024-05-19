@@ -30,6 +30,11 @@ class DialogRecordDeleteFragment(private val context: Context, private val postB
             dlg.dismiss()
         }
 
+        // 취소 버튼 (녹음 삭제 취소)
+        binding.cancelbtn4.setOnClickListener {
+            dlg.dismiss()
+        }
+
         dlg.show()
     }
 }

@@ -55,29 +55,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/groupJoinDoneBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="671dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/signin_green_button" />
-
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="완료"
-        android:textSize="18sp"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/groupJoinDoneBtn"
-        app:layout_constraintEnd_toEndOf="@+id/groupJoinDoneBtn"
-        app:layout_constraintStart_toStartOf="@+id/groupJoinDoneBtn"
-        app:layout_constraintTop_toTopOf="@+id/groupJoinDoneBtn" />
-
     <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"

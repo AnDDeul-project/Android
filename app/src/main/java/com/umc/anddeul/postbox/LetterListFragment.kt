@@ -68,10 +68,14 @@ class LetterListFragment : Fragment() {
 
         // 다음주
         binding.afterBtn2.setOnClickListener {
-            selectedDate = selectedDate.plusWeeks(1)
-            val yearMonth = YearMonth.from(selectedDate)
-            binding.selectDateTv2.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            setWeek(selectedDate)
+            val today = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+
+            if (selectedDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) != today) {
+                selectedDate = selectedDate.plusWeeks(1)
+                val yearMonth = YearMonth.from(selectedDate)
+                binding.selectDateTv2.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+                setWeek(selectedDate)
+            }
         }
 
         //// 편지 리스트

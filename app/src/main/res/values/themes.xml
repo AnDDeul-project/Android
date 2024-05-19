@@ -37,7 +37,7 @@
 
     <style name="GalleryToolBar">
         <item name="fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">20dp</item>
     </style>
 
     // mypage 유저 이름 수정 입력칸 둥글게 설정
