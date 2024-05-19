@@ -31,8 +31,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.time.format.DateTimeFormatter
 
 class PotFragment : Fragment() {
-
     lateinit var binding: FragmentPotBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPotBinding.inflate(inflater, container, false)
 
