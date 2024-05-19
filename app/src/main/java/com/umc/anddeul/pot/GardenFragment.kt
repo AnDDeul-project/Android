@@ -23,14 +23,30 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class GardenFragment : Fragment() {
-
     lateinit var binding : FragmentGardenBinding
+    var season = "spring"
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGardenBinding.inflate(inflater, container, false)
 
         binding.gardenImgBack.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
             requireActivity().supportFragmentManager.popBackStack()
+        }
+
+        binding.gardenBtnThemeNext.setOnClickListener {
+            if (season == "spring") { //봄
+                season = "summer"
+            }
+            else if (season == "summer") { //여름
+                season = "fall"
+            }
+            else if (season == "fall") { //가을
+                season = "winter"
+            }
+            else { //겨울
+
+            }
         }
 
         //토큰 가져오기
