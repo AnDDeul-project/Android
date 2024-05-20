@@ -32,7 +32,7 @@
             android:fontFamily="@font/font_pretendard_bold"
             android:text="기존 그룹에 참여하기"
             android:textColor="@color/text_high"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         android:text="참여 요청을 보냈습니다!"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:textSize="26sp"
+        android:textSize="26dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,7 +64,7 @@
         android:text="방장이 요청을 수락할 때 까지 기다려주세요.\n완료 시 알람을 보내드리겠습니다."
         android:textAlignment="center"
         android:textColor="@color/text_medium"
-        android:textSize="14sp"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
