@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="새로운 그룹 만들기"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:layout_gravity="center"
             android:fontFamily="@font/font_pretendard_bold"
             android:textColor="@color/text_high"
@@ -50,7 +50,7 @@
         android:text="'행복한 우리 가족'"
         android:textAlignment="center"
         android:textColor="@color/text_medium"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,7 +64,7 @@
         android:text="그룹 초대코드"
         android:textAlignment="center"
         android:textColor="@color/text_medium"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupExplainTv" />
@@ -73,10 +73,10 @@
         android:id="@+id/sendCodeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/gotoStartBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView19"
         app:srcCompat="@drawable/signin_green_button" />
 
     <TextView
@@ -86,7 +86,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="공유하기"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/sendCodeBtn"
         app:layout_constraintEnd_toEndOf="@+id/sendCodeBtn"
         app:layout_constraintStart_toStartOf="@+id/sendCodeBtn"
@@ -100,7 +100,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="TextView"
         android:textColor="@color/primary"
-        android:textSize="26sp"
+        android:textSize="26dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupExplainTv2" />
@@ -109,10 +109,10 @@
         android:id="@+id/gotoStartBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendCodeBtn"
         app:srcCompat="@drawable/invite_white_button" />
 
     <TextView
@@ -122,7 +122,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="시작하기"
         android:textColor="@color/primary"
-        android:textSize="18sp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/gotoStartBtn"
         app:layout_constraintEnd_toEndOf="@+id/gotoStartBtn"
         app:layout_constraintStart_toStartOf="@+id/gotoStartBtn"
@@ -132,14 +132,14 @@
         android:id="@+id/textView19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_marginBottom="18dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:text="해당 코드를 가족에게 보내보세요!"
         android:textColor="@color/text_disabled"
-        android:textSize="16sp"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/sendCodeBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/copyCodeBtn" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/copyCodeBtn"
