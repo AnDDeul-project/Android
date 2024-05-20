@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/loginBackBtn"
             android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/font_pretendard_bold"
             android:text="로그인하기"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textColor="@color/text_high"
             android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="우리가족 일상 공유의 뜰에\n어서오세요 :)"
         android:textColor="@color/primary"
-        android:textSize="26sp"
+        android:textSize="26dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
@@ -75,20 +75,20 @@
         android:id="@+id/oldLoginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/newLoginBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/signin_green_button" />
 
     <ImageView
         android:id="@+id/newLoginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/oldLoginBtn"
         app:srcCompat="@drawable/signin_green_button" />
 
     <TextView
@@ -96,7 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="카카오톡으로 로그인"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/oldLoginBtn"
@@ -109,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="다른 카카오 계정으로 로그인"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/newLoginBtn"
