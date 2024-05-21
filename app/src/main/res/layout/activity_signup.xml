@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/signupBackBtn"
             android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,7 @@
             android:fontFamily="@font/font_pretendard_bold"
             android:text="카카오톡 계정으로 생성하기"
             android:layout_gravity="center"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textColor="@color/text_high"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +69,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="우리가족 일상 공유의 뜰에\n어서오세요 :)"
         android:textColor="@color/primary"
-        android:textSize="26sp"
+        android:textSize="26dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
@@ -77,20 +77,20 @@
         android:id="@+id/oldSignUpBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="137dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/newSignUpBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/signin_green_button" />
 
     <ImageView
         android:id="@+id/newSignUpBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/oldSignUpBtn"
         app:srcCompat="@drawable/signin_green_button" />
 
     <TextView
@@ -100,7 +100,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="카카오톡으로 간편 가입"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/oldSignUpBtn"
         app:layout_constraintEnd_toEndOf="@+id/oldSignUpBtn"
         app:layout_constraintStart_toStartOf="@+id/oldSignUpBtn"
@@ -113,7 +113,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="다른 카카오 계정으로 가입"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/newSignUpBtn"
         app:layout_constraintEnd_toEndOf="@+id/newSignUpBtn"
         app:layout_constraintStart_toStartOf="@+id/newSignUpBtn"

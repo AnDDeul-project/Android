@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/codeBackBtn"
             android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,7 @@
             android:fontFamily="@font/font_pretendard_bold"
             android:text="기존 그룹에 참여하기"
             android:textColor="@color/text_high"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
         android:text="해당 가족 그룹에\n참여하시겠습니까?"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:textSize="26sp"
+        android:textSize="26dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -67,10 +67,10 @@
         android:id="@+id/existGroupJoinBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="671dp"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/signin_green_button" />
 
     <TextView
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="완료"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:fontFamily="@font/font_pretendard_bold"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/existGroupJoinBtn"
@@ -105,7 +105,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="행복한 우리 가족"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
@@ -118,7 +118,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="3 명"
         android:textColor="@color/text_disabled"
-        android:textSize="12sp"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
@@ -131,7 +131,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="초대코드 "
         android:textColor="@color/text_medium"
-        android:textSize="14sp"
+        android:textSize="14dp"
         app:layout_constraintStart_toStartOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/GroupNameTv" />
 
