@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "233688108572",
+    "project_id": "anddeul-fcm",
+    "storage_bucket": "anddeul-fcm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233688108572:android:8eb0834e4f3576091d99d9",
+        "android_client_info": {
+          "package_name": "com.umc.anddeul"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4d-kJP1KrwPVUHodR_WfASC9Ff0FBgqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
