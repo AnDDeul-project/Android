@@ -79,7 +79,7 @@ class MyPageFragment : Fragment() {
         binding.mypageModifyBtn.setOnClickListener {
             // MyPageModifyFragment로 이동
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .add(R.id.mypage_layout, MyPageModifyFragment())
+                .add(R.id.main_frm, MyPageModifyFragment())
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
         }

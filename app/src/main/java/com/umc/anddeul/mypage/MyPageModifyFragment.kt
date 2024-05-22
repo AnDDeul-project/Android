@@ -32,13 +32,11 @@ import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.ModifyProfileInterface
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -77,7 +75,7 @@ class MyPageModifyFragment : Fragment() {
 
                 binding.mypageModifyStoreBtn.setOnClickListener {
                     if (selectedImageUri != null) {
-                        modifyMyProfile(selectedImageUri)
+                        modifyMyProfile(selectedImageUri, binding.mypageModifyUsername.text.toString())
                     }
                 }
             }
@@ -111,12 +109,9 @@ class MyPageModifyFragment : Fragment() {
             checkPermission()
         }
 
-        val imagePath = myProfileData!!.image
-        val profileImageUri = Uri.parse(imagePath)
-
         // 이름만 변경할 때
         binding.mypageModifyStoreBtn.setOnClickListener {
-            modifyMyProfile(profileImageUri)
+            modifyMyProfile(null, binding.mypageModifyUsername.text.toString())
         }
 
         setToolbar()
@@ -145,14 +140,12 @@ class MyPageModifyFragment : Fragment() {
         throw IllegalArgumentException("Invalid URI")
     }
 
-    // 이미지 품질 암축
-    fun compressImage(context: Context, uri: Uri, quality: Int): ByteArray {
-        val contentResolver: ContentResolver = context.contentResolver
-        val inputStream = contentResolver.openInputStream(uri)
+    // 이미지 품질 압축
+    fun compressImage(file: File, quality: Int): ByteArray {
         val options = BitmapFactory.Options()
         options.inSampleSize = 2 // 샘플링 크기를 조정하여 이미지 크기를 줄임
 
-        val bitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        val bitmap = BitmapFactory.decodeFile(file.path, options)
         val byteArrayOutputStream = ByteArrayOutputStream()
 
         // 이미지를 JPEG 형식으로 압축
@@ -161,17 +154,18 @@ class MyPageModifyFragment : Fragment() {
         return byteArrayOutputStream.toByteArray()
     }
 
-    fun modifyMyProfile(newImage: Uri) {
+    fun modifyMyProfile(profileUri: Uri?, nickName: String) {
         val modifyService = retrofitBearer.create(ModifyProfileInterface::class.java)
 
-        val file = getFileFromUri(requireContext(), newImage)
-        val compressedImage = compressImage(requireContext(), newImage, 30) // 이미지 품질 30으로 설정
-        val requestImage = RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressedImage)
-        val newProfileImage = MultipartBody.Part.createFormData("image", file.name, requestImage)
-
-
-        val newUsername = binding.mypageModifyUsername.text.toString()
-        val usernameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), newUsername)
+        val newProfileImage = profileUri?.let { uri ->
+            val file = getFileFromUri(requireContext(), uri)
+            MultipartBody.Part.createFormData(
+                "image",
+                file.name,
+                RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressImage(file, 30))
+            )
+        }
+        val usernameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickName)
 
         modifyService.modifyProfile(usernameRequestBody, newProfileImage)
             .enqueue(object : Callback<ModifyProfileResponse> {
@@ -185,9 +179,8 @@ class MyPageModifyFragment : Fragment() {
                     if (response.isSuccessful) {
                         // MyPageFragment로 이동
                         (context as MainActivity).supportFragmentManager.beginTransaction()
-                            .replace(R.id.mypage_modify_profile_layout, MyPageFragment())
+                            .replace(R.id.main_frm, MyPageFragment())
                             .commit()
-
                     } else {
                         Log.e("modifyProfileService", "프로필 수정 실패")
                     }
@@ -196,7 +189,6 @@ class MyPageModifyFragment : Fragment() {
                 override fun onFailure(call: Call<ModifyProfileResponse>, t: Throwable) {
                     Log.e("modifyProfileService", "Failure message: ${t.message}")
                 }
-
             })
     }
 
