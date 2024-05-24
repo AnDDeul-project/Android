@@ -29,6 +29,7 @@ import com.umc.anddeul.checklist.model.CompleteCheck
 import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
+import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.databinding.ItemChecklistBinding
 import com.umc.anddeul.home.model.UserProfileDTO
@@ -74,6 +75,7 @@ class ChecklistFragment : Fragment() {
         //spf 받아오기
         val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
         val token = spf.getString("jwtToken", "")
+//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzMwNzIzOTQzIl0sImlhdCI6MTcwNzgzMDU3NX0.4jF675wl0rS1i4ehIhtYtZVKmsSTScrxawrUJRtTxkM"
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "")
 
@@ -134,15 +136,19 @@ class ChecklistFragment : Fragment() {
         }
 
         // 다음주
+        //today면 오늘 날짜로 넘김 안 됨.
         binding.checkliAfterBtn.setOnClickListener {
-            selectedDay = selectedDay.plusWeeks(1)
-            val yearMonth = YearMonth.from(selectedDay)
-            binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            if (selectedDay == today) {
-                setWeek(selectedDay, service, myId!!)
-            }
-            else {
-                setSelectedWeek(selectedDay, service, myId!!)
+            if (selectedDay != today) {
+                selectedDay = selectedDay.plusWeeks(1)
+                val yearMonth = YearMonth.from(selectedDay)
+                binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+
+                if (selectedDay == today) {
+                    setWeek(selectedDay, service, myId!!)
+                }
+                else {
+                    setSelectedWeek(selectedDay, service, myId!!)
+                }
             }
         }
 
@@ -183,7 +189,7 @@ class ChecklistFragment : Fragment() {
         })
     }
 
-    //오늘 날짜 동그라미 함수 (startOfWeek 2월 16일
+    //오늘 날짜 동그라미 함수
     private fun setWeek(startOfWeek: LocalDate, service : ChecklistInterface, spfMyId : String) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
@@ -349,5 +355,18 @@ class ChecklistFragment : Fragment() {
     private fun formatDate(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${checklistRVAdapter.filePath}")
+        ChecklistService(requireContext()).imgApi(checklistRVAdapter.currentChecklist, file!!)
+
+        if (file.exists()) {
+            ChecklistService(requireContext()).imgApi(checklistRVAdapter.currentChecklist, file!!)
+        } else {
+            // 파일이 존재하지 않으면 에러 처리
+            Log.e("onActivityResult", "File does not exist")
+        }
     }
 }

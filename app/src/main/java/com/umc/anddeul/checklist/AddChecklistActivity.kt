@@ -142,7 +142,7 @@ class AddChecklistActivity : AppCompatActivity() {
             val yearMonth = YearMonth.from(selectedDay)
             binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             if (selectedDay == today) {
-                setWeek(selectedDay, service, myId!!)
+//                setWeek(selectedDay, service, myId!!)
             }
             else {
                 setSelectedWeek(selectedDay, service, myId!!)
@@ -153,6 +153,26 @@ class AddChecklistActivity : AppCompatActivity() {
 
         //현재 체크리스트 불러오기
         readApi(service, checkUserId!!)
+
+        //엔터키 입력
+        binding.addCheckliEtContents.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // 엔터 키를 눌렀을 때 실행할 코드를 여기에 작성하세요.
+                val text = binding.addCheckliEtContents.text.toString()
+                val dateList = selectedDateText.split("-")
+                val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+
+                //체크리스트 추가 api
+                addApi(service, addChecklist)
+
+                //체크리스트 변환된 거 불러오기
+                readApi(service, checkUserId!!)
+                binding.addCheckliEtContents.text.clear()
+                true // 이벤트 처리 완료를 나타냄
+            } else {
+                false // 다른 액션 처리하지 않음
+            }
+        }
 
         //동그라미 클릭시 추가
         binding.addCheckliEtCircle.setOnClickListener {
@@ -392,5 +412,4 @@ class AddChecklistActivity : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
     }
-
 }
