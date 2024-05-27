@@ -2,17 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-    <!-- 카메라 권한 -->
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
-
-    <!-- 저장소 권한 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 카메라 권한 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" /> <!-- 저장소 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -29,15 +25,18 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
-        android:requestLegacyExternalStorage="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_anddeul"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_anddeul_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Anddeul"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".common.GalleryManagerActivity"
+            android:exported="false"/>
         <activity
             android:name=".home.PostWriteActivity"
             android:exported="false"
@@ -57,6 +56,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -67,8 +67,8 @@
                     android:scheme="@string/scheme_kakao_app_key" />
             </intent-filter>
         </activity>
-        <activity android:name=".start.StartActivity"/>
-        <activity android:name=".start.signin.LoginActivity"/>
+        <activity android:name=".start.StartActivity" />
+        <activity android:name=".start.signin.LoginActivity" />
         <activity android:name=".start.signin.SignupActivity" />
         <activity android:name=".start.terms.TermsActivity" />
         <activity android:name=".start.setprofile.SetProfileActivity" />
@@ -79,9 +79,11 @@
         <activity android:name=".invite.JoinGroupCodeActivity" />
         <activity android:name=".invite.JoinGroupSendActivity" />
         <activity android:name=".home.PostUploadActivity" />
-        <activity android:name=".home.PostModifyActivity"
+        <activity
+            android:name=".home.PostModifyActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".checklist.AddChecklistActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.umc.anddeul.fileprovider"
