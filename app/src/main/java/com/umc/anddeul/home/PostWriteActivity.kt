@@ -53,9 +53,11 @@ class PostWriteActivity : AppCompatActivity(){
         // 이미지 URI 목록 받아오기
         val selectedImagesUri: ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
 
-        selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
-        binding.uploadWriteSelectedVp.adapter = selectedVPAdapter
-        binding.uploadWriteSelectedVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        val selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
+        val viewPager = binding.uploadWriteSelectedVp.apply {
+            adapter = selectedVPAdapter
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        }
 
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
         for (imageUri in selectedImagesUri) {
@@ -68,14 +70,21 @@ class PostWriteActivity : AppCompatActivity(){
         }
 
         // 뷰 페이저 드래그 앤 드랍 설정
-        val dragAndDropHelper = DragAndDropHelper(listener = object : DragAndDropHelper.OnItemMovedListener {
+        val dragAndDropHelper = DragAndDropHelper(viewPager,listener = object : DragAndDropHelper.OnItemMovedListener {
             override fun onItemMoved(fromPosition: Int, toPosition: Int) {
                 selectedVPAdapter.swapItems(fromPosition, toPosition)
             }
         })
 
-        val itemTouchHelper = ItemTouchHelper(dragAndDropHelper)
-        itemTouchHelper.attachToRecyclerView(binding.uploadWriteSelectedVp.getChildAt(0) as RecyclerView)
+        viewPager.post {
+            for (i in 0 until viewPager.childCount) {
+                val page = viewPager.getChildAt(i)
+                if (page is RecyclerView) {
+                    val itemTouchHelper = ItemTouchHelper(dragAndDropHelper)
+                    itemTouchHelper.attachToRecyclerView(page)
+                }
+            }
+        }
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File {
