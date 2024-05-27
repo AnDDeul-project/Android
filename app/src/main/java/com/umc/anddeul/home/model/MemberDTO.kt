@@ -8,6 +8,7 @@ data class MemberResponse(
 )
 
 data class MembersData(
+    val family_name: String,
     val me : Member,
     val family_code : String,
     val family : List<Member>,

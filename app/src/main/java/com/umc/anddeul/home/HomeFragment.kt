@@ -271,7 +271,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                         val family = it.family
                         val wait = it.waitlist
 
-                        // 가족 초대 코드 설정
+                        binding.homeMenuTitleTv.text = memberData.family_name
                         binding.homeMenuCodeNumTv.text = memberData.family_code
 
                         binding.homeMenuCopyBt.setOnClickListener {
