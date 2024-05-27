@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.databinding.ActivityPostWriteSelectedBinding
+import java.util.Collections
 
 class SelectedVPAdapter(private val selectedImages: MutableList<Uri>) :
     RecyclerView.Adapter<SelectedVPAdapter.SelectedViewHolder>() {
@@ -37,4 +38,14 @@ class SelectedVPAdapter(private val selectedImages: MutableList<Uri>) :
             notifyItemInserted(selectedImages.size - 1)
         }
     }
+
+    fun swapItems(fromPosition: Int, toPosition: Int) {
+        Collections.swap(selectedImages, fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    fun getImages(): MutableList<Uri> {
+        return selectedImages
+    }
+
 }

@@ -7,12 +7,16 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.ext.SdkExtensions.getExtensionVersion
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -20,6 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
@@ -47,11 +52,58 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
     var token : String? = null
     lateinit var retrofitBearer: Retrofit
 
+    private val pickMultipleMediaLauncher = registerForActivityResult(
+        ActivityResultContracts.PickMultipleVisualMedia(MAX_UPLOAD_IMAGE)
+    ) { uris ->
+        // 선택한 이미지들의 URI 목록을 처리하는 콜백
+        if (uris.isNotEmpty()) {
+            // 선택한 이미지가 있을 경우
+            val selectedImagesList = ArrayList(uris)
+
+            startActivity(Intent(requireContext(), PostWriteActivity::class.java).apply {
+                putParcelableArrayListExtra("selectedImages", selectedImagesList)
+            })
+        }  else {
+            // 선택한 이미지가 없을 경우
+        }
+    }
+
+    private val albumLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        // 사진 선택을 완료한 후 돌아왔다면
+        if (it.resultCode == AppCompatActivity.RESULT_OK) {
+            // 선택한 이미지의 경로 데이터를 관리하는 Uri 객체 리스트를 추출
+            val uriclip = it.data?.clipData
+            val selectedImages: List<Uri> = if (uriclip == null) {
+                emptyList()
+            } else {
+                List(uriclip.itemCount) {index ->  uriclip.getItemAt(index).uri}
+            }
+            if (selectedImages.size > MAX_UPLOAD_IMAGE) {
+                Snackbar.make(
+                    binding.root,
+                    "사진 첨부는 최대 ${MAX_UPLOAD_IMAGE}장까지 가능합니다.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+            if (selectedImages.isNotEmpty()) {
+                startActivity(Intent(requireContext(), PostWriteActivity::class.java).apply {
+                    putParcelableArrayListExtra(
+                        "selectedImages",
+                        ArrayList(selectedImages.take(MAX_UPLOAD_IMAGE)) // take API 살펴보기
+                    )
+                })
+            }
+        }
+    }
+
+    companion object {
+        // 이미지 등록 가능 갯수
+        const val MAX_UPLOAD_IMAGE = 10
+    }
+
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
-            // 권한이 허용되면 갤러리 액티비티로 이동
-            val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-            startActivity(postUploadActivity)
+            startAlbumLauncher()
         } else {
             val permissionDialog = PermissionDialog()
             permissionDialog.isCancelable = false
@@ -113,7 +165,11 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
         // Floating Action Button 클릭 시
         binding.homeFloatingBt.setOnClickListener {
-            checkPermission()
+            if (isPhotoPickerAvailable()) {
+                startPhotoPicker()
+            } else {
+                checkPermission()
+            }
         }
 
         postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
@@ -331,13 +387,11 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
                 Log.e("memberService", "Failure message: ${t.message}")
             }
-
         })
     }
 
     // 유저 프로필로 이동
     fun changeUserProfile(userId: String) {
-
         (context as MainActivity).supportFragmentManager.beginTransaction()
             .add(R.id.home_drawer_layout, UserProfileFragment().apply {
                 arguments = Bundle().apply {
@@ -350,64 +404,30 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             .commitAllowingStateLoss()
     }
 
+    private fun isPhotoPickerAvailable(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            true
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getExtensionVersion(Build.VERSION_CODES.R) >= 2
+        } else {
+            false
+        }
+    }
+
     // 갤러리 접근 권한 확인 함수
     fun checkPermission() {
-        val permissionImages = android.Manifest.permission.READ_MEDIA_IMAGES
-        val permissionVideos = android.Manifest.permission.READ_MEDIA_VIDEO
-        val permissionUserSelected = android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
         val permissionReadExternal = android.Manifest.permission.READ_EXTERNAL_STORAGE
-
-        val permissionImagesGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            permissionImages
-        ) == PackageManager.PERMISSION_GRANTED
-
-        val permissionVideosGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            permissionVideos
-        ) == PackageManager.PERMISSION_GRANTED
-
-        val permissionUserSelectedGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            permissionUserSelected
-        ) == PackageManager.PERMISSION_GRANTED
 
         val permissionReadExternalGranted = ContextCompat.checkSelfPermission(
             requireContext(),
             permissionReadExternal
         ) == PackageManager.PERMISSION_GRANTED
 
-        // SDK 34 이상
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            if (permissionImagesGranted && permissionVideosGranted && permissionUserSelectedGranted) {
-                // 이미 권한이 허용된 경우 해당 코드 실행
-                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                startActivity(postUploadActivity)
-            } else {
-                // 권한이 없는 경우 권한 요청
-                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
-            }
-        }
-
-        // 안드로이드 SDK가 33 이상인 경우
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (permissionImagesGranted && permissionVideosGranted) {
-                // 이미 권한이 허용된 경우 해당 코드 실행
-                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                startActivity(postUploadActivity)
-            } else {
-                // 권한이 없는 경우 권한 요청
-                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-            }
-        } else { // 안드로이드 SDK가 33보다 낮은 경우
-            if (permissionReadExternalGranted) {
-                // 이미 권한이 허용된 경우 해당 코드 실행
-                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                startActivity(postUploadActivity)
-            } else {
-                // 권한이 없는 경우 권한 요청
-                permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
+        // 포토피커를 사용하지 못하는 버전만 권한 확인 (SDK 30 미만)
+        if (permissionReadExternalGranted) {
+            startAlbumLauncher()
+        } else {
+            permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
 
@@ -415,5 +435,19 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         loadMemberList()
     }
 
-    override fun onCancelClicked() { }
+    override fun onCancelClicked() {}
+
+    @SuppressLint("IntentReset")
+    fun startAlbumLauncher() {
+        val albumIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+        // 이미지 여러개 선택 가능
+        albumIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        // 액티비티를 실행한다.
+        albumLauncher.launch(albumIntent)
+    }
+
+    fun startPhotoPicker() {
+        pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
 }
