@@ -30,6 +30,8 @@ import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.checklist.service.ChecklistService
+import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.databinding.ItemChecklistBinding
 import com.umc.anddeul.home.model.UserProfileDTO
@@ -74,8 +76,8 @@ class ChecklistFragment : Fragment() {
 
         //spf 받아오기
         val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzMwNzIzOTQzIl0sImlhdCI6MTcwNzgzMDU3NX0.4jF675wl0rS1i4ehIhtYtZVKmsSTScrxawrUJRtTxkM"
+//        val token = spf.getString("jwtToken", "")
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzMwNzIzOTQzIl0sImlhdCI6MTcwNzgzMDU3NX0.4jF675wl0rS1i4ehIhtYtZVKmsSTScrxawrUJRtTxkM"
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "")
 
@@ -180,6 +182,10 @@ class ChecklistFragment : Fragment() {
                     val checklist = ArrayList<Checklist>()
                     checklistRVAdapter.setChecklistData(checklist)
                     checklistRVAdapter.notifyDataSetChanged()
+
+                    //토스트바 테스트
+                    val context = requireContext()
+                    AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
                 }
             }
 
