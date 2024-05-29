@@ -56,7 +56,7 @@ class PostWriteActivity : AppCompatActivity() {
         val selectedImagesUri: ArrayList<Uri> =
             intent.getParcelableArrayListExtra("selectedImages")!!
 
-        val selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
+        selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
         val viewPager = binding.uploadWriteSelectedVp.apply {
             adapter = selectedVPAdapter
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
