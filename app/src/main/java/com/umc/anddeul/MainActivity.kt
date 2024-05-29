@@ -1,9 +1,9 @@
 package com.umc.anddeul
 
-import android.content.Intent
-import android.media.session.MediaSession.Token
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
 import androidx.activity.viewModels
 import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.common.RetrofitManager
@@ -13,6 +13,7 @@ import com.umc.anddeul.home.HomeFragment
 import com.umc.anddeul.mypage.MyPageFragment
 import com.umc.anddeul.mypage.MyPageViewModel
 import com.umc.anddeul.postbox.PostboxFragment
+import com.umc.anddeul.postbox.service.PostboxAlarmService
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +35,20 @@ class MainActivity : AppCompatActivity() {
         TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcxNjA1MDc5MH0.F8R4yXHrHbZgvunHMECOPJ-Hm5qClrScWfd4K2hbFow")
 
         RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
+
+        // 가족 우체통 하단바 알림
+        postboxBottomAlarm()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        ev?.let {
+            if (it.action == MotionEvent.ACTION_DOWN) {
+
+                // 가족 우체통 하단바 알림
+                postboxBottomAlarm()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun initBottomNavigation() {
@@ -79,6 +94,45 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             false
+        }
+    }
+
+    // 토큰 불러오기
+    private fun loadJwt(): String {
+        val spf = getSharedPreferences("myToken", MODE_PRIVATE)
+        return spf.getString("jwtToken", null).toString()
+    }
+
+    // 가족 우체통 하단바 알림
+    private fun postboxBottomAlarm() {
+        val loadedToken = loadJwt() // jwt토큰
+        // api 연결
+        val postboxAlarmService = PostboxAlarmService()
+        postboxAlarmService.alarmPostbox(loadedToken) { postboxDTO ->
+            if (postboxDTO != null) {
+                if (postboxDTO.isSuccess.toString() == "true") {
+                    if (postboxDTO?.count!! <= 0) {         // 알림 0개
+                        binding.postboxCircle.visibility = View.GONE
+                        binding.postboxCnt.visibility = View.GONE
+                    } else {
+                        binding.postboxCircle.visibility = View.VISIBLE
+                        binding.postboxCnt.visibility = View.VISIBLE
+                        if (postboxDTO?.count!! <= 9){         // 알림 1자리 수
+                            binding.postboxCnt.text = postboxDTO?.count.toString()
+                            binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle)
+                        } else if (postboxDTO?.count!! <= 99) {         // 알림 2자리 수
+                            binding.postboxCnt.text = postboxDTO?.count.toString()
+                            binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle2)
+                        }else if (postboxDTO?.count!! <= 999) {         // 알림 3자리 수
+                            binding.postboxCnt.text = postboxDTO?.count.toString()
+                            binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle3)
+                        } else {         // 알림 4자리 수 이상
+                            binding.postboxCnt.text = "999"
+                            binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle3)
+                        }
+                    }
+                }
+            }
         }
     }
 }
