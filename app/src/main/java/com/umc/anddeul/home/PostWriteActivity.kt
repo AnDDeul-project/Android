@@ -10,10 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
+import com.umc.anddeul.R
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
@@ -30,10 +32,10 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 @Suppress("DEPRECATION")
-class PostWriteActivity : AppCompatActivity(){
+class PostWriteActivity : AppCompatActivity() {
     lateinit var binding: ActivityPostWriteBinding
-    lateinit var selectedVPAdapter : SelectedVPAdapter
-    var token : String? = null
+    lateinit var selectedVPAdapter: SelectedVPAdapter
+    var token: String? = null
     lateinit var retrofitBearer: Retrofit
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +53,14 @@ class PostWriteActivity : AppCompatActivity(){
         }
 
         // 이미지 URI 목록 받아오기
-        val selectedImagesUri: ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
+        val selectedImagesUri: ArrayList<Uri> =
+            intent.getParcelableArrayListExtra("selectedImages")!!
 
         val selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
         val viewPager = binding.uploadWriteSelectedVp.apply {
             adapter = selectedVPAdapter
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            offscreenPageLimit = 1
         }
 
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
@@ -69,22 +73,27 @@ class PostWriteActivity : AppCompatActivity(){
             boardPost()
         }
 
-        // 뷰 페이저 드래그 앤 드랍 설정
-        val dragAndDropHelper = DragAndDropHelper(viewPager,listener = object : DragAndDropHelper.OnItemMovedListener {
-            override fun onItemMoved(fromPosition: Int, toPosition: Int) {
-                selectedVPAdapter.swapItems(fromPosition, toPosition)
-            }
-        })
-
-        viewPager.post {
-            for (i in 0 until viewPager.childCount) {
-                val page = viewPager.getChildAt(i)
-                if (page is RecyclerView) {
-                    val itemTouchHelper = ItemTouchHelper(dragAndDropHelper)
-                    itemTouchHelper.attachToRecyclerView(page)
+        ItemTouchHelper(
+            DragAndDropHelper(listener = object : DragAndDropHelper.OnItemMovedListener {
+                override fun onItemMoved(fromPosition: Int, toPosition: Int) {
+                    selectedVPAdapter.swapItems(fromPosition, toPosition)
                 }
-            }
-        }
+
+                override fun onDraggingStarted() {
+                    viewPager.setSemanticPadding(
+                        horizontal = R.dimen.padding_post_pager_horizontal_dragging,
+                        vertical = R.dimen.padding_post_pager_vertical_dragging
+                    )
+                }
+
+                override fun onDraggingFinished() {
+                    viewPager.setSemanticPadding(
+                        horizontal = R.dimen.padding_post_pager_horizontal_idle,
+                        vertical = R.dimen.padding_post_pager_vertical_idle
+                    )
+                }
+            })
+        ).attachToRecyclerView(viewPager.getChildAt(0) as RecyclerView)
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File {
@@ -153,5 +162,14 @@ class PostWriteActivity : AppCompatActivity(){
                     Log.e("boardService", "Failure message: ${t.message}")
                 }
             })
+    }
+
+    private fun ViewPager2.setSemanticPadding(
+        @DimenRes horizontal: Int,
+        @DimenRes vertical: Int
+    ) {
+        val horizontalPx = resources.getDimensionPixelOffset(horizontal)
+        val verticalPx = resources.getDimensionPixelOffset(vertical)
+        setPadding(horizontalPx, verticalPx, horizontalPx, verticalPx)
     }
 }
