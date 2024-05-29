@@ -6,13 +6,11 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -21,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.FragmentPostboxBinding
 import com.umc.anddeul.postbox.model.Family
 import com.umc.anddeul.postbox.model.TextRequest
@@ -123,7 +123,11 @@ class PostboxFragment : Fragment() {
                     if (questionDTO?.question?.isNotEmpty() == true) {
                         binding.randomQTv.text = questionDTO?.question?.get(0)?.content ?: ""
                     }
+                } else {
+                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
                 }
+            } else {
+                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
             }
         }
 
@@ -139,7 +143,11 @@ class PostboxFragment : Fragment() {
                     familyAdapter.families = familyDTO.result.family
                     binding.sFamily.adapter = familyAdapter
                     binding.userTitleTv.text = familyDTO.result.me.nickname
+                } else{
+                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
                 }
+            }else {
+                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
             }
         }
 
@@ -243,7 +251,11 @@ class PostboxFragment : Fragment() {
                                         letterType = ""
                                         val postSendPopupFragment = DialogPostSendFragment(requireContext())
                                         postSendPopupFragment.show()
+                                    } else{
+                                        AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
                                     }
+                                }else{
+                                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
                                 }
                             }
                         }
@@ -272,6 +284,7 @@ class PostboxFragment : Fragment() {
                     postAdapter.notifyDataSetChanged()
                 }
             } else {
+                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
             }
         }
     }

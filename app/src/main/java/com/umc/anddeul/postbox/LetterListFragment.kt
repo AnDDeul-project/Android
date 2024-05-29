@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.FragmentLetterlistBinding
 import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
@@ -92,8 +94,11 @@ class LetterListFragment : Fragment() {
                     if (mailDTO.post.isEmpty()) {
                         binding.noLetterlistTv.visibility = View.VISIBLE
                     }
+                } else{
+                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
                 }
             } else {
+                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
             }
         }
 
@@ -105,7 +110,11 @@ class LetterListFragment : Fragment() {
             if (familyDTO != null) {
                 if (familyDTO.isSuccess.toString() == "true") {
                     binding.userTitleTv2.text = familyDTO.result.me.nickname
+                } else {
+                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
                 }
+            } else{
+                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
             }
         }
 
