@@ -15,6 +15,8 @@ import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.FragmentPopupLetterBinding
 import com.umc.anddeul.postbox.model.Post
 import com.umc.anddeul.postbox.service.ReadMailService
@@ -101,8 +103,11 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
                         }
                     }
 
+                } else {
+                    AnddeulErrorToast.createToast(context, "요청을 처리할 수 없습니다")?.show()
                 }
             } else {
+                AnddeulErrorToast.createToast(context, "요청을 처리할 수 없습니다")?.show()
             }
         }
 
