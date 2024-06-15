@@ -37,19 +37,19 @@ class MainActivity : AppCompatActivity() {
         RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
 
         // 가족 우체통 하단바 알림
-        postboxBottomAlarm()
+//        postboxBottomAlarm()
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        ev?.let {
-            if (it.action == MotionEvent.ACTION_DOWN) {
-
-                // 가족 우체통 하단바 알림
-                postboxBottomAlarm()
-            }
-        }
-        return super.dispatchTouchEvent(ev)
-    }
+//    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+//        ev?.let {
+//            if (it.action == MotionEvent.ACTION_DOWN) {
+//
+//                // 가족 우체통 하단바 알림
+//                postboxBottomAlarm()
+//            }
+//        }
+//        return super.dispatchTouchEvent(ev)
+//    }
 
     private fun initBottomNavigation() {
 
