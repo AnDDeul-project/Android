@@ -18,6 +18,7 @@ import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentLetterlistBinding
 import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
@@ -241,7 +242,8 @@ class LetterListFragment : Fragment() {
     // 토큰 불러오기
     private fun loadJwt(): String {
         val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-        return spf.getString("jwtToken", null).toString()
+//        return spf.getString("jwtToken", null).toString()
+        return TokenManager.getToken().toString()
     }
 
 }
