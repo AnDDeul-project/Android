@@ -22,6 +22,8 @@ class MailService {
         val call = mailService.mailToday("Bearer $accessToken", today)
         call.enqueue(object : Callback<TodayMailResponse> {
             override fun onResponse(call: Call<TodayMailResponse>, response: Response<TodayMailResponse>) {
+                Log.d("Postbox MailService code", "${response.code()}")
+                Log.d("Postbox MailService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())

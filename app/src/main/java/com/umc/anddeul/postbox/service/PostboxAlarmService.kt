@@ -22,6 +22,8 @@ class PostboxAlarmService {
         val call = questionService.postboxAlarm("Bearer $accessToken")
         call.enqueue(object : Callback<PostboxAlarmResponse> {
             override fun onResponse(call: Call<PostboxAlarmResponse>, response: Response<PostboxAlarmResponse>) {
+                Log.d("Postbox PostboxAlarmService code", "${response.code()}")
+                Log.d("Postbox PostboxAlarmService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())
