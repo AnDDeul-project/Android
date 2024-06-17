@@ -32,6 +32,8 @@ import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.databinding.ItemChecklistBinding
 import com.umc.anddeul.home.model.UserProfileDTO
@@ -58,8 +60,10 @@ import java.util.Date
 import java.util.Locale
 
 class ChecklistFragment : Fragment() {
-
     lateinit var binding: FragmentChecklistBinding
+    var token : String? = null
+    lateinit var retrofit : Retrofit
+
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     lateinit var selectedDateText : String
     lateinit var checklistRVAdapter : ChecklistRVAdapter
@@ -75,27 +79,11 @@ class ChecklistFragment : Fragment() {
         binding.checklistRecylerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         //spf 받아오기
-        val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-//        val token = spf.getString("jwtToken", "")
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzMwNzIzOTQzIl0sImlhdCI6MTcwNzgzMDU3NX0.4jF675wl0rS1i4ehIhtYtZVKmsSTScrxawrUJRtTxkM"
+        token = TokenManager.getToken()
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "")
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofit", "Token: " + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
+        retrofit = RetrofitManager.getRetrofitInstance()
 
         val service = retrofit.create(ChecklistInterface::class.java)
         val serviceUser = retrofit.create(UserProfileInterface::class.java)
@@ -110,14 +98,24 @@ class ChecklistFragment : Fragment() {
                     val root : UserProfileDTO? = response.body()
                     val result : UserProfileData? = root?.result
 
+                    Log.d("구성원", "${result}")
                     result.let {
                         binding.checkliTvName.text = result?.nickname
                     }
                 }
+
+                if (response.code() == 500) {
+                    val checklist = ArrayList<Checklist>()
+                    checklistRVAdapter.setChecklistData(checklist)
+                    checklistRVAdapter.notifyDataSetChanged()
+
+                    val context = requireContext()
+                    AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
+                }
             }
 
             override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                Log.d("구성원 조회", "${t.message}")
+                Log.d("구성원", "${t.message}")
             }
         })
 
@@ -140,15 +138,14 @@ class ChecklistFragment : Fragment() {
         // 다음주
         //today면 오늘 날짜로 넘김 안 됨.
         binding.checkliAfterBtn.setOnClickListener {
-            if (selectedDay != today) {
+            if (selectedDay < today) {
                 selectedDay = selectedDay.plusWeeks(1)
                 val yearMonth = YearMonth.from(selectedDay)
                 binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
 
                 if (selectedDay == today) {
                     setWeek(selectedDay, service, myId!!)
-                }
-                else {
+                } else {
                     setSelectedWeek(selectedDay, service, myId!!)
                 }
             }
@@ -165,9 +162,11 @@ class ChecklistFragment : Fragment() {
             false,
             selectedDay.toString()
         )
+
         readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
-                Log.d("api 조회", "Response ${response}")
+                Log.d("Checklist ReadService code", "${response.code()}")
+                Log.d("Checklist ReadService body", "${response.body()}")
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
@@ -178,19 +177,25 @@ class ChecklistFragment : Fragment() {
                         checklistRVAdapter.notifyDataSetChanged()
                     }
                 }
+                if (response.code() == 500) {
+                    val checklist = ArrayList<Checklist>()
+                    checklistRVAdapter.setChecklistData(checklist)
+                    checklistRVAdapter.notifyDataSetChanged()
+                    val context = requireContext()
+                    AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
+                }
+
                 if (response.code() == 451) {
                     val checklist = ArrayList<Checklist>()
                     checklistRVAdapter.setChecklistData(checklist)
                     checklistRVAdapter.notifyDataSetChanged()
-
-                    //토스트바 테스트
                     val context = requireContext()
-                    AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
+                    AnddeulToast.createToast(context, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
                 }
             }
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
-                Log.d("read 실패", "readCall: ${t.message}")
+                Log.d("Checklist ReadService Fail", "readCall: ${t.message}")
             }
         })
     }
@@ -361,18 +366,5 @@ class ChecklistFragment : Fragment() {
     private fun formatDate(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${checklistRVAdapter.filePath}")
-        ChecklistService(requireContext()).imgApi(checklistRVAdapter.currentChecklist, file!!)
-
-        if (file.exists()) {
-            ChecklistService(requireContext()).imgApi(checklistRVAdapter.currentChecklist, file!!)
-        } else {
-            // 파일이 존재하지 않으면 에러 처리
-            Log.e("onActivityResult", "File does not exist")
-        }
     }
 }
