@@ -79,7 +79,7 @@
 
             <TextView
                 android:id="@+id/letterDate1"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="186dp"
@@ -93,7 +93,7 @@
 
             <TextView
                 android:id="@+id/letterDate2"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -108,7 +108,7 @@
 
             <TextView
                 android:id="@+id/letterDate4"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -123,7 +123,7 @@
 
             <TextView
                 android:id="@+id/letterDate3"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -138,7 +138,7 @@
 
             <TextView
                 android:id="@+id/letterDate5"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -153,7 +153,7 @@
 
             <TextView
                 android:id="@+id/letterDate6"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -168,7 +168,7 @@
 
             <TextView
                 android:id="@+id/letterDate7"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:layout_marginEnd="16dp"

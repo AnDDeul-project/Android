@@ -174,7 +174,7 @@
 
             <TextView
                 android:id="@+id/postDate1"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="186dp"
@@ -188,7 +188,7 @@
 
             <TextView
                 android:id="@+id/postDate2"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -203,7 +203,7 @@
 
             <TextView
                 android:id="@+id/postDate4"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -218,7 +218,7 @@
 
             <TextView
                 android:id="@+id/postDate3"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -233,7 +233,7 @@
 
             <TextView
                 android:id="@+id/postDate5"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -248,7 +248,7 @@
 
             <TextView
                 android:id="@+id/postDate6"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -263,7 +263,7 @@
 
             <TextView
                 android:id="@+id/postDate7"
-                android:layout_width="21dp"
+                android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:layout_marginEnd="16dp"
