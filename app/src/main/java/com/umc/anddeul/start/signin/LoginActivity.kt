@@ -10,6 +10,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.umc.anddeul.MainActivity
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.start.signin.service.SigninService
 import com.umc.anddeul.databinding.ActivityLoginBinding
 import com.umc.anddeul.invite.JoinGroupSendActivity
@@ -42,6 +43,7 @@ class LoginActivity: AppCompatActivity()  {
             // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
+                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                 } else if (token != null) {
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
                         if (signinResponse != null) {
@@ -54,8 +56,11 @@ class LoginActivity: AppCompatActivity()  {
                                     val termsIntent = Intent(this, TermsActivity::class.java)
                                     startActivity(termsIntent)
                                 }
+                            } else {
+                                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                             }
                         } else {
+                            AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                         }
                     }
                 }
@@ -86,8 +91,11 @@ class LoginActivity: AppCompatActivity()  {
                                         val termsIntent = Intent(this, TermsActivity::class.java)
                                         startActivity(termsIntent)
                                     }
+                                } else {
+                                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                                 }
                             } else {
+                                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                             }
                         }
                     }
@@ -102,6 +110,7 @@ class LoginActivity: AppCompatActivity()  {
             // 카카오계정으로 로그인
             UserApiClient.instance.loginWithKakaoAccount(this, prompts = listOf(Prompt.LOGIN)) { token, error ->
                 if (error != null) {
+                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                 }
                 else if (token != null) {
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
@@ -115,8 +124,11 @@ class LoginActivity: AppCompatActivity()  {
                                     val termsIntent = Intent(this, TermsActivity::class.java)
                                     startActivity(termsIntent)
                                 }
+                            } else {
+                                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                             }
                         } else {
+                            AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                         }
                     }
                 }
@@ -155,6 +167,8 @@ class LoginActivity: AppCompatActivity()  {
                         val joinIntent = Intent(this, JoinGroupSendActivity::class.java)
                         startActivity(joinIntent)
                     }
+                } else {
+                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                 }
             }
         }
