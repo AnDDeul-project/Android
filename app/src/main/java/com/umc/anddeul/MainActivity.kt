@@ -40,17 +40,6 @@ class MainActivity : AppCompatActivity() {
 //        postboxBottomAlarm()
     }
 
-//    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-//        ev?.let {
-//            if (it.action == MotionEvent.ACTION_DOWN) {
-//
-//                // 가족 우체통 하단바 알림
-//                postboxBottomAlarm()
-//            }
-//        }
-//        return super.dispatchTouchEvent(ev)
-//    }
-
     private fun initBottomNavigation() {
 
         supportFragmentManager.beginTransaction()
@@ -63,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
                 // HomeFragment로 이동
                 R.id.homeFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, HomeFragment())
                         .commitAllowingStateLoss()
@@ -71,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
                 // ChecklistFragment로 이동
                 R.id.checklistFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, ChecklistFragment())
                         .commitAllowingStateLoss()
@@ -79,6 +70,7 @@ class MainActivity : AppCompatActivity() {
 
                 // postboxFragment로 이동
                 R.id.postboxFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, PostboxFragment())
                         .commitAllowingStateLoss()
@@ -87,6 +79,7 @@ class MainActivity : AppCompatActivity() {
 
                 // myPageFragment로 이동
                 R.id.myPageFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, MyPageFragment())
                         .commitAllowingStateLoss()
