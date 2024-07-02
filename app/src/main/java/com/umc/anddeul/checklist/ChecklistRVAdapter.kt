@@ -13,20 +13,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.service.ChecklistService
+import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.databinding.ItemChecklistBinding
 import java.io.File
 import java.io.IOException
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Date
 
 
 class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
-    val CAMERA_REQUEST_CODE = 405
+    val CAMERA_REQUEST_CODE = 200
     var checklist: List<Checklist>? = null
     var filePath: String? = null
     lateinit var file : File
@@ -52,31 +55,28 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
 
         //체크리스트 리사이클러뷰 연결
         holder.bind(checklist!!.get(position))
-//        holder.bind(checklist[position])
 
         //카메라 앱 연동 함수
         holder.binding.checkliBtnCamera.setOnClickListener {
             //함수 호출
             currentChecklist = checklist!!.get(position)
+
             if (currentChecklist.complete == 0) {
-                ChecklistService(context).completeApi(currentChecklist)
+                AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
             }
-            checkCameraPermission(currentChecklist)
+            else {
+//            checkCameraPermission(currentChecklist)
 
 //            val delayMillis : Long = 1000 * 13
 //            holder.binding.checkliBtnCamera.postDelayed({
 //                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
 //                ChecklistService(context).imgApi(currentChecklist, file!!)
 //            }, delayMillis)
-
-            //체크
-            checking(holder.binding)
+            }
         }
 
         holder.binding.checkliBtnChecking.setOnClickListener {
-            //complete
             ChecklistService(context).completeApi(checklist!!.get(position))
-            //체크
             checking(holder.binding)
         }
 
@@ -171,6 +171,7 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                     null
                 }
                 Log.d("카메라", "file : ${photoFile}")
+                currentChecklist = checklist
                 // 파일이 생성되었다면 카메라 앱에 전달
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
@@ -179,9 +180,10 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+
                     (context as Activity).startActivityForResult(
                         takePictureIntent,
-                        CAMERA_REQUEST_CODE,
+                        CAMERA_REQUEST_CODE
                     )
                 }
                 currentChecklist = checklist

@@ -23,6 +23,8 @@ class FamilyService {
 
         call.enqueue(object : Callback<FamilyResponse> {
             override fun onResponse(call: Call<FamilyResponse>, response: Response<FamilyResponse>) {
+                Log.d("Postbox FamilyService code", "${response.code()}")
+                Log.d("Postbox FamilyService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())
