@@ -8,7 +8,7 @@ import android.widget.Toast
 import com.umc.anddeul.databinding.ToastErrorAnddeulBinding
 
 object AnddeulErrorToast {
-    fun createToast(context: Context, message: String): Toast? {
+    fun createToast(context: Context, message: String): Toast {
         val inflater = LayoutInflater.from(context)
         val binding : ToastErrorAnddeulBinding = ToastErrorAnddeulBinding.inflate(inflater)
 
