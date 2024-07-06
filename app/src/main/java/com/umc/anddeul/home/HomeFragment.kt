@@ -29,6 +29,7 @@ import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.AddChecklistActivity
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
@@ -247,6 +248,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("postService", "Failure message: ${t.message}")
             }
         })
@@ -385,6 +387,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("memberService", "Failure message: ${t.message}")
             }
         })

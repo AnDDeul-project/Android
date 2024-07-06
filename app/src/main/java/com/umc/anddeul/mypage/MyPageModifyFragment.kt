@@ -22,6 +22,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageModifyProfileBinding
@@ -49,7 +50,6 @@ class MyPageModifyFragment : Fragment() {
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                // 권한이 허용되면 갤러리 액티비티로 이동
                 openGallery()
             } else {
                 val permissionDialog = PermissionDialog()
@@ -61,10 +61,8 @@ class MyPageModifyFragment : Fragment() {
     private val galleryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                // 갤러리에서 선택한 이미지의 Uri를 가져옵니다.
                 val selectedImageUri: Uri? = result.data?.data
 
-                // 선택한 이미지 화면에 동그랗게 크롭 후 띄우기
                 val imageView = binding.mypageModifyProfileIv
                 selectedImageUri?.let { uri ->
                     Glide.with(this)
@@ -182,11 +180,13 @@ class MyPageModifyFragment : Fragment() {
                             .replace(R.id.main_frm, MyPageFragment())
                             .commit()
                     } else {
+                        context?.let { AnddeulErrorToast.createToast(it, "다시 시도해 주세요").show() }
                         Log.e("modifyProfileService", "프로필 수정 실패")
                     }
                 }
 
                 override fun onFailure(call: Call<ModifyProfileResponse>, t: Throwable) {
+                    context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                     Log.e("modifyProfileService", "Failure message: ${t.message}")
                 }
             })
