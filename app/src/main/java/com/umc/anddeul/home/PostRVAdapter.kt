@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentHomeMyUploadBinding
@@ -315,6 +316,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
             }
 
             override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                context.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다")?.show() }
                 Log.e("emojiService", "onFailure")
                 Log.e("emojiService", "Failure message: ${t.message}")
             }
@@ -365,6 +367,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
             }
 
             override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다")?.show() }
                 Log.e("emojiService", "Failure message: ${t.message}")
             }
         })

@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostModifyBinding
@@ -83,6 +84,7 @@ class PostModifyActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostModifyDTO>, t: Throwable) {
+                AnddeulErrorToast.createToast(this@PostModifyActivity, "서버 연결이 불안정합니다")?.show()
                 Log.e("modifyService", "Failure message: ${t.message}")
             }
         })

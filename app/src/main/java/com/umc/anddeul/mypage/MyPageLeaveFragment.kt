@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.umc.anddeul.R
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageLeaveBinding
@@ -98,6 +99,7 @@ class MyPageLeaveFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<LeaveDTO>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("leaveService", "Failure message: ${t.message}")
             }
 
