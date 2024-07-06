@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
@@ -133,7 +134,8 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         // 게시글 조회
-        loadPost()
+        homePaging()
+
         // 메뉴 가족 구성원 정보 가져오기
         loadMemberList()
 
@@ -160,7 +162,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
         binding.homeSwipeRefresh.setOnRefreshListener {
-            loadPost()
+            homePaging()
         }
 
         // Floating Action Button 클릭 시
@@ -206,16 +208,17 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         editor.apply()
     }
 
-    fun loadPost() {
+    fun loadPost(page: Int) {
         // 내 sns id 가져오기
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
 
         val postService = retrofitBearer.create(PostsInterface::class.java)
 
-        postService.homePosts().enqueue(object : Callback<Post> {
+        postService.homePosts(page).enqueue(object : Callback<Post> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                Log.e("postService postPage", page.toString())
                 Log.e("postService response code : ", "${response.code()}")
                 Log.e("postService response body : ", "${response.body()}")
 
@@ -449,5 +452,28 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
     fun startPhotoPicker() {
         pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    fun homePaging() {
+        var page = 0
+        val pageSize = 20
+        loadPost(page)
+
+        binding.homeFeedRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
+                val totalItemCount = recyclerView.adapter?.itemCount ?: 0
+
+                // 스크롤이 마지막 아이템에 도달하고, 현재 페이지 * 페이지 크기가 전체 아이템 수보다 작을 때만 페이지 증가
+                if (lastVisibleItemPosition == totalItemCount - 1 && page * pageSize < totalItemCount) {
+                    page++
+                    loadPost(0) // 페이지 번호와 페이지 크기를 전달하여 loadPost() 호출
+                    Log.e("postService", "call loadPost")
+                }
+            }
+        })
     }
 }
