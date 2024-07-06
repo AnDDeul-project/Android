@@ -229,7 +229,7 @@ class MyPageFragment : Fragment() {
 
                         }
                     } else {
-                        context?.let { AnddeulErrorToast.createToast(it, "사용자를 찾을 수 없습니다")?.show() }
+                        context?.let { AnddeulErrorToast.createToast(it, "사용자를 찾을 수 없습니다").show() }
                     }
                 }
 

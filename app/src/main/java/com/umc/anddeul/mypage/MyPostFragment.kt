@@ -127,7 +127,7 @@ class MyPostFragment : Fragment() {
 
                     }
                 } else {
-                    context?.let { AnddeulErrorToast.createToast(it, "게시글을 찾을 수 없습니다")?.show() }
+                    context?.let { AnddeulErrorToast.createToast(it, "게시글을 찾을 수 없습니다").show() }
                 }
             }
 
