@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         initBottomNavigation() // bottom navigation 설정
 
         TokenManager.initialize(this) // 토큰 매니저 초기화
-        TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcxODEyMDE5N30.Hs7_x8UNwuCxdhSzJV2NuRUpOBNWqSRcVViieVN5p9E")
+        TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcyMDI2MTg1MX0.ouU4oZOUzAV0rXNDS1NK5OurdRzkh5O1gTJeiyR-fOI")
 
         RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
 
