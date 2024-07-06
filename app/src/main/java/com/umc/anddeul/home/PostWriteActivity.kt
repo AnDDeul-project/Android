@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
@@ -154,11 +155,17 @@ class PostWriteActivity : AppCompatActivity() {
                         finishAffinity()
 
                     } else {
-                        Log.e("boardService", "게시글 업로드 실패")
+                        if (response.code() == 400) {
+                            AnddeulErrorToast.createToast(this@PostWriteActivity, "내용을 입력해 주세요")
+                                .show()
+                            Log.e("boardService", "게시글 업로드 실패")
+                        }
+
                     }
                 }
 
                 override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
+                    AnddeulErrorToast.createToast(this@PostWriteActivity, "서버 연결이 불안정합니다").show()
                     Log.e("boardService", "Failure message: ${t.message}")
                 }
             })

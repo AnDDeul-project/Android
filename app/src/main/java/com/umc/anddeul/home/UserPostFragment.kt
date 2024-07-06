@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserPostBinding
@@ -112,10 +113,13 @@ class UserPostFragment : Fragment() {
                         binding.userPostEmojiRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
                     }
+                } else {
+                    context?.let { AnddeulErrorToast.createToast(it, "게시글을 찾을 수 없습니다").show() }
                 }
             }
 
             override fun onFailure(call: Call<OnePostDTO>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("onePostService", "Failure message: ${t.message}")
             }
         })
@@ -182,6 +186,7 @@ class UserPostFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("emojiService", "onFailure")
                 Log.e("emojiService", "Failure message: ${t.message}")
             }

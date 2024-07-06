@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
@@ -84,6 +85,7 @@ class DeleteDialog(val postId : Int) : DialogFragment() {
             }
 
             override fun onFailure(call: Call<PostDelete>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다")?.show() }
                 Log.e("deleteService", "Failure message: ${t.message}")
             }
         })
