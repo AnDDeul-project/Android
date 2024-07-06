@@ -248,7 +248,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다")?.show() }
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("postService", "Failure message: ${t.message}")
             }
         })
@@ -387,7 +387,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
-                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다")?.show() }
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("memberService", "Failure message: ${t.message}")
             }
         })

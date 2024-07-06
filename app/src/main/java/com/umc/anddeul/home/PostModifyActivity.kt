@@ -84,7 +84,7 @@ class PostModifyActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostModifyDTO>, t: Throwable) {
-                AnddeulErrorToast.createToast(this@PostModifyActivity, "서버 연결이 불안정합니다")?.show()
+                AnddeulErrorToast.createToast(this@PostModifyActivity, "서버 연결이 불안정합니다").show()
                 Log.e("modifyService", "Failure message: ${t.message}")
             }
         })
