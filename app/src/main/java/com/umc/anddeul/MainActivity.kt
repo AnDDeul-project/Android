@@ -1,11 +1,16 @@
 package com.umc.anddeul
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
 import com.umc.anddeul.checklist.ChecklistFragment
+import com.umc.anddeul.checklist.ChecklistRVAdapter
+import com.umc.anddeul.checklist.model.Checklist
+import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityMainBinding
@@ -14,11 +19,13 @@ import com.umc.anddeul.mypage.MyPageFragment
 import com.umc.anddeul.mypage.MyPageViewModel
 import com.umc.anddeul.postbox.PostboxFragment
 import com.umc.anddeul.postbox.service.PostboxAlarmService
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     val REQUEST_IMAGE_CAPTURE = 200
+    val checklistRVAdapter = ChecklistRVAdapter(this)
 
     private val myPageViewModel: MyPageViewModel by viewModels()
 
@@ -32,23 +39,28 @@ class MainActivity : AppCompatActivity() {
         initBottomNavigation() // bottom navigation 설정
 
         TokenManager.initialize(this) // 토큰 매니저 초기화
+
         TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcyMDI2MTg1MX0.ouU4oZOUzAV0rXNDS1NK5OurdRzkh5O1gTJeiyR-fOI")
 
         RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
 
         // 가족 우체통 하단바 알림
-        postboxBottomAlarm()
+//        postboxBottomAlarm()
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        ev?.let {
-            if (it.action == MotionEvent.ACTION_DOWN) {
 
-                // 가족 우체통 하단바 알림
-                postboxBottomAlarm()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        lateinit var file : File
+
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == RESULT_OK) {
+                    val checklistFragment = ChecklistFragment()
+                    Log.d("확인","체크리스트: $, 파일: ${checklistFragment.checklistRVAdapter?.file}")
+                }
             }
         }
-        return super.dispatchTouchEvent(ev)
     }
 
     private fun initBottomNavigation() {
@@ -63,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
                 // HomeFragment로 이동
                 R.id.homeFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, HomeFragment())
                         .commitAllowingStateLoss()
@@ -71,6 +84,7 @@ class MainActivity : AppCompatActivity() {
 
                 // ChecklistFragment로 이동
                 R.id.checklistFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, ChecklistFragment())
                         .commitAllowingStateLoss()
@@ -79,6 +93,7 @@ class MainActivity : AppCompatActivity() {
 
                 // postboxFragment로 이동
                 R.id.postboxFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, PostboxFragment())
                         .commitAllowingStateLoss()
@@ -87,6 +102,7 @@ class MainActivity : AppCompatActivity() {
 
                 // myPageFragment로 이동
                 R.id.myPageFragment -> {
+//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, MyPageFragment())
                         .commitAllowingStateLoss()

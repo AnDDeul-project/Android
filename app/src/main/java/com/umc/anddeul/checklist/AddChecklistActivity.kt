@@ -24,6 +24,11 @@ import com.umc.anddeul.checklist.model.Check
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
+import com.umc.anddeul.checklist.service.ChecklistService
+import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityAddChecklistBinding
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
@@ -45,11 +50,18 @@ import java.util.Locale
 
 class AddChecklistActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddChecklistBinding
+    var token : String? = null
+    lateinit var retrofit: Retrofit
+
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     lateinit var selectedDateText : String
     private var selectedDay: LocalDate = LocalDate.now()
     lateinit var addChecklistRVAdapter: AddChecklistRVAdapter
     val today = LocalDate.now()
+
+    //인텐트 정보 추출
+    lateinit var checkUserId : String
+    lateinit var  checkUserName : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,59 +69,17 @@ class AddChecklistActivity : AppCompatActivity() {
         binding = ActivityAddChecklistBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //인텐트 정보 추출
-        val checkUserId = intent.getStringExtra("checkUserId")
-        val checkUserName = intent.getStringExtra("checkUserName")
+        checkUserId = intent.getStringExtra("checkUserId")!!
+        checkUserName = intent.getStringExtra("checkUserName")!!
 
-        //토큰 가져오기
-        val spf: SharedPreferences = this!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-        val spfMyId = this.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-        val myId = spfMyId.getString("myId", "")
-        Log.d("myId", "${myId}")
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofitBearer", "Token: " + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
+        token = TokenManager.getToken()
+        retrofit = RetrofitManager.getRetrofitInstance()
 
         //서비스 생성
         val service = retrofit.create(ChecklistInterface::class.java)
-        val serviceUser = retrofit.create(UserProfileInterface::class.java)
 
-        //주인 이름
-        val profileCall : Call<UserProfileDTO> = serviceUser.getUserProfile(checkUserId!!)
-        profileCall.enqueue(object : Callback<UserProfileDTO> {
-            override fun onResponse(
-                call: Call<UserProfileDTO>,
-                response: Response<UserProfileDTO>
-            ) {
-                if (response.isSuccessful) {
-                    val root : UserProfileDTO? = response.body()
-                    val result : UserProfileData? = root?.result
-
-                    result.let {
-                        binding.checkliAddTvName.text = result?.nickname
-                        binding.addCheckliEtReader.text = result?.nickname + "님에게 할 일을 남겨보세요"
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                Log.d("구성원 조회", "${t.message}")
-            }
-        })
+        binding.checkliAddTvName.text = checkUserName
+        binding.addCheckliEtReader.text = checkUserName + "님에게 할 일을 남겨보세요"
 
         //날짜
         val dateStamp : String = SimpleDateFormat("MM월 dd일").format(Date())
@@ -121,7 +91,7 @@ class AddChecklistActivity : AppCompatActivity() {
         binding.checklistAddRecylerView.layoutManager = LinearLayoutManager(this@AddChecklistActivity, LinearLayoutManager.VERTICAL, false)
 
         // 초기 세팅
-        setWeek(currentStartOfWeek, service, checkUserId!!)
+        setWeek(currentStartOfWeek, service, checkUserId)
 
         // 저번주
         binding.addCheckliBeforeBtn.setOnClickListener {
@@ -129,65 +99,47 @@ class AddChecklistActivity : AppCompatActivity() {
             val yearMonth = YearMonth.from(selectedDay)
             binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             if (selectedDay == today) {
-                setWeek(selectedDay, service, myId!!)
+                setWeek(selectedDay, service, checkUserId)
             }
             else {
-                setSelectedWeek(selectedDay, service, myId!!)
+                setSelectedWeek(selectedDay, service, checkUserId)
             }
         }
 
         // 다음주
         binding.addCheckliAfterBtn.setOnClickListener {
-            selectedDay = selectedDay.plusWeeks(1)
-            val yearMonth = YearMonth.from(selectedDay)
-            binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            if (selectedDay == today) {
-//                setWeek(selectedDay, service, myId!!)
-            }
-            else {
-                setSelectedWeek(selectedDay, service, myId!!)
+            if (selectedDay < today) {
+                selectedDay = selectedDay.plusWeeks(1)
+                val yearMonth = YearMonth.from(selectedDay)
+                binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+
+                if (selectedDay == today) {
+                    setWeek(selectedDay, service, checkUserId)
+                } else {
+                    setSelectedWeek(selectedDay, service, checkUserId)
+                }
             }
         }
 
         selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
         //현재 체크리스트 불러오기
-        readApi(service, checkUserId!!)
+        readApi(service)
 
-        //엔터키 입력
-        binding.addCheckliEtContents.setOnEditorActionListener { _, actionId, _ ->
+        binding.addCheckliEtContents.setOnEditorActionListener {v, actionId, event ->
+            var handled = false
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // 엔터 키를 눌렀을 때 실행할 코드를 여기에 작성하세요.
                 val text = binding.addCheckliEtContents.text.toString()
                 val dateList = selectedDateText.split("-")
                 val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
 
                 //체크리스트 추가 api
                 addApi(service, addChecklist)
-
-                //체크리스트 변환된 거 불러오기
-                readApi(service, checkUserId!!)
-                binding.addCheckliEtContents.text.clear()
-                true // 이벤트 처리 완료를 나타냄
-            } else {
-                false // 다른 액션 처리하지 않음
+                binding.addCheckliEtContents.setText(null)
             }
+            readApi(service)
+            handled
         }
-
-        //동그라미 클릭시 추가
-        binding.addCheckliEtCircle.setOnClickListener {
-            val text = binding.addCheckliEtContents.text.toString()
-            val dateList = selectedDateText.split("-")
-            val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
-
-            //체크리스트 추가 api
-            addApi(service, addChecklist)
-
-            //체크리스트 변환된 거 불러오기
-            readApi(service, checkUserId!!)
-            binding.addCheckliEtContents.text.clear()
-        }
-
     }
 
     private fun addApi(service : ChecklistInterface, addChecklist: AddChecklist) {
@@ -197,54 +149,67 @@ class AddChecklistActivity : AppCompatActivity() {
 
         addCall.enqueue(object : Callback<AddRoot> {
             override fun onResponse(call: Call<AddRoot>, response: Response<AddRoot>) {
-                Log.d("api 추가", "Response ${response}")
+                Log.d("Checklist AddService code", "${response.code()}")
+                Log.d("Checklist AddService body", "${response.body()}")
 
                 if (response.isSuccessful) {
                     val root : AddRoot? = response.body()
                     val checklist: List<Check>? = root?.check
+
+                    Log.d("확", "${root}, ${checklist}")
                 }
             }
 
             override fun onFailure(call: Call<AddRoot>, t: Throwable) {
-                Log.d("add 실패", "readCall: ${t.message}")
+                Log.d("Checklist AddService Fail", "readCall: ${t.message}")
             }
         })
     }
 
-    fun readApi(service : ChecklistInterface, spfMyId : String) {
+    fun readApi(service : ChecklistInterface) {
         val readCall : Call<Root> = service.getChecklist(
-            spfMyId!!,
+            checkUserId!!,
             true,
             selectedDay.toString()
         )
         readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
-                Log.d("api 조회", "Response ${response}")
+                Log.d("Checklist ReadService code", "${response.code()}")
+                Log.d("Checklist ReadService body", "${response.body()}")
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
                     val result : List<Checklist>? = root?.checklist
+                    Log.d("확", "${root}, ${result}")
 
                     result?.let {
                         addChecklistRVAdapter.setChecklistData(it)
                         addChecklistRVAdapter.notifyDataSetChanged()
                     }
                 }
+                if (response.code() == 500) {
+                    val checklist = ArrayList<Checklist>()
+                    addChecklistRVAdapter.setChecklistData(checklist)
+                    addChecklistRVAdapter.notifyDataSetChanged()
+                    AnddeulErrorToast.createToast(this@AddChecklistActivity, "인터넷 연결이 불안정합니다")?.show()
+                }
+
                 if (response.code() == 451) {
                     val checklist = ArrayList<Checklist>()
                     addChecklistRVAdapter.setChecklistData(checklist)
                     addChecklistRVAdapter.notifyDataSetChanged()
+                    AnddeulToast.createToast(this@AddChecklistActivity, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
                 }
             }
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
-                Log.d("read 실패", "readCall: ${t.message}")
+                Log.d("Checklist ReadService Fail", "readCall: ${t.message}")
             }
         })
     }
 
     //오늘 날짜 동그라미 함수
-    private fun setWeek(startOfWeek: LocalDate, service : ChecklistInterface, spfMyId : String) {
+    private fun setWeek(startOfWeek: LocalDate, service : ChecklistInterface, checkUserId : String) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
         binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
@@ -316,18 +281,18 @@ class AddChecklistActivity : AppCompatActivity() {
                 val selectDate = LocalDate.parse(selectedDateText, formatter)
                 selectedDay = selectDate
                 if (selectedDay == today) {
-                    setWeek(selectedDay, service, spfMyId)
+                    setWeek(selectedDay, service, checkUserId)
                 }
                 else {
-                    setSelectedWeek(selectedDay, service, spfMyId)
+                    setSelectedWeek(selectedDay, service, checkUserId)
                 }
             }
         }
-        readApi(service, spfMyId!!)
+        readApi(service)
     }
 
     //내가 선택한 날짜로 넘어가기 및 동그라미
-    private fun setSelectedWeek(startOfWeek: LocalDate, service : ChecklistInterface, spfMyId : String) {
+    private fun setSelectedWeek(startOfWeek: LocalDate, service : ChecklistInterface, checkUserId : String) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
         binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
@@ -361,7 +326,6 @@ class AddChecklistActivity : AppCompatActivity() {
             val isSelectedDay = startOfWeek <= selectedDay && selectedDay <= startOfWeek.plusDays(6)
 
             if (isSelectedDay) {
-//                Log.d("날짜", "선택 날짜 ${selectedDay} 현재${currentDateForDay}")
                 if (selectedDay == currentDateForDay) {
                     binding.addChecklistSelectCircle.visibility = View.VISIBLE
                     binding.addCheckliTodayCircle.visibility = View.INVISIBLE
@@ -398,14 +362,14 @@ class AddChecklistActivity : AppCompatActivity() {
                 val selectDate = LocalDate.parse(selectedDateText, formatter)
                 selectedDay = selectDate
                 if (selectedDay == today) {
-                    setWeek(selectedDay, service, spfMyId)
+                    setWeek(selectedDay, service, checkUserId)
                 }
                 else {
-                    setSelectedWeek(selectedDay, service, spfMyId)
+                    setSelectedWeek(selectedDay, service, checkUserId)
                 }
             }
         }
-        readApi(service, spfMyId!!)
+        readApi(service)
     }
 
     private fun formatDate(date: LocalDate): String {

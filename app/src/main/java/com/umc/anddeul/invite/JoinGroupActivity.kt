@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.umc.anddeul.common.AnddeulErrorToast
 import com.umc.anddeul.databinding.ActivityJoinGroupBinding
 import com.umc.anddeul.invite.service.FamilyInfoService
 
@@ -30,6 +31,8 @@ class JoinGroupActivity : AppCompatActivity() {
                             val codeIntent = Intent(this, JoinGroupCodeActivity::class.java)
                             codeIntent.putExtra("GROUP_CODE", binding.existGroupNm.text.toString())
                             startActivity(codeIntent)
+                        } else {
+                            AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                         }
                     } else {    // 그룹코드 존재x
                         val notExistCodeFragment = DialogNotExistCodeFragment(this)
