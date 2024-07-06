@@ -99,7 +99,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
     companion object {
         // 이미지 등록 가능 갯수
-        const val MAX_UPLOAD_IMAGE = 10
+        const val MAX_UPLOAD_IMAGE = 3
     }
 
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
