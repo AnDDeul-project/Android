@@ -4,7 +4,12 @@ data class Post(
     val isSuccess: Boolean,
     val code: Int,
     val message: String,
-    val result: List<PostData>
+    val result: PostResult
+)
+
+data class PostResult(
+    val count: Int,
+    val data: List<PostData>
 )
 
 data class PostData(
