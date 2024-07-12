@@ -37,6 +37,7 @@ import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
+import com.umc.anddeul.ext.addOnScrollEndListener
 import com.umc.anddeul.home.model.Member
 import com.umc.anddeul.home.model.MemberResponse
 import com.umc.anddeul.home.model.Post
@@ -51,8 +52,10 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
     lateinit var binding: FragmentHomeBinding
     lateinit var postRVAdapter: PostRVAdapter
     lateinit var drawerLayout: DrawerLayout
-    var token : String? = null
+    var token: String? = null
     lateinit var retrofitBearer: Retrofit
+    private var page: Int = 0
+    private var isLastPage: Boolean = false
 
     private val pickMultipleMediaLauncher = registerForActivityResult(
         ActivityResultContracts.PickMultipleVisualMedia(MAX_UPLOAD_IMAGE)
@@ -137,15 +140,19 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
         // 게시글 조회
-        loadPost()
+        loadPost(0)
         // 메뉴 가족 구성원 정보 가져오기
         loadMemberList()
 
+        binding.homeFeedRv.addOnScrollEndListener {
+            if (!isLastPage) {
+                loadPost(page + 1)
+            }
+        }
+
         binding.homeToolbarMenuIb.setOnClickListener {
-            Log.e("toolbar", "click!!!!!!!!")
             if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 drawerLayout.openDrawer(GravityCompat.END)
-
             } else {
                 drawerLayout.closeDrawer(GravityCompat.END)
             }
@@ -164,7 +171,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
 
         // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
         binding.homeSwipeRefresh.setOnRefreshListener {
-            loadPost()
+            loadPost(0)
         }
 
         // Floating Action Button 클릭 시
@@ -214,21 +221,26 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         editor.apply()
     }
 
-    fun loadPost() {
+    fun loadPost(page: Int) {
         // 내 sns id 가져오기
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
 
         val postService = retrofitBearer.create(PostsInterface::class.java)
 
-        postService.homePosts().enqueue(object : Callback<Post> {
+        postService.homePosts(page).enqueue(object : Callback<Post> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 Log.e("postService response code : ", "${response.code()}")
                 Log.e("postService response body : ", "${response.body()}")
 
                 if (response.isSuccessful) {
-                    val postData = response.body()?.result?.map {
+                    val count = response.body()?.result!!.count
+                    if (count < 20 || count == 0) {
+                        isLastPage = true
+                    }
+
+                    val postData = response.body()?.result!!.data.map {
                         PostData(
                             it.post_idx,
                             it.user_idx,
@@ -239,21 +251,18 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                             it.emojis
                         )
                     }
-                    Log.e("postService", "$postData")
-                    if (postData != null) {
 
-                        // 각 게시글의 작성자 타입을 확인하여 리스트에 저장
-                        val authorTypesList = postData.map { post ->
-                            if (myId == post.user_idx) {
-                                "me"
-                            } else {
-                                "other"
-                            }
+                    // 각 게시글의 작성자 타입을 확인하여 리스트에 저장
+                    val authorTypesList = postData.map { post ->
+                        if (myId == post.user_idx) {
+                            "me"
+                        } else {
+                            "other"
                         }
-                        postRVAdapter.authorTypeList = authorTypesList
-                        postRVAdapter.postList = postData
-                        postRVAdapter.notifyDataSetChanged()
                     }
+                    postRVAdapter.authorTypeList = authorTypesList
+                    postRVAdapter.postList = postData
+                    postRVAdapter.notifyDataSetChanged()
 
                     // 새로고침 상태를 false로 변경해서 새로고침 완료
                     binding.homeSwipeRefresh.isRefreshing = false
