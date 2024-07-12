@@ -79,7 +79,7 @@ class DeleteDialog(val postId : Int) : DialogFragment() {
 
                         // 홈 프래그먼트의 loadPost 함수 호출해서 게시글 새로고침
                         val homeFragment = parentFragment as? HomeFragment
-                        homeFragment?.loadPost()
+                        homeFragment?.loadPost(0)
                     }
                 }
             }
