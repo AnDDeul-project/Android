@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Toast
 import com.umc.anddeul.databinding.ToastAnddeulBinding
+import com.umc.anddeul.ext.toPx
 
 object AnddeulToast {
     fun createToast(context: Context, message: String): Toast {
@@ -20,6 +21,4 @@ object AnddeulToast {
             view = binding.root
         }
     }
-
-    private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 }
