@@ -12,8 +12,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.umc.anddeul.R
-import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageLeaveBinding
@@ -29,6 +31,7 @@ class MyPageLeaveFragment : Fragment() {
     lateinit var binding: FragmentMypageLeaveBinding
     var token: String? = null
     lateinit var retrofitBearer: Retrofit
+    private lateinit var selectLeaderRVAdapter: SelectLeaderRVAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +43,22 @@ class MyPageLeaveFragment : Fragment() {
         token = TokenManager.getToken()
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
+        setToolbar()
+        settingBtn()
+        settingRVAdapter()
+
+        return binding.root
+    }
+
+    private fun setToolbar() {
+        binding.mypageLeaveBackIv.setOnClickListener {
+            // MyPageSettingFragment로 이동
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
+        }
+    }
+
+    private fun settingBtn() {
         // 탈퇴하기 버튼 색상 설정
         binding.mypageLeaveReasonEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -64,21 +83,23 @@ class MyPageLeaveFragment : Fragment() {
                 Toast.makeText(requireContext(), "10자 이상 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
-
-        setToolbar()
-
-        return binding.root
     }
 
-    fun setToolbar() {
-        binding.mypageLeaveBackIv.setOnClickListener {
-            // MyPageSettingFragment로 이동
-            val fragmentManager = requireActivity().supportFragmentManager
-            fragmentManager.popBackStack()
-        }
+    private fun settingRVAdapter() {
+        val nameList = listOf("사용자1", "사용자2", "사용자3", "사용자4", "사용자5")
+
+        selectLeaderRVAdapter = SelectLeaderRVAdapter(nameList, object : SelectLeaderRVAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                // 클릭 이벤트 처리
+                val selectedMember = selectLeaderRVAdapter.getSelectedMember()
+            }
+        })
+        binding.mypageLeaveSelectLeaderRv.layoutManager = LinearLayoutManager(context)
+        binding.mypageLeaveSelectLeaderRv.adapter = selectLeaderRVAdapter
     }
 
-    fun leaveAnddeul() {
+
+    private fun leaveAnddeul() {
         val leaveService = retrofitBearer.create(LeaveInterface::class.java)
 
         leaveService.leaveApp().enqueue(object : Callback<LeaveDTO> {

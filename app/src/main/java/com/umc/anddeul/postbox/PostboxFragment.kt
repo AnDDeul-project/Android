@@ -6,7 +6,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
-import com.umc.anddeul.common.AnddeulErrorToast
-import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentPostboxBinding
 import com.umc.anddeul.postbox.model.Family

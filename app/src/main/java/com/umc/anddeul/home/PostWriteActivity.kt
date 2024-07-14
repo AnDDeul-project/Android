@@ -16,11 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
-import com.umc.anddeul.common.AnddeulErrorToast
-import com.umc.anddeul.common.AnddeulNoLogoToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulNoLogoToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
+import com.umc.anddeul.home.adapter.SelectedVPAdapter
 import com.umc.anddeul.home.model.BoardResponse
 import com.umc.anddeul.home.network.BoardInterface
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
