@@ -104,10 +104,10 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
                     }
 
                 } else {
-                    AnddeulErrorToast.createToast(context, "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(context, "서버 연결이 불안정합니다.")?.show()
                 }
             } else {
-                AnddeulErrorToast.createToast(context, "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(context, "서버 연결이 불안정합니다.")?.show()
             }
         }
 
