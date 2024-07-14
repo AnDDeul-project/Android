@@ -1,4 +1,4 @@
-package com.umc.anddeul.common
+package com.umc.anddeul.common.toast
 
 import android.content.Context
 import android.view.Gravity

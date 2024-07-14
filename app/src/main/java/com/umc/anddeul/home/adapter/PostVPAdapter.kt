@@ -1,9 +1,10 @@
-package com.umc.anddeul.home
+package com.umc.anddeul.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.databinding.FragmentHomeUploadImageBinding
+import com.umc.anddeul.home.LoadImage
 
 class PostVPAdapter(private val imageList: List<String>): RecyclerView.Adapter<PostVPAdapter.PostViewHolder>() {
 

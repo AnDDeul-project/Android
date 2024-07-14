@@ -6,7 +6,6 @@
     android:background="@color/background"
     android:clickable="true">
 
-
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mypage_leave_toolbar"
         android:layout_width="match_parent"
@@ -38,6 +37,7 @@
     </com.google.android.material.appbar.MaterialToolbar>
 
     <View
+        android:id="@+id/mypage_leave_view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey_200"
@@ -45,85 +45,137 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_leave_toolbar" />
 
-    <ImageView
-        android:id="@+id/mypage_leave_emoji_iv"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginTop="51dp"
-        android:src="@drawable/mypage_emoji"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_leave_toolbar" />
-
-    <TextView
-        android:id="@+id/mypage_leave_question_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="안뜰을 탈퇴하시나요?"
-        android:textColor="@color/text_high"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_leave_emoji_iv" />
-
-    <TextView
-        android:id="@+id/mypage_leave_reason_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="70dp"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="탈퇴 사유를 알려주세요"
-        android:textColor="@color/text_high"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_leave_question_tv" />
-
-    <TextView
-        android:id="@+id/mypage_leave_reason_warning_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="(필수)"
-        android:textColor="@color/system_error"
-        android:textSize="16dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/mypage_leave_reason_tv"
-        app:layout_constraintStart_toEndOf="@id/mypage_leave_reason_tv" />
-
-    <EditText
-        android:id="@+id/mypage_leave_reason_edit"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="17dp"
-        android:background="@drawable/post_write_selector"
-        android:fontFamily="@font/font_pretendard_regular"
-        android:gravity="start"
-        android:hint="최소 10자 이상 입력해주세요"
-        android:padding="16dp"
-        android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_leave_reason_tv" />
-
-    <Button
-        android:id="@+id/mypage_leave_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginBottom="45dp"
-        android:backgroundTint="@color/icon_disabled"
-        android:enabled="false"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="탈퇴하기"
-        android:textSize="18dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearance="@style/RoundButton" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_leave_view">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/mypage_leave_emoji_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                android:src="@drawable/ic_sad_big"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/mypage_leave_question_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:fontFamily="@font/font_pretendard_bold"
+                android:text="안뜰을 탈퇴하시나요?"
+                android:textColor="@color/text_high"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_emoji_iv" />
+
+            <TextView
+                android:id="@+id/mypage_leave_reason_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="70dp"
+                android:fontFamily="@font/font_pretendard_bold"
+                android:text="탈퇴 사유를 알려주세요"
+                android:textColor="@color/text_high"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mypage_leave_question_tv" />
+
+            <TextView
+                android:id="@+id/mypage_leave_reason_warning_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/font_pretendard_bold"
+                android:text="(필수)"
+                android:textColor="@color/system_error"
+                android:textSize="16dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/mypage_leave_reason_tv"
+                app:layout_constraintStart_toEndOf="@id/mypage_leave_reason_tv" />
+
+            <EditText
+                android:id="@+id/mypage_leave_reason_edit"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="17dp"
+                android:background="@drawable/post_write_selector"
+                android:fontFamily="@font/font_pretendard_regular"
+                android:gravity="start"
+                android:hint="최소 10자 이상 입력해주세요"
+                android:padding="16dp"
+                android:textSize="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mypage_leave_reason_tv" />
+
+            <TextView
+                android:id="@+id/mypage_leave_select_leader_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="다음 방장을 선택해주세요"
+                android:textColor="@color/text_high"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_reason_edit" />
+
+            <TextView
+                android:id="@+id/mypage_leave_select_leader_warning_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="(필수)"
+                android:textColor="@color/system_error"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/mypage_leave_select_leader_tv"
+                app:layout_constraintStart_toEndOf="@+id/mypage_leave_select_leader_tv"
+                app:layout_constraintTop_toTopOf="@+id/mypage_leave_select_leader_tv" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mypage_leave_select_leader_rv"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="60dp"
+                app:layout_constraintBottom_toTopOf="@+id/mypage_leave_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_select_leader_tv" />
+
+            <Button
+                android:id="@+id/mypage_leave_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginBottom="45dp"
+                android:backgroundTint="@color/icon_disabled"
+                android:enabled="false"
+                android:fontFamily="@font/font_pretendard_bold"
+                android:text="탈퇴하기"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_select_leader_rv"
+                app:shapeAppearance="@style/RoundButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

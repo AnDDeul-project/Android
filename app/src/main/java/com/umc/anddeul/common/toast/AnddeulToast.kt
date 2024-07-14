@@ -1,7 +1,6 @@
-package com.umc.anddeul.common
+package com.umc.anddeul.common.toast
 
 import android.content.Context
-import android.content.res.Resources
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Toast

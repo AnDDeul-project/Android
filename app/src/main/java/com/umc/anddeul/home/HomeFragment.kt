@@ -30,14 +30,15 @@ import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.AddChecklistActivity
-import com.umc.anddeul.common.AnddeulErrorToast
-import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
 import com.umc.anddeul.ext.addOnScrollEndListener
+import com.umc.anddeul.home.adapter.PostRVAdapter
 import com.umc.anddeul.home.model.Member
 import com.umc.anddeul.home.model.MemberResponse
 import com.umc.anddeul.home.model.Post
