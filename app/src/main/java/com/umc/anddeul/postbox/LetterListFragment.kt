@@ -96,10 +96,10 @@ class LetterListFragment : Fragment() {
                         binding.noLetterlistTv.visibility = View.VISIBLE
                     }
                 } else{
-                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
                 }
             } else {
-                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
             }
         }
 
@@ -112,10 +112,10 @@ class LetterListFragment : Fragment() {
                 if (familyDTO.isSuccess.toString() == "true") {
                     binding.userTitleTv2.text = familyDTO.result.me.nickname
                 } else {
-                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
                 }
             } else{
-                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
             }
         }
 
