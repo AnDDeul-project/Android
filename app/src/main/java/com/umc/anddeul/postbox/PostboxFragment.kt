@@ -126,10 +126,10 @@ class PostboxFragment : Fragment() {
                         binding.randomQTv.text = questionDTO?.question?.get(0)?.content ?: ""
                     }
                 } else {
-                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
                 }
             } else {
-                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
             }
         }
 
@@ -146,10 +146,10 @@ class PostboxFragment : Fragment() {
                     binding.sFamily.adapter = familyAdapter
                     binding.userTitleTv.text = familyDTO.result.me.nickname
                 } else{
-                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
                 }
             }else {
-                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
             }
         }
 
@@ -254,10 +254,10 @@ class PostboxFragment : Fragment() {
                                         val postSendPopupFragment = DialogPostSendFragment(requireContext())
                                         postSendPopupFragment.show()
                                     } else{
-                                        AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                                        AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
                                     }
                                 }else{
-                                    AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                                    AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
                                 }
                             }
                         }
@@ -286,7 +286,7 @@ class PostboxFragment : Fragment() {
                     postAdapter.notifyDataSetChanged()
                 }
             } else {
-                AnddeulErrorToast.createToast(requireContext(), "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
             }
         }
     }
