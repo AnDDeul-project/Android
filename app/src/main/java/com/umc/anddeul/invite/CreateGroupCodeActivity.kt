@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ActivityCreateGroupCodeBinding
 
 class CreateGroupCodeActivity : AppCompatActivity() {

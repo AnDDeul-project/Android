@@ -22,7 +22,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
-import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageModifyProfileBinding

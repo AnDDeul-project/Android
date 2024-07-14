@@ -1,13 +1,11 @@
 package com.umc.anddeul.postbox
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -16,8 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
-import com.umc.anddeul.common.AnddeulErrorToast
-import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentLetterlistBinding
 import com.umc.anddeul.postbox.service.FamilyService

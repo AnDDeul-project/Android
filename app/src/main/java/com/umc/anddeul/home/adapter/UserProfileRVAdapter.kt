@@ -1,10 +1,11 @@
-package com.umc.anddeul.home
+package com.umc.anddeul.home.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.databinding.FragmentUserProfilePostImageBinding
+import com.umc.anddeul.home.LoadImage
 
 class UserProfileRVAdapter(private val userPostList : List<String>?, private val postIdList: List<Int>?) : RecyclerView.Adapter<UserProfileRVAdapter.UserProfileViewHolder>() {
 

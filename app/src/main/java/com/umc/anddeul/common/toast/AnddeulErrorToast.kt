@@ -1,19 +1,18 @@
-package com.umc.anddeul.common
+package com.umc.anddeul.common.toast
 
 import android.content.Context
-import android.content.res.Resources
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Toast
-import com.umc.anddeul.databinding.ToastAnddeulBinding
+import com.umc.anddeul.databinding.ToastErrorAnddeulBinding
 import com.umc.anddeul.ext.toPx
 
-object AnddeulToast {
+object AnddeulErrorToast {
     fun createToast(context: Context, message: String): Toast {
         val inflater = LayoutInflater.from(context)
-        val binding : ToastAnddeulBinding = ToastAnddeulBinding.inflate(inflater)
+        val binding : ToastErrorAnddeulBinding = ToastErrorAnddeulBinding.inflate(inflater)
 
-        binding.toastAnddeulTv.text = message
+        binding.toastErrorTv.text = message
 
         return Toast(context).apply {
             setGravity(Gravity.BOTTOM or Gravity.CENTER, 0, 104.toPx())

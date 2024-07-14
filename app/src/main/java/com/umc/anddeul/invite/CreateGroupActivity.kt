@@ -2,9 +2,8 @@ package com.umc.anddeul.invite
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.ActivityCreateGroupBinding
 import com.umc.anddeul.invite.service.FamilyNewService
 
