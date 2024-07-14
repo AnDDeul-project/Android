@@ -1,4 +1,4 @@
-package com.umc.anddeul.home
+package com.umc.anddeul.home.adapter
 
 import android.content.Context
 import android.util.Log
@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
-import com.umc.anddeul.common.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentHomeMyUploadBinding
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
-import com.umc.anddeul.home.model.Emoji
+import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.EmojiUiModel
