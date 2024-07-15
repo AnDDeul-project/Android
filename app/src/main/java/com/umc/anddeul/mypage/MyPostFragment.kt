@@ -18,6 +18,7 @@ import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMyPostBinding
 import com.umc.anddeul.home.DeleteDialog
+import com.umc.anddeul.home.DeleteDialogListener
 import com.umc.anddeul.home.adapter.EmojiRVAdpater
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostModifyActivity
@@ -27,14 +28,16 @@ import com.umc.anddeul.home.model.EmojiRequest
 import com.umc.anddeul.home.model.EmojiUiModel
 import com.umc.anddeul.home.model.OnePostDTO
 import com.umc.anddeul.home.model.OnePostData
+import com.umc.anddeul.home.model.PostDelete
 import com.umc.anddeul.home.network.EmojiInterface
 import com.umc.anddeul.home.network.OnePostInterface
+import com.umc.anddeul.home.network.PostDeleteInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class MyPostFragment : Fragment() {
+class MyPostFragment : Fragment(), DeleteDialogListener {
     lateinit var binding: FragmentMyPostBinding
     var token: String? = null
     lateinit var retrofitBearer: Retrofit
@@ -55,15 +58,15 @@ class MyPostFragment : Fragment() {
         return binding.root
     }
 
-    fun setToolbar() {
+    private fun setToolbar() {
         binding.myPostBackIv.setOnClickListener {
-            // UserProfileFragment로 이동
-            val fragmentManager = requireActivity().supportFragmentManager
-            fragmentManager.popBackStack()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, MyPageFragment())
+                .commit()
         }
     }
 
-    fun loadPost() {
+    private fun loadPost() {
         val postIdxJson = arguments?.getInt("postIdx")
         val postId: Int = postIdxJson ?: 0
 
@@ -167,14 +170,13 @@ class MyPostFragment : Fragment() {
 
     }
 
-    fun onDeleteClick(postId: Int) {
-        val deleteDialog = DeleteDialog(postId)
+    private fun onDeleteClick(postId: Int) {
+        val deleteDialog = DeleteDialog(postId, this)
         deleteDialog.isCancelable = false
         deleteDialog.show(requireActivity().supportFragmentManager, "delete dialog")
-
     }
 
-    fun onModifyClick(postId: Int, selectedImages: List<String>, postContent: String) {
+    private fun onModifyClick(postId: Int, selectedImages: List<String>, postContent: String) {
         val intent = Intent(requireContext(), PostModifyActivity::class.java)
 
         intent.putStringArrayListExtra("selectedImages", ArrayList(selectedImages))
@@ -201,7 +203,7 @@ class MyPostFragment : Fragment() {
         }
     }
 
-    fun selectEmoji(postId: Int, emojiType: String) {
+    private fun selectEmoji(postId: Int, emojiType: String) {
         // 사라지는 애니메이션
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
@@ -248,6 +250,28 @@ class MyPostFragment : Fragment() {
             override fun onFailure(call: Call<EmojiDTO>, t: Throwable) {
                 context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("emojiService", "Failure message: ${t.message}")
+            }
+        })
+    }
+
+    override fun onDelete(postId: Int) {
+        val deleteService = retrofitBearer.create(PostDeleteInterface::class.java)
+
+        deleteService.deletePost(postId).enqueue(object : Callback<PostDelete> {
+            override fun onResponse(call: Call<PostDelete>, response: Response<PostDelete>) {
+                Log.e("deleteService response code : ", "${response.code()}")
+                Log.e("deleteService response body : ", "${response.body()}")
+
+                if (response.isSuccessful) {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, MyPageFragment())
+                        .commit()
+                }
+            }
+
+            override fun onFailure(call: Call<PostDelete>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
+                Log.e("deleteService", "Failure message: ${t.message}")
             }
         })
     }
