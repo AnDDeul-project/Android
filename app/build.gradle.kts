@@ -33,7 +33,7 @@ android {
         // 카카오 로그인 키
         buildConfigField("String", "KAKAO_APP_KEY", "\"${properties.getProperty("KAKAO_APP_KEY")}\"")
         buildConfigField("String", "SCHEME_KAKAO_APP_KEY", "\"${properties.getProperty("SCHEME_KAKAO_APP_KEY")}\"")
-        manifestPlaceholders["SCHEME_KAKAO_APP_KEY"] = "\"${properties.getProperty("SCHEME_KAKAO_APP_KEY")}\""
+        manifestPlaceholders["SCHEME_KAKAO_APP_KEY"] = properties.getProperty("SCHEME_KAKAO_APP_KEY")
     }
 
     buildTypes {
