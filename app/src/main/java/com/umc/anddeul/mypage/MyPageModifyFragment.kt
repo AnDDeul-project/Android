@@ -176,7 +176,7 @@ class MyPageModifyFragment : Fragment() {
 
                     if (response.isSuccessful) {
                         // MyPageFragment로 이동
-                        (context as MainActivity).supportFragmentManager.beginTransaction()
+                        requireActivity().supportFragmentManager.beginTransaction()
                             .replace(R.id.main_frm, MyPageFragment())
                             .commit()
                     } else {
