@@ -64,7 +64,7 @@
                 <!-- scheme-ex: "kakao{NATIVE_APP_KEY}" -->
                 <data
                     android:host="oauth"
-                    android:scheme="@string/scheme_kakao_app_key" />
+                    android:scheme="${SCHEME_KAKAO_APP_KEY}" />
             </intent-filter>
         </activity>
         <activity android:name=".start.StartActivity"/>
