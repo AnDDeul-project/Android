@@ -164,9 +164,15 @@ class ChecklistFragment : Fragment() {
         )
 
         readCall.enqueue(object : Callback<Root> {
+
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
                 Log.d("Checklist ReadService code", "${response.code()}")
                 Log.d("Checklist ReadService body", "${response.body()}")
+
+                val checklist = ArrayList<Checklist>()
+                checklistRVAdapter.setChecklistData(checklist)
+                checklistRVAdapter.notifyDataSetChanged()
+                val context = requireContext()
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
@@ -178,24 +184,22 @@ class ChecklistFragment : Fragment() {
                     }
                 }
                 if (response.code() == 500) {
-                    val checklist = ArrayList<Checklist>()
-                    checklistRVAdapter.setChecklistData(checklist)
-                    checklistRVAdapter.notifyDataSetChanged()
-                    val context = requireContext()
                     AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
                 }
 
                 if (response.code() == 451) {
-                    val checklist = ArrayList<Checklist>()
-                    checklistRVAdapter.setChecklistData(checklist)
-                    checklistRVAdapter.notifyDataSetChanged()
-                    val context = requireContext()
                     AnddeulToast.createToast(context, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
                 }
             }
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
+                val checklist = ArrayList<Checklist>()
+                checklistRVAdapter.setChecklistData(checklist)
+                checklistRVAdapter.notifyDataSetChanged()
+                val context = requireContext()
+
                 Log.d("Checklist ReadService Fail", "readCall: ${t.message}")
+                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
             }
         })
     }
