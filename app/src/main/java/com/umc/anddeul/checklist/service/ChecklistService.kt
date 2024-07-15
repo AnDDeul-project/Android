@@ -31,6 +31,7 @@ import java.io.File
 
 class ChecklistService(context : Context) {
     val checklistRVAdapter = ChecklistRVAdapter(context)
+    val contextServcie = context
 
     val retrofit = RetrofitManager.getRetrofitInstance()
     val service = retrofit.create(ChecklistInterface::class.java)
@@ -90,6 +91,7 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         check.let {
+                            Log.d("확", "${checklist}")
                             readApi(checklist, myId!!)
                         }
                     }
@@ -110,6 +112,10 @@ class ChecklistService(context : Context) {
 
         readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
+                val checklist = ArrayList<Checklist>()
+                checklistRVAdapter.setChecklistData(checklist)
+                checklistRVAdapter.notifyDataSetChanged()
+
                 Log.d("Checklist ReadService code", "${response.code()}")
                 Log.d("Checklist ReadService body", "${response.body()}")
 
@@ -123,10 +129,11 @@ class ChecklistService(context : Context) {
                     }
                 }
                 if (response.code() == 500) {
-                    val checklist = ArrayList<Checklist>()
-                    checklistRVAdapter.setChecklistData(checklist)
-                    checklistRVAdapter.notifyDataSetChanged()
-                    //토스트바 추가
+                    AnddeulErrorToast.createToast(contextServcie, "인터넷 연결이 불안정합니다")?.show()
+                }
+
+                if (response.code() == 451) {
+                    AnddeulToast.createToast(contextServcie, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
                 }
             }
 
