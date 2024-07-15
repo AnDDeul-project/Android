@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.ext.SdkExtensions
 import android.provider.MediaStore
 import android.util.Log
@@ -111,33 +113,16 @@ class MyPageFragment : Fragment() {
         token = TokenManager.getToken()
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
-        binding.mypageSettingIb.setOnClickListener {
-            // MyPageSettingFragment로 이동
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .add(R.id.mypage_layout, MypageSettingFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+        binding.mypageSwipeRefresh.setOnRefreshListener {
+            loadMyProfile()
         }
 
-        // 게시글 올리기
-        binding.mypageUploadBtn.setOnClickListener {
-            if (isPhotoPickerAvailable()) {
-                startPhotoPicker()
-            } else {
-                checkPermission()
-            }
-        }
-
-        // 프로필 수정하기
-        binding.mypageModifyBtn.setOnClickListener {
-            // MyPageModifyFragment로 이동
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .add(R.id.main_frm, MyPageModifyFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-        }
+        binding.mypageSwipeRefresh.setColorSchemeResources(
+            R.color.primary
+        )
 
         loadMyProfile()
+        settingBtn()
 
         return binding.root
     }
@@ -158,7 +143,7 @@ class MyPageFragment : Fragment() {
     }
 
     // 갤러리 접근 권한 확인 함수
-    fun checkPermission() {
+    private fun checkPermission() {
         val permissionReadExternal = android.Manifest.permission.READ_EXTERNAL_STORAGE
 
         val permissionReadExternalGranted = ContextCompat.checkSelfPermission(
@@ -174,8 +159,35 @@ class MyPageFragment : Fragment() {
         }
     }
 
+    private fun settingBtn() {
+
+        binding.mypageSettingIb.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.main_frm, MypageSettingFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
+        // 게시글 올리기
+        binding.mypageUploadBtn.setOnClickListener {
+            if (isPhotoPickerAvailable()) {
+                startPhotoPicker()
+            } else {
+                checkPermission()
+            }
+        }
+
+        // 프로필 수정하기
+        binding.mypageModifyBtn.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.main_frm, MyPageModifyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+    }
+
     // 내 프로필 조회
-    fun loadMyProfile() {
+    private fun loadMyProfile() {
         // 내 sns id 가져오기
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "not found")
@@ -226,8 +238,13 @@ class MyPageFragment : Fragment() {
                             val myProfileDTO =
                                 gson.fromJson(gson.toJson(myProfile), UserProfileData::class.java)
                             myPageViewModel.setMyProfile(myProfileDTO)
-
                         }
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            // 데이터 로딩이 완료되면 새로고침 애니메이션 중지
+                            binding.mypageSwipeRefresh.isRefreshing = false
+                        }, 1000)
+
                     } else {
                         context?.let { AnddeulErrorToast.createToast(it, "사용자를 찾을 수 없습니다").show() }
                     }
@@ -242,7 +259,7 @@ class MyPageFragment : Fragment() {
     }
 
     fun getPost(postIdx: Int) {
-        (context as MainActivity).supportFragmentManager.beginTransaction()
+        requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.mypage_layout, MyPostFragment().apply {
                 arguments = Bundle().apply {
                     val gson = Gson()
@@ -257,14 +274,11 @@ class MyPageFragment : Fragment() {
     @SuppressLint("IntentReset")
     fun startAlbumLauncher() {
         val albumIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-
-        // 이미지 여러개 선택 가능
         albumIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        // 액티비티를 실행한다.
         albumLauncher.launch(albumIntent)
     }
 
-    fun startPhotoPicker() {
+    private fun startPhotoPicker() {
         pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 }
