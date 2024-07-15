@@ -10,6 +10,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.ext.SdkExtensions.getExtensionVersion
 import android.provider.MediaStore
 import android.util.Log
@@ -34,6 +36,7 @@ import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
+import com.umc.anddeul.common.toast.AnddeulNoLogoToast
 import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
@@ -43,13 +46,15 @@ import com.umc.anddeul.home.model.Member
 import com.umc.anddeul.home.model.MemberResponse
 import com.umc.anddeul.home.model.Post
 import com.umc.anddeul.home.model.PostData
+import com.umc.anddeul.home.model.PostDelete
 import com.umc.anddeul.home.network.MemberInterface
+import com.umc.anddeul.home.network.PostDeleteInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class HomeFragment : Fragment(), ConfirmDialogListener {
+class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
     lateinit var binding: FragmentHomeBinding
     lateinit var postRVAdapter: PostRVAdapter
     lateinit var drawerLayout: DrawerLayout
@@ -126,8 +131,8 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        postRVAdapter = PostRVAdapter(requireContext(), listOf(), listOf()) // 어댑터와 postDatas 연결
-        binding.homeFeedRv.adapter = postRVAdapter // recyclerView에 Adapter 연결
+        postRVAdapter = PostRVAdapter(requireContext(), listOf(), listOf())
+        binding.homeFeedRv.adapter = postRVAdapter
         binding.homeFeedRv.layoutManager = LinearLayoutManager(context)
 
         // 커스텀 툴바 사용
@@ -140,10 +145,10 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         token = TokenManager.getToken()
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
-        // 게시글 조회
         loadPost(0)
-        // 메뉴 가족 구성원 정보 가져오기
         loadMemberList()
+        settingBtn()
+        settingRVAdapter()
 
         binding.homeFeedRv.addOnScrollEndListener {
             if (!isLastPage) {
@@ -170,12 +175,18 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                 .commitAllowingStateLoss()
         }
 
-        // swipe refresh layout 초기화 (swipe 해서 피드 새로고침)
         binding.homeSwipeRefresh.setOnRefreshListener {
             loadPost(0)
         }
 
-        // Floating Action Button 클릭 시
+        binding.homeSwipeRefresh.setColorSchemeResources(
+            R.color.primary
+        )
+
+        return binding.root
+    }
+
+    private fun settingBtn() {
         binding.homeFloatingBt.setOnClickListener {
             if (isPhotoPickerAvailable()) {
                 startPhotoPicker()
@@ -183,7 +194,9 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                 checkPermission()
             }
         }
+    }
 
+    private fun settingRVAdapter() {
         postRVAdapter.setMyItemClickListener(object : PostRVAdapter.MyItemClickListener {
             override fun onItemClick(userId: String) {
                 // 선택한 유저 프로필로 이동
@@ -191,7 +204,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
             }
 
             override fun onDeleteClick(postId: Int) {
-                val deleteDialog = DeleteDialog(postId)
+                val deleteDialog = DeleteDialog(postId, this@HomeFragment)
                 deleteDialog.isCancelable = false
                 deleteDialog.show(requireActivity().supportFragmentManager, "delete dialog")
 
@@ -212,7 +225,6 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                 startActivity(intent)
             }
         })
-        return binding.root
     }
 
     fun saveMyId(context: Context, myId: String) {
@@ -265,8 +277,11 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
                     postRVAdapter.postList = postData
                     postRVAdapter.notifyDataSetChanged()
 
-                    // 새로고침 상태를 false로 변경해서 새로고침 완료
-                    binding.homeSwipeRefresh.isRefreshing = false
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        // 데이터 로딩이 완료되면 새로고침 애니메이션 중지
+                        binding.homeSwipeRefresh.isRefreshing = false
+                    }, 1000)
+
                 } else {
                     Log.e("postService onResponse", "But not success")
                 }
@@ -279,7 +294,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         })
     }
 
-    fun loadMemberList() {
+    private fun loadMemberList() {
         val memberListService = retrofitBearer.create(MemberInterface::class.java)
 
         memberListService.memberList().enqueue(object : Callback<MemberResponse> {
@@ -370,7 +385,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
     }
 
     // 갤러리 접근 권한 확인 함수
-    fun checkPermission() {
+    private fun checkPermission() {
         val permissionReadExternal = android.Manifest.permission.READ_EXTERNAL_STORAGE
 
         val permissionReadExternalGranted = ContextCompat.checkSelfPermission(
@@ -402,7 +417,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         albumLauncher.launch(albumIntent)
     }
 
-    fun startPhotoPicker() {
+    private fun startPhotoPicker() {
         pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
@@ -508,5 +523,26 @@ class HomeFragment : Fragment(), ConfirmDialogListener {
         } else {
             binding.homeMenuMyProfileLeaderIv.visibility = View.GONE
         }
+    }
+
+    override fun onDelete(postId: Int) {
+        val deleteService = retrofitBearer.create(PostDeleteInterface::class.java)
+
+        deleteService.deletePost(postId).enqueue(object : Callback<PostDelete> {
+            override fun onResponse(call: Call<PostDelete>, response: Response<PostDelete>) {
+                Log.e("deleteService response code : ", "${response.code()}")
+                Log.e("deleteService response body : ", "${response.body()}")
+
+                if (response.isSuccessful) {
+                    AnddeulNoLogoToast.createNoLogoToast(requireActivity(), "게시물이 삭제되었습니다")
+                    loadPost(0)
+                }
+            }
+
+            override fun onFailure(call: Call<PostDelete>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
+                Log.e("deleteService", "Failure message: ${t.message}")
+            }
+        })
     }
 }
