@@ -4,11 +4,13 @@ import android.util.Log
 import com.umc.anddeul.invite.model.NewFamilyRequest
 import com.umc.anddeul.invite.model.NewFamilyResponse
 import com.umc.anddeul.invite.network.InviteInterface
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 class FamilyNewService {
 
@@ -32,7 +34,12 @@ class FamilyNewService {
                         callback(response.body())
                     }
                     409 -> {
-                        callback(response.body())
+                        val errorBodyString = response.errorBody()?.string()
+                        val errorResponse =
+                            retrofit.responseBodyConverter<NewFamilyResponse>(
+                                NewFamilyResponse::class.java, arrayOfNulls(0))
+                                .convert(ResponseBody.create(null, errorBodyString ?: ""))
+                        callback(errorResponse)
                     }
                     500 -> {
                         callback(response.body())
