@@ -37,13 +37,13 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
         readMailService.readMail(loadedToken, idx.toInt()) { mailDTO ->
             if (mailDTO != null) {
                 if (mailDTO.isSuccess.toString() == "true") {
-                    binding.userTv.text = mailDTO.post[0].receiverIdx
-                    binding.familyTv.text = mailDTO.post[0].senderIdx
-                    binding.letterDateTv.text = "${mailDTO.post[0].sendDate.substring(0, 10)} 의 질문"
-                    binding.letterTitleTv.text = mailDTO.post[0].question.toString()
+                    binding.userTv.text = mailDTO.post.receiverIdx
+                    binding.familyTv.text = mailDTO.post.senderIdx
+                    binding.letterDateTv.text = "${mailDTO.post.sendDate.substring(0, 10)} 의 질문"
+                    binding.letterTitleTv.text = mailDTO.post.question.toString()
 
                     if (content.voice == 0.toLong()){
-                        binding.letterPop1.text = mailDTO.post[0].content
+                        binding.letterPop1.text = mailDTO.post.content
                         binding.letterPop2.visibility = View.VISIBLE
                         binding.recordPop2.visibility = View.GONE
                         binding.recordPop3.visibility = View.GONE
@@ -60,7 +60,7 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
                             binding.recordPop3.visibility = View.GONE
                             binding.recordPop4.visibility = View.GONE
                             binding.recordPop5.visibility = View.VISIBLE
-                            val myUri: Uri = Uri.parse(mailDTO.post[0].content)
+                            val myUri: Uri = Uri.parse(mailDTO.post.content)
                             if (mediaPlayer == null) {  // 일지정지한 적 없을 때
                                 mediaPlayer = MediaPlayer().apply {
                                     setAudioStreamType(AudioManager.STREAM_MUSIC)
