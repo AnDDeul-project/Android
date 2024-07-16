@@ -11,7 +11,8 @@ data class NewFamilyRequest (
 data class NewFamilyResponse (
     @SerializedName("status") val status: Int,
     @SerializedName("isSuccess") val isSuccess: Boolean,
-    @SerializedName("randomToken") val randomToken: List<String>
+    @SerializedName("randomToken") val randomToken: List<String>?,
+    val error: String?
 )
 
 // 가족 코드 참여
@@ -23,7 +24,8 @@ data class AddFamilyRequest (
 data class AddFamilyResponse (
     val status: Int,
     val isSuccess: Boolean,
-    @SerializedName("family_code") val familyCode: String
+    @SerializedName("family_code") val familyCode: String?,
+    val error: String?
 )
 
 // 가족 검색 정보
