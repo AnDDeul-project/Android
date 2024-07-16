@@ -405,7 +405,6 @@ class PostboxFragment : Fragment() {
     // 토큰 불러오기
     private fun loadJwt(): String {
         val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-//        return spf.getString("jwtToken", null).toString()
-        return TokenManager.getToken().toString()
+        return spf.getString("jwtToken", null).toString()
     }
 }
