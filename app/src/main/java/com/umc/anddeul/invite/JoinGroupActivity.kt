@@ -32,7 +32,7 @@ class JoinGroupActivity : AppCompatActivity() {
                             codeIntent.putExtra("GROUP_CODE", binding.existGroupNm.text.toString())
                             startActivity(codeIntent)
                         } else {
-                            AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                            AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                         }
                     } else {    // 그룹코드 존재x
                         val notExistCodeFragment = DialogNotExistCodeFragment(this)

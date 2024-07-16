@@ -33,16 +33,18 @@ class CreateGroupActivity : AppCompatActivity() {
                 val familyNewService = FamilyNewService()
                 familyNewService.createFamily(loadedToken, binding.groupNm.text.toString()) { inviteDto ->
                     if (inviteDto != null) {
-                        if (inviteDto.isSuccess.toString() == "true") {
+                        if (inviteDto.status == 200) {
                             val codeIntent = Intent(this, CreateGroupCodeActivity::class.java)
                             codeIntent.putExtra("FAMILY_GROUP_NAME", binding.groupNm.text.toString())
-                            codeIntent.putExtra("FAMILY_GROUP_CODE", inviteDto.randomToken[0])
+                            codeIntent.putExtra("FAMILY_GROUP_CODE", inviteDto.randomToken!![0])
                             startActivity(codeIntent)
-                        } else {
-                            AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                        } else if(inviteDto.status == 409) {
+                            AnddeulErrorToast.createToast(this, "이미 가족이 존재합니다.")?.show()
+                        }else {
+                            AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                         }
                     } else {
-                        AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                        AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                     }
                 }
             }

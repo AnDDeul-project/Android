@@ -42,10 +42,10 @@ class JoinGroupCodeActivity : AppCompatActivity() {
                     binding.familyCntTv.text = "${inviteDto.familyCount}명"
                     binding.inviteCodeTv.text = "초대코드 ${groupCode.toString()}"
                 } else {
-                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                 }
             } else {
-                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
             }
         }
 
@@ -63,14 +63,20 @@ class JoinGroupCodeActivity : AppCompatActivity() {
             val familyAddService = FamilyAddService()
             familyAddService.addFamily(loadedToken, groupCode.toString()) { inviteDto ->
                 if (inviteDto != null) {
-                    if (inviteDto.isSuccess.toString() == "true") {
-                        val sendIntent = Intent(this, JoinGroupSendActivity::class.java)
-                        startActivity(sendIntent)
-                    } else {
-                        AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                    when (inviteDto.status) {
+                        200 -> {
+                            val sendIntent = Intent(this, JoinGroupSendActivity::class.java)
+                            startActivity(sendIntent)
+                        }
+                        409 -> {
+                            AnddeulErrorToast.createToast(this, "이미 가족이 존재합니다.")?.show()
+                        }
+                        else -> {
+                            AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
+                        }
                     }
                 } else {
-                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                 }
             }
         }
