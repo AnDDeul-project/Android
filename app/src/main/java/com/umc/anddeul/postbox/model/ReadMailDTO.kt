@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class ReadMailResponse (
     val status: Long,
     val isSuccess: Boolean,
-    val post: List<Letter>,
+    val post: Letter,
 )
 
 data class Letter(
