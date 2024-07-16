@@ -4,6 +4,7 @@ import android.util.Log
 import com.umc.anddeul.invite.model.AddFamilyRequest
 import com.umc.anddeul.invite.model.AddFamilyResponse
 import com.umc.anddeul.invite.network.InviteInterface
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,7 +33,12 @@ class FamilyAddService {
                         callback(response.body())
                     }
                     409 -> {
-                        callback(response.body())
+                        val errorBodyString = response.errorBody()?.string()
+                        val errorResponse =
+                            retrofit.responseBodyConverter<AddFamilyResponse>(
+                                AddFamilyResponse::class.java, arrayOfNulls(0))
+                                .convert(ResponseBody.create(null, errorBodyString ?: ""))
+                        callback(errorResponse)
                     }
                     410 -> {
                         callback(response.body())

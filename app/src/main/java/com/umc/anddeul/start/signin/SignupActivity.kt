@@ -91,10 +91,10 @@ class SignupActivity: AppCompatActivity()  {
                                         startActivity(termsIntent)
                                     }
                                 } else {
-                                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                                    AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                                 }
                             } else {
-                                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                                AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                             }
                         }
                     }
@@ -109,7 +109,7 @@ class SignupActivity: AppCompatActivity()  {
             // 카카오계정으로 로그인
             UserApiClient.instance.loginWithKakaoAccount(this, prompts = listOf(Prompt.LOGIN)) { token, error ->
                 if (error != null) {
-                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                 }
                 else if (token != null) {
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
@@ -124,10 +124,10 @@ class SignupActivity: AppCompatActivity()  {
                                     startActivity(termsIntent)
                                 }
                             } else {
-                                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                                AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                             }
                         } else {
-                            AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
+                            AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                         }
                     }
                 }
