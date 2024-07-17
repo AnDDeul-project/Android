@@ -9,6 +9,7 @@ import com.umc.anddeul.MainActivity
 import com.umc.anddeul.databinding.ActivityStartBinding
 import com.umc.anddeul.invite.JoinGroupSendActivity
 import com.umc.anddeul.start.service.RequestService
+import com.umc.anddeul.start.service.TokenService
 import com.umc.anddeul.start.signin.LoginActivity
 import com.umc.anddeul.start.signin.SignupActivity
 
@@ -26,19 +27,27 @@ class StartActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        //// api 연결
-        if (!loadJwt().isNullOrEmpty()){    // 토큰이 있을 때 (로그인이 되어있을 때)
-            val requestService = RequestService()
-            requestService.requestInfo(loadJwt()) { requestDTO ->
-                if (requestDTO != null) {
-                    if (requestDTO.isSuccess.toString() == "true") {
-                        if (requestDTO.infamily){   // 가족이 있을 때
-                            val mainIntent = Intent(this, MainActivity::class.java)
-                            startActivity(mainIntent)
-                        }
-                        else if (requestDTO.request){   // 가족이 없고 요청이 있을 때
-                            val joinIntent = Intent(this, JoinGroupSendActivity::class.java)
-                            startActivity(joinIntent)
+        val jwt = loadJwt()
+
+        // 자동 로그인 구현
+        if (!jwt.isNullOrEmpty()){    // 토큰이 비어있지 않을 때
+            //// api 연결 - 토큰 유효한지 판별
+            val tokensService = TokenService()
+            tokensService.requestToken(jwt) { tokenDTO ->
+                if (tokenDTO != null && tokenDTO.isSuccess.toString() == "true") {
+                    //// api 연결 - 가족 or 요청 있는지 판별
+                    val requestService = RequestService()
+                    requestService.requestInfo(jwt) { requestDTO ->
+                        if (requestDTO != null) {
+                            if (requestDTO.isSuccess.toString() == "true") {
+                                if (requestDTO.infamily) {   // 가족이 있을 때
+                                    val mainIntent = Intent(this, MainActivity::class.java)
+                                    startActivity(mainIntent)
+                                } else if (requestDTO.request) {   // 가족이 없고 요청이 있을 때
+                                    val joinIntent = Intent(this, JoinGroupSendActivity::class.java)
+                                    startActivity(joinIntent)
+                                }
+                            }
                         }
                     }
                 }
