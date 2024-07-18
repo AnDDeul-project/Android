@@ -121,18 +121,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypage_leave_reason_tv" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mypage_leave_select_leader_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="30dp"
+                android:paddingHorizontal="32dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_reason_edit">
+
             <TextView
                 android:id="@+id/mypage_leave_select_leader_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="30dp"
                 android:fontFamily="@font/pretendard_bold"
                 android:text="다음 방장을 선택해주세요"
                 android:textColor="@color/text_high"
                 android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_reason_edit" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/mypage_leave_select_leader_warning_tv"
@@ -151,13 +159,14 @@
                 android:id="@+id/mypage_leave_select_leader_rv"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="60dp"
-                app:layout_constraintBottom_toTopOf="@+id/mypage_leave_btn"
+                android:layout_marginBottom="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_select_leader_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_select_leader_tv"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/mypage_leave_btn"
@@ -173,7 +182,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_select_leader_rv"
+                app:layout_constraintTop_toBottomOf="@+id/mypage_leave_select_leader_layout"
                 app:shapeAppearance="@style/RoundButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
