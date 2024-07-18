@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
+import com.google.firebase.messaging.FirebaseMessaging
 import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.Checklist
@@ -43,6 +44,16 @@ class MainActivity : AppCompatActivity() {
 
         RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
 
+        // FCM 토큰 발급
+        val TAG = "seeToken"
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                // Use the token as needed
+                Log.d(TAG, token)
+            } else {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                
         // 가족 우체통 하단바 알림
 //        postboxBottomAlarm()
     }
