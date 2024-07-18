@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MailService {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://umc-garden.store")
+        .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -22,6 +22,8 @@ class MailService {
         val call = mailService.mailToday("Bearer $accessToken", today)
         call.enqueue(object : Callback<TodayMailResponse> {
             override fun onResponse(call: Call<TodayMailResponse>, response: Response<TodayMailResponse>) {
+                Log.d("Postbox MailService code", "${response.code()}")
+                Log.d("Postbox MailService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())

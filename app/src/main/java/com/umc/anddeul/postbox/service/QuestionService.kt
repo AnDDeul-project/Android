@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class QuestionService {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://umc-garden.store")
+        .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -23,6 +23,8 @@ class QuestionService {
 
         call.enqueue(object : Callback<QuestionResponse> {
             override fun onResponse(call: Call<QuestionResponse>, response: Response<QuestionResponse>) {
+                Log.d("Postbox QuestionService code", "${response.code()}")
+                Log.d("Postbox QuestionService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())

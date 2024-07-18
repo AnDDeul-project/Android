@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class FamilyService {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://umc-garden.store")
+        .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -23,6 +23,8 @@ class FamilyService {
 
         call.enqueue(object : Callback<FamilyResponse> {
             override fun onResponse(call: Call<FamilyResponse>, response: Response<FamilyResponse>) {
+                Log.d("Postbox FamilyService code", "${response.code()}")
+                Log.d("Postbox FamilyService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())

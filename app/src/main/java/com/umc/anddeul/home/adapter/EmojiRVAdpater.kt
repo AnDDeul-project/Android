@@ -1,4 +1,4 @@
-package com.umc.anddeul.home
+package com.umc.anddeul.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

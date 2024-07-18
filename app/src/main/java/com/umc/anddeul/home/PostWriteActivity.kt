@@ -10,12 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import androidx.annotation.DimenRes
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.toast.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulNoLogoToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
+import com.umc.anddeul.home.adapter.SelectedVPAdapter
 import com.umc.anddeul.home.model.BoardResponse
 import com.umc.anddeul.home.network.BoardInterface
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -31,7 +37,8 @@ import java.io.File
 @Suppress("DEPRECATION")
 class PostWriteActivity : AppCompatActivity() {
     lateinit var binding: ActivityPostWriteBinding
-    var token : String? = null
+    lateinit var selectedVPAdapter: SelectedVPAdapter
+    var token: String? = null
     lateinit var retrofitBearer: Retrofit
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,27 +50,11 @@ class PostWriteActivity : AppCompatActivity() {
         token = TokenManager.getToken()
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
-        binding.uploadWriteBackIv.setOnClickListener {
-            // 현재 Activity를 종료
-            finish()
-        }
+        settingBtn()
+        settingImages()
 
-        // 이미지 URI 목록 받아오기
-        val selectedImagesUri: ArrayList<Uri> = intent.getParcelableArrayListExtra("selectedImages")!!
-
-        val selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
-        binding.uploadWriteSelectedVp.adapter = selectedVPAdapter
-        binding.uploadWriteSelectedVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
-        // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
-        val copiedImagesUri: List<Uri> = ArrayList(selectedImagesUri)
-        for (imageUri in copiedImagesUri) {
-            selectedVPAdapter.addImage(imageUri)
-        }
-
-        binding.uploadWriteBtn.setOnClickListener {
-            // 서버에 데이터 전송
-            boardPost()
+        binding.root.post{
+            AnddeulNoLogoToast.createNoLogoToast(this@PostWriteActivity, "사진을 길게 누르고 움직여 순서를 조정해보세요!").show()
         }
     }
 
@@ -81,14 +72,60 @@ class PostWriteActivity : AppCompatActivity() {
         throw IllegalArgumentException("Invalid URI")
     }
 
-    fun boardPost() {
-        val boardService = retrofitBearer.create(BoardInterface::class.java)
+    fun settingBtn() {
+        binding.uploadWriteBackIv.setOnClickListener {
+            // 현재 Activity를 종료
+            finish()
+        }
 
+        binding.uploadWriteBtn.setOnClickListener {
+            // 서버에 데이터 전송
+            boardPost()
+        }
+    }
+
+    fun settingImages() {
         // 이미지 URI 목록 받아오기
         val selectedImagesUri: ArrayList<Uri> =
             intent.getParcelableArrayListExtra("selectedImages")!!
+
+        selectedVPAdapter = SelectedVPAdapter(selectedImagesUri)
+        val viewPager = binding.uploadWriteSelectedVp.apply {
+            adapter = selectedVPAdapter
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            offscreenPageLimit = 1
+        }
+
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
-        val copiedImagesUri: List<Uri> = ArrayList(selectedImagesUri)
+        for (imageUri in selectedImagesUri) {
+            selectedVPAdapter.addImage(imageUri)
+        }
+
+        ItemTouchHelper(
+            DragAndDropHelper(listener = object : DragAndDropHelper.OnItemMovedListener {
+                override fun onItemMoved(fromPosition: Int, toPosition: Int) {
+                    selectedVPAdapter.swapItems(fromPosition, toPosition)
+                }
+
+                override fun onDraggingStarted() {
+                    viewPager.setSemanticPadding(
+                        horizontal = R.dimen.padding_post_pager_horizontal_dragging,
+                        vertical = R.dimen.padding_post_pager_vertical_dragging
+                    )
+                }
+
+                override fun onDraggingFinished() {
+                    viewPager.setSemanticPadding(
+                        horizontal = R.dimen.padding_post_pager_horizontal_idle,
+                        vertical = R.dimen.padding_post_pager_vertical_idle
+                    )
+                }
+            })
+        ).attachToRecyclerView(viewPager.getChildAt(0) as RecyclerView)
+    }
+
+    fun boardPost() {
+        val boardService = retrofitBearer.create(BoardInterface::class.java)
 
         fun compressBitmap(bitmap: Bitmap, quality: Int): ByteArray {
             val byteArrayOutputStream = ByteArrayOutputStream()
@@ -97,14 +134,13 @@ class PostWriteActivity : AppCompatActivity() {
         }
 
         // 이미지 파일들을 MultipartBody.Part로 변환
-        val imageParts: List<MultipartBody.Part> = copiedImagesUri.map { uri ->
+        val imageParts: List<MultipartBody.Part> = selectedVPAdapter.getImages().map { uri ->
             val file = getFileFromUri(this, uri)
             val bitmap = BitmapFactory.decodeFile(file.path)
             val compressedImage = compressBitmap(bitmap, 30) // 품질을 조절하여 압축 (예: 80)
             val requestImage = RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressedImage)
             MultipartBody.Part.createFormData("image", file.name, requestImage)
         }
-
 
         val content = binding.uploadWriteEdit.text.toString()
         val contentRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), content)
@@ -132,13 +168,28 @@ class PostWriteActivity : AppCompatActivity() {
                         finishAffinity()
 
                     } else {
-                        Log.e("boardService", "게시글 업로드 실패")
+                        if (response.code() == 400) {
+                            AnddeulErrorToast.createToast(this@PostWriteActivity, "내용을 입력해 주세요")
+                                .show()
+                            Log.e("boardService", "게시글 업로드 실패")
+                        }
+
                     }
                 }
 
                 override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
+                    AnddeulErrorToast.createToast(this@PostWriteActivity, "서버 연결이 불안정합니다").show()
                     Log.e("boardService", "Failure message: ${t.message}")
                 }
             })
+    }
+
+    private fun ViewPager2.setSemanticPadding(
+        @DimenRes horizontal: Int,
+        @DimenRes vertical: Int
+    ) {
+        val horizontalPx = resources.getDimensionPixelOffset(horizontal)
+        val verticalPx = resources.getDimensionPixelOffset(vertical)
+        setPadding(horizontalPx, verticalPx, horizontalPx, verticalPx)
     }
 }

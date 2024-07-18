@@ -81,7 +81,7 @@
         app:layout_constraintBottom_toTopOf="@+id/newSignUpBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/signin_green_button" />
+        app:srcCompat="@drawable/signin_kakao_button1" />
 
     <ImageView
         android:id="@+id/newSignUpBtn"
@@ -91,31 +91,42 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/signin_green_button" />
+        app:srcCompat="@drawable/signin_kakao_button2" />
 
-    <TextView
-        android:id="@+id/textView5"
+    <ImageView
+        android:id="@+id/imageView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="카카오톡으로 간편 가입"
-        android:textColor="@color/white"
-        android:textSize="18dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/oldSignUpBtn"
+        app:layout_constraintStart_toStartOf="@+id/oldSignUpBtn"
+        app:layout_constraintTop_toTopOf="@+id/oldSignUpBtn"
+        app:srcCompat="@drawable/signin_kakao_icon" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:text="카카오로 시작하기"
+        android:textColor="#191919"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/oldSignUpBtn"
         app:layout_constraintEnd_toEndOf="@+id/oldSignUpBtn"
-        app:layout_constraintStart_toStartOf="@+id/oldSignUpBtn"
+        app:layout_constraintStart_toStartOf="@+id/imageView12"
         app:layout_constraintTop_toTopOf="@+id/oldSignUpBtn" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textView22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/font_pretendard_bold"
-        android:text="다른 카카오 계정으로 가입"
-        android:textColor="@color/white"
-        android:textSize="18dp"
+        android:fontFamily="@font/font_pretendard_regular"
+        android:text="다른 카카오 계정으로 시작하기"
+        android:textColor="#191919"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/newSignUpBtn"
         app:layout_constraintEnd_toEndOf="@+id/newSignUpBtn"
         app:layout_constraintStart_toStartOf="@+id/newSignUpBtn"
         app:layout_constraintTop_toTopOf="@+id/newSignUpBtn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.ActivityPostUploadBinding
+import com.umc.anddeul.home.adapter.GalleryAdapter
 
 class PostUploadActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPostUploadBinding

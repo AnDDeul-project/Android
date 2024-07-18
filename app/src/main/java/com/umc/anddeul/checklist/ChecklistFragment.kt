@@ -1,62 +1,47 @@
 package com.umc.anddeul.checklist
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.model.Checklist
-import com.umc.anddeul.checklist.model.CompleteCheck
-import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
+import com.umc.anddeul.common.toast.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulToast
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentChecklistBinding
-import com.umc.anddeul.databinding.ItemChecklistBinding
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
-import com.umc.anddeul.postbox.LetterListFragment
-import com.umc.anddeul.postbox.PostboxFragment
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.time.temporal.TemporalAdjusters
 import java.util.Date
 import java.util.Locale
 
 class ChecklistFragment : Fragment() {
-
     lateinit var binding: FragmentChecklistBinding
+    var token : String? = null
+    lateinit var retrofit : Retrofit
+
     private var currentStartOfWeek: LocalDate = LocalDate.now()
     lateinit var selectedDateText : String
     lateinit var checklistRVAdapter : ChecklistRVAdapter
@@ -72,26 +57,11 @@ class ChecklistFragment : Fragment() {
         binding.checklistRecylerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         //spf 받아오기
-        val spf: SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
+        token = TokenManager.getToken()
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "")
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofit", "Token: " + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
+        retrofit = RetrofitManager.getRetrofitInstance()
 
         val service = retrofit.create(ChecklistInterface::class.java)
         val serviceUser = retrofit.create(UserProfileInterface::class.java)
@@ -106,14 +76,24 @@ class ChecklistFragment : Fragment() {
                     val root : UserProfileDTO? = response.body()
                     val result : UserProfileData? = root?.result
 
+                    Log.d("구성원", "${result}")
                     result.let {
                         binding.checkliTvName.text = result?.nickname
                     }
                 }
+
+                if (response.code() == 500) {
+                    val checklist = ArrayList<Checklist>()
+                    checklistRVAdapter.setChecklistData(checklist)
+                    checklistRVAdapter.notifyDataSetChanged()
+
+                    val context = requireContext()
+                    AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
+                }
             }
 
             override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                Log.d("구성원 조회", "${t.message}")
+                Log.d("구성원", "${t.message}")
             }
         })
 
@@ -134,15 +114,18 @@ class ChecklistFragment : Fragment() {
         }
 
         // 다음주
+        //today면 오늘 날짜로 넘김 안 됨.
         binding.checkliAfterBtn.setOnClickListener {
-            selectedDay = selectedDay.plusWeeks(1)
-            val yearMonth = YearMonth.from(selectedDay)
-            binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-            if (selectedDay == today) {
-                setWeek(selectedDay, service, myId!!)
-            }
-            else {
-                setSelectedWeek(selectedDay, service, myId!!)
+            if (selectedDay < today) {
+                selectedDay = selectedDay.plusWeeks(1)
+                val yearMonth = YearMonth.from(selectedDay)
+                binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
+
+                if (selectedDay == today) {
+                    setWeek(selectedDay, service, myId!!)
+                } else {
+                    setSelectedWeek(selectedDay, service, myId!!)
+                }
             }
         }
 
@@ -157,9 +140,17 @@ class ChecklistFragment : Fragment() {
             false,
             selectedDay.toString()
         )
+
         readCall.enqueue(object : Callback<Root> {
+
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
-                Log.d("api 조회", "Response ${response}")
+                Log.d("Checklist ReadService code", "${response.code()}")
+                Log.d("Checklist ReadService body", "${response.body()}")
+
+                val checklist = ArrayList<Checklist>()
+                checklistRVAdapter.setChecklistData(checklist)
+                checklistRVAdapter.notifyDataSetChanged()
+                val context = requireContext()
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
@@ -170,20 +161,28 @@ class ChecklistFragment : Fragment() {
                         checklistRVAdapter.notifyDataSetChanged()
                     }
                 }
+                if (response.code() == 500) {
+                    AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
+                }
+
                 if (response.code() == 451) {
-                    val checklist = ArrayList<Checklist>()
-                    checklistRVAdapter.setChecklistData(checklist)
-                    checklistRVAdapter.notifyDataSetChanged()
+                    AnddeulToast.createToast(context, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
                 }
             }
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
-                Log.d("read 실패", "readCall: ${t.message}")
+                val checklist = ArrayList<Checklist>()
+                checklistRVAdapter.setChecklistData(checklist)
+                checklistRVAdapter.notifyDataSetChanged()
+                val context = requireContext()
+
+                Log.d("Checklist ReadService Fail", "readCall: ${t.message}")
+                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
             }
         })
     }
 
-    //오늘 날짜 동그라미 함수 (startOfWeek 2월 16일
+    //오늘 날짜 동그라미 함수
     private fun setWeek(startOfWeek: LocalDate, service : ChecklistInterface, spfMyId : String) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)

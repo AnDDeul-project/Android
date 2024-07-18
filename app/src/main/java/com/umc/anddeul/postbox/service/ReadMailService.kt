@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ReadMailService {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://umc-garden.store")
+        .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -22,6 +22,8 @@ class ReadMailService {
         val call = readMailService.mailRead("Bearer $accessToken", idx)
         call.enqueue(object : Callback<ReadMailResponse> {
             override fun onResponse(call: Call<ReadMailResponse>, response: Response<ReadMailResponse>) {
+                Log.d("Postbox ReadMailService code", "${response.code()}")
+                Log.d("Postbox ReadMailService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())
