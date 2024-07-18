@@ -2,29 +2,38 @@ package com.umc.anddeul.mypage
 
 import android.content.Intent
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.ext.SdkExtensions
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageBinding
+import com.umc.anddeul.home.HomeFragment
 import com.umc.anddeul.home.PermissionDialog
-import com.umc.anddeul.home.PostUploadActivity
 import com.umc.anddeul.home.LoadProfileImage
-import com.umc.anddeul.home.UserProfileRVAdapter
+import com.umc.anddeul.home.PostWriteActivity
+import com.umc.anddeul.home.SaveDataHandler
+import com.umc.anddeul.home.adapter.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
@@ -38,13 +47,54 @@ class MyPageFragment : Fragment() {
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     var token: String? = null
     lateinit var retrofitBearer: Retrofit
+    private val pickMultipleMediaLauncher = registerForActivityResult(
+        ActivityResultContracts.PickMultipleVisualMedia(HomeFragment.MAX_UPLOAD_IMAGE)
+    ) { uris ->
+        // 선택한 이미지들의 URI 목록을 처리하는 콜백
+        if (uris.isNotEmpty()) {
+            // 선택한 이미지가 있을 경우
+            val selectedImagesList = ArrayList(uris)
+
+            startActivity(Intent(requireContext(), PostWriteActivity::class.java).apply {
+                putParcelableArrayListExtra("selectedImages", selectedImagesList)
+            })
+        } else {
+            // 선택한 이미지가 없을 경우
+        }
+    }
+
+    private val albumLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        // 사진 선택을 완료한 후 돌아왔다면
+        if (it.resultCode == AppCompatActivity.RESULT_OK) {
+            // 선택한 이미지의 경로 데이터를 관리하는 Uri 객체 리스트를 추출
+            val uriclip = it.data?.clipData
+            val selectedImages: List<Uri> = if (uriclip == null) {
+                emptyList()
+            } else {
+                List(uriclip.itemCount) {index ->  uriclip.getItemAt(index).uri}
+            }
+            if (selectedImages.size > HomeFragment.MAX_UPLOAD_IMAGE) {
+                Snackbar.make(
+                    binding.root,
+                    "사진 첨부는 최대 ${HomeFragment.MAX_UPLOAD_IMAGE}장까지 가능합니다.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+            if (selectedImages.isNotEmpty()) {
+                startActivity(Intent(requireContext(), PostWriteActivity::class.java).apply {
+                    putParcelableArrayListExtra(
+                        "selectedImages",
+                        ArrayList(selectedImages.take(HomeFragment.MAX_UPLOAD_IMAGE)) // take API 살펴보기
+                    )
+                })
+            }
+        }
+    }
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                // 권한이 허용되면 갤러리 액티비티로 이동
-                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                startActivity(postUploadActivity)
+                startAlbumLauncher()
             } else {
                 val permissionDialog = PermissionDialog()
                 permissionDialog.isCancelable = false
@@ -62,29 +112,16 @@ class MyPageFragment : Fragment() {
         token = TokenManager.getToken()
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
-        binding.mypageSettingIb.setOnClickListener {
-            // MyPageSettingFragment로 이동
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .add(R.id.mypage_layout, MypageSettingFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+        binding.mypageSwipeRefresh.setOnRefreshListener {
+            loadMyProfile()
         }
 
-        // 게시글 올리기
-        binding.mypageUploadBtn.setOnClickListener {
-            checkPermission()
-        }
-
-        // 프로필 수정하기
-        binding.mypageModifyBtn.setOnClickListener {
-            // MyPageModifyFragment로 이동
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .add(R.id.main_frm, MyPageModifyFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-        }
+        binding.mypageSwipeRefresh.setColorSchemeResources(
+            R.color.primary
+        )
 
         loadMyProfile()
+        settingBtn()
 
         return binding.root
     }
@@ -94,71 +131,64 @@ class MyPageFragment : Fragment() {
         loadMyProfile()
     }
 
-    fun checkPermission() {
-        val permissionImages = android.Manifest.permission.READ_MEDIA_IMAGES
-        val permissionVideos = android.Manifest.permission.READ_MEDIA_VIDEO
-        val permissionUserSelected = android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+    private fun isPhotoPickerAvailable(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            true
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            SdkExtensions.getExtensionVersion(Build.VERSION_CODES.R) >= 2
+        } else {
+            false
+        }
+    }
+
+    // 갤러리 접근 권한 확인 함수
+    private fun checkPermission() {
         val permissionReadExternal = android.Manifest.permission.READ_EXTERNAL_STORAGE
-
-        val permissionImagesGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            permissionImages
-        ) == PackageManager.PERMISSION_GRANTED
-
-        val permissionVideosGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            permissionVideos
-        ) == PackageManager.PERMISSION_GRANTED
-
-        val permissionUserSelectedGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            permissionUserSelected
-        ) == PackageManager.PERMISSION_GRANTED
 
         val permissionReadExternalGranted = ContextCompat.checkSelfPermission(
             requireContext(),
             permissionReadExternal
         ) == PackageManager.PERMISSION_GRANTED
 
-        // SDK 34 이상
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            if (permissionImagesGranted && permissionVideosGranted && permissionUserSelectedGranted) {
-                // 이미 권한이 허용된 경우 해당 코드 실행
-                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                startActivity(postUploadActivity)
+        // 포토피커를 사용하지 못하는 버전만 권한 확인 (SDK 30 미만)
+        if (permissionReadExternalGranted) {
+            startAlbumLauncher()
+        } else {
+            permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    private fun settingBtn() {
+
+        binding.mypageSettingIb.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.main_frm, MypageSettingFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
+        // 게시글 올리기
+        binding.mypageUploadBtn.setOnClickListener {
+            if (isPhotoPickerAvailable()) {
+                startPhotoPicker()
             } else {
-                // 권한이 없는 경우 권한 요청
-                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
+                checkPermission()
             }
         }
 
-        // 안드로이드 SDK가 33 이상인 경우
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (permissionImagesGranted && permissionVideosGranted) {
-                // 이미 권한이 허용된 경우 해당 코드 실행
-                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                startActivity(postUploadActivity)
-            } else {
-                // 권한이 없는 경우 권한 요청
-                permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-            }
-        } else { // 안드로이드 SDK가 33보다 낮은 경우
-            if (permissionReadExternalGranted) {
-                // 이미 권한이 허용된 경우 해당 코드 실행
-                val postUploadActivity = Intent(activity, PostUploadActivity::class.java)
-                startActivity(postUploadActivity)
-            } else {
-                // 권한이 없는 경우 권한 요청
-                permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
+        // 프로필 수정하기
+        binding.mypageModifyBtn.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.main_frm, MyPageModifyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
         }
     }
 
     // 내 프로필 조회
-    fun loadMyProfile() {
-        // 내 sns id 가져오기
-        val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-        val myId = spfMyId.getString("myId", "not found")
+    private fun loadMyProfile() {
+        val saveDataHandler = SaveDataHandler(requireActivity())
+        val myId = saveDataHandler.getMyId()
 
         val userProfileService = retrofitBearer.create(UserProfileInterface::class.java)
 
@@ -206,12 +236,19 @@ class MyPageFragment : Fragment() {
                             val myProfileDTO =
                                 gson.fromJson(gson.toJson(myProfile), UserProfileData::class.java)
                             myPageViewModel.setMyProfile(myProfileDTO)
-
                         }
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            binding.mypageSwipeRefresh.isRefreshing = false
+                        }, 1000)
+
+                    } else {
+                        context?.let { AnddeulErrorToast.createToast(it, "사용자를 찾을 수 없습니다").show() }
                     }
                 }
 
                 override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
+                    context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                     Log.e("myProfileService", "Failure message: ${t.message}")
                 }
             })
@@ -219,7 +256,7 @@ class MyPageFragment : Fragment() {
     }
 
     fun getPost(postIdx: Int) {
-        (context as MainActivity).supportFragmentManager.beginTransaction()
+        requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.mypage_layout, MyPostFragment().apply {
                 arguments = Bundle().apply {
                     val gson = Gson()
@@ -229,5 +266,16 @@ class MyPageFragment : Fragment() {
             })
             .addToBackStack(null)
             .commitAllowingStateLoss()
+    }
+
+    @SuppressLint("IntentReset")
+    fun startAlbumLauncher() {
+        val albumIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        albumIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        albumLauncher.launch(albumIntent)
+    }
+
+    private fun startPhotoPicker() {
+        pickMultipleMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 }

@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class VoiceService {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://umc-garden.store")
+        .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -25,7 +25,8 @@ class VoiceService {
         val call = voiceService.voiceSend("Bearer $accessToken", member, question, record)
         call.enqueue(object : Callback<VoiceResponse> {
             override fun onResponse(call: Call<VoiceResponse>, response: Response<VoiceResponse>) {
-                Log.d("확1", "${response}")
+                Log.d("Postbox VoiceService code", "${response.code()}")
+                Log.d("Postbox VoiceService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())

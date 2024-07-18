@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface OnePostInterface {
-    @GET("/home/posts/{postIdx}")
+    @GET("/home/posts/one/{postIdx}")
     fun onePost(
         @Path("postIdx") postIdx : Int
     ) : Call<OnePostDTO>

@@ -2,8 +2,8 @@ package com.umc.anddeul.invite
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.ActivityCreateGroupBinding
 import com.umc.anddeul.invite.service.FamilyNewService
 
@@ -32,13 +32,18 @@ class CreateGroupActivity : AppCompatActivity() {
                 val familyNewService = FamilyNewService()
                 familyNewService.createFamily(loadedToken, binding.groupNm.text.toString()) { inviteDto ->
                     if (inviteDto != null) {
-                        if (inviteDto.isSuccess.toString() == "true") {
+                        if (inviteDto.status == 200) {
                             val codeIntent = Intent(this, CreateGroupCodeActivity::class.java)
                             codeIntent.putExtra("FAMILY_GROUP_NAME", binding.groupNm.text.toString())
-                            codeIntent.putExtra("FAMILY_GROUP_CODE", inviteDto.randomToken[0])
+                            codeIntent.putExtra("FAMILY_GROUP_CODE", inviteDto.randomToken!![0])
                             startActivity(codeIntent)
+                        } else if(inviteDto.status == 409) {
+                            AnddeulErrorToast.createToast(this, "이미 가족이 존재합니다.")?.show()
+                        }else {
+                            AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                         }
                     } else {
+                        AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                     }
                 }
             }

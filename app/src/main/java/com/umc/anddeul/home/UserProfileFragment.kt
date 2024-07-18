@@ -13,9 +13,11 @@ import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.AddChecklistActivity
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserProfileBinding
+import com.umc.anddeul.home.adapter.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.network.UserProfileInterface
 import retrofit2.Call
@@ -102,10 +104,13 @@ class UserProfileFragment : Fragment() {
                             startActivity(intent)
                         }
                     }
+                } else {
+                    context?.let { AnddeulErrorToast.createToast(it, "사용자를 찾을 수 없습니다").show() }
                 }
             }
 
             override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("userProfileService", "Failure message: ${t.message}")
             }
         })

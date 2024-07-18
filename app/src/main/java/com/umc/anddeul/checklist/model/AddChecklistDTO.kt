@@ -2,9 +2,7 @@ package com.umc.anddeul.checklist.model
 
 data class AddChecklist (
     var receiver_idx : String,
-    var due_year : Int,
-    var due_month : Int,
-    var due_day : Int,
+    var due_date : String,
     var content : String
 )
 
@@ -14,11 +12,12 @@ data class AddRoot (
 )
 
 data class Check (
-    var checkid : Int,
-    var due_date : String,
-    var complete : Boolean,
-    var picture : String,
-    var content : String,
-    var sender : String,
-    var receiver : String
+    val check_idx : Int,
+    val due_date : String?,
+    val complete : Int,
+    val picture : String,
+    val content : String,
+    val sender : String,
+    val receiver : String,
+    var picturePath: String? = null
 )

@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class TextService {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://umc-garden.store")
+        .baseUrl("https://umc-garden.store")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -26,6 +26,8 @@ class TextService {
             "Bearer $accessToken", textRequest)
         call.enqueue(object : Callback<TextResponse> {
             override fun onResponse(call: Call<TextResponse>, response: Response<TextResponse>) {
+                Log.d("Postbox TextService code", "${response.code()}")
+                Log.d("Postbox TextService body", "${response.body()}")
                 when (response.code()) {
                     200 -> {
                         callback(response.body())

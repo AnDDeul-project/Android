@@ -1,8 +1,16 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
 }
+
+// 카카오 로그인 키
+val properties = Properties().apply {
+    load(project.rootProject.file("local.properties").inputStream())
+}
+var manifestPlaceholders = mutableMapOf<String, Any>()
 
 android {
     namespace = "com.umc.anddeul"
@@ -11,6 +19,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -21,6 +30,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // 카카오 로그인 키
+        buildConfigField("String", "KAKAO_APP_KEY", "\"${properties.getProperty("KAKAO_APP_KEY")}\"")
+        buildConfigField("String", "SCHEME_KAKAO_APP_KEY", "\"${properties.getProperty("SCHEME_KAKAO_APP_KEY")}\"")
+        manifestPlaceholders["SCHEME_KAKAO_APP_KEY"] = properties.getProperty("SCHEME_KAKAO_APP_KEY")
     }
 
     buildTypes {

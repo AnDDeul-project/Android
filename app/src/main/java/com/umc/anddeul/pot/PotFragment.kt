@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.service.ChecklistService
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentPotBinding
 import com.umc.anddeul.home.LoadImage
 import com.umc.anddeul.pot.GardenFragment
@@ -32,9 +34,15 @@ import java.time.format.DateTimeFormatter
 
 class PotFragment : Fragment() {
     lateinit var binding: FragmentPotBinding
+    var token : String? = null
+    lateinit var retrofit: Retrofit
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPotBinding.inflate(inflater, container, false)
+
+        token = TokenManager.getToken()
+        retrofit = RetrofitManager.getRetrofitInstance()
+        val service = retrofit.create(PotInterface::class.java)
 
         binding.potImgGarden.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -48,27 +56,6 @@ class PotFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        //토큰 가져오기
-        val spf : SharedPreferences = context!!.getSharedPreferences("myToken", Context.MODE_PRIVATE)
-        val token = spf.getString("jwtToken", "")
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://umc-garden.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("retrofit", "Token: " + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
-        val service = retrofit.create(PotInterface::class.java)
-
         binding.potImgPointPlus.setOnClickListener {
             giveLove(service)
         }
@@ -76,7 +63,8 @@ class PotFragment : Fragment() {
         val myPointCall : Call<PointRoot> = service.getMyPoint()
         myPointCall.enqueue(object : Callback<PointRoot> {
             override fun onResponse(call: Call<PointRoot>, response: Response<PointRoot>) {
-                Log.d("포인트", "Response: ${response}")
+                Log.d("Flower PointService code", "${response.code()}")
+                Log.d("Flower PointService body", "${response.body()}")
 
                 if (response.isSuccessful) {
                     val root : PointRoot? = response.body()
@@ -89,14 +77,15 @@ class PotFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<PointRoot>, t: Throwable) {
-                Log.d("포인트 불러오기 실패", "myPointCall: ${t.message}")
+                Log.d("Flower PointService Fail", "myPointCall: ${t.message}")
             }
         })
 
         val flowerCall : Call<FlowerRoot> = service.getFlower()
-        Log.d("현재 꽃", "flowerCall: ${flowerCall}")
         flowerCall.enqueue(object: Callback<FlowerRoot> {
             override fun onResponse(call: Call<FlowerRoot>, response: Response<FlowerRoot>) {
+                Log.d("Flower CurrentPotService code", "${response.code()}")
+                Log.d("Flower CurrentPotService body", "${response.body()}")
 
                 if (response.isSuccessful) {
                     val root : FlowerRoot? = response.body()
@@ -114,7 +103,7 @@ class PotFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<FlowerRoot>, t: Throwable) {
-                Log.d("현재 꽃 불러오기 실패", "flowerCall: ${t.message}")
+                Log.d("Flower CurrentPotService Fail", "flowerCall: ${t.message}")
             }
         })
 
@@ -125,7 +114,9 @@ class PotFragment : Fragment() {
         val loveCall: Call<LoveRoot> = service.giveLove()
         loveCall.enqueue(object : Callback<LoveRoot> {
             override fun onResponse(call: Call<LoveRoot>, response: Response<LoveRoot>) {
-                Log.d("사랑주기", "Response: ${response}")
+                Log.d("Flower GiveLoveService code", "${response.code()}")
+                Log.d("Flower GiveLoveService body", "${response.body()}")
+
                 if(response.isSuccessful) {
                     val root : LoveRoot? = response.body()
                     val result : Result? = root?.result
@@ -147,7 +138,7 @@ class PotFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<LoveRoot>, t: Throwable) {
-                Log.d("사랑주기", "loveCall: ${t.message}")
+                Log.d("Flower GiveLoveService Fail", "loveCall: ${t.message}")
             }
         })
     }
