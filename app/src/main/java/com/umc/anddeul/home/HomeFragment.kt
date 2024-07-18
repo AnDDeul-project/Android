@@ -62,6 +62,10 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
     lateinit var retrofitBearer: Retrofit
     private var page: Int = 0
     private var isLastPage: Boolean = false
+    private var saveDataHandler: SaveDataHandler? = null
+    private val MAX_RETRY_COUNT = 3 // 최대 재시도 횟수
+    private var retryCount = 0 // 현재 재시도 횟수
+    private val retryDelayMillis = 2000L // 재시도 간 딜레이 (2초)
 
     private val pickMultipleMediaLauncher = registerForActivityResult(
         ActivityResultContracts.PickMultipleVisualMedia(MAX_UPLOAD_IMAGE)
@@ -128,7 +132,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         postRVAdapter = PostRVAdapter(requireContext(), listOf(), listOf())
@@ -186,6 +190,11 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        saveDataHandler = SaveDataHandler(requireActivity())
+    }
+
     private fun settingBtn() {
         binding.homeFloatingBt.setOnClickListener {
             if (isPhotoPickerAvailable()) {
@@ -227,18 +236,8 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
         })
     }
 
-    fun saveMyId(context: Context, myId: String) {
-        val spfMyId = context.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-        val editor = spfMyId.edit()
-        editor.putString("myId", myId)
-        editor.apply()
-    }
-
     fun loadPost(page: Int) {
-        // 내 sns id 가져오기
-        val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-        val myId = spfMyId.getString("myId", "not found")
-
+        val myId = saveDataHandler?.getMyId()
         val postService = retrofitBearer.create(PostsInterface::class.java)
 
         postService.homePosts(page).enqueue(object : Callback<Post> {
@@ -248,6 +247,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
                 Log.e("postService response body : ", "${response.body()}")
 
                 if (response.isSuccessful) {
+                    retryCount = 0
                     val count = response.body()?.result!!.count
                     if (count < 20 || count == 0) {
                         isLastPage = true
@@ -288,8 +288,16 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
-                Log.e("postService", "Failure message: ${t.message}")
+                if (retryCount < MAX_RETRY_COUNT) {
+                    retryCount++
+                    Log.e("postService", "서버 연결 재시도 중  $retryCount")
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        loadPost(page)
+                    }, retryDelayMillis)
+                } else {
+                    context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
+                    Log.e("postService", "Failure message: ${t.message}")
+                }
             }
         })
     }
@@ -314,30 +322,31 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
                         val family = it.family
                         val wait = it.waitlist
 
-                        // 내 sns id 저장
-                        saveMyId(requireContext(), me.snsId)
+                        saveDataHandler?.saveMyId(me.snsId)
+                        saveDataHandler?.saveMyNickname(me.nickname)
+                        saveDataHandler?.saveFamilyLeader(leader)
 
                         binding.homeMenuTitleTv.text = memberData.family_name
                         binding.homeMenuCodeNumTv.text = memberData.family_code
 
                         binding.homeMenuCopyBt.setOnClickListener {
                             // 가족 코드를 클립보드에 복사
-                            val familyCode = binding.homeMenuCodeNumTv.text.toString()
                             val clipboardManager =
                                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clipData = ClipData.newPlainText("Family Code", familyCode)
+                            val clipData = ClipData.newPlainText(
+                                "Family Code",
+                                binding.homeMenuCodeNumTv.text.toString()
+                            )
                             clipboardManager.setPrimaryClip(clipData)
 
-                            // 복사 완료 메시지
-                            val context = requireContext()
-                            AnddeulToast.createToast(context, "가족 코드가 복사되었습니다").show()
-
+                            AnddeulToast.createToast(requireContext(), "가족 코드가 복사되었습니다").show()
                         }
 
                         // 가족 구성원 정보 리스트
                         val familyList = family.map { member ->
                             Member(member.snsId, member.nickname, member.image)
                         }
+                        saveDataHandler?.saveFamilyData(familyList)
 
                         // 수락 요청 멤버 리스트
                         val waitList = wait.map { waitMember ->

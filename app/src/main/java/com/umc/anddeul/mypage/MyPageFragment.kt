@@ -2,7 +2,6 @@ package com.umc.anddeul.mypage
 
 import android.content.Intent
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -24,7 +23,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
@@ -34,6 +32,7 @@ import com.umc.anddeul.home.HomeFragment
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostWriteActivity
+import com.umc.anddeul.home.SaveDataHandler
 import com.umc.anddeul.home.adapter.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
@@ -188,9 +187,8 @@ class MyPageFragment : Fragment() {
 
     // 내 프로필 조회
     private fun loadMyProfile() {
-        // 내 sns id 가져오기
-        val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
-        val myId = spfMyId.getString("myId", "not found")
+        val saveDataHandler = SaveDataHandler(requireActivity())
+        val myId = saveDataHandler.getMyId()
 
         val userProfileService = retrofitBearer.create(UserProfileInterface::class.java)
 
@@ -241,7 +239,6 @@ class MyPageFragment : Fragment() {
                         }
 
                         Handler(Looper.getMainLooper()).postDelayed({
-                            // 데이터 로딩이 완료되면 새로고침 애니메이션 중지
                             binding.mypageSwipeRefresh.isRefreshing = false
                         }, 1000)
 
