@@ -53,9 +53,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, token)
             } else {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                
-        // 가족 우체통 하단바 알림
+
+                // 가족 우체통 하단바 알림
 //        postboxBottomAlarm()
+            }
+        }
     }
 
 
