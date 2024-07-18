@@ -11,6 +11,8 @@ import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.toast.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -119,11 +121,11 @@ class ChecklistService(context : Context) {
                     }
                 }
                 if (response.code() == 500) {
-                    AnddeulErrorToast.createToast(contextServcie, "인터넷 연결이 불안정합니다")?.show()
+                    AnddeulErrorToast.createToast(contextServcie, "인터넷 연결이 불안정합니다").show()
                 }
 
                 if (response.code() == 451) {
-                    AnddeulToast.createToast(contextServcie, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
+                    AnddeulToast.createToast(contextServcie, "해당 날짜에 만들어진 체크리스트가 없습니다.").show()
                 }
             }
 
