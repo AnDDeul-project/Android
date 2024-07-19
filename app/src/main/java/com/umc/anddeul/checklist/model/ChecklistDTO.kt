@@ -5,10 +5,12 @@ data class Root (
 )
 
 data class Checklist (
-    val check_id : Int,
+    val check_idx : Int,
+    val due_date : String?,
     val complete : Int,
     val picture : String,
     val content : String,
-    val alarm_idx : Int,
     val sender : String,
+    val receiver : String,
+    var picturePath: String? = null
 )
