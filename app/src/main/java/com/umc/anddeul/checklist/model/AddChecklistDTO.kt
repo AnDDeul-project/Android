@@ -8,7 +8,7 @@ data class AddChecklist (
 
 data class AddRoot (
     var success : Boolean,
-    var check : Check
+    var check : List<Check>
 )
 
 data class Check (

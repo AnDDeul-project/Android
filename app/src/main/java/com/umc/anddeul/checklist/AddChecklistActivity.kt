@@ -137,6 +137,7 @@ class AddChecklistActivity : AppCompatActivity() {
                 addApi(service, addChecklist)
                 binding.addCheckliEtContents.setText(null)
             }
+            readApi(service)
             handled
         }
     }
@@ -152,13 +153,12 @@ class AddChecklistActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val root : AddRoot? = response.body()
-                    val checklist: Check = root!!.check
-                    readApi(service)
+                    val checklist: List<Check>? = root?.check
                 }
             }
 
             override fun onFailure(call: Call<AddRoot>, t: Throwable) {
-                Log.d("Checklist AddService Fail", "addCall: ${t.message}")
+                Log.d("Checklist AddService Fail", "readCall: ${t.message}")
             }
         })
     }
@@ -198,7 +198,7 @@ class AddChecklistActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
-                Log.d("Checklist ReadService Fail", "readCall: ${readCall} ${t.message}")
+                Log.d("Checklist ReadService Fail", "readCall: ${t.message}")
                 AnddeulErrorToast.createToast(this@AddChecklistActivity, "서버 연결이 불안정합니다")?.show()
             }
         })
