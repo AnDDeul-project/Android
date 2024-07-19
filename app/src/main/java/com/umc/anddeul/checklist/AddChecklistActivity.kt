@@ -117,8 +117,8 @@ class AddChecklistActivity : AppCompatActivity() {
             var handled = false
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val text = binding.addCheckliEtContents.text.toString()
-                val dateList = selectedDateText.split("-")
-                val addChecklist = AddChecklist(checkUserId, dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt(), text)
+                val date = selectedDateText
+                val addChecklist = AddChecklist(checkUserId, date, text)
 
                 //체크리스트 추가 api
                 addApi(service, addChecklist)
@@ -133,7 +133,6 @@ class AddChecklistActivity : AppCompatActivity() {
         val addCall : Call<AddRoot> = service.addCheckliist(
             addChecklist
         )
-
         addCall.enqueue(object : Callback<AddRoot> {
             override fun onResponse(call: Call<AddRoot>, response: Response<AddRoot>) {
                 Log.d("Checklist AddService code", "${response.code()}")
@@ -142,8 +141,6 @@ class AddChecklistActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val root : AddRoot? = response.body()
                     val checklist: List<Check>? = root?.check
-
-                    Log.d("확", "${root}, ${checklist}")
                 }
             }
 
@@ -164,6 +161,10 @@ class AddChecklistActivity : AppCompatActivity() {
                 Log.d("Checklist ReadService code", "${response.code()}")
                 Log.d("Checklist ReadService body", "${response.body()}")
 
+                val checklist = ArrayList<Checklist>()
+                addChecklistRVAdapter.setChecklistData(checklist)
+                addChecklistRVAdapter.notifyDataSetChanged()
+
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
                     val result : List<Checklist>? = root?.checklist
@@ -175,22 +176,17 @@ class AddChecklistActivity : AppCompatActivity() {
                     }
                 }
                 if (response.code() == 500) {
-                    val checklist = ArrayList<Checklist>()
-                    addChecklistRVAdapter.setChecklistData(checklist)
-                    addChecklistRVAdapter.notifyDataSetChanged()
                     AnddeulErrorToast.createToast(this@AddChecklistActivity, "인터넷 연결이 불안정합니다")?.show()
                 }
 
                 if (response.code() == 451) {
-                    val checklist = ArrayList<Checklist>()
-                    addChecklistRVAdapter.setChecklistData(checklist)
-                    addChecklistRVAdapter.notifyDataSetChanged()
                     AnddeulToast.createToast(this@AddChecklistActivity, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
                 }
             }
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
                 Log.d("Checklist ReadService Fail", "readCall: ${t.message}")
+                AnddeulErrorToast.createToast(this@AddChecklistActivity, "서버 연결이 불안정합니다")?.show()
             }
         })
     }
