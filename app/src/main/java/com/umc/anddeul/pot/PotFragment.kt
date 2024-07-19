@@ -2,12 +2,17 @@ package com.umc.anddeul.pot
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.service.ChecklistService
@@ -128,11 +133,12 @@ class PotFragment : Fragment() {
                     changedImg.let {
                         //꽃 사진 변경
                         val laodFlower = LoadImage(binding.potImgPlants)
-                        laodFlower.execute(it?.get(0)?.img)
-
+//                        laodFlower.execute(it?.get(0)?.img)
+                        binding.potImgPlants.loadImageFromUrl(it?.get(0)?.img!!)
                         //프로그레스바 이미지 변경
                         val loadGauge = LoadImage(binding.potImageGauge)
-                        loadGauge.execute(it?.get(1)?.gauge)
+//                        loadGauge.execute(it?.get(1)?.gauge)
+                        binding.potImgPlants.loadImageFromUrl(it?.get(1)?.gauge!!)
                     }
                 }
             }
@@ -141,5 +147,26 @@ class PotFragment : Fragment() {
                 Log.d("Flower GiveLoveService Fail", "loveCall: ${t.message}")
             }
         })
+    }
+
+    fun ImageView.loadImageFromUrl(imageUrl: String) {
+        val imageLoader = ImageLoader.Builder(this.context)
+            .componentRegistry { add(SvgDecoder(context))
+            }
+            .build()
+
+        val imageRequest = ImageRequest.Builder(this.context)
+            .crossfade(true)
+            .crossfade(300)
+            .data(imageUrl)
+            .target(
+                onSuccess = { result ->
+                    val bitmap = (result as BitmapDrawable).bitmap
+                    this.setImageBitmap(bitmap)
+                },
+            )
+            .build()
+
+        imageLoader.enqueue(imageRequest)
     }
 }
