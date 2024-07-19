@@ -37,3 +37,19 @@ data class Flower (
     val img : String,
     val gauge : String
 )
+
+data class GardenRoot (
+    val status : Int,
+    val isSuccess: Boolean,
+    val garden : Garden
+)
+
+data class Garden (
+    val theme : String,
+    val flowers : List<Flowers>
+)
+
+data class Flowers(
+    val idx : String,
+    val img_5 : String
+)
