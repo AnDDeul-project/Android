@@ -7,21 +7,14 @@ import android.graphics.drawable.ColorDrawable
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.umc.anddeul.common.AnddeulErrorToast
-import com.umc.anddeul.common.AnddeulToast
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.FragmentPopupLetterBinding
 import com.umc.anddeul.postbox.model.Post
 import com.umc.anddeul.postbox.service.ReadMailService
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class LetterPopupFragment(private val context: Context, private val onDismissCallback: () -> Unit)  {
     private lateinit var binding : FragmentPopupLetterBinding
@@ -104,10 +97,10 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
                     }
 
                 } else {
-                    AnddeulErrorToast.createToast(context, "요청을 처리할 수 없습니다")?.show()
+                    AnddeulErrorToast.createToast(context, "서버 연결이 불안정합니다.")?.show()
                 }
             } else {
-                AnddeulErrorToast.createToast(context, "요청을 처리할 수 없습니다")?.show()
+                AnddeulErrorToast.createToast(context, "서버 연결이 불안정합니다.")?.show()
             }
         }
 

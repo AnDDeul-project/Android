@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentDialogPermissionBinding
@@ -92,6 +93,7 @@ class LogoutDialog : DialogFragment() {
             }
 
             override fun onFailure(call: Call<LogoutDTO>, t: Throwable) {
+                context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                 Log.e("logoutService", "Failure message: ${t.message}")
             }
         })

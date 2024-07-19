@@ -43,7 +43,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".MainActivity"
+            android:name=".start.StartActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -64,10 +64,12 @@
                 <!-- scheme-ex: "kakao{NATIVE_APP_KEY}" -->
                 <data
                     android:host="oauth"
-                    android:scheme="@string/scheme_kakao_app_key" />
+                    android:scheme="${SCHEME_KAKAO_APP_KEY}" />
             </intent-filter>
         </activity>
-        <activity android:name=".start.StartActivity"/>
+<!--        <activity android:name=".start.StartActivity"/>-->
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".start.signin.LoginActivity"/>
         <activity android:name=".start.signin.SignupActivity" />
         <activity android:name=".start.terms.TermsActivity" />

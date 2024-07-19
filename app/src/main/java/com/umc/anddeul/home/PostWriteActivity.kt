@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.toast.AnddeulErrorToast
+import com.umc.anddeul.common.toast.AnddeulNoLogoToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
+import com.umc.anddeul.home.adapter.SelectedVPAdapter
 import com.umc.anddeul.home.model.BoardResponse
 import com.umc.anddeul.home.network.BoardInterface
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -47,11 +50,41 @@ class PostWriteActivity : AppCompatActivity() {
         token = TokenManager.getToken()
         retrofitBearer = RetrofitManager.getRetrofitInstance()
 
+        settingBtn()
+        settingImages()
+
+        binding.root.post{
+            AnddeulNoLogoToast.createNoLogoToast(this@PostWriteActivity, "사진을 길게 누르고 움직여 순서를 조정해보세요!").show()
+        }
+    }
+
+    private fun getFileFromUri(context: Context, uri: Uri): File {
+        val contentResolver: ContentResolver = context.contentResolver
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            val filePath = it.getString(columnIndex)
+            return File(filePath)
+        }
+
+        throw IllegalArgumentException("Invalid URI")
+    }
+
+    fun settingBtn() {
         binding.uploadWriteBackIv.setOnClickListener {
             // 현재 Activity를 종료
             finish()
         }
 
+        binding.uploadWriteBtn.setOnClickListener {
+            // 서버에 데이터 전송
+            boardPost()
+        }
+    }
+
+    fun settingImages() {
         // 이미지 URI 목록 받아오기
         val selectedImagesUri: ArrayList<Uri> =
             intent.getParcelableArrayListExtra("selectedImages")!!
@@ -66,11 +99,6 @@ class PostWriteActivity : AppCompatActivity() {
         // 받아온 이미지 URI 목록을 이용하여 이미지를 나열
         for (imageUri in selectedImagesUri) {
             selectedVPAdapter.addImage(imageUri)
-        }
-
-        binding.uploadWriteBtn.setOnClickListener {
-            // 서버에 데이터 전송
-            boardPost()
         }
 
         ItemTouchHelper(
@@ -94,20 +122,6 @@ class PostWriteActivity : AppCompatActivity() {
                 }
             })
         ).attachToRecyclerView(viewPager.getChildAt(0) as RecyclerView)
-    }
-
-    private fun getFileFromUri(context: Context, uri: Uri): File {
-        val contentResolver: ContentResolver = context.contentResolver
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            it.moveToFirst()
-            val filePath = it.getString(columnIndex)
-            return File(filePath)
-        }
-
-        throw IllegalArgumentException("Invalid URI")
     }
 
     fun boardPost() {
@@ -154,11 +168,17 @@ class PostWriteActivity : AppCompatActivity() {
                         finishAffinity()
 
                     } else {
-                        Log.e("boardService", "게시글 업로드 실패")
+                        if (response.code() == 400) {
+                            AnddeulErrorToast.createToast(this@PostWriteActivity, "내용을 입력해 주세요")
+                                .show()
+                            Log.e("boardService", "게시글 업로드 실패")
+                        }
+
                     }
                 }
 
                 override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
+                    AnddeulErrorToast.createToast(this@PostWriteActivity, "서버 연결이 불안정합니다").show()
                     Log.e("boardService", "Failure message: ${t.message}")
                 }
             })

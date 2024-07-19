@@ -1,12 +1,8 @@
 package com.umc.anddeul.checklist.service
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
-import com.umc.anddeul.checklist.model.AddRoot
 import com.umc.anddeul.checklist.model.CheckImg
 import com.umc.anddeul.checklist.model.CheckImgRoot
 import com.umc.anddeul.checklist.model.Checklist
@@ -14,19 +10,13 @@ import com.umc.anddeul.checklist.model.CompleteCheck
 import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
-import com.umc.anddeul.common.AnddeulErrorToast
-import com.umc.anddeul.common.AnddeulToast
 import com.umc.anddeul.common.RetrofitManager
-import kotlinx.coroutines.flow.callbackFlow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 class ChecklistService(context : Context) {

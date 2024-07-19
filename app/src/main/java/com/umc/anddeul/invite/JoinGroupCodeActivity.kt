@@ -2,16 +2,14 @@ package com.umc.anddeul.invite
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.umc.anddeul.MainActivity
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.ActivityJoinGroupCodeBinding
 import com.umc.anddeul.invite.model.FamilyImage
 import com.umc.anddeul.invite.service.FamilyAddService
 import com.umc.anddeul.invite.service.FamilyInfoService
-import com.umc.anddeul.start.terms.TermsActivity
 
 class JoinGroupCodeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityJoinGroupCodeBinding
@@ -40,8 +38,11 @@ class JoinGroupCodeActivity : AppCompatActivity() {
                     binding.GroupNameTv.text = inviteDto.familyName
                     binding.familyCntTv.text = "${inviteDto.familyCount}명"
                     binding.inviteCodeTv.text = "초대코드 ${groupCode.toString()}"
+                } else {
+                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                 }
             } else {
+                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
             }
         }
 
@@ -62,8 +63,11 @@ class JoinGroupCodeActivity : AppCompatActivity() {
                     if (inviteDto.isSuccess.toString() == "true") {
                         val sendIntent = Intent(this, JoinGroupSendActivity::class.java)
                         startActivity(sendIntent)
+                    } else {
+                        AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                     }
                 } else {
+                    AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                 }
             }
         }

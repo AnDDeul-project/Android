@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageBinding
@@ -31,7 +32,7 @@ import com.umc.anddeul.home.HomeFragment
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PostWriteActivity
-import com.umc.anddeul.home.UserProfileRVAdapter
+import com.umc.anddeul.home.adapter.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
@@ -227,10 +228,13 @@ class MyPageFragment : Fragment() {
                             myPageViewModel.setMyProfile(myProfileDTO)
 
                         }
+                    } else {
+                        context?.let { AnddeulErrorToast.createToast(it, "사용자를 찾을 수 없습니다").show() }
                     }
                 }
 
                 override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
+                    context?.let { AnddeulErrorToast.createToast(it, "서버 연결이 불안정합니다").show() }
                     Log.e("myProfileService", "Failure message: ${t.message}")
                 }
             })

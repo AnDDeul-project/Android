@@ -2,8 +2,8 @@ package com.umc.anddeul.invite
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.ActivityCreateGroupBinding
 import com.umc.anddeul.invite.service.FamilyNewService
 
@@ -37,8 +37,11 @@ class CreateGroupActivity : AppCompatActivity() {
                             codeIntent.putExtra("FAMILY_GROUP_NAME", binding.groupNm.text.toString())
                             codeIntent.putExtra("FAMILY_GROUP_CODE", inviteDto.randomToken[0])
                             startActivity(codeIntent)
+                        } else {
+                            AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                         }
                     } else {
+                        AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                     }
                 }
             }
