@@ -3,6 +3,7 @@ package com.umc.anddeul.checklist.network
 import com.umc.anddeul.checklist.model.AddChecklist
 import com.umc.anddeul.checklist.model.AddRoot
 import com.umc.anddeul.checklist.model.CheckImgRoot
+import com.umc.anddeul.checklist.model.ChecklistAlarm
 import com.umc.anddeul.checklist.model.CompleteRoot
 import com.umc.anddeul.checklist.model.Root
 import okhttp3.MultipartBody
@@ -40,6 +41,11 @@ interface ChecklistInterface {
     fun complete (
         @Path("checkid") checkid : Int
     ) : Call<CompleteRoot>
+
+    @GET("/alarm/{place}")
+    fun alaram (
+        @Path("place") place : String
+    ) : Call<ChecklistAlarm>
 
     @Multipart
     @PATCH("/check/img")
