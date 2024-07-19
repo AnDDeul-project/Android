@@ -65,13 +65,7 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
             }
             else {
-//            checkCameraPermission(currentChecklist)
-
-//            val delayMillis : Long = 1000 * 13
-//            holder.binding.checkliBtnCamera.postDelayed({
-//                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
-//                ChecklistService(context).imgApi(currentChecklist, file!!)
-//            }, delayMillis)
+                checkCameraPermission(currentChecklist)
             }
         }
 
@@ -122,24 +116,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         }
     }
 
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        Log.d("카메라", "시간 ${timeStamp}")
-        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        val file = File.createTempFile(
-            timeStamp,
-            ".jpg",
-            storageDir
-        )
-
-        currentPhotoFileName = file.name
-        currentPhotoPath = file.absolutePath
-
-        return file
-    }
-
     fun checkCameraPermission(checklist: Checklist) {
         Log.d("카메라", "권한 함수")
         if (ContextCompat.checkSelfPermission(
@@ -160,33 +136,51 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
         }
     }
 
-    fun openCamera(checklist: Checklist) {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (takePictureIntent.resolveActivity(context.packageManager) != null) {
-                // 파일을 저장할 디렉토리 생성
-                val photoFile: File? = try {
-                    val file = createImageFile()
-                    file
-                } catch (ex: IOException) {
-                    null
-                }
-                Log.d("카메라", "file : ${photoFile}")
-                currentChecklist = checklist
-                // 파일이 생성되었다면 카메라 앱에 전달
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        context,
-                        "com.umc.anddeul.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        Log.d("카메라", "시간 ${timeStamp}")
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-                    (context as Activity).startActivityForResult(
-                        takePictureIntent,
-                        CAMERA_REQUEST_CODE
-                    )
-                }
-                currentChecklist = checklist
+        val file = File.createTempFile(
+            timeStamp,
+            ".jpg",
+            storageDir
+        )
+
+        currentPhotoFileName = file.name
+        currentPhotoPath = file.absolutePath
+
+        return file
+    }
+
+    fun openCamera(checklist: Checklist) {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(context.packageManager) != null) {
+            // 파일을 저장할 디렉토리 생성
+            val photoFile: File? = try {
+                val file = createImageFile()
+                file
+            } catch (ex: IOException) {
+                null
             }
+            Log.d("카메라", "file : ${photoFile}")
+            currentChecklist = checklist
+            // 파일이 생성되었다면 카메라 앱에 전달
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    context,
+                    "com.umc.anddeul.fileprovider",
+                    it
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+
+                (context as Activity).startActivityForResult(
+                    takePictureIntent,
+                    CAMERA_REQUEST_CODE
+                )
+            }
+            currentChecklist = checklist
         }
     }
+}

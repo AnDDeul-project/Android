@@ -2,6 +2,7 @@ package com.umc.anddeul.checklist.service
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.umc.anddeul.checklist.ChecklistFragment
@@ -39,8 +40,8 @@ class ChecklistService(context : Context) {
     val spfMyId = context.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
     val myId = spfMyId.getString("myId", "")
 
-    fun imgApi(checklist: Checklist, file: File, token: String) {
-        val checkId = checklist.check_idx
+    fun imgApi(checklist: Checklist, file : File) {
+        val checkId = checklist.check_id
         val selectedDay = checklist
 
         val imageFileRequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
@@ -77,7 +78,7 @@ class ChecklistService(context : Context) {
 
     fun completeApi(checklist: Checklist) {
         val completeCall : Call<CompleteRoot> = service.complete(
-            checklist.check_idx
+            checklist.check_id
         )
 
         completeCall.enqueue(object : Callback<CompleteRoot> {
@@ -91,8 +92,8 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         check.let {
-                            Log.d("확", "${checklist}")
-                            readApi(checklist, myId!!)
+                            Log.d("확", "${check}")
+                            readApi(check!!.due_date, myId!!)
                         }
                     }
                 }
@@ -103,11 +104,11 @@ class ChecklistService(context : Context) {
         })
     }
 
-    fun readApi(checklist : Checklist, myId : String) {
+    fun readApi(due_date : String, myId : String) {
         val readCall : Call<Root> = service.getChecklist(
             myId!!,
             false,
-            checklist.due_date.toString()
+            due_date
         )
 
         readCall.enqueue(object : Callback<Root> {

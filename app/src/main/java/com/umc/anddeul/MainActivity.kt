@@ -1,8 +1,11 @@
 package com.umc.anddeul
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -10,6 +13,8 @@ import androidx.activity.viewModels
 import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.Checklist
+import com.umc.anddeul.checklist.model.ChecklistAlarm
+import com.umc.anddeul.checklist.service.ChecklistAlarmService
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
@@ -45,21 +50,10 @@ class MainActivity : AppCompatActivity() {
 
         // 가족 우체통 하단바 알림
 //        postboxBottomAlarm()
+
+        checklistAlarm()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        lateinit var file : File
-
-        when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> {
-                if (resultCode == RESULT_OK) {
-                    val checklistFragment = ChecklistFragment()
-                    Log.d("확인","체크리스트: $, 파일: ${checklistFragment.checklistRVAdapter?.file}")
-                }
-            }
-        }
-    }
 
 //    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
 //        ev?.let {
@@ -153,6 +147,40 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun checklistAlarm() {
+        val alarmService = ChecklistAlarmService()
+
+        alarmService.alarmApi { checklistAlarmDTO ->
+            if (checklistAlarmDTO != null) {
+                if(checklistAlarmDTO.count <= 0) {
+                    binding.checklistCircle.visibility = View.GONE
+                    binding.checklistCnt.visibility = View.GONE
+                }
+                else {
+                    if (checklistAlarmDTO.count!! <= 9){         // 알림 1자리 수
+                        binding.checklistCnt.text = checklistAlarmDTO.count.toString()
+                        binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle)
+                    } else if (checklistAlarmDTO.count!! <= 99) {         // 알림 2자리 수
+                        binding.checklistCnt.text = checklistAlarmDTO.count.toString()
+                        binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle2)
+                    }else if (checklistAlarmDTO.count!! <= 999) {         // 알림 3자리 수
+                        binding.checklistCnt.text = checklistAlarmDTO.count.toString()
+                        binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
+                    } else {         // 알림 4자리 수 이상
+                        binding.checklistCnt.text = "999"
+                        binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
+                    }
+                    binding.checklistCircle.visibility = View.VISIBLE
+                    binding.checklistCnt.visibility = View.VISIBLE
+                }
+            }
+            else {
+                binding.checklistCircle.visibility = View.GONE
+                binding.checklistCnt.visibility = View.GONE
             }
         }
     }
