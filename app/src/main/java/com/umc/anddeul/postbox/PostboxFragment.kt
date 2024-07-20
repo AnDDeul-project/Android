@@ -144,7 +144,7 @@ class PostboxFragment : Fragment() {
                     familyAdapter.families = familyDTO.result.family
                     binding.sFamily.adapter = familyAdapter
                     binding.userTitleTv.text = familyDTO.result.me.nickname
-
+                    // 이전에 선택했던 멤버 있으면 해당 멤버 선택으로 변경
                     var selectedMem = arguments?.getInt("selectedMem") ?: 0
                     binding.sFamily.setSelection(selectedMem, true)
                 } else{
@@ -160,7 +160,8 @@ class PostboxFragment : Fragment() {
             if (letterType != "record") {   // 녹음을 하지 않았을 때
                 if (binding.letterEt.text.toString().isEmpty()) {   // 작성된 텍스트 없을 때
                     val recordPopupFragment = RecordPopupFragment(requireContext())
-
+                    
+                    // 선택한 멤버 저장
                     val bundle = Bundle()
                     bundle.putInt("selectedMem", binding.sFamily.selectedItemPosition)
                     recordPopupFragment.arguments = bundle
