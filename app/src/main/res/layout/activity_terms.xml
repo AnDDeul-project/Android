@@ -328,8 +328,7 @@
                     android:id="@+id/terms3"
                     android:layout_width="409dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:visibility="gone">
+                    android:layout_marginTop="24dp">
 
                     <ImageView
                         android:id="@+id/termNotChecked3"
@@ -356,7 +355,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
                         android:fontFamily="@font/font_pretendard_bold"
-                        android:text="알림 서비스 수락 (선택)"
+                        android:text="이용 계약 당사자의 의무 동의 (필수)"
                         android:textColor="@color/secondary"
                         android:textSize="14dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -417,7 +416,7 @@
                             android:paddingTop="15dp">
 
                             <TextView
-                                android:id="@+id/textView2w2"
+                                android:id="@+id/termsText3"
                                 android:layout_width="296dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/font_pretendard_regular"
