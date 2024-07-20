@@ -58,12 +58,26 @@ class SignupActivity: AppCompatActivity()  {
                         if (signinResponse != null) {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
-                                if (signinResponse.has == true){
+                                if (signinResponse.has == true) {
                                     checkFamilyRequest(loadJwt())
-                                }
-                                else {
-                                    val termsIntent = Intent(this, TermsActivity::class.java)
-                                    startActivity(termsIntent)
+                                } else {
+                                    // FCM 토큰 발급
+                                    val TAG = "deviceToken"
+                                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            val token = task.result
+                                            Log.d(TAG, token)
+                                            putDeviceToken(token) { success ->
+                                                if (success) {
+                                                    val termsIntent =
+                                                        Intent(this, TermsActivity::class.java)
+                                                    startActivity(termsIntent)
+                                                } else {
+                                                    Log.w(TAG, "Failed to send device token")
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             } else {
                                 AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
@@ -93,12 +107,26 @@ class SignupActivity: AppCompatActivity()  {
                             if (signinResponse != null) {
                                 if (signinResponse.isSuccess.toString() == "true") {
                                     saveJwt(signinResponse.accessToken.toString())
-                                    if (signinResponse.has == true){
+                                    if (signinResponse.has == true) {
                                         checkFamilyRequest(loadJwt())
-                                    }
-                                    else {
-                                        val termsIntent = Intent(this, TermsActivity::class.java)
-                                        startActivity(termsIntent)
+                                    } else {
+                                        // FCM 토큰 발급
+                                        val TAG = "deviceToken"
+                                        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                val token = task.result
+                                                Log.d(TAG, token)
+                                                putDeviceToken(token) { success ->
+                                                    if (success) {
+                                                        val termsIntent =
+                                                            Intent(this, TermsActivity::class.java)
+                                                        startActivity(termsIntent)
+                                                    } else {
+                                                        Log.w(TAG, "Failed to send device token")
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 } else {
                                     AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
@@ -117,21 +145,37 @@ class SignupActivity: AppCompatActivity()  {
         //// 다른 카카오 계정으로 회원가입
         binding.newSignUpBtn.setOnClickListener {
             // 카카오계정으로 로그인
-            UserApiClient.instance.loginWithKakaoAccount(this, prompts = listOf(Prompt.LOGIN)) { token, error ->
+            UserApiClient.instance.loginWithKakaoAccount(
+                this,
+                prompts = listOf(Prompt.LOGIN)
+            ) { token, error ->
                 if (error != null) {
                     AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
-                }
-                else if (token != null) {
+                } else if (token != null) {
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
                         if (signinResponse != null) {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
-                                if (signinResponse.has == true){
+                                if (signinResponse.has == true) {
                                     checkFamilyRequest(loadJwt())
-                                }
-                                else {
-                                    val termsIntent = Intent(this, TermsActivity::class.java)
-                                    startActivity(termsIntent)
+                                } else {
+                                    // FCM 토큰 발급
+                                    val TAG = "deviceToken"
+                                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            val token = task.result
+                                            Log.d(TAG, token)
+                                            putDeviceToken(token) { success ->
+                                                if (success) {
+                                                    val termsIntent =
+                                                        Intent(this, TermsActivity::class.java)
+                                                    startActivity(termsIntent)
+                                                } else {
+                                                    Log.w(TAG, "Failed to send device token")
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             } else {
                                 AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
@@ -146,7 +190,7 @@ class SignupActivity: AppCompatActivity()  {
     }
 
     //// 토큰 저장
-    private fun saveJwt(jwt: String){
+    private fun saveJwt(jwt: String) {
         TokenManager.initialize(this) // 토큰 매니저 초기화
         TokenManager.setToken(jwt)
 
@@ -168,23 +212,23 @@ class SignupActivity: AppCompatActivity()  {
                 if (requestDTO.isSuccess.toString() == "true") {
 
                     // FCM 토큰 발급
-//                    val TAG = "deviceToken"
-//                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-//                        if (task.isSuccessful) {
-//                            val token = task.result
-//                            Log.d(TAG, token)
-//                            putDeviceToken(token) { success ->
-//                                if (success) {
+                    val TAG = "deviceToken"
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val token = task.result
+                            Log.d(TAG, token)
+                            putDeviceToken(token) { success ->
+                                if (success) {
                                     navigateToNextScreen(requestDTO)
-//                                } else {
-//                                    Log.w(TAG, "Failed to send device token")
-//                                }
-//                            }
-//                        } else {
-//                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-//                            AnddeulErrorToast.createToast(this, "디바이스 토큰 전송 실패").show()
-//                        }
-//                    }
+                                } else {
+                                    Log.w(TAG, "Failed to send device token")
+                                }
+                            }
+                        } else {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                            AnddeulErrorToast.createToast(this, "디바이스 토큰 전송 실패").show()
+                        }
+                    }
                 } else {
                     AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다").show()
                 }

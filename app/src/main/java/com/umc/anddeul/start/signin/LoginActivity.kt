@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.common.model.ClientError
@@ -172,23 +173,23 @@ class LoginActivity: AppCompatActivity()  {
                 if (requestDTO.isSuccess.toString() == "true") {
 
                     // FCM 토큰 발급
-//                    val TAG = "deviceToken"
-//                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-//                        if (task.isSuccessful) {
-//                            val token = task.result
-//                            Log.d(TAG, token)
-//                            putDeviceToken(token) { success ->
-//                                if (success) {
+                    val TAG = "deviceToken"
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val token = task.result
+                            Log.d(TAG, token)
+                            putDeviceToken(token) { success ->
+                                if (success) {
                                     navigateToNextScreen(requestDTO)
-//                                } else {
-//                                    Log.w(TAG, "Failed to send device token")
-//                                }
-//                            }
-//                        } else {
-//                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-//                            AnddeulErrorToast.createToast(this, "디바이스 토큰 전송 실패").show()
-//                        }
-//                    }
+                                } else {
+                                    Log.w(TAG, "Failed to send device token")
+                                }
+                            }
+                        } else {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                            AnddeulErrorToast.createToast(this, "디바이스 토큰 전송 실패").show()
+                        }
+                    }
                 } else {
                     AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다").show()
                 }
