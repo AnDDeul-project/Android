@@ -21,7 +21,7 @@ object RetrofitManager {
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
                             .build()
-                        Log.d("retrofitBearer", "Token: ${token.toString()}" + token.orEmpty())
+                        Log.d("retrofitBearer", "Token: ${token.toString()}")
                         chain.proceed(request)
                     }
                     .build()
