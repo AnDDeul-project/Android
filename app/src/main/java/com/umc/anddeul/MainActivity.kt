@@ -4,14 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
-import com.google.firebase.messaging.FirebaseMessaging
 import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
-import com.umc.anddeul.checklist.model.Checklist
-import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityMainBinding
@@ -39,25 +35,25 @@ class MainActivity : AppCompatActivity() {
 
         initBottomNavigation() // bottom navigation 설정
 
-        TokenManager.initialize(this) // 토큰 매니저 초기화
-        TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcxODM2MjI0Nn0.P4KKwBdmyWOfiBfl9dnQijmKFOngdiIXUMbtQ0McMrY")
+//        TokenManager.initialize(this) // 토큰 매니저 초기화
+//        TokenManager.setToken("각자 토큰")
+//
+//        RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
 
-        RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
-
-        // FCM 토큰 발급
-        val TAG = "seeToken"
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result
-                // Use the token as needed
-                Log.d(TAG, token)
-            } else {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-
-                // 가족 우체통 하단바 알림
+//        // FCM 토큰 발급
+//        val TAG = "seeToken"
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+//            if (task.isSuccessful) {
+//                val token = task.result
+//                // Use the token as needed
+//                Log.d(TAG, token)
+//            } else {
+//                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+//
+//                // 가족 우체통 하단바 알림
 //        postboxBottomAlarm()
-            }
-        }
+//            }
+//        }
     }
 
 
