@@ -2,20 +2,30 @@ package com.umc.anddeul.start.signin
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.umc.anddeul.MainActivity
+import com.umc.anddeul.alarm.DeviceTokenDTO
+import com.umc.anddeul.alarm.DeviceTokenInterface
+import com.umc.anddeul.common.RetrofitManager
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.start.signin.service.SigninService
 import com.umc.anddeul.databinding.ActivitySignupBinding
 import com.umc.anddeul.invite.JoinGroupSendActivity
 import com.umc.anddeul.start.StartActivity
+import com.umc.anddeul.start.model.RequestResponse
 import com.umc.anddeul.start.service.RequestService
 import com.umc.anddeul.start.terms.TermsActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SignupActivity: AppCompatActivity()  {
     val TAG = "SignupActivity"
@@ -137,11 +147,10 @@ class SignupActivity: AppCompatActivity()  {
 
     //// 토큰 저장
     private fun saveJwt(jwt: String){
-        val spf = getSharedPreferences("myToken", MODE_PRIVATE)
-        val editor = spf.edit()
+        TokenManager.initialize(this) // 토큰 매니저 초기화
+        TokenManager.setToken(jwt)
 
-        editor.putString("jwtToken", jwt)
-        editor.apply()
+        RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
     }
 
 
@@ -157,18 +166,68 @@ class SignupActivity: AppCompatActivity()  {
         requestService.requestInfo(loadJwt()) { requestDTO ->
             if (requestDTO != null) {
                 if (requestDTO.isSuccess.toString() == "true") {
-                    if (requestDTO.infamily){   // 가족이 있을 때
-                        val mainIntent = Intent(this, MainActivity::class.java)
-                        startActivity(mainIntent)
-                        StartActivity._startActivity.finish()
-                        finish()
-                    }
-                    else if (requestDTO.request){   // 가족이 없고 요청이 있을 때
-                        val joinIntent = Intent(this, JoinGroupSendActivity::class.java)
-                        startActivity(joinIntent)
-                    }
+
+                    // FCM 토큰 발급
+//                    val TAG = "deviceToken"
+//                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            val token = task.result
+//                            Log.d(TAG, token)
+//                            putDeviceToken(token) { success ->
+//                                if (success) {
+                                    navigateToNextScreen(requestDTO)
+//                                } else {
+//                                    Log.w(TAG, "Failed to send device token")
+//                                }
+//                            }
+//                        } else {
+//                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+//                            AnddeulErrorToast.createToast(this, "디바이스 토큰 전송 실패").show()
+//                        }
+//                    }
+                } else {
+                    AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다").show()
                 }
             }
         }
+    }
+
+    private fun navigateToNextScreen(requestDTO: RequestResponse) {
+        if (requestDTO.infamily) { // 가족이 있을 때
+            val mainIntent = Intent(this, MainActivity::class.java)
+            startActivity(mainIntent)
+            StartActivity._startActivity.finish()
+            finish()
+        } else if (requestDTO.request) { // 가족이 없고 요청이 있을 때
+            val joinIntent = Intent(this, JoinGroupSendActivity::class.java)
+            startActivity(joinIntent)
+        }
+    }
+
+    private fun putDeviceToken(deviceToken: String, callback: (Boolean) -> Unit) {
+        val retrofitManager = RetrofitManager.getRetrofitInstance()
+        val deviceTokenService = retrofitManager.create(DeviceTokenInterface::class.java)
+
+        deviceTokenService.putDeviceToken(deviceToken).enqueue(object : Callback<DeviceTokenDTO> {
+            override fun onResponse(
+                call: Call<DeviceTokenDTO>,
+                response: Response<DeviceTokenDTO>
+            ) {
+                Log.e("putDeviceToken response code : ", "${response.code()}")
+                Log.e("putDeviceToken response body : ", "${response.body()}")
+
+                if (response.isSuccessful) {
+                    Log.e("putDeviceToken", "디바이스 토큰 전송 완료")
+                    callback(true)
+                }
+            }
+
+            override fun onFailure(call: Call<DeviceTokenDTO>, t: Throwable) {
+                AnddeulErrorToast.createToast(this@SignupActivity, "서버 연결이 불안정합니다").show()
+                Log.e("putDeviceToken", "디바이스 토큰 전송 실패")
+                Log.e("putDeviceToken", "Failure message: ${t.message}")
+                callback(false)
+            }
+        })
     }
 }
