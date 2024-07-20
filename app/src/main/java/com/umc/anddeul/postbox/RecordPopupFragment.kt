@@ -16,12 +16,13 @@ import android.view.View
 import android.view.Window
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentPopupRecordBinding
 import java.util.Date
 
-class RecordPopupFragment(private val context: Context) {
+class RecordPopupFragment(private val context: Context) : Fragment() {
     private lateinit var binding: FragmentPopupRecordBinding
     private val dlg = Dialog(context)
     private var outputPath: String? = null
@@ -76,8 +77,11 @@ class RecordPopupFragment(private val context: Context) {
 
             val postboxFragment = PostboxFragment()
 
+            val selectedMem = arguments?.getInt("selectedMem") ?: 0
+
             val bundle = Bundle()
             bundle.putString("recordFilePath", outputPath)
+            bundle.putInt("selectedMem", selectedMem)
             postboxFragment.arguments = bundle
 
             (context as MainActivity).supportFragmentManager.beginTransaction()
