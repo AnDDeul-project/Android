@@ -28,8 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PostRVAdapter(private val context: Context, var postList: List<PostData>, var authorTypeList: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var token = TokenManager.getToken()
-    var retrofitBearer = RetrofitManager.getRetrofitInstance()
+    val retrofitBearer = RetrofitManager.getRetrofitInstance()
 
     companion object {
         const val VIEW_TYPE_ME = 0
