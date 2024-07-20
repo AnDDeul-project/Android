@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.common.RetrofitManager
-import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityStartBinding
 import com.umc.anddeul.invite.JoinGroupSendActivity
 import com.umc.anddeul.start.service.RequestService
@@ -36,12 +34,6 @@ class StartActivity : AppCompatActivity() {
             val tokensService = TokenService()
             tokensService.requestToken(jwt) { tokenDTO ->
                 if (tokenDTO != null && tokenDTO.isSuccess.toString() == "true") {
-                    // 토큰 매니저 초기화
-                    TokenManager.initialize(this)
-                    TokenManager.setToken(jwt)
-                    // RetrofitManager 초기화
-                    RetrofitManager.initialize("https://umc-garden.store")
-
                     //// api 연결 - 가족 or 요청 있는지 판별
                     val requestService = RequestService()
                     requestService.requestInfo(jwt) { requestDTO ->
