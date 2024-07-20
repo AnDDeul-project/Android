@@ -1,4 +1,12 @@
 package com.umc.anddeul.alarm
 
-class DeviceTokenInterface {
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.PUT
+
+interface DeviceTokenInterface {
+    @PUT("/putToken")
+    fun putDeviceToken(
+        @Body deviceToken: String
+    ): Call<DeviceTokenDTO>
 }

@@ -1,4 +1,7 @@
 package com.umc.anddeul.alarm
 
-class DeviceTokenDTO {
-}
+data class DeviceTokenDTO (
+    val status: Int,
+    val isSuccess: Boolean,
+    val count: Int
+)
