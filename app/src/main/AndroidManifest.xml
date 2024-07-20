@@ -43,7 +43,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".start.StartActivity"
+            android:name=".start.SplashActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -67,7 +67,7 @@
                     android:scheme="${SCHEME_KAKAO_APP_KEY}" />
             </intent-filter>
         </activity>
-<!--        <activity android:name=".start.StartActivity"/>-->
+        <activity android:name=".start.StartActivity"/>
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".start.signin.LoginActivity"/>

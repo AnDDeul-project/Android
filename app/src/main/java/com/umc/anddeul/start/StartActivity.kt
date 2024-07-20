@@ -26,33 +26,6 @@ class StartActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val jwt = loadJwt()
-
-        // 자동 로그인 구현
-        if (!jwt.isNullOrEmpty()){    // 토큰이 비어있지 않을 때
-            //// api 연결 - 토큰 유효한지 판별
-            val tokensService = TokenService()
-            tokensService.requestToken(jwt) { tokenDTO ->
-                if (tokenDTO != null && tokenDTO.isSuccess.toString() == "true") {
-                    //// api 연결 - 가족 or 요청 있는지 판별
-                    val requestService = RequestService()
-                    requestService.requestInfo(jwt) { requestDTO ->
-                        if (requestDTO != null) {
-                            if (requestDTO.isSuccess.toString() == "true") {
-                                if (requestDTO.infamily) {   // 가족이 있을 때
-                                    val mainIntent = Intent(this, MainActivity::class.java)
-                                    startActivity(mainIntent)
-                                } else if (requestDTO.request) {   // 가족이 없고 요청이 있을 때
-                                    val joinIntent = Intent(this, JoinGroupSendActivity::class.java)
-                                    startActivity(joinIntent)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         //// 로그인으로 이동
         binding.longinBtn.setOnClickListener {
             val loginIntent = Intent(this, LoginActivity::class.java)
@@ -70,11 +43,4 @@ class StartActivity : AppCompatActivity() {
     @Override
     override fun onBackPressed() {
     }
-
-    // 토큰 불러오기
-    private fun loadJwt(): String {
-        val spf = getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-        return spf.getString("jwtToken", null).toString()
-    }
-
 }
