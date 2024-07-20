@@ -21,8 +21,7 @@ class MypageSettingFragment : Fragment(){
 
         // 알림 설정
         binding.mypageSettingNotification.setOnClickListener {
-            // 알림 설정 화면으로 이동
-            (context as MainActivity).supportFragmentManager.beginTransaction()
+            requireActivity().supportFragmentManager.beginTransaction()
                 .add(R.id.mypage_setting_layout, MyPageNotificationFragment())
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -37,9 +36,16 @@ class MypageSettingFragment : Fragment(){
 
         // 탈퇴하기
         binding.mypageSettingLeave.setOnClickListener {
-            // 탈퇴하기 화면으로 이동
-            (context as MainActivity).supportFragmentManager.beginTransaction()
+            requireActivity().supportFragmentManager.beginTransaction()
                 .add(R.id.mypage_setting_layout, MyPageLeaveFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
+        // 약관 확인
+        binding.mypageSettingTerms.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.mypage_setting_layout, MyPageTermsFragment())
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
         }
