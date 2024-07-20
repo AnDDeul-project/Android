@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -143,6 +144,9 @@ class PostboxFragment : Fragment() {
                     familyAdapter.families = familyDTO.result.family
                     binding.sFamily.adapter = familyAdapter
                     binding.userTitleTv.text = familyDTO.result.me.nickname
+
+                    var selectedMem = arguments?.getInt("selectedMem") ?: 0
+                    binding.sFamily.setSelection(selectedMem, true)
                 } else{
                     AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
                 }
@@ -156,6 +160,11 @@ class PostboxFragment : Fragment() {
             if (letterType != "record") {   // 녹음을 하지 않았을 때
                 if (binding.letterEt.text.toString().isEmpty()) {   // 작성된 텍스트 없을 때
                     val recordPopupFragment = RecordPopupFragment(requireContext())
+
+                    val bundle = Bundle()
+                    bundle.putInt("selectedMem", binding.sFamily.selectedItemPosition)
+                    recordPopupFragment.arguments = bundle
+
                     recordPopupFragment.show()
                 } else {    // 작성된 텍스트 있을 때
                     val dialogFragment = DialogLetterFragment(requireContext())
