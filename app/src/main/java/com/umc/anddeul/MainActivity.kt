@@ -12,6 +12,7 @@ import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityMainBinding
 import com.umc.anddeul.home.HomeFragment
+import com.umc.anddeul.home.service.HomeAlarmService
 import com.umc.anddeul.mypage.MyPageFragment
 import com.umc.anddeul.mypage.MyPageViewModel
 import com.umc.anddeul.postbox.PostboxFragment
@@ -50,8 +51,10 @@ class MainActivity : AppCompatActivity() {
 //            } else {
 //                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
 //
-//                // 가족 우체통 하단바 알림
-//        postboxBottomAlarm()
+        // 가족 우체통 하단바 알림
+        postboxBottomAlarm()
+        // 홈 하단바 알림
+        homeBottomAlarm()
 //            }
 //        }
     }
@@ -83,7 +86,8 @@ class MainActivity : AppCompatActivity() {
 
                 // HomeFragment로 이동
                 R.id.homeFragment -> {
-//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
+                    homeBottomAlarm()   // 홈 하단바 알림
+                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, HomeFragment())
                         .commitAllowingStateLoss()
@@ -92,7 +96,8 @@ class MainActivity : AppCompatActivity() {
 
                 // ChecklistFragment로 이동
                 R.id.checklistFragment -> {
-//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
+                    homeBottomAlarm()   // 홈 하단바 알림
+                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, ChecklistFragment())
                         .commitAllowingStateLoss()
@@ -101,7 +106,8 @@ class MainActivity : AppCompatActivity() {
 
                 // postboxFragment로 이동
                 R.id.postboxFragment -> {
-//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
+                    homeBottomAlarm()   // 홈 하단바 알림
+                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, PostboxFragment())
                         .commitAllowingStateLoss()
@@ -110,7 +116,8 @@ class MainActivity : AppCompatActivity() {
 
                 // myPageFragment로 이동
                 R.id.myPageFragment -> {
-//                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
+                    homeBottomAlarm()   // 홈 하단바 알림
+                    postboxBottomAlarm()    // 가족 우체통 하단바 알림
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, MyPageFragment())
                         .commitAllowingStateLoss()
@@ -125,6 +132,39 @@ class MainActivity : AppCompatActivity() {
     private fun loadJwt(): String {
         val spf = getSharedPreferences("myToken", MODE_PRIVATE)
         return spf.getString("jwtToken", null).toString()
+    }
+
+    // 홈 하단바 알림
+    private fun homeBottomAlarm() {
+        val loadedToken = loadJwt() // jwt토큰
+        // api 연결
+        val homeAlarmService = HomeAlarmService()
+        homeAlarmService.alarmHome(loadedToken) { homeDTO ->
+            if (homeDTO != null) {
+                if (homeDTO.isSuccess.toString() == "true") {
+                    if (homeDTO?.count!! <= 0) {         // 알림 0개
+                        binding.homeCircle.visibility = View.GONE
+                        binding.homeCnt.visibility = View.GONE
+                    } else {
+                        binding.homeCircle.visibility = View.VISIBLE
+                        binding.homeCnt.visibility = View.VISIBLE
+                        if (homeDTO?.count!! <= 9){         // 알림 1자리 수
+                            binding.homeCnt.text = homeDTO?.count.toString()
+                            binding.homeCircle.setImageResource(R.drawable.img_alarm_circle)
+                        } else if (homeDTO?.count!! <= 99) {         // 알림 2자리 수
+                            binding.homeCnt.text = homeDTO?.count.toString()
+                            binding.homeCircle.setImageResource(R.drawable.img_alarm_circle2)
+                        }else if (homeDTO?.count!! <= 999) {         // 알림 3자리 수
+                            binding.homeCnt.text = homeDTO?.count.toString()
+                            binding.homeCircle.setImageResource(R.drawable.img_alarm_circle3)
+                        } else {         // 알림 4자리 수 이상
+                            binding.homeCnt.text = "999"
+                            binding.homeCircle.setImageResource(R.drawable.img_alarm_circle3)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // 가족 우체통 하단바 알림
