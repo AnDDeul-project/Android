@@ -5,7 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.PUT
 
 interface DeviceTokenInterface {
-    @PUT("/putToken")
+    @PUT("/push/putToken")
     fun putDeviceToken(
         @Body deviceToken: String
     ): Call<DeviceTokenDTO>
