@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.common.model.ClientError
@@ -153,7 +152,7 @@ class LoginActivity: AppCompatActivity()  {
 //        editor.putString("jwtToken", jwt)
 //        editor.apply()
 
-        TokenManager.initialize(this) // 토큰 매니저 초기화
+        //TokenManager.initialize(this) // 토큰 매니저 초기화
         TokenManager.setToken(jwt)
 
         RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화

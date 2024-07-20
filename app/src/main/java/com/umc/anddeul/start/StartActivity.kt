@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.common.RetrofitManager
-import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityStartBinding
 import com.umc.anddeul.invite.JoinGroupSendActivity
 import com.umc.anddeul.start.service.RequestService
