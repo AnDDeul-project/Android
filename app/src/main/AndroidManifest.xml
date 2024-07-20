@@ -36,7 +36,7 @@
         android:roundIcon="@mipmap/ic_anddeul_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Anddeul"
-        tools:targetApi="31"
+        tools:targetApi="34"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".home.PostWriteActivity"
