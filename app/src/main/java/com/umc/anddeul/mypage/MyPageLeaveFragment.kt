@@ -151,6 +151,16 @@ class MyPageLeaveFragment : Fragment() {
                 Log.e("leaveService", "${response.body()}")
 
                 if (response.isSuccessful) {
+                    TokenManager.clearToken()
+
+                    // 토큰이 제대로 삭제되었는지 확인
+                    val deletedToken = TokenManager.getToken()
+                    if (deletedToken == null) {
+                        Log.d("leaveService TokenManager", "토큰이 성공적으로 삭제되었습니다.")
+                    } else {
+                        Log.e("leaveService TokenManager", "토큰 삭제에 실패했습니다. 삭제된 토큰: $deletedToken")
+                    }
+
                     val intent = Intent(activity, StartActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
