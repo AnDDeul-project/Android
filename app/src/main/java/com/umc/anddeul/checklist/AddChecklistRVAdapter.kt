@@ -9,7 +9,7 @@ import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.databinding.ItemAddChecklistBinding
 
 class AddChecklistRVAdapter() : RecyclerView.Adapter<AddChecklistRVAdapter.ViewHolder>() {
-    var checklist: List<com.umc.anddeul.checklist.model.Checklist>? = null
+    var checklist: List<Checklist>? = null
 
     override fun getItemCount(): Int {
         return checklist?.size ?: 0

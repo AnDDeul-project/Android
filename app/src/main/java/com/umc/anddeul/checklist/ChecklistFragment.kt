@@ -93,7 +93,7 @@ class ChecklistFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                Log.d("구성원", "${t.message}")
+                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
             }
         })
 
@@ -114,18 +114,19 @@ class ChecklistFragment : Fragment() {
         }
 
         // 다음주
-        //today면 오늘 날짜로 넘김 안 됨.
         binding.checkliAfterBtn.setOnClickListener {
             if (selectedDay < today) {
-                selectedDay = selectedDay.plusWeeks(1)
+                val tempDay = selectedDay.plusWeeks(1)
+                if (tempDay == today) {
+                    setWeek(tempDay, service, myId!!)
+                } else {
+                    if (tempDay <= today) {
+                        selectedDay = tempDay
+                        setSelectedWeek(tempDay, service, myId!!)
+                    }
+                }
                 val yearMonth = YearMonth.from(selectedDay)
                 binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-
-                if (selectedDay == today) {
-                    setWeek(selectedDay, service, myId!!)
-                } else {
-                    setSelectedWeek(selectedDay, service, myId!!)
-                }
             }
         }
 

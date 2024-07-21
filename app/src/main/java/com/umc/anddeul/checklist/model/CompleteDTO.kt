@@ -7,6 +7,6 @@ data class CompleteRoot (
 
 data class CompleteCheck (
     val checkid : Int,
-    val due_date : String,
+    val dueDate : String,
     val complete : Int
 )

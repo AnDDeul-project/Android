@@ -96,15 +96,17 @@ class AddChecklistActivity : AppCompatActivity() {
         // 다음주
         binding.addCheckliAfterBtn.setOnClickListener {
             if (selectedDay < today) {
-                selectedDay = selectedDay.plusWeeks(1)
+                val tempDay = selectedDay.plusWeeks(1)
+                if (tempDay == today) {
+                    setWeek(tempDay, service, checkUserId)
+                } else {
+                    if (tempDay <= today) {
+                        selectedDay = tempDay
+                        setSelectedWeek(tempDay, service, checkUserId)
+                    }
+                }
                 val yearMonth = YearMonth.from(selectedDay)
                 binding.addCheckliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-
-                if (selectedDay == today) {
-                    setWeek(selectedDay, service, checkUserId)
-                } else {
-                    setSelectedWeek(selectedDay, service, checkUserId)
-                }
             }
         }
 
@@ -119,12 +121,12 @@ class AddChecklistActivity : AppCompatActivity() {
                 val text = binding.addCheckliEtContents.text.toString()
                 val date = selectedDateText
                 val addChecklist = AddChecklist(checkUserId, date, text)
+                Log.d("Checklist AddServcie", "addChecklist: ${addChecklist}")
 
                 //체크리스트 추가 api
                 addApi(service, addChecklist)
                 binding.addCheckliEtContents.setText(null)
             }
-            readApi(service)
             handled
         }
     }
@@ -133,6 +135,7 @@ class AddChecklistActivity : AppCompatActivity() {
         val addCall : Call<AddRoot> = service.addCheckliist(
             addChecklist
         )
+
         addCall.enqueue(object : Callback<AddRoot> {
             override fun onResponse(call: Call<AddRoot>, response: Response<AddRoot>) {
                 Log.d("Checklist AddService code", "${response.code()}")
@@ -140,12 +143,23 @@ class AddChecklistActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val root : AddRoot? = response.body()
-                    val checklist: List<Check>? = root?.check
+                    val checklist: Check = root!!.check
+
+                    if (response.code() == 500) {
+                        AnddeulErrorToast.createToast(this@AddChecklistActivity, "인터넷 연결이 불안정합니다")?.show()
+                    }
+
+                    if (response.code() == 451) {
+                        AnddeulToast.createToast(this@AddChecklistActivity, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
+                    }
+
+                    readApi(service)
                 }
             }
 
             override fun onFailure(call: Call<AddRoot>, t: Throwable) {
-                Log.d("Checklist AddService Fail", "readCall: ${t.message}")
+                Log.d("Checklist ReadService Fail", "addCall: ${t.message}")
+                AnddeulErrorToast.createToast(this@AddChecklistActivity, "서버 연결이 불안정합니다")?.show()
             }
         })
     }

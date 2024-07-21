@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.Checklist
+import com.umc.anddeul.checklist.service.ChecklistAlarmService
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
@@ -45,19 +46,22 @@ class MainActivity : AppCompatActivity() {
 
         // 가족 우체통 하단바 알림
 //        postboxBottomAlarm()
+        checklistBottomAlarm()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        lateinit var file: File
 
-//    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-//        ev?.let {
-//            if (it.action == MotionEvent.ACTION_DOWN) {
-//
-//                // 가족 우체통 하단바 알림
-//                postboxBottomAlarm()
-//            }
-//        }
-//        return super.dispatchTouchEvent(ev)
-//    }
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == RESULT_OK) {
+                    val checklistFragment = ChecklistFragment()
+                    Log.d("확인", "체크리스트: $, 파일: ${checklistFragment.checklistRVAdapter?.file}")
+                }
+            }
+        }
+    }
     
     private fun initBottomNavigation() {
 
@@ -129,18 +133,50 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         binding.postboxCircle.visibility = View.VISIBLE
                         binding.postboxCnt.visibility = View.VISIBLE
-                        if (postboxDTO?.count!! <= 9){         // 알림 1자리 수
+                        if (postboxDTO?.count!! <= 9) {         // 알림 1자리 수
                             binding.postboxCnt.text = postboxDTO?.count.toString()
                             binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle)
                         } else if (postboxDTO?.count!! <= 99) {         // 알림 2자리 수
                             binding.postboxCnt.text = postboxDTO?.count.toString()
                             binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle2)
-                        }else if (postboxDTO?.count!! <= 999) {         // 알림 3자리 수
+                        } else if (postboxDTO?.count!! <= 999) {         // 알림 3자리 수
                             binding.postboxCnt.text = postboxDTO?.count.toString()
                             binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle3)
                         } else {         // 알림 4자리 수 이상
                             binding.postboxCnt.text = "999"
                             binding.postboxCircle.setImageResource(R.drawable.img_alarm_circle3)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checklistBottomAlarm() {
+        val loadedToken = loadJwt() // jwt토큰
+        // api 연결
+        val checklistAlarmService = ChecklistAlarmService()
+        checklistAlarmService.alarmApi { checklistAlarmDTO ->
+            if (checklistAlarmDTO != null) {
+                if (checklistAlarmDTO.isSuccess.toString() == "true") {
+                    if (checklistAlarmDTO?.count!! <= 0) {         // 알림 0개
+                        binding.checklistCnt.visibility = View.GONE
+                        binding.checklistCircle.visibility = View.GONE
+                    } else {
+                        binding.checklistCnt.visibility = View.VISIBLE
+                        binding.checklistCircle.visibility = View.VISIBLE
+                        if (checklistAlarmDTO?.count!! <= 9) {         // 알림 1자리 수
+                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
+                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle)
+                        } else if (checklistAlarmDTO?.count!! <= 99) {         // 알림 2자리 수
+                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
+                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle2)
+                        } else if (checklistAlarmDTO?.count!! <= 999) {         // 알림 3자리 수
+                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
+                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
+                        } else {         // 알림 4자리 수 이상
+                            binding.checklistCnt.text = "999"
+                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
                         }
                     }
                 }
