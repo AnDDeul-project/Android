@@ -84,7 +84,7 @@ class LetterListFragment : Fragment() {
         val today = selectedDate
         val loadedToken = loadJwt() // jwt토큰
         val mailService = MailService()
-        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
+        mailService.todayMail(requireContext(), loadedToken, today.toString()) { mailDTO ->
             if (mailDTO != null) {
                 if (mailDTO.isSuccess.toString() == "true") {
                     letterlistAdapter.letters = mailDTO.post
@@ -104,7 +104,7 @@ class LetterListFragment : Fragment() {
         //// 상단바 이름
         // api 연결
         val familyService = FamilyService()
-        familyService.getFamilyList(loadedToken) { familyDTO ->
+        familyService.getFamilyList(requireContext(), loadedToken) { familyDTO ->
             if (familyDTO != null) {
                 if (familyDTO.isSuccess.toString() == "true") {
                     binding.userTitleTv2.text = familyDTO.result.me.nickname

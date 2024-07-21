@@ -1,8 +1,11 @@
 package com.umc.anddeul.postbox.service
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.umc.anddeul.postbox.model.ReadMailResponse
 import com.umc.anddeul.postbox.network.ReadMailInterface
+import com.umc.anddeul.start.StartActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +21,7 @@ class ReadMailService {
 
     private val readMailService = retrofit.create(ReadMailInterface::class.java)
 
-    fun readMail(accessToken: String, idx: Int, callback: (ReadMailResponse?) -> Unit) {
+    fun readMail(context: Context, accessToken: String, idx: Int, callback: (ReadMailResponse?) -> Unit) {
         val call = readMailService.mailRead("Bearer $accessToken", idx)
         call.enqueue(object : Callback<ReadMailResponse> {
             override fun onResponse(call: Call<ReadMailResponse>, response: Response<ReadMailResponse>) {
@@ -29,7 +32,8 @@ class ReadMailService {
                         callback(response.body())
                     }
                     401 -> {
-                        callback(response.body())
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context.startActivity(startIntent)
                     }
                     500 -> {
                         callback(response.body())

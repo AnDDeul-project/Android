@@ -1,8 +1,11 @@
 package com.umc.anddeul.postbox.service
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.umc.anddeul.postbox.model.QuestionResponse
 import com.umc.anddeul.postbox.network.QuestionInterface
+import com.umc.anddeul.start.StartActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +21,7 @@ class QuestionService {
 
     private val questionService = retrofit.create(QuestionInterface::class.java)
 
-    fun randomQuestion(accessToken: String, callback: (QuestionResponse?) -> Unit) {
+    fun randomQuestion(context: Context, accessToken: String, callback: (QuestionResponse?) -> Unit) {
         val call = questionService.questionRandom("Bearer $accessToken")
 
         call.enqueue(object : Callback<QuestionResponse> {
@@ -30,7 +33,8 @@ class QuestionService {
                         callback(response.body())
                     }
                     401 -> {
-                        callback(response.body())
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context.startActivity(startIntent)
                     }
                     405 -> {
                         callback(response.body())

@@ -1,8 +1,11 @@
 package com.umc.anddeul.postbox.service
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.umc.anddeul.postbox.model.FamilyResponse
 import com.umc.anddeul.postbox.network.FamilyInterface
+import com.umc.anddeul.start.StartActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +21,7 @@ class FamilyService {
 
     private val familyService = retrofit.create(FamilyInterface::class.java)
 
-    fun getFamilyList(accessToken: String, callback: (FamilyResponse?) -> Unit) {
+    fun getFamilyList(context: Context, accessToken: String, callback: (FamilyResponse?) -> Unit) {
         val call = familyService.familyList("Bearer $accessToken")
 
         call.enqueue(object : Callback<FamilyResponse> {
@@ -30,7 +33,8 @@ class FamilyService {
                         callback(response.body())
                     }
                     401 -> {
-                        callback(response.body())
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context.startActivity(startIntent)
                     }
                     500 -> {
                         callback(response.body())
