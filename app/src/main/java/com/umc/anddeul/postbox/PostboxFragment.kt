@@ -118,7 +118,7 @@ class PostboxFragment : Fragment() {
         //// 랜덤 질문
         // api 연결
         val questionService = QuestionService()
-        questionService.randomQuestion(loadedToken) { questionDTO ->
+        questionService.randomQuestion(requireContext(), loadedToken) { questionDTO ->
             if (questionDTO != null) {
                 if (questionDTO.isSuccess.toString() == "true") {
                     if (questionDTO?.question?.isNotEmpty() == true) {
@@ -138,7 +138,7 @@ class PostboxFragment : Fragment() {
 
         // api 연결
         val familyService = FamilyService()
-        familyService.getFamilyList(loadedToken) { familyDTO ->
+        familyService.getFamilyList(requireContext(), loadedToken) { familyDTO ->
             if (familyDTO != null) {
                 if (familyDTO.isSuccess.toString() == "true") {
                     familyAdapter.families = familyDTO.result.family
@@ -233,7 +233,7 @@ class PostboxFragment : Fragment() {
                         val memberRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), it.snsId)
                         val questionRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.randomQTv.text.toString())
 
-                        voiceService.sendVoice(loadedToken, memberRequestBody, questionRequestBody, recordPart) { voiceDTO ->
+                        voiceService.sendVoice(requireContext(), loadedToken, memberRequestBody, questionRequestBody, recordPart) { voiceDTO ->
                             if (voiceDTO != null) {
                                 if (voiceDTO.isSuccess.toString() == "true") {
                                     binding.recordInfo1.visibility = View.GONE
@@ -253,7 +253,7 @@ class PostboxFragment : Fragment() {
                             val request = TextRequest(it.snsId, binding.randomQTv.text.toString(),binding.letterEt.text.toString())
                             // api 연결
                             val textService = TextService()
-                            textService.sendText(loadedToken, request) { textDTO ->
+                            textService.sendText(requireContext(), loadedToken, request) { textDTO ->
                                 if (textDTO != null) {
                                     if (textDTO.isSuccess.toString() == "true") {
                                         //텍스트 초기화
@@ -287,7 +287,7 @@ class PostboxFragment : Fragment() {
         val today = currentDate.format(dateFormat)
         val loadedToken = loadJwt() // jwt토큰
         val mailService = MailService()
-        mailService.todayMail(loadedToken, today.toString()) { mailDTO ->
+        mailService.todayMail(requireContext(), loadedToken, today.toString()) { mailDTO ->
             if (mailDTO != null) {
                 if (mailDTO.isSuccess.toString() == "true") {
                     postAdapter.letters = mailDTO.post

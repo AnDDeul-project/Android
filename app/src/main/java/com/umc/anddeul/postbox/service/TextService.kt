@@ -1,9 +1,12 @@
 package com.umc.anddeul.postbox.service
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.umc.anddeul.postbox.model.TextRequest
 import com.umc.anddeul.postbox.model.TextResponse
 import com.umc.anddeul.postbox.network.TextInterface
+import com.umc.anddeul.start.StartActivity
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,7 +23,7 @@ class TextService {
 
     private val textService = retrofit.create(TextInterface::class.java)
 
-    fun sendText(accessToken: String, textRequest: TextRequest, callback: (TextResponse?) -> Unit) {
+    fun sendText(context: Context, accessToken: String, textRequest: TextRequest, callback: (TextResponse?) -> Unit) {
 
         val call = textService.textSend(
             "Bearer $accessToken", textRequest)
@@ -33,7 +36,8 @@ class TextService {
                         callback(response.body())
                     }
                     401 -> {
-                        callback(response.body())
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context.startActivity(startIntent)
                     }
                     500 -> {
                         callback(response.body())

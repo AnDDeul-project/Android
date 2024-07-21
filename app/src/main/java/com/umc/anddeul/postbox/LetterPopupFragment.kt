@@ -34,7 +34,7 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
         val idx = content.postboxIdx
         val loadedToken = loadJwt() // jwt토큰
         val readMailService = ReadMailService()
-        readMailService.readMail(loadedToken, idx.toInt()) { mailDTO ->
+        readMailService.readMail(context, loadedToken, idx.toInt()) { mailDTO ->
             if (mailDTO != null) {
                 if (mailDTO.isSuccess.toString() == "true") {
                     binding.userTv.text = mailDTO.post.receiverIdx
