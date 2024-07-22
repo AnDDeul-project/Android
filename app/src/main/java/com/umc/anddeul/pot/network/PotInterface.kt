@@ -1,5 +1,6 @@
 package com.umc.anddeul.pot.network
 import com.umc.anddeul.pot.model.FlowerRoot
+import com.umc.anddeul.pot.model.GardenRoot
 import com.umc.anddeul.pot.model.LoveRoot
 import com.umc.anddeul.pot.model.PointRoot
 import retrofit2.Call
@@ -17,8 +18,8 @@ interface PotInterface {
     @GET("/garden/mypoint")
     fun getMyPoint() : Call<PointRoot>
 
-    @GET("/garden/get/{flowerid}")
-    fun getFlowerId(
-        @Path("flowerid") flowerid : String
-    )
+    @GET("/garden/get/{flowerId}")
+    fun getGarden(
+        @Path("flowerId") flowerId : Int
+    ) : Call<GardenRoot>
 }

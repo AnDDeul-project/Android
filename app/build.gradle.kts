@@ -113,4 +113,8 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.0")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+
+    //coil
+    implementation ("io.coil-kt:coil:1.2.0")
+    implementation ("io.coil-kt:coil-svg:1.2.0")
 }
