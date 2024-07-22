@@ -105,7 +105,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/font_pretendard_bold"
-                android:text="상대방이 갑자기 좀비로 변한다면?"
+                android:text="가족에게 하고 싶은 말은?"
                 android:textColor="#3C9D80"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
