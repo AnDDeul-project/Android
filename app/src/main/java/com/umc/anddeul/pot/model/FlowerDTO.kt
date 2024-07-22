@@ -1,7 +1,5 @@
 package com.umc.anddeul.pot.model
 
-import retrofit2.Call
-
 data class PointRoot (
     val point : Point
 )
@@ -36,4 +34,20 @@ data class Flower (
     val name : String,
     val img : String,
     val gauge : String
+)
+
+data class GardenRoot (
+    val status : Int,
+    val isSuccess: Boolean,
+    val garden : Garden
+)
+
+data class Garden (
+    val theme : String,
+    val flowers : List<Flowers>
+)
+
+data class Flowers(
+    val idx : String,
+    val img_5 : String
 )

@@ -2,17 +2,23 @@ package com.umc.anddeul.pot
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
+import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.FragmentPotBinding
 import com.umc.anddeul.home.LoadImage
 import com.umc.anddeul.pot.GardenFragment
@@ -94,16 +100,18 @@ class PotFragment : Fragment() {
                     flower.let {
                         binding.potTvPlantsName.text = it?.name.toString()
                         //이미지뷰에 변경
-                        val loadFlower = LoadImage(binding.potImgPlants)
-                        loadFlower.execute(it?.img)
-                        val loadGauge = LoadImage(binding.potImageGauge)
-                        loadGauge.execute(it?.gauge)
+                        binding.potImgPlants.loadImageFromUrl(it?.img!!)
+                        binding.potImageGauge.loadImageFromUrl(it?.gauge!!)
+                    }
+                    if (response.code() == 500) {
+                        AnddeulErrorToast.createToast(context!!, "인터넷 연결이 불안정합니다")?.show()
                     }
                 }
             }
 
             override fun onFailure(call: Call<FlowerRoot>, t: Throwable) {
                 Log.d("Flower CurrentPotService Fail", "flowerCall: ${t.message}")
+                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
             }
         })
 
@@ -127,19 +135,41 @@ class PotFragment : Fragment() {
                     }
                     changedImg.let {
                         //꽃 사진 변경
-                        val laodFlower = LoadImage(binding.potImgPlants)
-                        laodFlower.execute(it?.get(0)?.img)
-
+                        binding.potImgPlants.loadImageFromUrl(it?.get(0)?.img!!)
                         //프로그레스바 이미지 변경
-                        val loadGauge = LoadImage(binding.potImageGauge)
-                        loadGauge.execute(it?.get(1)?.gauge)
+                        binding.potImageGauge.loadImageFromUrl(it?.get(1)?.gauge!!)
+                    }
+                    if (response.code() == 500) {
+                        AnddeulErrorToast.createToast(context!!, "인터넷 연결이 불안정합니다")?.show()
                     }
                 }
             }
 
             override fun onFailure(call: Call<LoveRoot>, t: Throwable) {
                 Log.d("Flower GiveLoveService Fail", "loveCall: ${t.message}")
+                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
             }
         })
+    }
+
+    fun ImageView.loadImageFromUrl(imageUrl: String) {
+        val imageLoader = ImageLoader.Builder(this.context)
+            .componentRegistry { add(SvgDecoder(context))
+            }
+            .build()
+
+        val imageRequest = ImageRequest.Builder(this.context)
+            .crossfade(true)
+            .crossfade(300)
+            .data(imageUrl)
+            .target(
+                onSuccess = { result ->
+                    val bitmap = (result as BitmapDrawable).bitmap
+                    this.setImageBitmap(bitmap)
+                },
+            )
+            .build()
+
+        imageLoader.enqueue(imageRequest)
     }
 }
