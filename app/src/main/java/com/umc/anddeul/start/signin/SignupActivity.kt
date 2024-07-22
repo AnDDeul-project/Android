@@ -11,8 +11,8 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.alarm.DeviceTokenDTO
 import com.umc.anddeul.alarm.DeviceTokenInterface
+import com.umc.anddeul.alarm.DeviceTokenRequest
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
@@ -23,11 +23,12 @@ import com.umc.anddeul.start.StartActivity
 import com.umc.anddeul.start.model.RequestResponse
 import com.umc.anddeul.start.service.RequestService
 import com.umc.anddeul.start.terms.TermsActivity
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SignupActivity: AppCompatActivity()  {
+class SignupActivity : AppCompatActivity() {
     val TAG = "SignupActivity"
     private lateinit var binding: ActivitySignupBinding
 
@@ -58,15 +59,27 @@ class SignupActivity: AppCompatActivity()  {
                         if (signinResponse != null) {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
-                                if (signinResponse.has == true){
+                                if (signinResponse.has == true) {
                                     checkFamilyRequest(loadJwt())
+                                } else {
+                                    // FCM 토큰 발급
+                                    val TAG = "deviceToken"
+                                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            val token = task.result
+                                            Log.d(TAG, token)
+                                            putDeviceToken(token) { success ->
+                                                if (success) {
+                                                    val termsIntent =
+                                                        Intent(this, TermsActivity::class.java)
+                                                    startActivity(termsIntent)
+                                                } else {
+                                                    Log.w(TAG, "Failed to send device token")
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                else {
-                                    val termsIntent = Intent(this, TermsActivity::class.java)
-                                    startActivity(termsIntent)
-                                }
-                            } else {
-                                AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                             }
                         } else {
                             AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
@@ -93,15 +106,27 @@ class SignupActivity: AppCompatActivity()  {
                             if (signinResponse != null) {
                                 if (signinResponse.isSuccess.toString() == "true") {
                                     saveJwt(signinResponse.accessToken.toString())
-                                    if (signinResponse.has == true){
+                                    if (signinResponse.has == true) {
                                         checkFamilyRequest(loadJwt())
+                                    } else {
+                                        // FCM 토큰 발급
+                                        val TAG = "deviceToken"
+                                        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                val token = task.result
+                                                Log.d(TAG, token)
+                                                putDeviceToken(token) { success ->
+                                                    if (success) {
+                                                        val termsIntent =
+                                                            Intent(this, TermsActivity::class.java)
+                                                        startActivity(termsIntent)
+                                                    } else {
+                                                        Log.w(TAG, "Failed to send device token")
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-                                    else {
-                                        val termsIntent = Intent(this, TermsActivity::class.java)
-                                        startActivity(termsIntent)
-                                    }
-                                } else {
-                                    AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                                 }
                             } else {
                                 AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
@@ -117,24 +142,38 @@ class SignupActivity: AppCompatActivity()  {
         //// 다른 카카오 계정으로 회원가입
         binding.newSignUpBtn.setOnClickListener {
             // 카카오계정으로 로그인
-            UserApiClient.instance.loginWithKakaoAccount(this, prompts = listOf(Prompt.LOGIN)) { token, error ->
+            UserApiClient.instance.loginWithKakaoAccount(
+                this,
+                prompts = listOf(Prompt.LOGIN)
+            ) { token, error ->
                 if (error != null) {
                     AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
-                }
-                else if (token != null) {
+                } else if (token != null) {
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
                         if (signinResponse != null) {
                             if (signinResponse.isSuccess.toString() == "true") {
                                 saveJwt(signinResponse.accessToken.toString())
-                                if (signinResponse.has == true){
+                                if (signinResponse.has == true) {
                                     checkFamilyRequest(loadJwt())
+                                } else {
+                                    // FCM 토큰 발급
+                                    val TAG = "deviceToken"
+                                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            val token = task.result
+                                            Log.d(TAG, token)
+                                            putDeviceToken(token) { success ->
+                                                if (success) {
+                                                    val termsIntent =
+                                                        Intent(this, TermsActivity::class.java)
+                                                    startActivity(termsIntent)
+                                                } else {
+                                                    Log.w(TAG, "Failed to send device token")
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                else {
-                                    val termsIntent = Intent(this, TermsActivity::class.java)
-                                    startActivity(termsIntent)
-                                }
-                            } else {
-                                AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
                             }
                         } else {
                             AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다.")?.show()
@@ -146,7 +185,7 @@ class SignupActivity: AppCompatActivity()  {
     }
 
     //// 토큰 저장
-    private fun saveJwt(jwt: String){
+    private fun saveJwt(jwt: String) {
         TokenManager.initialize(this) // 토큰 매니저 초기화
         TokenManager.setToken(jwt)
 
@@ -168,23 +207,23 @@ class SignupActivity: AppCompatActivity()  {
                 if (requestDTO.isSuccess.toString() == "true") {
 
                     // FCM 토큰 발급
-//                    val TAG = "deviceToken"
-//                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-//                        if (task.isSuccessful) {
-//                            val token = task.result
-//                            Log.d(TAG, token)
-//                            putDeviceToken(token) { success ->
-//                                if (success) {
+                    val TAG = "deviceToken"
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val token = task.result
+                            Log.d(TAG, token)
+                            putDeviceToken(token) { success ->
+                                if (success) {
                                     navigateToNextScreen(requestDTO)
-//                                } else {
-//                                    Log.w(TAG, "Failed to send device token")
-//                                }
-//                            }
-//                        } else {
-//                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-//                            AnddeulErrorToast.createToast(this, "디바이스 토큰 전송 실패").show()
-//                        }
-//                    }
+                                } else {
+                                    Log.w(TAG, "Failed to send device token")
+                                }
+                            }
+                        } else {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                            AnddeulErrorToast.createToast(this, "디바이스 토큰 전송 실패").show()
+                        }
+                    }
                 } else {
                     AnddeulErrorToast.createToast(this, "서버 연결이 불안정합니다").show()
                 }
@@ -207,22 +246,21 @@ class SignupActivity: AppCompatActivity()  {
     private fun putDeviceToken(deviceToken: String, callback: (Boolean) -> Unit) {
         val retrofitManager = RetrofitManager.getRetrofitInstance()
         val deviceTokenService = retrofitManager.create(DeviceTokenInterface::class.java)
+        val request = DeviceTokenRequest(deviceToken)
 
-        deviceTokenService.putDeviceToken(deviceToken).enqueue(object : Callback<DeviceTokenDTO> {
+        deviceTokenService.putDeviceToken(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(
-                call: Call<DeviceTokenDTO>,
-                response: Response<DeviceTokenDTO>
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
             ) {
                 Log.e("putDeviceToken response code : ", "${response.code()}")
-                Log.e("putDeviceToken response body : ", "${response.body()}")
 
                 if (response.isSuccessful) {
-                    Log.e("putDeviceToken", "디바이스 토큰 전송 완료")
                     callback(true)
                 }
             }
 
-            override fun onFailure(call: Call<DeviceTokenDTO>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 AnddeulErrorToast.createToast(this@SignupActivity, "서버 연결이 불안정합니다").show()
                 Log.e("putDeviceToken", "디바이스 토큰 전송 실패")
                 Log.e("putDeviceToken", "Failure message: ${t.message}")

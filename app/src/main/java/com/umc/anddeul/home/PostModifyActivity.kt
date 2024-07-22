@@ -10,6 +10,7 @@ import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostModifyBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.adapter.PostVPAdapter
 import com.umc.anddeul.home.model.ModifyRequest
 import com.umc.anddeul.home.model.PostModifyDTO
@@ -67,7 +68,7 @@ class PostModifyActivity : AppCompatActivity() {
 
         val modifyService = retrofitBearer.create(PostModifyInterface::class.java)
 
-        modifyService.modifyPost(postIdx, modifyRequest).enqueue(object : Callback<PostModifyDTO> {
+        modifyService.modifyPost(postIdx, modifyRequest).enqueueWithLogoutOnUnauthorized(this@PostModifyActivity, object : Callback<PostModifyDTO> {
             override fun onResponse(call: Call<PostModifyDTO>, response: Response<PostModifyDTO>) {
                 Log.e("modifyService", "${response.code()}")
                 Log.e("modifyService", "${response.body()}")

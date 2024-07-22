@@ -41,6 +41,7 @@ import com.umc.anddeul.databinding.FragmentHomeBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuMemberBinding
 import com.umc.anddeul.databinding.FragmentHomeMenuRequestMemberBinding
 import com.umc.anddeul.ext.addOnScrollEndListener
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.adapter.PostRVAdapter
 import com.umc.anddeul.home.model.Member
 import com.umc.anddeul.home.model.MemberResponse
@@ -240,7 +241,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
         val myId = saveDataHandler?.getMyId()
         val postService = retrofitBearer.create(PostsInterface::class.java)
 
-        postService.homePosts(page).enqueue(object : Callback<Post> {
+        postService.homePosts(page).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<Post> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 Log.e("postService response code : ", "${response.code()}")
@@ -305,7 +306,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
     private fun loadMemberList() {
         val memberListService = retrofitBearer.create(MemberInterface::class.java)
 
-        memberListService.memberList().enqueue(object : Callback<MemberResponse> {
+        memberListService.memberList().enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<MemberResponse> {
             override fun onResponse(
                 call: Call<MemberResponse>,
                 response: Response<MemberResponse>
@@ -537,7 +538,7 @@ class HomeFragment : Fragment(), ConfirmDialogListener, DeleteDialogListener {
     override fun onDelete(postId: Int) {
         val deleteService = retrofitBearer.create(PostDeleteInterface::class.java)
 
-        deleteService.deletePost(postId).enqueue(object : Callback<PostDelete> {
+        deleteService.deletePost(postId).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<PostDelete> {
             override fun onResponse(call: Call<PostDelete>, response: Response<PostDelete>) {
                 Log.e("deleteService response code : ", "${response.code()}")
                 Log.e("deleteService response body : ", "${response.body()}")

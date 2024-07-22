@@ -17,6 +17,7 @@ import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMyPostBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.DeleteDialog
 import com.umc.anddeul.home.DeleteDialogListener
 import com.umc.anddeul.home.adapter.EmojiRVAdpater
@@ -72,7 +73,7 @@ class MyPostFragment : Fragment(), DeleteDialogListener {
 
         val onePostService = retrofitBearer.create(OnePostInterface::class.java)
 
-        onePostService.onePost(postId).enqueue(object : Callback<OnePostDTO> {
+        onePostService.onePost(postId).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<OnePostDTO> {
             override fun onResponse(call: Call<OnePostDTO>, response: Response<OnePostDTO>) {
                 Log.e("myPostService response code : ", "${response.code()}")
                 Log.e("myPostService response body : ", "${response.body()}")
@@ -210,7 +211,7 @@ class MyPostFragment : Fragment(), DeleteDialogListener {
         val emojiService = retrofitBearer.create(EmojiInterface::class.java)
         val emojiRequest = EmojiRequest(emojiType)
 
-        emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+        emojiService.getEmoji(postId, emojiRequest).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<EmojiDTO> {
             override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
                 Log.e("emojiService", "onResponse code : ${response.code()}")
                 Log.e("emojiService", "${response.body()}")
@@ -257,7 +258,7 @@ class MyPostFragment : Fragment(), DeleteDialogListener {
     override fun onDelete(postId: Int) {
         val deleteService = retrofitBearer.create(PostDeleteInterface::class.java)
 
-        deleteService.deletePost(postId).enqueue(object : Callback<PostDelete> {
+        deleteService.deletePost(postId).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<PostDelete> {
             override fun onResponse(call: Call<PostDelete>, response: Response<PostDelete>) {
                 Log.e("deleteService response code : ", "${response.code()}")
                 Log.e("deleteService response body : ", "${response.body()}")

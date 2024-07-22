@@ -13,6 +13,7 @@ import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.DialogConfirmBinding
 import com.umc.anddeul.ext.dialogResize
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.model.MemberApproveDTO
 import com.umc.anddeul.home.network.MemberApproveInterface
 import retrofit2.Call
@@ -77,7 +78,7 @@ class ConfirmDialog(name: String, groupName: String, userId: String, private val
     private fun approveMember(userId: String) {
         val approveService = retrofitBearer.create(MemberApproveInterface::class.java)
 
-        approveService.approveMember(userId).enqueue(object : Callback<MemberApproveDTO> {
+        approveService.approveMember(userId).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<MemberApproveDTO> {
             override fun onResponse(
                 call: Call<MemberApproveDTO>,
                 response: Response<MemberApproveDTO>

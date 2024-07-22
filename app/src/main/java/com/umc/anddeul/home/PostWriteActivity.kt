@@ -21,6 +21,7 @@ import com.umc.anddeul.common.toast.AnddeulNoLogoToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivityPostWriteBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.adapter.SelectedVPAdapter
 import com.umc.anddeul.home.model.BoardResponse
 import com.umc.anddeul.home.network.BoardInterface
@@ -148,7 +149,7 @@ class PostWriteActivity : AppCompatActivity() {
         Log.e("boardService", "${contentRequestBody}, ${imageParts}")
 
         boardService.homeBoard(contentRequestBody, imageParts)
-            .enqueue(object : Callback<BoardResponse> {
+            .enqueueWithLogoutOnUnauthorized(this@PostWriteActivity, object : Callback<BoardResponse> {
                 override fun onResponse(
                     call: Call<BoardResponse>,
                     response: Response<BoardResponse>

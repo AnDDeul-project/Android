@@ -17,6 +17,7 @@ import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserProfileBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.adapter.UserProfileRVAdapter
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.network.UserProfileInterface
@@ -63,7 +64,7 @@ class UserProfileFragment : Fragment() {
 
         val userProfileService = retrofitBearer.create(UserProfileInterface::class.java)
 
-        userProfileService.getUserProfile(snsId).enqueue(object : Callback<UserProfileDTO> {
+        userProfileService.getUserProfile(snsId).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<UserProfileDTO> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(
                 call: Call<UserProfileDTO>,

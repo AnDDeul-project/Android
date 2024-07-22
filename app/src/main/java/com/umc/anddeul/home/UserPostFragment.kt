@@ -14,6 +14,7 @@ import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentUserPostBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.adapter.EmojiRVAdpater
 import com.umc.anddeul.home.adapter.PostVPAdapter
 import com.umc.anddeul.home.model.EmojiDTO
@@ -62,7 +63,7 @@ class UserPostFragment : Fragment() {
 
         val onePostService = retrofitBearer.create(OnePostInterface::class.java)
 
-        onePostService.onePost(postId).enqueue(object : Callback<OnePostDTO> {
+        onePostService.onePost(postId).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<OnePostDTO> {
             override fun onResponse(call: Call<OnePostDTO>, response: Response<OnePostDTO>) {
                 Log.e("onePostService response code : ", "${response.code()}")
                 Log.e("onePostService response body : ", "${response.body()}")
@@ -149,7 +150,7 @@ class UserPostFragment : Fragment() {
         val emojiService = retrofitBearer.create(EmojiInterface::class.java)
         val emojiRequest = EmojiRequest(emojiType)
 
-        emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+        emojiService.getEmoji(postId, emojiRequest).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<EmojiDTO> {
             override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
                 Log.e("emojiService", "선택한 게시글 id : $postId")
                 Log.e("emojiService", "onResponse code : ${response.code()}")

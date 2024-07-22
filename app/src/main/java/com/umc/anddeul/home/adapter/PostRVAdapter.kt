@@ -14,9 +14,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.umc.anddeul.R
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
-import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentHomeMyUploadBinding
 import com.umc.anddeul.databinding.FragmentHomeUploadBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.model.EmojiDTO
 import com.umc.anddeul.home.model.EmojiRequest
@@ -278,7 +278,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
         val emojiService = retrofitBearer.create(EmojiInterface::class.java)
         val emojiRequest = EmojiRequest(emojiType)
 
-        emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+        emojiService.getEmoji(postId, emojiRequest).enqueueWithLogoutOnUnauthorized(context, object : Callback<EmojiDTO> {
             override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
                 Log.e("emojiService", "onResponse code : ${response.code()}")
                 Log.e("emojiService", "${response.body()}")
@@ -329,7 +329,7 @@ class PostRVAdapter(private val context: Context, var postList: List<PostData>, 
         val emojiService = retrofitBearer.create(EmojiInterface::class.java)
         val emojiRequest = EmojiRequest(emojiType)
 
-        emojiService.getEmoji(postId, emojiRequest).enqueue(object : Callback<EmojiDTO> {
+        emojiService.getEmoji(postId, emojiRequest).enqueueWithLogoutOnUnauthorized(context, object : Callback<EmojiDTO> {
             override fun onResponse(call: Call<EmojiDTO>, response: Response<EmojiDTO>) {
                 Log.e("emojiService", "onResponse code : ${response.code()}")
                 Log.e("emojiService", "${response.body()}")
