@@ -35,6 +35,8 @@ class AddChecklistRVAdapter() : RecyclerView.Adapter<AddChecklistRVAdapter.ViewH
             if (checklist.complete == 0) { //체크 안 되어 있을 때
                 binding.checkliAddBtnChecked.visibility = View.INVISIBLE
                 binding.checkliAddBtnChecking.visibility = View.VISIBLE
+                binding.checkliAddTvWriter.setTextColor(Color.parseColor("#261710"))
+                binding.checkliAddTvChecklist.setTextColor(Color.parseColor("#261710"))
             } else {
                 binding.checkliAddBtnChecked.visibility = View.VISIBLE
                 binding.checkliAddBtnChecking.visibility = View.INVISIBLE

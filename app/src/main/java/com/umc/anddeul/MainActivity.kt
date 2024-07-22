@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
 import com.umc.anddeul.checklist.ChecklistFragment
@@ -62,6 +63,14 @@ class MainActivity : AppCompatActivity() {
 //        }
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        ev?.let {
+            if (it.action == MotionEvent.ACTION_DOWN) {
+                checklistBottomAlarm()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

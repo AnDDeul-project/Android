@@ -7,17 +7,16 @@ data class AddChecklist (
 )
 
 data class AddRoot (
-    var success : Boolean,
-    var check : List<Check>
+    var isSuccess : Boolean,
+    var check : Check
 )
 
 data class Check (
     val check_idx : Int,
-    val due_date : String?,
+    val dueDate : String?,
     val complete : Int,
     val picture : String,
     val content : String,
     val sender : String,
     val receiver : String,
-    var picturePath: String? = null
 )
