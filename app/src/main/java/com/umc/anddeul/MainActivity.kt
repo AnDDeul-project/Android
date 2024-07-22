@@ -56,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         postboxBottomAlarm()
         // 홈 하단바 알림
         homeBottomAlarm()
+        // 체크리스트 하단바 알림
+        checklistBottomAlarm()
 //            }
 //        }
     }
