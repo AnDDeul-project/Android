@@ -124,12 +124,35 @@ class ChecklistFragment : Fragment() {
         binding.checkliAfterBtn.setOnClickListener {
             if (selectedDay < today) {
                 val tempDay = selectedDay.plusWeeks(1)
+                var tempMonday = tempDay
+
+                when (tempDay.dayOfWeek.toString()) {
+                    "TUESDAY" -> {
+                        tempMonday = tempDay.minusDays(1)
+                    }
+                    "WEDNESDAY" -> {
+                        tempMonday = tempDay.minusDays(2)
+                    }
+                    "THURSDAY" -> {
+                        tempMonday = tempDay.minusDays(3)
+                    }
+                    "FRIDAY" -> {
+                        tempMonday = tempDay.minusDays(4)
+                    }
+                    "SATURDAY" -> {
+                        tempMonday = tempDay.minusDays(5)
+                    }
+                    "SUNDAY" -> {
+                        tempMonday = tempDay.minusDays(6)
+                    }
+                }
+
                 if (tempDay == today) {
-                    setWeek(tempDay, service, myId!!)
+                    setWeek(tempDay, service, myId)
                 } else {
-                    if (tempDay <= today) {
+                    if (tempMonday <= today) {
                         selectedDay = tempDay
-                        setSelectedWeek(tempDay, service, myId!!)
+                        setSelectedWeek(selectedDay, service, myId)
                     }
                 }
                 val yearMonth = YearMonth.from(selectedDay)
