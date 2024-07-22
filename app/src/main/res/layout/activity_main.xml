@@ -37,35 +37,6 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:translationZ="9dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_frm">
-
-        <ImageView
-            android:id="@+id/homeCircle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/img_alarm_circle" />
-
-        <TextView
-            android:id="@+id/homeCnt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/font_pretendard_regular"
-            android:gravity="center"
-            android:text="1"
-            android:textColor="@android:color/white"
-            android:textSize="12dp" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:translationZ="9dp"
         android:layout_marginTop="7dp"
         app:layout_constraintEnd_toEndOf="parent"
