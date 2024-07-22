@@ -80,7 +80,7 @@
             <TextView
                 android:id="@+id/letterDate1"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -94,7 +94,7 @@
             <TextView
                 android:id="@+id/letterDate2"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -109,7 +109,7 @@
             <TextView
                 android:id="@+id/letterDate4"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -124,7 +124,7 @@
             <TextView
                 android:id="@+id/letterDate3"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -139,7 +139,7 @@
             <TextView
                 android:id="@+id/letterDate5"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -154,7 +154,7 @@
             <TextView
                 android:id="@+id/letterDate6"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -169,7 +169,7 @@
             <TextView
                 android:id="@+id/letterDate7"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -183,7 +183,7 @@
             <TextView
                 android:id="@+id/letterDay1"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="21dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -197,7 +197,7 @@
             <TextView
                 android:id="@+id/letterDay2"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -212,7 +212,7 @@
             <TextView
                 android:id="@+id/letterDay3"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -227,7 +227,7 @@
             <TextView
                 android:id="@+id/letterDay4"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -242,7 +242,7 @@
             <TextView
                 android:id="@+id/letterDay5"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -257,7 +257,7 @@
             <TextView
                 android:id="@+id/letterDay6"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -272,7 +272,7 @@
             <TextView
                 android:id="@+id/letterDay7"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:layout_marginEnd="21dp"
                 android:fontFamily="@font/pretendard_regular"
