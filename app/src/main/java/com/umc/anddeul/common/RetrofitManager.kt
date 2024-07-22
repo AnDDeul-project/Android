@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitManager {
     private lateinit var retrofitBearer: Retrofit
+    private lateinit var retrofitNoAuth: Retrofit
     var token: String? = null
 
     fun initialize(baseUrl: String) {
@@ -27,6 +28,12 @@ object RetrofitManager {
                     .build()
             )
             .build()
+
+        retrofitNoAuth = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(OkHttpClient.Builder().build()) // 토큰 없이 기본 OkHttpClient 사용
+            .build()
     }
 
     fun getRetrofitInstance(): Retrofit {
@@ -35,4 +42,12 @@ object RetrofitManager {
         }
         return retrofitBearer
     }
+
+    fun getRetrofitInstanceWithoutAuth(): Retrofit {
+        if (!::retrofitNoAuth.isInitialized) {
+            throw UninitializedPropertyAccessException("RetrofitManager must be initialized")
+        }
+        return retrofitNoAuth
+    }
 }
+
