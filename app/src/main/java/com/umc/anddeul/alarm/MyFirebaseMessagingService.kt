@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.umc.anddeul.MainActivity
+import com.umc.anddeul.R
 import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.home.HomeFragment
 import com.umc.anddeul.postbox.PostboxFragment
@@ -25,8 +26,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
             val type = remoteMessage.data["type"]
-            val message = remoteMessage.data["message"]
-            sendNotification(type, message)
+            val title = remoteMessage.data["title"]
+            val message = remoteMessage.data["content"]
+            sendNotification(type, title, message)
         }
 
         // 알림 페이로드가 있는지 확인
@@ -41,7 +43,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // 새로운 토큰을 서버로 전송하는 코드 필요 시 추가
     }
 
-    private fun sendNotification(type: String?, messageBody: String?) {
+    private fun sendNotification(type: String?, title: String?, messageBody: String?) {
         val intent = when (type) {
             "home" -> Intent(this, HomeFragment::class.java)
             "checklist" -> Intent(this, ChecklistFragment::class.java)
@@ -56,7 +58,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val channelId = "default_channel_id"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("안뜰")
+            .setSmallIcon(R.drawable.anddeul_logo)
+            .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
