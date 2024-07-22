@@ -18,6 +18,7 @@ import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageLeaveBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.SaveDataHandler
 import com.umc.anddeul.mypage.model.LeaveDTO
 import com.umc.anddeul.mypage.model.SelectLeaderDTO
@@ -145,7 +146,7 @@ class MyPageLeaveFragment : Fragment() {
         val leaveService = retrofitBearer.create(LeaveInterface::class.java)
         val leaveContent = binding.mypageLeaveReasonEdit.text.toString()
 
-        leaveService.leaveApp(leaveContent).enqueue(object : Callback<LeaveDTO> {
+        leaveService.leaveApp(leaveContent).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<LeaveDTO> {
             override fun onResponse(call: Call<LeaveDTO>, response: Response<LeaveDTO>) {
                 Log.e("leaveService", "${response.code()}")
                 Log.e("leaveService", "${response.body()}")
@@ -181,7 +182,7 @@ class MyPageLeaveFragment : Fragment() {
     private fun selectLeader(userId: String) {
         val selectLeaderService = retrofitBearer.create(SelectLeaderInterface::class.java)
 
-        selectLeaderService.selectLeader(userId).enqueue(object : Callback<SelectLeaderDTO> {
+        selectLeaderService.selectLeader(userId).enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<SelectLeaderDTO> {
             override fun onResponse(
                 call: Call<SelectLeaderDTO>,
                 response: Response<SelectLeaderDTO>

@@ -20,12 +20,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentMypageModifyProfileBinding
+import com.umc.anddeul.ext.enqueueWithLogoutOnUnauthorized
 import com.umc.anddeul.home.LoadProfileImage
 import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.model.ModifyProfileResponse
@@ -166,7 +166,7 @@ class MyPageModifyFragment : Fragment() {
         val usernameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickName)
 
         modifyService.modifyProfile(usernameRequestBody, newProfileImage)
-            .enqueue(object : Callback<ModifyProfileResponse> {
+            .enqueueWithLogoutOnUnauthorized(requireActivity(), object : Callback<ModifyProfileResponse> {
                 override fun onResponse(
                     call: Call<ModifyProfileResponse>,
                     response: Response<ModifyProfileResponse>
