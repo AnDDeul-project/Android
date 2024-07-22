@@ -3,38 +3,26 @@ package com.umc.anddeul.checklist
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ItemChecklistBinding
 import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
 
 
 class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
-    val CAMERA_REQUEST_CODE = 200
     var checklist: List<Checklist>? = null
-    var filePath: String? = null
     lateinit var file : File
-
-    lateinit var currentPhotoPath: String   // 현재 이미지 파일의 경로 저장
     lateinit var currentChecklist : Checklist
-    var currentPhotoFileName: String? = null
+    val REQUEST_CODE = 200
 
     override fun getItemCount(): Int {
         return checklist?.size ?: 0
@@ -63,13 +51,14 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
             }
             else {
-//            checkCameraPermission(currentChecklist)
+                val sharedPreferences: SharedPreferences = context.getSharedPreferences("CheckIdPrefs", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putInt("checkid", currentChecklist.check_idx)
+                editor.apply()
 
-//            val delayMillis : Long = 1000 * 13
-//            holder.binding.checkliBtnCamera.postDelayed({
-//                val file = File("/storage/emulated/0/Android/data/com.umc.anddeul/files/Pictures/${currentPhotoFileName}")
-//                ChecklistService(context).imgApi(currentChecklist, file!!)
-//            }, delayMillis)
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                intent.type = "image/*"
+                (context as Activity).startActivityForResult(intent, REQUEST_CODE)
             }
         }
 
@@ -100,7 +89,7 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
     }
 
     inner class ViewHolder(val binding: ItemChecklistBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(checklist : Checklist) {
+        fun bind(checklist: Checklist) {
             binding.checkliTvChecklist.text = checklist?.content
             binding.checkliTvWriter.text = checklist?.sender + "님이 남기셨습니다."
             if (checklist.picture != null) {
@@ -116,75 +105,6 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
                 binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
             }
-            filePath = currentPhotoFileName
         }
     }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        Log.d("카메라", "시간 ${timeStamp}")
-        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        val file = File.createTempFile(
-            timeStamp,
-            ".jpg",
-            storageDir
-        )
-
-        currentPhotoFileName = file.name
-        currentPhotoPath = file.absolutePath
-
-        return file
-    }
-
-    fun checkCameraPermission(checklist: Checklist) {
-        Log.d("카메라", "권한 함수")
-        if (ContextCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // 권한이 없으면 권한 요청
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(android.Manifest.permission.CAMERA),
-                CAMERA_REQUEST_CODE
-            )
-
-        } else {
-            // 권한이 이미 허용되어 있으면 카메라 열기
-            openCamera(checklist)
-        }
-    }
-
-    fun openCamera(checklist: Checklist) {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (takePictureIntent.resolveActivity(context.packageManager) != null) {
-                // 파일을 저장할 디렉토리 생성
-                val photoFile: File? = try {
-                    val file = createImageFile()
-                    file
-                } catch (ex: IOException) {
-                    null
-                }
-                Log.d("카메라", "file : ${photoFile}")
-                currentChecklist = checklist
-                // 파일이 생성되었다면 카메라 앱에 전달
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        context,
-                        "com.umc.anddeul.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-
-                    (context as Activity).startActivityForResult(
-                        takePictureIntent,
-                        CAMERA_REQUEST_CODE
-                    )
-                }
-                currentChecklist = checklist
-            }
-        }
-    }
+}

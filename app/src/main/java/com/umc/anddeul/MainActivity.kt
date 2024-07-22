@@ -38,10 +38,10 @@ class MainActivity : AppCompatActivity() {
 
         initBottomNavigation() // bottom navigation 설정
 
-//        TokenManager.initialize(this) // 토큰 매니저 초기화
-//        TokenManager.setToken("각자 토큰")
+        TokenManager.initialize(this) // 토큰 매니저 초기화
+        TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcxODM2MjI0Nn0.P4KKwBdmyWOfiBfl9dnQijmKFOngdiIXUMbtQ0McMrY")
 //
-//        RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
+        RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
 
 //        // FCM 토큰 발급
 //        val TAG = "seeToken"

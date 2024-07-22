@@ -34,7 +34,7 @@ class ChecklistService(context : Context) {
     val myId = spfMyId.getString("myId", "")
 
     fun imgApi(checklist: Checklist, file: File, token: String) {
-        val checkId = checklist.check_id
+        val checkId = checklist.check_idx
         val selectedDay = checklist
 
         val imageFileRequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
@@ -72,7 +72,7 @@ class ChecklistService(context : Context) {
 
     fun completeApi(checklist: Checklist) {
         val completeCall : Call<CompleteRoot> = service.complete(
-            checklist.check_id
+            checklist.check_idx
         )
 
         completeCall.enqueue(object : Callback<CompleteRoot> {
