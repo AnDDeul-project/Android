@@ -1,6 +1,7 @@
 package com.umc.anddeul.pot
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -30,6 +31,7 @@ import com.umc.anddeul.pot.model.Point
 import com.umc.anddeul.pot.model.PointRoot
 import com.umc.anddeul.pot.model.Result
 import com.umc.anddeul.pot.network.PotInterface
+import com.umc.anddeul.start.StartActivity
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -106,6 +108,10 @@ class PotFragment : Fragment() {
                     if (response.code() == 500) {
                         AnddeulErrorToast.createToast(context!!, "인터넷 연결이 불안정합니다")?.show()
                     }
+                    if (response.code() == 401) {
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context!!.startActivity(startIntent)
+                    }
                 }
             }
 
@@ -141,6 +147,10 @@ class PotFragment : Fragment() {
                     }
                     if (response.code() == 500) {
                         AnddeulErrorToast.createToast(context!!, "인터넷 연결이 불안정합니다")?.show()
+                    }
+                    if (response.code() == 401) {
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context!!.startActivity(startIntent)
                     }
                 }
             }

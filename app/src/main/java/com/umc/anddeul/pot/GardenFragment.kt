@@ -1,6 +1,7 @@
 package com.umc.anddeul.pot
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.BitmapDrawable
 import android.opengl.Visibility
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.umc.anddeul.R
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
@@ -27,16 +29,18 @@ import com.umc.anddeul.pot.model.GardenRoot
 import com.umc.anddeul.pot.model.Point
 import com.umc.anddeul.pot.model.PointRoot
 import com.umc.anddeul.pot.network.PotInterface
+import com.umc.anddeul.start.StartActivity
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.properties.Delegates
 
 class GardenFragment : Fragment() {
     lateinit var binding : FragmentGardenBinding
-    var flowerId : Int = 0
+    var flowerId = 0
     var season = "봄"
     var token : String? = null
     lateinit var retrofit: Retrofit
@@ -55,16 +59,53 @@ class GardenFragment : Fragment() {
 
         binding.gardenBtnThemeNext.setOnClickListener {
             season = "여름"
-            changeSeason()
+            seasonSet()
+            flowerApi(service)
         }
 
         binding.gardenBtnThemeBefore.setOnClickListener {
             season = "봄"
-            changeSeason()
+            seasonSet()
+            flowerApi(service)
         }
 
-        changeSeason()
+        seasonSet()
+        pointApi(service)
+        flowerApi(service)
 
+        return binding.root
+    }
+
+    private fun flowerApi(service: PotInterface) {
+        val flowerCall : Call<FlowerRoot> = service.getFlower()
+        flowerCall.enqueue(object: Callback<FlowerRoot> {
+            override fun onResponse(call: Call<FlowerRoot>, response: Response<FlowerRoot>) {
+                Log.d("Flower CurrentPotService code", "${response.code()}")
+                Log.d("Flower CurrentPotService body", "${response.body()}")
+
+                if (response.isSuccessful) {
+                    val root : FlowerRoot? = response.body()
+                    val flower : Flower? = root?.flower
+                    flowerId = flower!!.idx
+                    gardenApi(service, flowerId)
+                }
+                if (response.code() == 500) {
+                    AnddeulErrorToast.createToast(context!!, "인터넷 연결이 불안정합니다")?.show()
+                }
+                if (response.code() == 401) {
+                    val startIntent = Intent(context, StartActivity::class.java)
+                    context!!.startActivity(startIntent)
+                }
+            }
+
+            override fun onFailure(call: Call<FlowerRoot>, t: Throwable) {
+                Log.d("Flower CurrentPotService Fail", "flowerCall: ${t.message}")
+                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
+            }
+        })
+    }
+
+    private fun pointApi(service: PotInterface) {
         val myPointCall : Call<PointRoot> = service.getMyPoint()
         myPointCall.enqueue(object : Callback<PointRoot> {
             override fun onResponse(call: Call<PointRoot>, response: Response<PointRoot>) {
@@ -83,6 +124,10 @@ class GardenFragment : Fragment() {
                     if (response.code() == 500) {
                         AnddeulErrorToast.createToast(context!!, "인터넷 연결이 불안정합니다")?.show()
                     }
+                    if (response.code() == 401) {
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context!!.startActivity(startIntent)
+                    }
                 }
             }
 
@@ -91,31 +136,9 @@ class GardenFragment : Fragment() {
                 AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
             }
         })
-
-        val flowerCall : Call<FlowerRoot> = service.getFlower()
-        flowerCall.enqueue(object: Callback<FlowerRoot> {
-            override fun onResponse(call: Call<FlowerRoot>, response: Response<FlowerRoot>) {
-                Log.d("Flower CurrentPotService code", "${response.code()}")
-                Log.d("Flower CurrentPotService body", "${response.body()}")
-
-                if (response.isSuccessful) {
-                    val root : FlowerRoot? = response.body()
-                    val flower : Flower? = root?.flower
-                    flowerId = flower!!.idx
-                }
-            }
-
-            override fun onFailure(call: Call<FlowerRoot>, t: Throwable) {
-                Log.d("Flower CurrentPotService Fail", "flowerCall: ${t.message}")
-                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
-            }
-        })
-
-        gardenApi(service)
-        return binding.root
     }
 
-    private fun gardenApi(service : PotInterface) {
+    private fun gardenApi(service : PotInterface, flowerId : Int) {
         val gardenCall : Call<GardenRoot> = service.getGarden(flowerId)
         gardenCall.enqueue(object: Callback<GardenRoot> {
             override fun onResponse(call: Call<GardenRoot>, response: Response<GardenRoot>) {
@@ -125,22 +148,35 @@ class GardenFragment : Fragment() {
                 if (response.isSuccessful) {
                     val root : GardenRoot? = response.body()
                     val garden : Garden? = root?.garden
-                    season = garden!!.theme
-                    val flowers : List<Flowers>? = garden?.flowers
 
-                    flowers.let {
-                        var i = 0
-                        while (i < flowers!!.size) {
-                            when (i) {
-                                0 -> binding.gardenIvFlower1.loadImageFromUrl(flowers?.get(i)?.img_5!!)
-                                1 -> binding.gardenIvFlower2.loadImageFromUrl(flowers?.get(i)?.img_5!!)
+                    if (season == garden?.theme) {
+                        val flowers: List<Flowers>? = garden?.flowers
+                        flowers.let {
+                            var i = 0
+                            while (i < flowers!!.size) {
+                                when (i) {
+                                    0 -> binding.gardenIvFlower1.loadImageFromUrl(flowers?.get(i)?.img_5!!)
+                                    1 -> binding.gardenIvFlower2.loadImageFromUrl(flowers?.get(i)?.img_5!!)
+                                    2 -> binding.gardenIvFlower3.loadImageFromUrl(flowers?.get(i)?.img_5!!)
+                                    3 -> binding.gardenIvFlower4.loadImageFromUrl(flowers?.get(i)?.img_5!!)
+                                }
+                                i++
                             }
-                            i++
                         }
+                    }
+                    else {
+                        binding.gardenIvFlower1.setImageResource(R.drawable.garden_img_plants1)
+                        binding.gardenIvFlower2.setImageResource(R.drawable.garden_img_plants1)
+                        binding.gardenIvFlower3.setImageResource(R.drawable.garden_img_plants2)
+                        binding.gardenIvFlower4.setImageResource(R.drawable.garden_img_plants2)
                     }
 
                     if (response.code() == 500) {
                         AnddeulErrorToast.createToast(context!!, "인터넷 연결이 불안정합니다")?.show()
+                    }
+                    if (response.code() == 401) {
+                        val startIntent = Intent(context, StartActivity::class.java)
+                        context!!.startActivity(startIntent)
                     }
                 }
             }
@@ -152,7 +188,7 @@ class GardenFragment : Fragment() {
         })
     }
 
-    fun changeSeason() {
+    fun seasonSet() {
         when (season) {
             "봄" -> {
                 binding.gardenBtnThemeBefore.visibility = View.GONE
