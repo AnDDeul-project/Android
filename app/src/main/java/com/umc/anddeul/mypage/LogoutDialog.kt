@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.RetrofitManager
@@ -43,7 +42,7 @@ class LogoutDialog : DialogFragment() {
         binding = FragmentDialogPermissionBinding.inflate(layoutInflater, container, false)
 
         token = TokenManager.getToken()
-        retrofitBearer = RetrofitManager.getRetrofitInstance()
+        retrofitBearer = RetrofitManager.getRetrofitInstanceWithoutAuth()
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명
         binding.dialogPermissionTv.text = "로그아웃 하시겠어요?"
@@ -71,16 +70,15 @@ class LogoutDialog : DialogFragment() {
                 Log.e("logoutService", "${response.body()}")
 
                 if (response.isSuccessful) {
-                    dismiss()
 
                     // 토큰 초기화
-                    val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-                    val editor = spf.edit()
-                    editor.putString("jwtToken", "")
-                    editor.apply()
+                    TokenManager.clearToken()
+                    dismiss()
 
                     // 로그인 화면으로 이동
                     val intent = Intent(activity, StartActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
                     startActivity(intent)
 
                 } else {
