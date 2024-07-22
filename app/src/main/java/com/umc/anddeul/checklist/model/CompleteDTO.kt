@@ -1,6 +1,7 @@
 package com.umc.anddeul.checklist.model
 
 data class CompleteRoot (
+    val status : Int,
     val isSuccess : Boolean,
     val check : CompleteCheck
 )

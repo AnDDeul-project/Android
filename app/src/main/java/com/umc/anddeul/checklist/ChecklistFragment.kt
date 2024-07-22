@@ -1,6 +1,7 @@
 package com.umc.anddeul.checklist
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,7 @@ import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
+import com.umc.anddeul.start.StartActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,10 +92,15 @@ class ChecklistFragment : Fragment() {
                     val context = requireContext()
                     AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
                 }
+
+                if(response.code() == 401) {
+                    val startIntent = Intent(context, StartActivity::class.java)
+                    context!!.startActivity(startIntent)
+                }
             }
 
             override fun onFailure(call: Call<UserProfileDTO>, t: Throwable) {
-                Log.d("구성원", "${t.message}")
+                AnddeulErrorToast.createToast(context!!, "서버 연결이 불안정합니다")?.show()
             }
         })
 
@@ -114,18 +121,19 @@ class ChecklistFragment : Fragment() {
         }
 
         // 다음주
-        //today면 오늘 날짜로 넘김 안 됨.
         binding.checkliAfterBtn.setOnClickListener {
             if (selectedDay < today) {
-                selectedDay = selectedDay.plusWeeks(1)
+                val tempDay = selectedDay.plusWeeks(1)
+                if (tempDay == today) {
+                    setWeek(tempDay, service, myId!!)
+                } else {
+                    if (tempDay <= today) {
+                        selectedDay = tempDay
+                        setSelectedWeek(tempDay, service, myId!!)
+                    }
+                }
                 val yearMonth = YearMonth.from(selectedDay)
                 binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
-
-                if (selectedDay == today) {
-                    setWeek(selectedDay, service, myId!!)
-                } else {
-                    setSelectedWeek(selectedDay, service, myId!!)
-                }
             }
         }
 
@@ -167,6 +175,11 @@ class ChecklistFragment : Fragment() {
 
                 if (response.code() == 451) {
                     AnddeulToast.createToast(context, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
+                }
+
+                if(response.code() == 401) {
+                    val startIntent = Intent(context, StartActivity::class.java)
+                    context!!.startActivity(startIntent)
                 }
             }
 
