@@ -4,22 +4,22 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/bottom_home"
         app:showAsAction="always"
         android:title="홈" />
     <item
         android:id="@+id/checklistFragment"
-        android:icon="@drawable/ic_checklist"
+        android:icon="@drawable/bottom_check"
         app:showAsAction="always"
         android:title="체크리스트" />
     <item
         android:id="@+id/postboxFragment"
-        android:icon="@drawable/ic_postbox"
+        android:icon="@drawable/bottom_postbox"
         app:showAsAction="always"
         android:title="우체통" />
     <item
         android:id="@+id/myPageFragment"
-        android:icon="@drawable/ic_mypage"
+        android:icon="@drawable/bottom_mypage"
         app:showAsAction="always"
         android:title="마이페이지" />
 

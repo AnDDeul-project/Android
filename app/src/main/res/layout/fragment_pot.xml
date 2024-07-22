@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/pot_img_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pot_btn_back" />
+
+    <ImageView
+        android:id="@+id/pot_img_my_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pot_img_point" />
+
+    <ImageView
+        android:id="@+id/pot_img_garden"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="275dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_my_point"
+        app:srcCompat="@drawable/pot_btn_garden" />
+
+    <ImageView
+        android:id="@+id/pot_img_plants"
+        android:layout_width="271.5dp"
+        android:layout_height="340dp"
+        android:layout_marginTop="21dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_my_point"
+        app:srcCompat="@drawable/pot_img_tulip" />
+
+    <ImageView
+        android:id="@+id/pot_image_gauge"
+        android:layout_width="340dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_tv_plants_name"
+        app:srcCompat="@drawable/pot_img_gauge" />
+
+    <ImageView
+        android:id="@+id/pot_img_point_plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_image_gauge"
+        app:srcCompat="@drawable/pot_img_heart" />
+
+    <TextView
+        android:id="@+id/pot_tv_heart_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="0"
+        android:textColor="@color/icon_white"
+        android:textSize="22dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pot_img_my_point"
+        app:layout_constraintEnd_toEndOf="@+id/pot_img_my_point"
+        app:layout_constraintStart_toStartOf="@+id/pot_img_my_point"
+        app:layout_constraintTop_toTopOf="@+id/pot_img_my_point" />
+
+    <TextView
+        android:id="@+id/pot_give_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2"
+        android:textSize="18dp"
+        android:textColor="@color/text_high"
+        android:fontFamily="@font/pretendard_semibold"
+        android:layout_marginStart="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pot_img_point_plus"
+        app:layout_constraintStart_toStartOf="@+id/pot_img_point_plus"
+        app:layout_constraintTop_toTopOf="@+id/pot_img_point_plus" />
+
+    <TextView
+        android:id="@+id/pot_tv_plants_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:lineSpacingExtra="36dp"
+        android:text="식물이름"
+        android:textColor="#3B1F11"
+        android:textSize="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_plants" />
+
+    <TextView
+        android:id="@+id/pot_tv_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="사랑을 주어 식물을 키워보세요"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pot_img_point_plus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
