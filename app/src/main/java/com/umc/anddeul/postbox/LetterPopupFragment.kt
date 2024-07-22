@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.FragmentPopupLetterBinding
 import com.umc.anddeul.postbox.model.Post
@@ -125,7 +126,6 @@ class LetterPopupFragment(private val context: Context, private val onDismissCal
 
     // 토큰 불러오기
     private fun loadJwt(): String {
-        val spf = context.getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-        return spf.getString("jwtToken", null).toString()
+        return TokenManager.getToken().toString()
     }
 }

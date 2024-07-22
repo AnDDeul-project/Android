@@ -2,6 +2,7 @@ package com.umc.anddeul.postbox
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -238,8 +239,7 @@ class LetterListFragment : Fragment() {
 
     // 토큰 불러오기
     private fun loadJwt(): String {
-        val spf = requireActivity().getSharedPreferences("myToken", AppCompatActivity.MODE_PRIVATE)
-        return spf.getString("jwtToken", null).toString()
+        return TokenManager.getToken().toString()
     }
 
 }

@@ -10,6 +10,8 @@ data class FamilyResponse(
 )
 
 data class FamilyData(
+    @SerializedName("family_name") val familyName : String,
+    @SerializedName("family_leader") val familyLeader : String,
     val me : Family,
     @SerializedName("family_code") val familyCode : String,
     val family : List<Family>,
