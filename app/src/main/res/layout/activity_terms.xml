@@ -109,7 +109,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/terms1"
-                    android:layout_width="409dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="299dp">
 
@@ -217,7 +217,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/terms2"
-                    android:layout_width="409dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp">
 
@@ -326,7 +326,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/terms3"
-                    android:layout_width="409dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp">
 

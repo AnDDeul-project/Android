@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/letterIv"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/postbox_letterbox" />
@@ -51,8 +51,8 @@
 
     <ImageView
         android:id="@+id/recordIv"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

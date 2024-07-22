@@ -189,7 +189,7 @@
             <TextView
                 android:id="@+id/postDate2"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -204,7 +204,7 @@
             <TextView
                 android:id="@+id/postDate4"
                 android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="186dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -278,7 +278,7 @@
             <TextView
                 android:id="@+id/postDay1"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="21dp"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
@@ -292,7 +292,7 @@
             <TextView
                 android:id="@+id/postDay2"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -307,7 +307,7 @@
             <TextView
                 android:id="@+id/postDay3"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -337,7 +337,7 @@
             <TextView
                 android:id="@+id/postDay5"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
@@ -367,7 +367,7 @@
             <TextView
                 android:id="@+id/postDay7"
                 android:layout_width="11dp"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="158dp"
                 android:layout_marginEnd="21dp"
                 android:fontFamily="@font/pretendard_regular"
