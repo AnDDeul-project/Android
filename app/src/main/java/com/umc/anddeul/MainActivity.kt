@@ -12,6 +12,7 @@ import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.service.ChecklistAlarmService
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
+import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ActivityMainBinding
 import com.umc.anddeul.home.HomeFragment
 import com.umc.anddeul.home.service.HomeAlarmService
@@ -25,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     val REQUEST_IMAGE_CAPTURE = 200
-    val checklistRVAdapter = ChecklistRVAdapter(this)
 
     private val myPageViewModel: MyPageViewModel by viewModels()
 
@@ -61,6 +61,18 @@ class MainActivity : AppCompatActivity() {
 //        }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                data?.data.let {uri ->
+
+                }
+            }
+            AnddeulToast.createToast(this, "사진 업로드는 다음 업데이트를 기다려주세요")?.show()
+        }
+    }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         ev?.let {
             if (it.action == MotionEvent.ACTION_DOWN) {
@@ -68,20 +80,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        lateinit var file : File
-
-        when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> {
-                if (resultCode == RESULT_OK) {
-                    val checklistFragment = ChecklistFragment()
-                    Log.d("확인","체크리스트: $, 파일: ${checklistFragment.checklistRVAdapter?.file}")
-                }
-            }
-        }
     }
 
     private fun initBottomNavigation() {

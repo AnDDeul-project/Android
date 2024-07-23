@@ -33,9 +33,8 @@ class ChecklistService(context : Context) {
     val spfMyId = context.getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
     val myId = spfMyId.getString("myId", "")
 
-    fun imgApi(checklist: Checklist, file: File, token: String) {
+    fun imgApi(checklist: Checklist, file: File) {
         val checkId = checklist.check_idx
-        val selectedDay = checklist
 
         val imageFileRequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
         val imagePart = MultipartBody.Part.createFormData("image", file.name, imageFileRequestBody)
@@ -86,7 +85,6 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         check.let {
-                            Log.d("확", "${checklist}")
                             readApi(check?.due_date!!, myId!!)
                         }
                     }

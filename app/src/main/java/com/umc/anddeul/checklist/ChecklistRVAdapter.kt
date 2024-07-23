@@ -6,15 +6,23 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ItemChecklistBinding
+import com.umc.anddeul.home.HomeFragment
+import com.umc.anddeul.home.PostWriteActivity
 import java.io.File
 
 
@@ -51,14 +59,11 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
             }
             else {
-                val sharedPreferences: SharedPreferences = context.getSharedPreferences("CheckIdPrefs", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.putInt("checkid", currentChecklist.check_idx)
-                editor.apply()
-
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 intent.type = "image/*"
+                intent.putExtra("checkId", currentChecklist.check_idx)
                 (context as Activity).startActivityForResult(intent, REQUEST_CODE)
+
             }
         }
 
