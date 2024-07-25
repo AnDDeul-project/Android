@@ -86,9 +86,6 @@ class ChecklistRVAdapter(private val context : Context, private val onItemClicke
 
             //카메라 앱 연동 함수
             binding.checkliBtnCamera.setOnClickListener {
-                //함수 호출
-                // currentChecklist = checklist.get(position)
-
                 if (currentChecklist.complete == 0) {
                     AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
                 }
