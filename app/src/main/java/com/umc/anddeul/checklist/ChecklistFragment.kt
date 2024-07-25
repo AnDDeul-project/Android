@@ -1,14 +1,23 @@
 package com.umc.anddeul.checklist
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.ext.SdkExtensions
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -17,11 +26,13 @@ import com.umc.anddeul.R
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.Root
 import com.umc.anddeul.checklist.network.ChecklistInterface
+import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.FragmentChecklistBinding
+import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
@@ -41,22 +52,72 @@ import java.util.Locale
 
 class ChecklistFragment : Fragment() {
     lateinit var binding: FragmentChecklistBinding
-    var token : String? = null
-    lateinit var retrofit : Retrofit
+    var token: String? = null
+    lateinit var retrofit: Retrofit
 
     private var currentStartOfWeek: LocalDate = LocalDate.now()
-    lateinit var selectedDateText : String
-    lateinit var checklistRVAdapter : ChecklistRVAdapter
+    lateinit var selectedDateText: String
+    lateinit var checklistRVAdapter: ChecklistRVAdapter
     val today = LocalDate.now()
     private var selectedDay: LocalDate = LocalDate.now()
+    private var currentCheckId: Int? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            currentCheckId?.let { ChecklistService(requireActivity()).imgApi(it, uri) }
+        } else {
+            // 선택한 이미지가 없을 경우
+        }
+    }
+
+    private val albumLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                // 선택한 이미지의 경로 데이터를 관리하는 Uri 객체를 추출
+                val selectedImageUri: Uri? = result.data?.data
+                selectedImageUri?.let { uri ->
+                    // 선택한 이미지가 있을 경우
+                    currentCheckId?.let { checkId ->
+                        ChecklistService(requireActivity()).imgApi(checkId, uri)
+                    }
+                } ?: run {
+                    // 선택한 이미지가 없을 경우 처리
+                }
+            }
+        }
+
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                startAlbumLauncher()
+            } else {
+                val permissionDialog = PermissionDialog()
+                permissionDialog.isCancelable = false
+                permissionDialog.show(parentFragmentManager, "permission dialog")
+            }
+        }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentChecklistBinding.inflate(inflater, container, false)
 
         //리사이클러뷰 연결
-        checklistRVAdapter = ChecklistRVAdapter(requireContext())
+        checklistRVAdapter = ChecklistRVAdapter(requireContext()) {
+            currentCheckId = it
+            if (isPhotoPickerAvailable()) {
+                startPhotoPicker()
+            } else {
+                checkPermission()
+            }
+        }
         binding.checklistRecylerView.adapter = checklistRVAdapter
-        binding.checklistRecylerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.checklistRecylerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         //spf 받아오기
         token = TokenManager.getToken()
@@ -68,15 +129,15 @@ class ChecklistFragment : Fragment() {
         val service = retrofit.create(ChecklistInterface::class.java)
         val serviceUser = retrofit.create(UserProfileInterface::class.java)
 
-        val profileCall : Call<UserProfileDTO> = serviceUser.getUserProfile(myId!!)
+        val profileCall: Call<UserProfileDTO> = serviceUser.getUserProfile(myId!!)
         profileCall.enqueue(object : Callback<UserProfileDTO> {
             override fun onResponse(
                 call: Call<UserProfileDTO>,
                 response: Response<UserProfileDTO>
             ) {
                 if (response.isSuccessful) {
-                    val root : UserProfileDTO? = response.body()
-                    val result : UserProfileData? = root?.result
+                    val root: UserProfileDTO? = response.body()
+                    val result: UserProfileData? = root?.result
 
                     Log.d("구성원", "${result}")
                     result.let {
@@ -93,7 +154,7 @@ class ChecklistFragment : Fragment() {
                     AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
                 }
 
-                if(response.code() == 401) {
+                if (response.code() == 401) {
                     val startIntent = Intent(context, StartActivity::class.java)
                     context!!.startActivity(startIntent)
                 }
@@ -114,8 +175,7 @@ class ChecklistFragment : Fragment() {
             binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
             if (selectedDay == today) {
                 setWeek(selectedDay, service, myId!!)
-            }
-            else {
+            } else {
                 setSelectedWeek(selectedDay, service, myId!!)
             }
         }
@@ -130,18 +190,23 @@ class ChecklistFragment : Fragment() {
                     "TUESDAY" -> {
                         tempMonday = tempDay.minusDays(1)
                     }
+
                     "WEDNESDAY" -> {
                         tempMonday = tempDay.minusDays(2)
                     }
+
                     "THURSDAY" -> {
                         tempMonday = tempDay.minusDays(3)
                     }
+
                     "FRIDAY" -> {
                         tempMonday = tempDay.minusDays(4)
                     }
+
                     "SATURDAY" -> {
                         tempMonday = tempDay.minusDays(5)
                     }
+
                     "SUNDAY" -> {
                         tempMonday = tempDay.minusDays(6)
                     }
@@ -165,8 +230,8 @@ class ChecklistFragment : Fragment() {
         return binding.root
     }
 
-    fun readApi(service : ChecklistInterface, myId : String) {
-        val readCall : Call<Root> = service.getChecklist(
+    fun readApi(service: ChecklistInterface, myId: String) {
+        val readCall: Call<Root> = service.getChecklist(
             myId!!,
             false,
             selectedDay.toString()
@@ -184,8 +249,8 @@ class ChecklistFragment : Fragment() {
                 val context = requireContext()
 
                 if (response.isSuccessful) {
-                    val root : Root? = response.body()
-                    val result : List<Checklist>? = root?.checklist
+                    val root: Root? = response.body()
+                    val result: List<Checklist>? = root?.checklist
 
                     result?.let {
                         checklistRVAdapter.setChecklistData(it)
@@ -200,7 +265,7 @@ class ChecklistFragment : Fragment() {
                     AnddeulToast.createToast(context, "해당 날짜에 만들어진 체크리스트가 없습니다.")?.show()
                 }
 
-                if(response.code() == 401) {
+                if (response.code() == 401) {
                     val startIntent = Intent(context, StartActivity::class.java)
                     context!!.startActivity(startIntent)
                 }
@@ -219,7 +284,7 @@ class ChecklistFragment : Fragment() {
     }
 
     //오늘 날짜 동그라미 함수
-    private fun setWeek(startOfWeek: LocalDate, service : ChecklistInterface, spfMyId : String) {
+    private fun setWeek(startOfWeek: LocalDate, service: ChecklistInterface, spfMyId: String) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
         binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
@@ -269,16 +334,24 @@ class ChecklistFragment : Fragment() {
                             return true
                         }
                     })
-                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    dateTextView?.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
                     dayTextView?.setTextColor(Color.parseColor("#1D1D1D"))
-                    dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
-                    dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
-                }
-                else {
+                    dayTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
+                    dateTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
+                } else {
                     dateTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
-                    dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
-                    dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
+                    dayTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
+                    dateTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 }
             }
 
@@ -291,8 +364,7 @@ class ChecklistFragment : Fragment() {
                 selectedDay = selectDate
                 if (selectedDay == today) {
                     setWeek(selectedDay, service, spfMyId)
-                }
-                else {
+                } else {
                     setSelectedWeek(selectedDay, service, spfMyId)
                 }
             }
@@ -301,7 +373,11 @@ class ChecklistFragment : Fragment() {
     }
 
     //내가 선택한 날짜로 넘어가기 및 동그라미
-    private fun setSelectedWeek(startOfWeek: LocalDate, service : ChecklistInterface, spfMyId : String) {
+    private fun setSelectedWeek(
+        startOfWeek: LocalDate,
+        service: ChecklistInterface,
+        spfMyId: String
+    ) {
         val nearestMonday = startOfWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val yearMonth = YearMonth.from(nearestMonday)
         binding.checkliSelectDateTv.text = "${yearMonth.year}년 ${yearMonth.monthValue}월"
@@ -350,16 +426,24 @@ class ChecklistFragment : Fragment() {
                             return true
                         }
                     })
-                    dateTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    dateTextView?.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
                     dayTextView?.setTextColor(Color.parseColor("#1D1D1D"))
-                    dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
-                    dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
-                }
-                else {
+                    dayTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
+                    dateTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_bold)
+                } else {
                     dateTextView?.setTextColor(Color.parseColor("#666666"))
                     dayTextView?.setTextColor(Color.parseColor("#666666"))
-                    dayTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
-                    dateTextView?.typeface = ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
+                    dayTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
+                    dateTextView?.typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.font_pretendard_regular)
                 }
             }
 
@@ -372,8 +456,7 @@ class ChecklistFragment : Fragment() {
                 selectedDay = selectDate
                 if (selectedDay == today) {
                     setWeek(selectedDay, service, spfMyId)
-                }
-                else {
+                } else {
                     setSelectedWeek(selectedDay, service, spfMyId)
                 }
             }
@@ -385,4 +468,44 @@ class ChecklistFragment : Fragment() {
         val formatter = DateTimeFormatter.ofPattern("dd", Locale.getDefault())
         return date.format(formatter)
     }
+
+    private fun isPhotoPickerAvailable(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            true
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            SdkExtensions.getExtensionVersion(Build.VERSION_CODES.R) >= 2
+        } else {
+            false
+        }
+    }
+
+    private fun checkPermission() {
+        val permissionReadExternal = android.Manifest.permission.READ_EXTERNAL_STORAGE
+
+        val permissionReadExternalGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            permissionReadExternal
+        ) == PackageManager.PERMISSION_GRANTED
+
+        // 포토피커를 사용하지 못하는 버전만 권한 확인 (SDK 30 미만)
+        if (permissionReadExternalGranted) {
+            startAlbumLauncher()
+        } else {
+            permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    @SuppressLint("IntentReset")
+    fun startAlbumLauncher() {
+        val albumIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        albumIntent.type = "image/*"
+        albumLauncher.launch(albumIntent)
+    }
+
+    private fun startPhotoPicker() {
+        pickImageLauncher.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
+    }
+
 }
