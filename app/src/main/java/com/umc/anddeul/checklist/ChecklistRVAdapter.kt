@@ -1,36 +1,24 @@
 package com.umc.anddeul.checklist
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
-import android.net.Uri
-import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ItemChecklistBinding
-import com.umc.anddeul.home.HomeFragment
-import com.umc.anddeul.home.PostWriteActivity
 import java.io.File
 
 
-class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
+class ChecklistRVAdapter(private val context : Context, private val onItemClicked: (Int) -> Unit) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
     var checklist: List<Checklist>? = null
     lateinit var file : File
-    lateinit var currentChecklist : Checklist
-    val REQUEST_CODE = 200
+    private lateinit var currentChecklist : Checklist
+    private val REQUEST_CODE = 200
+
 
     override fun getItemCount(): Int {
         return checklist?.size ?: 0
@@ -48,23 +36,8 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
     override fun onBindViewHolder(holder: ChecklistRVAdapter.ViewHolder, position: Int) {
 
         //체크리스트 리사이클러뷰 연결
-        holder.bind(checklist!!.get(position))
-
-        //카메라 앱 연동 함수
-        holder.binding.checkliBtnCamera.setOnClickListener {
-            //함수 호출
-            currentChecklist = checklist!!.get(position)
-
-            if (currentChecklist.complete == 0) {
-                AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
-            }
-            else {
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                intent.type = "image/*"
-                intent.putExtra("checkId", currentChecklist.check_idx)
-                (context as Activity).startActivityForResult(intent, REQUEST_CODE)
-
-            }
+        checklist?.getOrNull(position)?.let { item ->
+            holder.bind(item)
         }
 
         holder.binding.checkliBtnChecking.setOnClickListener {
@@ -109,6 +82,23 @@ class ChecklistRVAdapter(private val context : Context) : RecyclerView.Adapter<C
                 binding.checkliBtnChecked.visibility = View.VISIBLE
                 binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
                 binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
+            }
+
+            //카메라 앱 연동 함수
+            binding.checkliBtnCamera.setOnClickListener {
+                //함수 호출
+                // currentChecklist = checklist.get(position)
+
+                if (currentChecklist.complete == 0) {
+                    AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
+                }
+                else {
+//                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//                intent.type = "image/*"
+//                intent.putExtra("checkId", currentChecklist.check_idx)
+//                (context as Activity).startActivityForResult(intent, REQUEST_CODE)
+                    onItemClicked(checklist.check_idx)
+                }
             }
         }
     }
