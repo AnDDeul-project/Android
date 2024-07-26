@@ -78,7 +78,9 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         checkImg?.let {
-
+                            val due_date = checkImg.due_date
+                            Log.d("Checklist", "${checkImg}")
+                            readApi(due_date, myId!!)
                         }
                     }
                 }

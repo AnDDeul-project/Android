@@ -16,9 +16,6 @@ import java.io.File
 class ChecklistRVAdapter(private val context : Context, private val onItemClicked: (Int) -> Unit) : RecyclerView.Adapter<ChecklistRVAdapter.ViewHolder>() {
     var checklist: List<Checklist>? = null
     lateinit var file : File
-    private lateinit var currentChecklist : Checklist
-    private val REQUEST_CODE = 200
-
 
     override fun getItemCount(): Int {
         return checklist?.size ?: 0
@@ -86,7 +83,7 @@ class ChecklistRVAdapter(private val context : Context, private val onItemClicke
 
             //카메라 앱 연동 함수
             binding.checkliBtnCamera.setOnClickListener {
-                if (currentChecklist.complete == 0) {
+                if (checklist.complete == 0) {
                     AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
                 }
                 else {
