@@ -2,6 +2,7 @@ package com.umc.anddeul.checklist
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ItemChecklistBinding
+import okhttp3.internal.notify
 import java.io.File
 
 
@@ -21,8 +23,10 @@ class ChecklistRVAdapter(private val context : Context, private val onItemClicke
         return checklist?.size ?: 0
     }
 
-    fun setChecklistData(checklist: List<Checklist>) {
-        this.checklist = checklist
+    fun setChecklistData(list: List<Checklist>) {
+        Log.d("Checklist", "setChecklistData 진입")
+        Log.d("Checklist", "${list}")
+        checklist = list
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ChecklistRVAdapter.ViewHolder {
@@ -38,15 +42,14 @@ class ChecklistRVAdapter(private val context : Context, private val onItemClicke
         }
 
         holder.binding.checkliBtnChecking.setOnClickListener {
-            ChecklistService(context).completeApi(checklist!!.get(position))
+            ChecklistService(context).completeApi(checklist!!.get(position), position)
             checking(holder.binding)
         }
 
         holder.binding.checkliBtnChecked.setOnClickListener {
-            ChecklistService(context).completeApi(checklist!!.get(position))
+            ChecklistService(context).completeApi(checklist!!.get(position), position)
             checked(holder.binding)
         }
-
     }
 
     fun checking(binding : ItemChecklistBinding) {
@@ -67,18 +70,25 @@ class ChecklistRVAdapter(private val context : Context, private val onItemClicke
         fun bind(checklist: Checklist) {
             binding.checkliTvChecklist.text = checklist?.content
             binding.checkliTvWriter.text = checklist?.sender + "님이 남기셨습니다."
-            if (checklist.picture != null) {
-                binding.checkliIvPhoto.visibility = View.VISIBLE
-                val loadCheckImg = LoadCheckImg(binding.checkliIvPhoto)
-                loadCheckImg.execute(checklist.picture)
-            } else {
-                binding.checkliIvPhoto.visibility = View.GONE
-            }
             if (checklist.complete == 1) {
                 binding.checkliBtnChecking.visibility = View.INVISIBLE
                 binding.checkliBtnChecked.visibility = View.VISIBLE
                 binding.checkliTvWriter.setTextColor(Color.parseColor("#BFBFBF"))
                 binding.checkliTvChecklist.setTextColor(Color.parseColor("#BFBFBF"))
+                if (checklist.picture != null) {
+                    binding.checkliIvPhoto.visibility = View.VISIBLE
+                    val loadCheckImg = LoadCheckImg(binding.checkliIvPhoto)
+                    loadCheckImg.execute(checklist.picture)
+                } else {
+                    binding.checkliIvPhoto.visibility = View.GONE
+                }
+            }
+            else {
+                binding.checkliBtnChecking.visibility = View.VISIBLE
+                binding.checkliBtnChecked.visibility = View.INVISIBLE
+                binding.checkliTvWriter.setTextColor(Color.parseColor("#261710"))
+                binding.checkliTvChecklist.setTextColor(Color.parseColor("#261710"))
+                binding.checkliIvPhoto.visibility = View.GONE
             }
 
             //카메라 앱 연동 함수
@@ -87,10 +97,6 @@ class ChecklistRVAdapter(private val context : Context, private val onItemClicke
                     AnddeulToast.createToast(context, "체크리스트 달성 전에는 인증샷을 추가할 수 없습니다.")?.show()
                 }
                 else {
-//                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//                intent.type = "image/*"
-//                intent.putExtra("checkId", currentChecklist.check_idx)
-//                (context as Activity).startActivityForResult(intent, REQUEST_CODE)
                     onItemClicked(checklist.check_idx)
                 }
             }

@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.model.Root
@@ -36,6 +37,7 @@ import com.umc.anddeul.home.PermissionDialog
 import com.umc.anddeul.home.model.UserProfileDTO
 import com.umc.anddeul.home.model.UserProfileData
 import com.umc.anddeul.home.network.UserProfileInterface
+import com.umc.anddeul.pot.PotFragment
 import com.umc.anddeul.start.StartActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -123,7 +125,6 @@ class ChecklistFragment : Fragment() {
         token = TokenManager.getToken()
         val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
         val myId = spfMyId.getString("myId", "")
-
         retrofit = RetrofitManager.getRetrofitInstance()
 
         val service = retrofit.create(ChecklistInterface::class.java)
@@ -146,10 +147,6 @@ class ChecklistFragment : Fragment() {
                 }
 
                 if (response.code() == 500) {
-                    val checklist = ArrayList<Checklist>()
-                    checklistRVAdapter.setChecklistData(checklist)
-                    checklistRVAdapter.notifyDataSetChanged()
-
                     val context = requireContext()
                     AnddeulErrorToast.createToast(context, "인터넷 연결이 불안정합니다")?.show()
                 }
@@ -225,9 +222,28 @@ class ChecklistFragment : Fragment() {
             }
         }
 
+        binding.refresh.setOnRefreshListener {
+            binding.refresh.isRefreshing=false
+            binding.refresh.setColorSchemeResources(R.color.primary)
+            readApi(service, myId!!)
+        }
+
         selectedDateText = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val spfMyId = requireActivity().getSharedPreferences("myIdSpf", Context.MODE_PRIVATE)
+        val myId = spfMyId.getString("myId", "")
+
+        retrofit = RetrofitManager.getRetrofitInstance()
+        val service = retrofit.create(ChecklistInterface::class.java)
+
+        Log.d("Checklist", "onResume 실행")
+
+        readApi(service, myId!!)
     }
 
     fun readApi(service: ChecklistInterface, myId: String) {
@@ -243,10 +259,10 @@ class ChecklistFragment : Fragment() {
                 Log.d("Checklist ReadService code", "${response.code()}")
                 Log.d("Checklist ReadService body", "${response.body()}")
 
+                val context = requireContext()
                 val checklist = ArrayList<Checklist>()
                 checklistRVAdapter.setChecklistData(checklist)
                 checklistRVAdapter.notifyDataSetChanged()
-                val context = requireContext()
 
                 if (response.isSuccessful) {
                     val root: Root? = response.body()
@@ -507,5 +523,4 @@ class ChecklistFragment : Fragment() {
             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
         )
     }
-
 }

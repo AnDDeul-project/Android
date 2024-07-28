@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
+import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.CheckImg
 import com.umc.anddeul.checklist.model.CheckImgRoot
@@ -17,6 +19,7 @@ import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.toast.AnddeulToast
+import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.start.StartActivity
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -78,9 +81,8 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         checkImg?.let {
-                            val due_date = checkImg.due_date
                             Log.d("Checklist", "${checkImg}")
-                            readApi(due_date, myId!!)
+                            val due_date = checkImg.due_date
                         }
                     }
                 }
@@ -93,7 +95,7 @@ class ChecklistService(context : Context) {
         })
     }
 
-    fun completeApi(checklist: Checklist) {
+    fun completeApi(checklist: Checklist, position : Int) {
         val completeCall : Call<CompleteRoot> = service.complete(
             checklist.check_idx
         )
@@ -109,7 +111,8 @@ class ChecklistService(context : Context) {
 
                     if (root?.isSuccess == true) {
                         check.let {
-                            readApi(check?.due_date!!, myId!!)
+                            val due_date = check?.due_date
+                            readApi(due_date!!, myId!!, position)
                         }
                     }
 
@@ -130,7 +133,7 @@ class ChecklistService(context : Context) {
         })
     }
 
-    fun readApi(due_date : String, myId : String) {
+    fun readApi(due_date : String, myId : String, position: Int) {
         val readCall : Call<Root> = service.getChecklist(
             myId!!,
             false,
@@ -139,12 +142,12 @@ class ChecklistService(context : Context) {
 
         readCall.enqueue(object : Callback<Root> {
             override fun onResponse(call: Call<Root>, response: Response<Root>) {
+                Log.d("Checklist ReadService code", "${response.code()}")
+                Log.d("Checklist ReadService body", "${response.body()}")
+
                 val checklist = ArrayList<Checklist>()
                 checklistRVAdapter.setChecklistData(checklist)
                 checklistRVAdapter.notifyDataSetChanged()
-
-                Log.d("Checklist ReadService code", "${response.code()}")
-                Log.d("Checklist ReadService body", "${response.body()}")
 
                 if (response.isSuccessful) {
                     val root : Root? = response.body()
@@ -153,6 +156,7 @@ class ChecklistService(context : Context) {
                     result?.let {
                         checklistRVAdapter.setChecklistData(it)
                         checklistRVAdapter.notifyDataSetChanged()
+                        Log.d("Checklist", "읽기 api ${it}")
                     }
                 }
                 if (response.code() == 500) {
@@ -171,9 +175,11 @@ class ChecklistService(context : Context) {
 
             override fun onFailure(call: Call<Root>, t: Throwable) {
                 Log.d("Checklist ReadService Fail", "readCall: ${t.message}")
+                val checklist = ArrayList<Checklist>()
+                checklistRVAdapter.setChecklistData(checklist)
+                checklistRVAdapter.notifyDataSetChanged()
                 AnddeulErrorToast.createToast(contextService, "서버 연결이 불안정합니다").show()
             }
         })
     }
-
 }
