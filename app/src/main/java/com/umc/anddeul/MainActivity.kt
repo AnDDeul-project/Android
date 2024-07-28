@@ -60,19 +60,7 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                data?.data.let {uri ->
-
-                }
-            }
-            AnddeulToast.createToast(this, "사진 업로드는 다음 업데이트를 기다려주세요")?.show()
-        }
-    }
-
+    
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         ev?.let {
             if (it.action == MotionEvent.ACTION_DOWN) {

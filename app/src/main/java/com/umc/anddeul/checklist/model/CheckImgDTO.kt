@@ -7,5 +7,6 @@ data class CheckImgRoot (
 
 data class CheckImg (
     var checkid : Int,
-    var picture : String
+    var picture : String,
+    var due_date : String
 )
