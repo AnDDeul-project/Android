@@ -1,6 +1,5 @@
 package com.umc.anddeul.start.service
 
-import android.util.Log
 import com.umc.anddeul.start.model.RequestResponse
 import com.umc.anddeul.start.network.RequestInterface
 import retrofit2.Call

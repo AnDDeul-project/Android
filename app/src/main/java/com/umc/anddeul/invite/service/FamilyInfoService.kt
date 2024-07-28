@@ -1,6 +1,5 @@
 package com.umc.anddeul.invite.service
 
-import android.util.Log
 import com.umc.anddeul.invite.network.InviteInterface
 import com.umc.anddeul.invite.model.FamilyInfoResponse
 import retrofit2.Call

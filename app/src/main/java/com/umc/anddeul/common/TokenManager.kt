@@ -2,7 +2,6 @@ package com.umc.anddeul.common
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 
 object TokenManager {
     private const val SHARED_PREF_NAME = "myToken"

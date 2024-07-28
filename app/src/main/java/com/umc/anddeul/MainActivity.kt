@@ -1,64 +1,33 @@
 package com.umc.anddeul
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.activity.viewModels
 import com.umc.anddeul.checklist.ChecklistFragment
-import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.service.ChecklistAlarmService
-import com.umc.anddeul.common.RetrofitManager
-import com.umc.anddeul.common.TokenManager
-import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ActivityMainBinding
 import com.umc.anddeul.home.HomeFragment
-import com.umc.anddeul.home.service.HomeAlarmService
 import com.umc.anddeul.mypage.MyPageFragment
-import com.umc.anddeul.mypage.MyPageViewModel
 import com.umc.anddeul.postbox.PostboxFragment
 import com.umc.anddeul.postbox.service.PostboxAlarmService
-import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    val REQUEST_IMAGE_CAPTURE = 200
-
-    private val myPageViewModel: MyPageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
         initBottomNavigation() // bottom navigation 설정
 
-//        TokenManager.initialize(this) // 토큰 매니저 초기화
-//        TokenManager.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrYWthb19pZCI6WyIzMzI0MTg1MDA0Il0sImlhdCI6MTcxODM2MjI0Nn0.P4KKwBdmyWOfiBfl9dnQijmKFOngdiIXUMbtQ0McMrY")
-//
-//        RetrofitManager.initialize("https://umc-garden.store") // RetrofitManager 초기화
-
-//        // FCM 토큰 발급
-//        val TAG = "seeToken"
-//        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                val token = task.result
-//                // Use the token as needed
-//                Log.d(TAG, token)
-//            } else {
-//                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-//
         // 가족 우체통 하단바 알림
         postboxBottomAlarm()
         // 체크리스트 하단바 알림
         checklistBottomAlarm()
-//            }
-//        }
     }
     
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

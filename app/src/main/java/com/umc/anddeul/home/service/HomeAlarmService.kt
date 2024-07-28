@@ -1,6 +1,5 @@
 package com.umc.anddeul.home.service
 
-import android.util.Log
 import com.umc.anddeul.home.model.HomeAlarmResponse
 import com.umc.anddeul.home.network.HomeAlarmInterface
 import retrofit2.Call

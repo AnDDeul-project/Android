@@ -4,11 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.databinding.ActivityStartBinding
-import com.umc.anddeul.invite.JoinGroupSendActivity
-import com.umc.anddeul.start.service.RequestService
-import com.umc.anddeul.start.service.TokenService
 import com.umc.anddeul.start.signin.LoginActivity
 import com.umc.anddeul.start.signin.SignupActivity
 

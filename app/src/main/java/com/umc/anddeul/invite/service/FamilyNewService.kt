@@ -1,6 +1,5 @@
 package com.umc.anddeul.invite.service
 
-import android.util.Log
 import com.umc.anddeul.invite.model.NewFamilyRequest
 import com.umc.anddeul.invite.model.NewFamilyResponse
 import com.umc.anddeul.invite.network.InviteInterface
@@ -10,7 +9,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 
 class FamilyNewService {
 

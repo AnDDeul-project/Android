@@ -1,14 +1,8 @@
 package com.umc.anddeul.start.terms
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
-import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.databinding.ActivityTermsBinding
 import com.umc.anddeul.invite.InviteStartActivity

@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.R
 import com.umc.anddeul.databinding.FragmentMypageSettingBinding
-import com.umc.anddeul.home.PermissionDialog
 
 class MypageSettingFragment : Fragment(){
     lateinit var binding: FragmentMypageSettingBinding

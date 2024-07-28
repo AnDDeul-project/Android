@@ -6,8 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
-import com.umc.anddeul.checklist.ChecklistFragment
 import com.umc.anddeul.checklist.ChecklistRVAdapter
 import com.umc.anddeul.checklist.model.CheckImg
 import com.umc.anddeul.checklist.model.CheckImgRoot
@@ -19,7 +17,6 @@ import com.umc.anddeul.checklist.network.ChecklistInterface
 import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.common.toast.AnddeulToast
-import com.umc.anddeul.databinding.FragmentChecklistBinding
 import com.umc.anddeul.start.StartActivity
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

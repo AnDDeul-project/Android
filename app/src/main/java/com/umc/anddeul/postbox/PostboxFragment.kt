@@ -6,13 +6,11 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.AdapterView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -28,7 +26,6 @@ import com.umc.anddeul.postbox.model.TextRequest
 import com.umc.anddeul.postbox.model.VoiceRequest
 import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
-import com.umc.anddeul.postbox.service.QuestionService
 import com.umc.anddeul.postbox.service.TextService
 import com.umc.anddeul.postbox.service.VoiceService
 import com.umc.anddeul.pot.PotFragment

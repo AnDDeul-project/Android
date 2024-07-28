@@ -11,7 +11,6 @@ import com.umc.anddeul.checklist.model.Checklist
 import com.umc.anddeul.checklist.service.ChecklistService
 import com.umc.anddeul.common.toast.AnddeulToast
 import com.umc.anddeul.databinding.ItemChecklistBinding
-import okhttp3.internal.notify
 import java.io.File
 
 

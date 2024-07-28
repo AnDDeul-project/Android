@@ -10,7 +10,6 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.FragmentPopupLetterBinding

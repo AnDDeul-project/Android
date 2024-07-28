@@ -1,10 +1,7 @@
 package com.umc.anddeul.pot
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.drawable.BitmapDrawable
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,7 +17,6 @@ import com.umc.anddeul.common.RetrofitManager
 import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.common.toast.AnddeulErrorToast
 import com.umc.anddeul.databinding.FragmentGardenBinding
-import com.umc.anddeul.home.LoadImage
 import com.umc.anddeul.pot.model.Flower
 import com.umc.anddeul.pot.model.FlowerRoot
 import com.umc.anddeul.pot.model.Flowers
@@ -30,13 +26,10 @@ import com.umc.anddeul.pot.model.Point
 import com.umc.anddeul.pot.model.PointRoot
 import com.umc.anddeul.pot.network.PotInterface
 import com.umc.anddeul.start.StartActivity
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.properties.Delegates
 
 class GardenFragment : Fragment() {
     lateinit var binding : FragmentGardenBinding

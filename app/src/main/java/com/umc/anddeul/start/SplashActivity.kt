@@ -6,8 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.umc.anddeul.MainActivity
-import com.umc.anddeul.common.RetrofitManager
-import com.umc.anddeul.common.TokenManager
 import com.umc.anddeul.databinding.ActivitySplashBinding
 import com.umc.anddeul.invite.JoinGroupSendActivity
 import com.umc.anddeul.start.service.RequestService

@@ -1,6 +1,5 @@
 package com.umc.anddeul.invite.service
 
-import android.util.Log
 import com.umc.anddeul.invite.model.AddFamilyRequest
 import com.umc.anddeul.invite.model.AddFamilyResponse
 import com.umc.anddeul.invite.network.InviteInterface

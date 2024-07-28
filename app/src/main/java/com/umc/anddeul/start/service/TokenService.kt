@@ -1,6 +1,5 @@
 package com.umc.anddeul.start.service
 
-import android.util.Log
 import com.umc.anddeul.start.model.TokenResponse
 import com.umc.anddeul.start.network.TokenInterface
 import okhttp3.ResponseBody

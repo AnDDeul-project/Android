@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.Window
-import com.umc.anddeul.MainActivity
 import com.umc.anddeul.databinding.FragmentDialogRecordRestartBinding
 
 class DialogRecordRestartFragment(private val context: Context, private val recordPopupFragment: RecordPopupFragment) {
