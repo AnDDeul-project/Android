@@ -26,6 +26,7 @@ import com.umc.anddeul.postbox.model.TextRequest
 import com.umc.anddeul.postbox.model.VoiceRequest
 import com.umc.anddeul.postbox.service.FamilyService
 import com.umc.anddeul.postbox.service.MailService
+import com.umc.anddeul.postbox.service.QuestionService
 import com.umc.anddeul.postbox.service.TextService
 import com.umc.anddeul.postbox.service.VoiceService
 import com.umc.anddeul.pot.PotFragment
@@ -255,20 +256,20 @@ class PostboxFragment : Fragment() {
 
         //// 랜덤 질문
         // api 연결
-//        val questionService = QuestionService()
-//        questionService.randomQuestion(requireContext(), loadedToken) { questionDTO ->
-//            if (questionDTO != null) {
-//                if (questionDTO.isSuccess.toString() == "true") {
-//                    if (questionDTO?.question?.isNotEmpty() == true) {
-//                        binding.randomQTv.text = questionDTO?.question?.get(0)?.content ?: ""
-//                    }
-//                } else {
-//                    AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
-//                }
-//            } else {
-//                AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
-//            }
-//        }
+        val questionService = QuestionService()
+        questionService.randomQuestion(requireContext(), loadedToken) { questionDTO ->
+            if (questionDTO != null) {
+                if (questionDTO.isSuccess.toString() == "true") {
+                    if (questionDTO?.question?.isNotEmpty() == true) {
+                        binding.randomQTv.text = questionDTO?.question?.get(0)?.content ?: ""
+                    }
+                } else {
+                    AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
+                }
+            } else {
+                AnddeulErrorToast.createToast(requireContext(), "서버 연결이 불안정합니다.")?.show()
+            }
+        }
 
         return binding.root
     }
