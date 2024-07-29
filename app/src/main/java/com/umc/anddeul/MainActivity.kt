@@ -27,13 +27,13 @@ class MainActivity : AppCompatActivity() {
         // 가족 우체통 하단바 알림
         postboxBottomAlarm()
         // 체크리스트 하단바 알림
-        checklistBottomAlarm()
+        //checklistBottomAlarm()
     }
     
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         ev?.let {
             if (it.action == MotionEvent.ACTION_DOWN) {
-                checklistBottomAlarm()
+                //checklistBottomAlarm()
             }
         }
         return super.dispatchTouchEvent(ev)
@@ -128,35 +128,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checklistBottomAlarm() {
-        val loadedToken = loadJwt() // jwt토큰
-        // api 연결
-        val checklistAlarmService = ChecklistAlarmService()
-        checklistAlarmService.alarmApi { checklistAlarmDTO ->
-            if (checklistAlarmDTO != null) {
-                if (checklistAlarmDTO.isSuccess.toString() == "true") {
-                    if (checklistAlarmDTO?.count!! <= 0) {         // 알림 0개
-                        binding.checklistCnt.visibility = View.GONE
-                        binding.checklistCircle.visibility = View.GONE
-                    } else {
-                        binding.checklistCnt.visibility = View.VISIBLE
-                        binding.checklistCircle.visibility = View.VISIBLE
-                        if (checklistAlarmDTO?.count!! <= 9) {         // 알림 1자리 수
-                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
-                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle)
-                        } else if (checklistAlarmDTO?.count!! <= 99) {         // 알림 2자리 수
-                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
-                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle2)
-                        } else if (checklistAlarmDTO?.count!! <= 999) {         // 알림 3자리 수
-                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
-                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
-                        } else {         // 알림 4자리 수 이상
-                            binding.checklistCnt.text = "999"
-                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    private fun checklistBottomAlarm() {
+//        val loadedToken = loadJwt() // jwt토큰
+//        // api 연결
+//        val checklistAlarmService = ChecklistAlarmService()
+//        checklistAlarmService.alarmApi { checklistAlarmDTO ->
+//            if (checklistAlarmDTO != null) {
+//                if (checklistAlarmDTO.isSuccess.toString() == "true") {
+//                    if (checklistAlarmDTO?.count!! <= 0) {         // 알림 0개
+//                        binding.checklistCnt.visibility = View.GONE
+//                        binding.checklistCircle.visibility = View.GONE
+//                    } else {
+//                        binding.checklistCnt.visibility = View.VISIBLE
+//                        binding.checklistCircle.visibility = View.VISIBLE
+//                        if (checklistAlarmDTO?.count!! <= 9) {         // 알림 1자리 수
+//                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
+//                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle)
+//                        } else if (checklistAlarmDTO?.count!! <= 99) {         // 알림 2자리 수
+//                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
+//                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle2)
+//                        } else if (checklistAlarmDTO?.count!! <= 999) {         // 알림 3자리 수
+//                            binding.checklistCnt.text = checklistAlarmDTO?.count.toString()
+//                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
+//                        } else {         // 알림 4자리 수 이상
+//                            binding.checklistCnt.text = "999"
+//                            binding.checklistCircle.setImageResource(R.drawable.img_alarm_circle3)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
