@@ -38,8 +38,16 @@ android {
     }
 
     buildTypes {
-        release {
+        debug{
             isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+
+        release {
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -63,7 +71,7 @@ dependencies {
     implementation("com.kizitonwose.calendar:view:2.4.1")
 
     // 카카오 로그인
-    implementation ("com.kakao.sdk:v2-user:2.19.0")
+    implementation ("com.kakao.sdk:v2-user:2.20.1")
 
     // retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -86,10 +94,6 @@ dependencies {
     // ViewPager2
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
 
-    // Glide
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-
-
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -101,7 +105,6 @@ dependencies {
 
     //svg
     implementation ("com.github.bumptech.glide:okhttp3-integration:4.12.0")
-//    implementation("com.google.firebase:firebase-messaging:24.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
