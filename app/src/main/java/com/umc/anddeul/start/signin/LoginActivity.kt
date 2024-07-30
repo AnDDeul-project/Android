@@ -27,6 +27,8 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.kakao.sdk.common.util.Utility
+
 
 class LoginActivity: AppCompatActivity()  {
     val TAG = "LoginActivity"
@@ -38,6 +40,9 @@ class LoginActivity: AppCompatActivity()  {
         binding = ActivityLoginBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        val keyHash = Utility.getKeyHash(this)
+        Log.e("keyHash", keyHash)
 
         //// 뒤로 가기
         binding.loginBackBtn.setOnClickListener {
@@ -53,6 +58,7 @@ class LoginActivity: AppCompatActivity()  {
             // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
+                    Log.e("LoginError", "Error occurred: ${error.message}", error)
                     AnddeulErrorToast.createToast(this, "요청을 처리할 수 없습니다")?.show()
                 } else if (token != null) {
                     signinService.executeSignIn(token.accessToken) { signinResponse ->
