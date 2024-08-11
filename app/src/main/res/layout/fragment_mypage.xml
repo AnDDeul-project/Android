@@ -101,11 +101,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/font_pretendard_bold"
                     android:text="게시물 올리기"
                     android:textSize="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mypage_profile_iv"
-                    app:shapeAppearance="@style/RoundButton" />
+                    app:shapeAppearance="@style/RoundButtonPrimary" />
 
             </LinearLayout>
 

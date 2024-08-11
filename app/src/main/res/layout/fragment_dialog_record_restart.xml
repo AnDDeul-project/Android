@@ -34,7 +34,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="다시 녹음 하시겠어요?\n기존 녹음본은 삭제됩니다."
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="20dp"
         android:textColor="@color/text_high"
         app:layout_constraintEnd_toEndOf="@+id/imageView7"
         app:layout_constraintStart_toStartOf="@+id/imageView7"

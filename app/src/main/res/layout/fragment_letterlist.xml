@@ -46,6 +46,7 @@
             android:layout_marginTop="30dp"
             android:fontFamily="@font/font_pretendard_regular"
             android:text="님의 우체통"
+            android:textColor="@color/text_high"
             android:textSize="18dp"
             app:layout_constraintStart_toEndOf="@+id/userTitleTv2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -309,6 +310,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="125dp"
                 android:text="TextView"
+                android:textColor="@color/black"
                 android:textSize="14dp"
                 android:fontFamily="@font/font_pretendard_bold"
                 app:layout_constraintEnd_toEndOf="parent"

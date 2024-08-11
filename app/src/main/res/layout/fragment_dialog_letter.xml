@@ -34,7 +34,7 @@
         android:fontFamily="@font/font_pretendard_bold"
         android:text="TextView"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="20dp"
         android:textColor="@color/text_high"
         app:layout_constraintEnd_toEndOf="@+id/imageView8"
         app:layout_constraintStart_toStartOf="@+id/imageView8"

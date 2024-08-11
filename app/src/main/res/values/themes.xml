@@ -15,7 +15,12 @@
     // Bottom Navigation font 설정
     <style name="BottomNavigationView" parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textSize">12sp</item> <!-- 텍스트 크기 조절 -->
+        <item name="android:textSize">12dp</item> <!-- 텍스트 크기 조절 -->
+    </style>
+
+    <style name="BottomNavigationViewInactive" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">12dp</item> <!-- 텍스트 크기 조절 -->
     </style>
 
     // Bottom Navigation 탭 클릭 시 컬러 설정
@@ -35,6 +40,13 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="RoundButtonPrimary" parent="Widget.MaterialComponents.Button">
+        <item name="cornerFamily">rounded</item>
+        <item name="background">@color/primary</item>
+        <item name="android:textColor">@color/background</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
     <style name="GalleryToolBar">
         <item name="fontFamily">@font/font_pretendard_bold</item>
         <item name="android:textSize">20dp</item>
@@ -49,10 +61,16 @@
         <item name="boxStrokeColor">@color/icon_inactive</item>
     </style>
 
+    <style name="PopupMenuTextAppearance">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/text_high</item>
+    </style>
+
+    <!-- PopupMenu 스타일 정의 -->
     <style name="PopupMenuStyle" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@drawable/menu_back_selector</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textAppearance">@style/PopupMenuTextAppearance</item>
     </style>
 
 </resources>

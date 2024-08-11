@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/mypage_notification_bell_iv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/mypage_notification_bell_iv"
-        app:shapeAppearance="@style/RoundButton" />
+        app:shapeAppearance="@style/RoundButtonPrimary" />
 
     <TextView
         android:id="@+id/mypage_notification_explain_tv"

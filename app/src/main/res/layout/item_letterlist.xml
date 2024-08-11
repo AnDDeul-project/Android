@@ -45,7 +45,7 @@
         android:fontFamily="@font/font_pretendard_regular"
         android:text="안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
         android:textColor="@color/grey_800"
-        android:textSize="12sp"
+        android:textSize="12dp"
         app:layout_constraintStart_toStartOf="@+id/minibox"
         app:layout_constraintTop_toBottomOf="@+id/userNmTv" />
 

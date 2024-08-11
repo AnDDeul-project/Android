@@ -36,7 +36,7 @@
         android:fontFamily="@font/font_pretendard_regular"
         android:text="이솜솜"
         android:textColor="@color/text_high"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:textAlignment="center"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"

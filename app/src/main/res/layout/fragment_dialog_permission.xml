@@ -61,7 +61,7 @@
             android:text="확인"
             android:textColor="@color/onPrimary"
             android:textSize="14dp"
-            app:shapeAppearance="@style/RoundButton" />
+            app:shapeAppearance="@style/RoundButtonPrimary" />
 
     </LinearLayout>
 

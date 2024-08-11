@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemTextAppearanceActive="@style/BottomNavigationView"
-        app:itemTextAppearanceInactive="@style/BottomNavigationView"
+        app:itemTextAppearanceInactive="@style/BottomNavigationViewInactive"
         android:background="@color/background"
         app:itemActiveIndicatorStyle="@style/NavActiveIndicatorStyle"
         app:itemIconSize="30dp"

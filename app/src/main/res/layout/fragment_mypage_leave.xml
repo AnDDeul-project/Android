@@ -168,7 +168,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/mypage_leave_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mypage_leave_select_leader_layout"
-                app:shapeAppearance="@style/RoundButton" />
+                app:shapeAppearance="@style/RoundButtonPrimary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

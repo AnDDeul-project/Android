@@ -60,7 +60,7 @@
             android:fontFamily="@font/font_pretendard_bold"
             android:text="취소"
             android:textColor="@color/primary"
-            android:textSize="14sp"
+            android:textSize="14dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toStartOf="@+id/dialog_accept_btn"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,12 +77,12 @@
             android:fontFamily="@font/font_pretendard_bold"
             android:text="수락하기"
             android:textColor="@color/onPrimary"
-            android:textSize="14sp"
+            android:textSize="14dp"
             android:layout_marginStart="12dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/dialog_cancel_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/dialog_cancel_btn"
-            app:shapeAppearance="@style/RoundButton" />
+            app:shapeAppearance="@style/RoundButtonPrimary" />
 
     </LinearLayout>
 
