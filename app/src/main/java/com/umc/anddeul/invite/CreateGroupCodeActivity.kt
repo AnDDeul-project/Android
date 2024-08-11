@@ -27,9 +27,9 @@ class CreateGroupCodeActivity : AppCompatActivity() {
         binding.sendCodeBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
             intent.type = "text/plain"
-            val groupCodeText = intent.getStringExtra("FAMILY_GROUP_CODE")
-            val content = "가족이 초대링크를 공유했어요!"
-            intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n$groupCodeText")
+            val groupCodeText = binding.groupCode.text
+            val content = "[안뜰] 초대 코드를 통해 그룹에 가입해보세요!"
+            intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n 초대 코드 : $groupCodeText")
             val chooserTitle = "가족에게 공유하기"
             startActivity(Intent.createChooser(intent, chooserTitle))
 
